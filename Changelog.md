@@ -1,8 +1,10 @@
 # Changelog
 
+- "It was a bright day in April, and the clocks were striking thirteen." - 1984
+
 ## [Unreleased]
 
-- "It was a bright day in April, and the clocks were striking thirteen." - 1984
+- [Fix #591](https://github.com/WPN-XM/WPN-XM/issues/591): Control panel crashes/won't start if startminimized=1 and "The following processes are already running" prompt is to be shown
 
 ## [0.8.6] - 2016-01-02
 

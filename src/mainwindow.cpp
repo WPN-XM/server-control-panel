@@ -22,6 +22,12 @@ namespace ServerControlPanel
         setDefaultSettings();
         setWindowTitle(APP_NAME_AND_VERSION);
 
+        this->servers = new Servers::Servers();
+
+        createTrayIcon();
+
+        renderInstalledDaemons();
+
         // start minimized to tray
         if(settings->get("global/startminimized").toBool()) {
             setWindowState( Qt::WindowMinimized );
@@ -33,12 +39,6 @@ namespace ServerControlPanel
 
         // disable Maximize button functionality
         setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
-
-        this->servers = new Servers::Servers();
-
-        createTrayIcon();
-
-        renderInstalledDaemons();
 
         checkAlreadyActiveDaemons();
 
@@ -335,8 +335,6 @@ namespace ServerControlPanel
 
     void MainWindow::setVisible(bool visible)
     {
-        minimizeAction->setEnabled(visible);
-        restoreAction->setEnabled(isMaximized() || !visible);
         QMainWindow::setVisible(visible);
     }
 
