@@ -36,8 +36,8 @@
 
 - Initial Release
 
-[Unreleased]: https://github.com/WPN-XM/server-control-panel/compare/0.8.6...HEAD
-[0.8.6]: https://github.com/WPN-XM/server-control-panel/compare/0.8.5...0.8.6
+[Unreleased]: https://github.com/WPN-XM/server-control-panel/compare/v0.8.6...HEAD
+[0.8.6]: https://github.com/WPN-XM/server-control-panel/compare/0.8.5...v0.8.6
 [0.8.5]: https://github.com/WPN-XM/server-control-panel/compare/0.8.4...0.8.5
 [0.8.4]: https://github.com/WPN-XM/server-control-panel/compare/0.8.3...0.8.4
 [0.8.3]: https://github.com/WPN-XM/server-control-panel/compare/0.8.2...0.8.3
