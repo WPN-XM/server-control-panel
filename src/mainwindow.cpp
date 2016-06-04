@@ -28,6 +28,8 @@ namespace ServerControlPanel
 
         renderInstalledDaemons();
 
+        createActions();
+
         // start minimized to tray
         if(settings->get("global/startminimized").toBool()) {
             setWindowState( Qt::WindowMinimized );
@@ -51,8 +53,6 @@ namespace ServerControlPanel
             qDebug() << "[Daemons] Autostart enabled";
             autostartDaemons();
         };
-
-        createActions();
 
         if(ui->centralWidget->findChild<QLabel*>("label_Nginx_Status")->isEnabled() &&
            ui->centralWidget->findChild<QLabel*>("label_PHP_Status")->isEnabled()) {
@@ -335,6 +335,8 @@ namespace ServerControlPanel
 
     void MainWindow::setVisible(bool visible)
     {
+        minimizeAction->setEnabled(visible);
+        restoreAction->setEnabled(isMaximized() || !visible);
         QMainWindow::setVisible(visible);
     }
 
