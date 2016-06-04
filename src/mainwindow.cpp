@@ -672,7 +672,7 @@ namespace ServerControlPanel
 
     void MainWindow::goToForum()
     {
-        QDesktopServices::openUrl(QUrl("http://wpn-xm.org/forum/"));
+        QDesktopServices::openUrl(QUrl("http://forum.wpn-xm.org/"));
     }
 
     void MainWindow::goToReportIssue()
