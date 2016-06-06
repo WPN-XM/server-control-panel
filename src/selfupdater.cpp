@@ -178,7 +178,9 @@ namespace Updater
         QString text = "The Server Control Panel was updated from ";
         text.append(QString("v%1 to v%2.").arg(APP_VERSION_SHORT, versionInfo["latest_version"].toString()));
 
-        QString infoText = "Do you want to restart now?";
+        QString infoText = "The update was installed. "
+                           "You can restart the Server Control Panel now, "
+                           "or continue working and restart later.";
 
         QPixmap iconPixmap = QIcon(":/update").pixmap(80,80);
 
@@ -188,7 +190,7 @@ namespace Updater
         msgBox.setText(text);
         msgBox.setInformativeText(infoText);
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setButtonText(QMessageBox::Yes, tr("Restart"));
+        msgBox.setButtonText(QMessageBox::Yes, tr("Restart SCP"));
         msgBox.setButtonText(QMessageBox::No, tr("Continue"));
         msgBox.setDefaultButton(QMessageBox::Yes);
 
