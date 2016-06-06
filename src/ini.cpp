@@ -9,7 +9,7 @@
 #include <QDebug>
 #include <QString>
 
-#define INI_DEBUG 1
+#define INI_DEBUG 0
 #define log qDebug
 #define mlog(msg...) do{\
 if(INI_DEBUG) qDebug(msg);\
