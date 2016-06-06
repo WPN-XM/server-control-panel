@@ -80,7 +80,8 @@ HEADERS += \
     src/networkutils.h \
     src/jobscheduler.h \
     src/csv.h \
-    src/processviewerdialog.h
+    src/processviewerdialog.h \
+    src/ini.h
 
 SOURCES += \
     src/app/main.cpp \
@@ -112,7 +113,8 @@ SOURCES += \
     src/networkutils.cpp \
     src/jobscheduler.cpp \
     src/csv.cpp \
-    src/processviewerdialog.cpp
+    src/processviewerdialog.cpp \
+    src/ini.cpp
 
 RESOURCES += \
     src/resources/resources.qrc
