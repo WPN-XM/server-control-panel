@@ -88,9 +88,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>10</x>
      <y>180</y>
-     <width>161</width>
+     <width>221</width>
      <height>23</height>
     </rect>
    </property>
@@ -99,6 +99,9 @@
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

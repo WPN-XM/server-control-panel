@@ -4,6 +4,7 @@
 #include "nginxaddpooldialog.h"
 #include "nginxaddserverdialog.h"
 #include "../json.h"
+#include "src/ini.h"
 
 namespace Configuration
 {
@@ -121,6 +122,9 @@ namespace Configuration
        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
        ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
 
+       // Configuration > Components > MariaDB
+       ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString() );
+
        // Configuration > Components > Memcached
        ui->lineEdit_memcached_tcpport->setText(settings->get("memcached/tcpport", QVariant(QString("11211"))).toString() );
        ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString() );
@@ -170,8 +174,13 @@ namespace Configuration
         // Configuration > Components > XDebug
 
         // Configuration > Components > MariaDB
+        settings->set("mariadb/port",             QString(ui->lineEdit_mariadb_port->text()));
 
         // Configuration > Components > MongoDB
+
+        // Configuration > Components > PostgreSQL
+
+        // Configuration > Components > Redis
 
         // Configuration > Components > Memcached
         settings->set("memcached/tcpport",        QString(ui->lineEdit_memcached_tcpport->text()));
@@ -184,6 +193,23 @@ namespace Configuration
          * Page "Nginx" - Tab "Upstream"
          */
         saveSettings_Nginx_Upstream();
+
+        /**
+         * Page "MariaDB" - Tab "Configuration"
+         */
+        saveSettings_MariaDB_Configuration();
+    }
+
+    void ConfigurationDialog::saveSettings_MariaDB_Configuration()
+    {
+        QString mariaDb_iniFile = settings->get("mariadb/config").toString();
+        if(!QFile(mariaDb_iniFile).exists()) {
+            qDebug() << "[Error]" << mariaDb_iniFile << "not found";
+        }
+
+        INI *ini = new INI(mariaDb_iniFile.toLatin1());
+        ini->setStringValue("mysqld", "port", ui->lineEdit_mariadb_port->text().toLatin1());
+        ini->writeConfigFile();
     }
 
     void ConfigurationDialog::saveSettings_Nginx_Upstream()
@@ -483,8 +509,8 @@ namespace Configuration
         NginxAddPoolDialog *dialog = new NginxAddPoolDialog();
         dialog->setWindowTitle("Nginx - Add Pool");
 
-        ui->tableWidget_pools->setSelectionBehavior(QAbstractItemView::SelectRows);
-        ui->tableWidget_pools->setSelectionMode(QAbstractItemView::SingleSelection);
+        //ui->tableWidget_pools->setSelectionBehavior(QAbstractItemView::SelectRows);
+        //ui->tableWidget_pools->setSelectionMode(QAbstractItemView::SingleSelection);
 
         result = dialog->exec();
 
@@ -561,7 +587,6 @@ namespace Configuration
 
         updateServersTable(jsonPoolFirst);
     }
-
 
     void ConfigurationDialog::on_tableWidget_pools_itemSelectionChanged()
     {
@@ -640,5 +665,7 @@ namespace Configuration
 
         return QJsonObject();
     }
+
+
 
 }

@@ -45,6 +45,10 @@ namespace Configuration
             void setServers(Servers::Servers *servers);
             void hideAutostartCheckboxesOfNotInstalledServers();
 
+            // TODO move mariadb stuff into own class
+
+            void saveSettings_MariaDB_Configuration();
+
             // TODO move nginx stuff into a "nginx config class"
 
             void saveSettings_Nginx_Upstream();
@@ -96,6 +100,7 @@ namespace Configuration
 
             void readSettings();
             void writeSettings();
+
             void toggleRunOnStartup();
 
             void loadNginxUpstreams();
