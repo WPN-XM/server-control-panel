@@ -21,7 +21,6 @@ INI::INI(const char *fileNameWithPath, bool _autoCreate):
     autoSave(false),
     autoCreate(_autoCreate)
 {
-    qDebug() << "[INI] Loading Config: " << iniFileName;
     strcpy(iniFileName, fileNameWithPath);
     loadConfigFile();
 }
@@ -34,13 +33,13 @@ void INI::loadConfigFile()
     fStream.open(p,ios::in);
     if(!fStream){
         if(!autoCreate){
-            log("load config, file [%s] not exist", iniFileName);
+            log("[INI] config file [%s] does not exist", iniFileName);
         }else{
-            log("inifile [%s] not found, create a new file", iniFileName);
+            log("[INI] config file [%s] not found. Creating new file (auto-create on)", iniFileName);
         }
         return;
     }else{
-        mlog("file open OK\n");
+        mlog("[INI] Reading config file [%s]", iniFileName);
     }
     char line[4096];
     char ch;
@@ -59,7 +58,7 @@ void INI::loadConfigFile()
             //entry.index = str;
             entry.isEmptyLine = true;
             datas.push_back(entry);
-            mlog("entry: empty line");
+            mlog("[INI] entry: empty line");
             continue;
         }
 
@@ -86,7 +85,7 @@ void INI::loadConfigFile()
             if(i==0) continue;            
             line[i]='\0';
             str = string(line);
-            mlog("read one line {%s}", str.c_str());
+            mlog("[INI] read one line {%s}", str.c_str());
             // section start
             if(line[0]=='['){
                 index = str;
@@ -102,7 +101,7 @@ void INI::loadConfigFile()
                 entry.value = trim(entry.value);
                 // insert
                 datas.push_back(entry);
-                mlog("entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
+                mlog("[INI] entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
             }
             i=0;
         }
@@ -119,7 +118,7 @@ void INI::loadConfigFile()
         entry.value = trim(entry.value);
         // insert
         datas.push_back(entry);
-        mlog("last add entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
+        mlog("[INI] last add entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
     }
     fStream.close();
 }
@@ -127,7 +126,7 @@ void INI::loadConfigFile()
 INI::~INI()
 {
     if(autoSave){
-        cout<<"AUTO save Config file["<<iniFileName<<"]"<<endl;
+        mlog("[INI] Deconstructor. AutoSaving config file: [%s]", iniFileName);
         writeConfigFile();
     }
 }
@@ -263,10 +262,10 @@ float INI::getFloatValue(const char* index, const char *name)
 
 const char* INI::getStringValue(const char* index, const char *name)
 {
-    mlog("find index[%s]-name[%s]", index, name);
+    mlog("find section[%s]-name[%s]", index, name);
     for(unsigned int i=0; i<datas.size(); i++){
         if(strcmp(datas[i].index.c_str(), index) == 0){
-            mlog("find index[%s]", datas[i].index.c_str());
+            mlog("find section[%s]", datas[i].index.c_str());
             for(;i<datas.size();i++){
                 if(strcmp(datas[i].name.c_str(), name)==0)
                     return datas[i].value.c_str();
@@ -309,8 +308,8 @@ void INI::debug()
         INIEntry entry = *it;
         log(" ------------ INI item of [%s] ------------ ", iniFileName);
         if(entry.isComment) {cout<<entry.comment<<endl;continue;}
-        log("  index:%s", entry.index.c_str());
-        log("  name:%s", entry.name.c_str());
-        log("  value:%s", entry.value.c_str());
+        log("  index : %s", entry.index.c_str());
+        log("  name  : %s", entry.name.c_str());
+        log("  value : %s", entry.value.c_str());
     }
 }
