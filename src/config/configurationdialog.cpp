@@ -125,6 +125,12 @@ namespace Configuration
        // Configuration > Components > MariaDB
        ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString() );
 
+       // Configuration > Components > MongoDB
+       ui->lineEdit_mongodb_port->setText(settings->get("mongodb/port", QVariant(QString("27017"))).toString() );
+
+       // Configuration > Components > PostgreSQL
+       //ui->lineEdit_mariadb_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString() );
+
        // Configuration > Components > Memcached
        ui->lineEdit_memcached_tcpport->setText(settings->get("memcached/tcpport", QVariant(QString("11211"))).toString() );
        ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString() );
@@ -177,6 +183,7 @@ namespace Configuration
         settings->set("mariadb/port",             QString(ui->lineEdit_mariadb_port->text()));
 
         // Configuration > Components > MongoDB
+        settings->set("mongodb/port",             QString(ui->lineEdit_mongodb_port->text()));
 
         // Configuration > Components > PostgreSQL
 
@@ -198,17 +205,36 @@ namespace Configuration
          * Page "MariaDB" - Tab "Configuration"
          */
         saveSettings_MariaDB_Configuration();
+
+        /**
+         * Page "MongoDB" - Tab "Configuration"
+         */
+        //saveSettings_MongoDB_Configuration();
     }
 
     void ConfigurationDialog::saveSettings_MariaDB_Configuration()
     {
-        QString mariaDb_iniFile = settings->get("mariadb/config").toString();
-        if(!QFile(mariaDb_iniFile).exists()) {
-            qDebug() << "[Error]" << mariaDb_iniFile << "not found";
+        QString file = settings->get("mariadb/config").toString();
+        if(!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
         }
 
-        INI *ini = new INI(mariaDb_iniFile.toLatin1());
+        File::INI *ini = new File::INI(file.toLatin1());
         ini->setStringValue("mysqld", "port", ui->lineEdit_mariadb_port->text().toLatin1());
+        ini->writeConfigFile();
+    }
+
+    void ConfigurationDialog::saveSettings_MongoDB_Configuration()
+    {
+        // TODO fix crash: QWaitCondition: Destroyed while threads are still waiting
+
+        QString file = settings->get("mongodb/config").toString();
+        if(!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::INI *ini = new File::INI(file.toLatin1());
+        ini->setStringValue("mongodb", "port", ui->lineEdit_mongodb_port->text().toLatin1());
         ini->writeConfigFile();
     }
 

@@ -8,6 +8,9 @@
 #include <vector>
 #include <cstdlib>
 
+namespace File
+{
+
 using namespace std;
 
 struct INIEntry{
@@ -79,6 +82,8 @@ class INI
         fstream *fStream;
         bool autoSave;
         bool autoCreate;
+};
+
 };
 
 #endif // INI_H

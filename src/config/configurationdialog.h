@@ -45,9 +45,10 @@ namespace Configuration
             void setServers(Servers::Servers *servers);
             void hideAutostartCheckboxesOfNotInstalledServers();
 
-            // TODO move mariadb stuff into own class
+            // TODO move config stuff into own class per component
 
             void saveSettings_MariaDB_Configuration();
+            void saveSettings_MongoDB_Configuration();
 
             // TODO move nginx stuff into a "nginx config class"
 

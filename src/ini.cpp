@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QString>
 
+namespace File {
+
 #define INI_DEBUG 0
 #define log qDebug
 #define mlog(msg...) do{\
@@ -313,3 +315,5 @@ void INI::debug()
         log("  value : %s", entry.value.c_str());
     }
 }
+
+};
