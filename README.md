@@ -1,5 +1,8 @@
-WPN-XM Server Control Panel [![Build Status](https://travis-ci.org/WPN-XM/server-control-panel.svg)](https://travis-ci.org/WPN-XM/server-control-panel)
+WPN-XM Server Control Panel 
 ===========================
+
+[![Build Status](https://travis-ci.org/WPN-XM/server-control-panel.svg)](https://travis-ci.org/WPN-XM/server-control-panel) [![license](https://img.shields.io/github/license/wpn-xm/server-control-panel.svg?maxAge=2592000)]()
+[![Twitter Follow](https://img.shields.io/twitter/follow/wpnxm.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/wpnxm)
 
 The WPN-XM Server Control Panel is written in Qt v5.2+.
 
@@ -23,13 +26,13 @@ You should be able to find everything at http://www.qt.io/download-open-source/ 
 
   http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
 
-* Qt 5.6.x
+* Qt 5.7.x
 
-  http://download.qt.io/official_releases/qt/5.6/5.6.0/qt-opensource-windows-x86-mingw492-5.6.0.exe
+  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-mingw530-5.7.0.exe
 
 * Qt Creator
 
-  http://download.qt.io/official_releases/qtcreator/3.6/3.6.1/qt-creator-opensource-windows-x86-3.6.1.exe
+  http://download.qt.io/official_releases/qtcreator/4.0/4.0.2/qt-creator-opensource-windows-x86-4.0.2.exe
 
 ### Installation Steps and Requirements for Qt
 
