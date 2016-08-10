@@ -95,48 +95,72 @@ namespace Configuration
 
     void ConfigurationDialog::readSettings()
     {
-       // Read Settings from INI and prefill config dialog items
+        // Read Settings from INI and prefill config dialog items
 
-       ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
-       ui->checkbox_autostartDaemons->setChecked(settings->get("global/autostartdaemons", false).toBool());
-       ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
+        ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
+        ui->checkbox_autostartDaemons->setChecked(settings->get("global/autostartdaemons", false).toBool());
+        ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
 
-       ui->checkbox_autostart_PHP->setChecked(settings->get("autostart/php", true).toBool());
-       ui->checkbox_autostart_Nginx->setChecked(settings->get("autostart/nginx", true).toBool());
-       ui->checkbox_autostart_MariaDb->setChecked(settings->get("autostart/mariadb", true).toBool());
-       ui->checkbox_autostart_MongoDb->setChecked(settings->get("autostart/mongodb", false).toBool());
-       ui->checkbox_autostart_Memcached->setChecked(settings->get("autostart/memcached", false).toBool());
-       ui->checkbox_autostart_Postgresql->setChecked(settings->get("autostart/postgresql", false).toBool());
-       ui->checkbox_autostart_Redis->setChecked(settings->get("autostart/redis", false).toBool());
+        ui->checkbox_autostart_PHP->setChecked(settings->get("autostart/php", true).toBool());
+        ui->checkbox_autostart_Nginx->setChecked(settings->get("autostart/nginx", true).toBool());
+        ui->checkbox_autostart_MariaDb->setChecked(settings->get("autostart/mariadb", true).toBool());
+        ui->checkbox_autostart_MongoDb->setChecked(settings->get("autostart/mongodb", false).toBool());
+        ui->checkbox_autostart_Memcached->setChecked(settings->get("autostart/memcached", false).toBool());
+        ui->checkbox_autostart_Postgresql->setChecked(settings->get("autostart/postgresql", false).toBool());
+        ui->checkbox_autostart_Redis->setChecked(settings->get("autostart/redis", false).toBool());
 
-       ui->checkbox_clearLogsOnStart->setChecked(settings->get("global/clearlogsonstart", false).toBool());
-       ui->checkbox_stopDaemonsOnQuit->setChecked(settings->get("global/stopdaemonsonquit", false).toBool());
+        ui->checkbox_clearLogsOnStart->setChecked(settings->get("global/clearlogsonstart", false).toBool());
+        ui->checkbox_stopDaemonsOnQuit->setChecked(settings->get("global/stopdaemonsonquit", false).toBool());
 
-       ui->checkbox_onStartAllMinimize->setChecked(settings->get("global/onstartallminimize", false).toBool());
-       ui->checkbox_onStartAllOpenWebinterface->setChecked(settings->get("global/onstartallopenwebinterface", false).toBool());
+        ui->checkbox_onStartAllMinimize->setChecked(settings->get("global/onstartallminimize", false).toBool());
+        ui->checkbox_onStartAllOpenWebinterface->setChecked(settings->get("global/onstartallopenwebinterface", false).toBool());
 
-       ui->lineEdit_SelectedEditor->setText(settings->get("global/editor", QVariant(QString("notepad.exe")) ).toString());
+        ui->lineEdit_SelectedEditor->setText(settings->get("global/editor", QVariant(QString("notepad.exe")) ).toString());
 
-       // Configuration > Updater > Self Updater
-       ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->get("selfupdater/runonstartup", false).toBool());
-       ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
-       ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
+        /**
+         * Configuration > Updater > Self Updater
+         */
 
-       // Configuration > Components > MariaDB
-       ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString() );
+        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->get("selfupdater/runonstartup", false).toBool());
+        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
+        ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
 
-       // Configuration > Components > MongoDB
-       ui->lineEdit_mongodb_port->setText(settings->get("mongodb/port", QVariant(QString("27017"))).toString() );
+        /**
+         * Configuration > Components > MariaDB
+         */
 
-       // Configuration > Components > PostgreSQL
-       //ui->lineEdit_mariadb_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString() );
+        ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString() );
 
-       // Configuration > Components > Memcached
-       ui->lineEdit_memcached_tcpport->setText(settings->get("memcached/tcpport", QVariant(QString("11211"))).toString() );
-       ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString() );
-       ui->lineEdit_memcached_threads->setText(settings->get("memcached/threads", QVariant(QString("2"))).toString() );
-       ui->lineEdit_memcached_maxconnections->setText(settings->get("memcached/maxconnections", QVariant(QString("2048"))).toString() );
-       ui->lineEdit_memcached_maxmemory->setText(settings->get("memcached/maxmemory", QVariant(QString("2048"))).toString() );
+        /**
+         * Configuration > Components > MongoDB
+         */
+
+        ui->lineEdit_mongodb_bindip->setText(settings->get("mongodb/bind_ip", QVariant(QString("127.0.0.1"))).toString() );
+        ui->lineEdit_mongodb_port->setText(settings->get("mongodb/port", QVariant(QString("27017"))).toString() );
+        ui->comboBox_mongodb_storageengine->setCurrentIndex(
+           ui->comboBox_mongodb_storageengine->findText(
+                       settings->get("mongodb/storageengine", QVariant(QString("wiredTiger"))).toString()
+        ));
+        ui->checkBox_mongodb_fork->setChecked(settings->get("mongodb/fork", true).toBool());
+        ui->checkBox_mongodb_rest->setChecked(settings->get("mongodb/rest", true).toBool());
+        ui->checkBox_mongodb_verbose->setChecked(settings->get("mongodb/verbose", true).toBool());
+        ui->checkBox_mongodb_noauth->setChecked(settings->get("mongodb/noauth", true).toBool());
+
+        /**
+         * Configuration > Components > PostgreSQL
+         */
+
+        //ui->lineEdit_mariadb_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString() );
+
+        /**
+         * Configuration > Components > Memcached
+         */
+
+        ui->lineEdit_memcached_tcpport->setText(settings->get("memcached/tcpport", QVariant(QString("11211"))).toString() );
+        ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString() );
+        ui->lineEdit_memcached_threads->setText(settings->get("memcached/threads", QVariant(QString("2"))).toString() );
+        ui->lineEdit_memcached_maxconnections->setText(settings->get("memcached/maxconnections", QVariant(QString("2048"))).toString() );
+        ui->lineEdit_memcached_maxmemory->setText(settings->get("memcached/maxmemory", QVariant(QString("2048"))).toString() );
     }
 
     void ConfigurationDialog::writeSettings()
@@ -147,6 +171,7 @@ namespace Configuration
         /**
          * Page "Server Control Panel" - Tab "Configuration"
          */
+
         settings->set("global/runonstartup",      int(ui->checkbox_runOnStartUp->isChecked()));
         settings->set("global/startminimized",    int(ui->checkbox_startMinimized->isChecked()));
         settings->set("global/autostartdaemons",  int(ui->checkbox_autostartDaemons->isChecked()));
@@ -159,12 +184,18 @@ namespace Configuration
 
         settings->set("global/editor",            QString(ui->lineEdit_SelectedEditor->text()));
 
-        // Configuration > Updater > Self Updater
+        /**
+         * Configuration > Updater > Self Updater
+         */
+
         settings->set("selfupdater/runonstartup", int(ui->checkBox_SelfUpdater_RunOnStartUp->isChecked()));
         settings->set("selfupdater/autoupdate",   int(ui->checkBox_SelfUpdater_AutoUpdate->isChecked()));
         settings->set("selfupdater/autorestart",  int(ui->checkBox_SelfUpdater_AutoRestart->isChecked()));
 
-        // Autostart Servers with the Server Control Panel
+        /**
+         * Autostart Servers with the Server Control Panel
+         */
+
         settings->set("autostart/nginx",          int(ui->checkbox_autostart_Nginx->isChecked()));
         settings->set("autostart/php",            int(ui->checkbox_autostart_PHP->isChecked()));
         settings->set("autostart/mariadb",        int(ui->checkbox_autostart_MariaDb->isChecked()));
@@ -173,23 +204,48 @@ namespace Configuration
         settings->set("autostart/postgresql",     int(ui->checkbox_autostart_Postgresql->isChecked()));
         settings->set("autostart/redis",          int(ui->checkbox_autostart_Redis->isChecked()));
 
-        // Configuration > Components > PHP
+        /**
+         * Configuration > Components > PHP
+         */
 
-        // Configuration > Components > Nginx
+        /**
+         * Configuration > Components > Nginx
+         */
 
-        // Configuration > Components > XDebug
+        /**
+         * Configuration > Components > XDebug
+         */
 
-        // Configuration > Components > MariaDB
+        /**
+         * Configuration > Components > MariaDB
+         */
+
         settings->set("mariadb/port",             QString(ui->lineEdit_mariadb_port->text()));
 
-        // Configuration > Components > MongoDB
+        /**
+         * Configuration > Components > MongoDB
+         */
+
+        settings->set("mongodb/bind_ip",          QString(ui->lineEdit_mongodb_bindip->text()));
         settings->set("mongodb/port",             QString(ui->lineEdit_mongodb_port->text()));
+        settings->set("mongodb/storageengine",    QString(ui->comboBox_mongodb_storageengine->currentText()));
+        settings->set("mongodb/fork",             QString(ui->checkBox_mongodb_fork->isChecked()));
+        settings->set("mongodb/noauth",           QString(ui->checkBox_mongodb_noauth->isChecked()));
+        settings->set("mongodb/rest",             QString(ui->checkBox_mongodb_rest->isChecked()));
+        settings->set("mongodb/verbose",          QString(ui->checkBox_mongodb_verbose->isChecked()));
 
-        // Configuration > Components > PostgreSQL
+        /**
+         * Configuration > Components > PostgreSQL
+         */
 
-        // Configuration > Components > Redis
+        /**
+         * Configuration > Components > Redis
+         */
 
-        // Configuration > Components > Memcached
+        /**
+         * Configuration > Components > Memcached
+         */
+
         settings->set("memcached/tcpport",        QString(ui->lineEdit_memcached_tcpport->text()));
         settings->set("memcached/udpport",        QString(ui->lineEdit_memcached_udpport->text()));
         settings->set("memcached/threads",        QString(ui->lineEdit_memcached_threads->text()));
@@ -233,8 +289,16 @@ namespace Configuration
             qDebug() << "[Error]" << file << "not found";
         }
 
+        // TODO switch to YAML (because the newer Mongodb versions use YAML as config format)
+
         File::INI *ini = new File::INI(file.toLatin1());
-        ini->setStringValue("mongodb", "port", ui->lineEdit_mongodb_port->text().toLatin1());
+        ini->setStringValue("mongodb", "bind_ip",       ui->lineEdit_mongodb_bindip->text().toLatin1());
+        ini->setStringValue("mongodb", "port",          ui->lineEdit_mongodb_port->text().toLatin1());
+        ini->setStringValue("mongodb", "storageengine", ui->comboBox_mongodb_storageengine->currentText().toLatin1());
+        ini->setBoolValue("mongodb", "fork",            ui->checkBox_mongodb_fork->isChecked());
+        ini->setBoolValue("mongodb", "rest",            ui->checkBox_mongodb_rest->isChecked());
+        ini->setBoolValue("mongodb", "verbose",         ui->checkBox_mongodb_verbose->isChecked());
+        ini->setBoolValue("mongodb", "noauth",          ui->checkBox_mongodb_noauth->isChecked());
         ini->writeConfigFile();
     }
 
@@ -487,9 +551,9 @@ namespace Configuration
             // In Windows terminology "shortcuts" are "shell links".
             WindowsAPI::CreateShellLink(
                 qApp->applicationFilePath(),"","WPN-XM Server Control Panel", // app, args, desc
-                qApp->applicationFilePath(),0, // icon path and idx
-                qApp->applicationDirPath(), // working dir
-                startupDir + "\\WPN-XM Server Control Panel.lnk" // filepath of shortcut
+                qApp->applicationFilePath(),0,                                // icon path and idx
+                qApp->applicationDirPath(),                                   // working dir
+                startupDir + "\\WPN-XM Server Control Panel.lnk"              // filepath of shortcut
             );
         } else {
             // remove link
