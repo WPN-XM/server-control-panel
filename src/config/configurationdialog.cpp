@@ -162,6 +162,11 @@ namespace Configuration
         ui->lineEdit_memcached_threads->setText(settings->get("memcached/threads", QVariant(QString("2"))).toString() );
         ui->lineEdit_memcached_maxconnections->setText(settings->get("memcached/maxconnections", QVariant(QString("2048"))).toString() );
         ui->lineEdit_memcached_maxmemory->setText(settings->get("memcached/maxmemory", QVariant(QString("2048"))).toString() );
+
+        /**
+         * Configuration > Components > Redis
+         */
+        ui->lineEdit_redis_port->setText(settings->get("redis/port", QVariant(QString("6379"))).toString() );
     }
 
     void ConfigurationDialog::writeSettings()
@@ -243,6 +248,7 @@ namespace Configuration
         /**
          * Configuration > Components > Redis
          */
+        settings->set("redis/port",             QString(ui->lineEdit_redis_port->text()));
 
         /**
          * Configuration > Components > Memcached
@@ -255,20 +261,38 @@ namespace Configuration
         settings->set("memcached/maxmemory",      QString(ui->lineEdit_memcached_maxmemory->text()));
 
         /**
-         * Page "Nginx" - Tab "Upstream"
+         * Tab "Upstream" > Page "Nginx"
          */
         saveSettings_Nginx_Upstream();
 
         /**
-         * Page "MariaDB" - Tab "Configuration"
+         * Tab "Configuration" > Page "MariaDB"
          */
         saveSettings_MariaDB_Configuration();
 
         /**
-         * Page "MongoDB" - Tab "Configuration"
+         * Tab "Configuration" > Page "Regis"
+         */
+        saveSettings_Redis_Configuration();
+
+        /**
+         *Tab "Configuration" > Page "MongoDB"
          */
         //saveSettings_MongoDB_Configuration();
     }
+
+    void ConfigurationDialog::saveSettings_Redis_Configuration()
+    {
+        QString file = settings->get("redis/config").toString();
+        if(!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::INI *ini = new File::INI(file.toLatin1());
+        ini->setStringValue("redis", "port", ui->lineEdit_redis_port->text().toLatin1());
+        ini->writeConfigFile();
+    }
+
 
     void ConfigurationDialog::saveSettings_MariaDB_Configuration()
     {
