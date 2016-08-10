@@ -66,7 +66,7 @@ namespace ServerControlPanel
 
     void Tray::goToWebsiteHelp()
     {
-        QDesktopServices::openUrl(QUrl("https://github.com/WPN-XM/WPN-XM/wiki/Using-the-Server-Control-Panel"));
+        QDesktopServices::openUrl(QUrl("http://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
     }
 
     void Tray::startAllDaemons()
