@@ -145,6 +145,7 @@ namespace Configuration
         ui->checkBox_mongodb_rest->setChecked(settings->get("mongodb/rest", true).toBool());
         ui->checkBox_mongodb_verbose->setChecked(settings->get("mongodb/verbose", true).toBool());
         ui->checkBox_mongodb_noauth->setChecked(settings->get("mongodb/noauth", true).toBool());
+        ui->lineEdit_mongodb_dbpath->setText(settings->get("mongodb/dbpath", QVariant(QString("db/path"))).toString());
 
         /**
          * Configuration > Components > PostgreSQL
@@ -233,6 +234,7 @@ namespace Configuration
         settings->set("mongodb/noauth",           QString(ui->checkBox_mongodb_noauth->isChecked()));
         settings->set("mongodb/rest",             QString(ui->checkBox_mongodb_rest->isChecked()));
         settings->set("mongodb/verbose",          QString(ui->checkBox_mongodb_verbose->isChecked()));
+        settings->set("mongodb/dbpath",           QString(ui->lineEdit_mongodb_dbpath->text()));
 
         /**
          * Configuration > Components > PostgreSQL
@@ -299,6 +301,7 @@ namespace Configuration
         ini->setBoolValue("mongodb", "rest",            ui->checkBox_mongodb_rest->isChecked());
         ini->setBoolValue("mongodb", "verbose",         ui->checkBox_mongodb_verbose->isChecked());
         ini->setBoolValue("mongodb", "noauth",          ui->checkBox_mongodb_noauth->isChecked());
+        ini->setStringValue("mongodb", "dbpath",        ui->lineEdit_mongodb_dbpath->text().toLatin1());
         ini->writeConfigFile();
     }
 
