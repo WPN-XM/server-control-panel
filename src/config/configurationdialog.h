@@ -50,6 +50,7 @@ namespace Configuration
             void saveSettings_MariaDB_Configuration();
             void saveSettings_MongoDB_Configuration();
             void saveSettings_Redis_Configuration();
+            void saveSettings_PostgreSQL_Configuration();
 
             // TODO move nginx stuff into a "nginx config class"
 

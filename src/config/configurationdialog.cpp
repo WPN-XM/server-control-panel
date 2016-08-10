@@ -151,7 +151,7 @@ namespace Configuration
          * Configuration > Components > PostgreSQL
          */
 
-        //ui->lineEdit_mariadb_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString() );
+        ui->lineEdit_postgresql_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString() );
 
         /**
          * Configuration > Components > Memcached
@@ -244,11 +244,12 @@ namespace Configuration
         /**
          * Configuration > Components > PostgreSQL
          */
+        settings->set("postgresql/port",          QString(ui->lineEdit_postgresql_port->text()));
 
         /**
          * Configuration > Components > Redis
          */
-        settings->set("redis/port",             QString(ui->lineEdit_redis_port->text()));
+        settings->set("redis/port",               QString(ui->lineEdit_redis_port->text()));
 
         /**
          * Configuration > Components > Memcached
@@ -279,6 +280,18 @@ namespace Configuration
          *Tab "Configuration" > Page "MongoDB"
          */
         //saveSettings_MongoDB_Configuration();
+    }
+
+    void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
+    {
+        QString file = settings->get("postgresql/config").toString();
+        if(!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::INI *ini = new File::INI(file.toLatin1());
+        ini->setStringValue("postgresql", "port", ui->lineEdit_postgresql_port->text().toLatin1());
+        ini->writeConfigFile();
     }
 
     void ConfigurationDialog::saveSettings_Redis_Configuration()
