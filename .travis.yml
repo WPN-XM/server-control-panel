@@ -108,5 +108,9 @@ notifications:
   email: false
   irc:
     channels:
-      - "irc.freenode.org#koch"
+      - "irc.freenode.org#wpnxm"
     use_notice: true
+    skip_join: true
+
+git:
+  depth: 10
