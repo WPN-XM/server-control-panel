@@ -1,0 +1,84 @@
+# See http://www.appveyor.com/docs/appveyor-yml
+
+version: '{build}'
+
+# Branches to build
+branches:
+  only: 
+    - master
+
+configuration: 
+  - release 
+  #- debug
+
+environment:
+  MSBUILD_FLAGS: /verbosity:minimal /maxcpucount
+  matrix:
+    # MinGW 32bit
+    - QTDIR: C:\Qt\5.6\mingw49_32
+      SPEC: win32-g++
+      COMPILER: mingw32-make
+      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win32.zip
+     # Microsoft Visual Studio 64bit
+    - QTDIR: C:\Qt\5.6\msvc2015_64
+      VSVER: 14.0
+      SPEC: win32-msvc2015
+      COMPILER: nmake
+      #ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%.%APPVEYOR_BUILD_NUMBER%-win64.zip
+      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win64.zip
+      #GENERATOR: "Visual Studio 14 2015 Win64"
+    # Microsoft Visual Studio 32bit
+    - QTDIR: C:\Qt\5.6\msvc2015
+      VSVER: 14.0
+      SPEC: win32-msvc2015
+      COMPILER: nmake
+      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_BUILD_VERSION%_win32.zip
+
+
+matrix:
+  fast_finish: true
+
+init:
+- git config --global core.autocrlf input
+
+shallow_clone: true
+
+before_build:
+  # set QT path and env variables
+  - call "%QTDIR%\bin\qtenv2.bat"
+  - set Path=%QTDIR%\bin;%Path%
+  # show qmake and make version
+  - qmake -v
+  - if %COMPILER%==mingw32-make call %COMPILER% -v
+  # detect architecture (32bit or 64bit)
+  - if %QTDIR:_64=%==%QTDIR% (set ARCH=x86) else (set ARCH=x64)
+  # Set more... if Microsoft Visual Studio
+  - if %COMPILER%==nmake call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  # Show build folder
+  - echo %APPVEYOR_BUILD_FOLDER%
+  - echo %CONFIGURATION%
+  ä- cmake -H. -Bbuild -G "%GENERATOR%" -DCMAKE_SYSTEM_VERSION=10.0 "-DCMAKE_PREFIX_PATH=%QTDIR%"
+
+build_script:
+  - if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
+  - cd %APPVEYOR_BUILD_FOLDER%
+  # run qmake
+  - qmake Project.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
+  #- cmake --build build --config "%CONFIGURATION%" -- %MSBUILD_FLAGS%
+  # Run compiler
+  - call %COMPILER%
+
+after_build:
+#- cmake --build build --config "%CONFIGURATION%" --target check -- %MSBUILD_FLAGS%
+#- cmake --build build --config "%CONFIGURATION%" --target package -- %MSBUILD_FLAGS%
+
+#artifacts:
+#- path: build/scp-*.7z
+
+#deploy:
+#  provider: GitHub
+#  auth_token:
+#    secure: ---------------------
+#  artifact: /.*\.7z/
+#  on:
+#    appveyor_repo_tag: true
