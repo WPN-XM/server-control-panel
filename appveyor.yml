@@ -57,7 +57,7 @@ before_build:
   # Show build folder
   - echo %APPVEYOR_BUILD_FOLDER%
   - echo %CONFIGURATION%
-  ä- cmake -H. -Bbuild -G "%GENERATOR%" -DCMAKE_SYSTEM_VERSION=10.0 "-DCMAKE_PREFIX_PATH=%QTDIR%"
+  #- cmake -H. -Bbuild -G "%GENERATOR%" -DCMAKE_SYSTEM_VERSION=10.0 "-DCMAKE_PREFIX_PATH=%QTDIR%"
 
 build_script:
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
