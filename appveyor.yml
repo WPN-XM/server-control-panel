@@ -63,7 +63,7 @@ build_script:
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
   # run qmake
-  - qmake Project.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
+  - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
   #- cmake --build build --config "%CONFIGURATION%" -- %MSBUILD_FLAGS%
   # Run compiler
   - call %COMPILER%
