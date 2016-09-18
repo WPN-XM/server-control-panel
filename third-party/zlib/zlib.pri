@@ -1,27 +1,29 @@
-HEADERS = crc32.h \
-          deflate.h \
-          inffast.h \
-          inffixed.h \
-          inflate.h \
-          inftrees.h \
-          trees.h \
-          zconf.h \
-          zlib.h \
-          zutil.h \
-          gzguts.h
+INCLUDEPATH += $$PWD
+DEPENDPATH += $$PWD
+HEADERS = $$PWD/crc32.h \
+          $$PWD/deflate.h \
+          $$PWD/inffast.h \
+          $$PWD/inffixed.h \
+          $$PWD/inflate.h \
+          $$PWD/inftrees.h \
+          $$PWD/trees.h \
+          $$PWD/zconf.h \
+          $$PWD/zlib.h \
+          $$PWD/zutil.h \
+          $$PWD/gzguts.h
 
-SOURCES = adler32.c \
-          compress.c \
-          crc32.c \
-          deflate.c \
-          infback.c \
-          inffast.c \
-          inflate.c \
-          inftrees.c \
-          trees.c \
-          uncompr.c \
-          zutil.c \
-          gzclose.c \
-          gzlib.c \
-          gzread.c \
-          gzwrite.c
+SOURCES = $$PWD/adler32.c \
+          $$PWD/compress.c \
+          $$PWD/crc32.c \
+          $$PWD/deflate.c \
+          $$PWD/infback.c \
+          $$PWD/inffast.c \
+          $$PWD/inflate.c \
+          $$PWD/inftrees.c \
+          $$PWD/trees.c \
+          $$PWD/uncompr.c \
+          $$PWD/zutil.c \
+          $$PWD/gzclose.c \
+          $$PWD/gzlib.c \
+          $$PWD/gzread.c \
+          $$PWD/gzwrite.c
