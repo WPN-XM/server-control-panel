@@ -18,20 +18,16 @@ environment:
     - QTDIR: C:\Qt\5.6\mingw49_32
       SPEC: win32-g++
       MAKE: mingw32-make
-      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win32-mingw.zip
     # Microsoft Visual Studio 32bit
     - QTDIR: C:\Qt\5.6\msvc2015
       CMAKE_GENERATOR: "Visual Studio 14 2015"
       SPEC: win32-msvc2015
       MAKE: nmake
-      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_BUILD_VERSION%_win32-msvc2015.zip
      # Microsoft Visual Studio 64bit
     - QTDIR: C:\Qt\5.6\msvc2015_64
       CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
       SPEC: win32-msvc2015
       MAKE: nmake
-      #ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%.%APPVEYOR_BUILD_NUMBER%-win64.zip
-      ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win64-msvc2015.zip
 
 matrix:
   fast_finish: true
