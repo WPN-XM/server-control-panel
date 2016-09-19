@@ -84,7 +84,8 @@ build_script:
   - call %MAKE%
 
 after_build:
-  - cmd: 'echo %cd%'
+  - echo %cd%
+  - dir %APPVEYOR_BUILD_FOLDER% /s
   - cd %CONFIGURATION%
   - windeployqt.exe wpn-xm.exe
   - xcopy /Y /s %APPVEYOR_BUILD_FOLDER%\libs .
