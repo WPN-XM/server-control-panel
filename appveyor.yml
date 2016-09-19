@@ -21,6 +21,7 @@ environment:
       ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win32-mingw.zip
      # Microsoft Visual Studio 64bit
     - QTDIR: C:\Qt\5.6\msvc2015_64
+      CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
       VSVER: 14.0
       SPEC: win32-msvc2015
       MAKE: nmake
@@ -29,6 +30,7 @@ environment:
       #GENERATOR: "Visual Studio 14 2015 Win64"
     # Microsoft Visual Studio 32bit
     - QTDIR: C:\Qt\5.6\msvc2015
+      CMAKE_GENERATOR: "Visual Studio 14 2015"
       VSVER: 14.0
       SPEC: win32-msvc2015
       MAKE: nmake
