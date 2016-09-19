@@ -91,6 +91,10 @@ after_build:
   # identify and copy dependencies
   - windeployqt.exe wpn-xm.exe
   - xcopy /Y /s %APPVEYOR_BUILD_FOLDER%\libs .
+  # cleanups
+  - del *.obj
+  - del *.o
+  - del *.cpp
   # package
   - 7z a wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip .
   # deploy
