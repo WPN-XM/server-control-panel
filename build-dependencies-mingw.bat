@@ -4,13 +4,6 @@ echo.
 echo Building dependencies using MinGW
 echo.
 
-::set QTDIR="C:\Qt\Qt5.5.0\5.5\mingw492_32"
-
-pushd "%~dp0"
-call "%QTDIR%\bin\qtenv2.bat"
-popd
-
-
 echo -- Building zlib
 echo.
 pushd "%~dp0"
@@ -21,7 +14,7 @@ qmake.exe zlib.pro -r -spec win32-g++ "DESTDIR = $$PWD/../../../libs"
 mingw32-make
 popd
 echo Done.
-
+echo.
 
 echo -- Building QuaZip
 echo.
@@ -33,3 +26,4 @@ qmake.exe quazip.pro -r -spec win32-g++ "INCLUDEPATH += $$PWD/../../zlib" "LIBS 
 mingw32-make
 popd
 echo Done.
+echo.

@@ -22,14 +22,12 @@ environment:
     # Microsoft Visual Studio 32bit
     - QTDIR: C:\Qt\5.6\msvc2015
       CMAKE_GENERATOR: "Visual Studio 14 2015"
-      VSVER: 14.0
       SPEC: win32-msvc2015
       MAKE: nmake
       ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_BUILD_VERSION%_win32-msvc2015.zip
      # Microsoft Visual Studio 64bit
     - QTDIR: C:\Qt\5.6\msvc2015_64
       CMAKE_GENERATOR: "Visual Studio 14 2015 Win64"
-      VSVER: 14.0
       SPEC: win32-msvc2015
       MAKE: nmake
       #ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%.%APPVEYOR_BUILD_NUMBER%-win64.zip
@@ -67,7 +65,7 @@ before_build:
   # detect architecture (32bit or 64bit)
   - if %QTDIR:_64=%==%QTDIR% (set ARCH=x86) else (set ARCH=x64)
   # Set more... if Microsoft Visual Studio
-  - if %MAKE%==nmake call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  - if %MAKE%==nmake call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
   # Show build folder
   - echo %APPVEYOR_BUILD_FOLDER%
   - echo %CONFIGURATION%

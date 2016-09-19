@@ -1,10 +1,8 @@
 @echo off
 
 echo.
-echo "Building dependencies using MSVC"
+echo Building dependencies using MSVC
 echo.
-
-
 
 echo -- Building zlib
 echo.
