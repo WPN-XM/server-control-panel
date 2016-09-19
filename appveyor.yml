@@ -101,6 +101,10 @@ after_build:
   # deploy
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip
 
+test_script:
+  - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
+  - wpn-xm.exe -v
+
 #artifacts:
 #- path: build/scp-*.7z
 
