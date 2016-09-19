@@ -38,18 +38,17 @@ QT += core network widgets
 # needed for "createShellLink", see ConfigurationDialog
 LIBS += -luuid -lole32
 
-# this define disables qDebug() output to console in release mode
-#@
-#CONFIG(release, debug|release):DEFINES += QT_NO_WARNING_OUTPUT QT_NO_DEBUG_OUTPUT QT_NO_TRANSLATION
-#@
-
 # ZLIB
 INCLUDEPATH += $$PWD/third-party/zlib
-LIBS += -L$$PWD/libs -lz
+release {
+    LIBS += -L$$PWD/libs -lz
+}
 
 # QuaZIP
 INCLUDEPATH += $$PWD/third-party/quazip
-LIBS += -L$$PWD/libs -lquazip
+release {
+    LIBS += -L$$PWD/libs -lquazip
+}
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 

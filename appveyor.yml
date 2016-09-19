@@ -17,13 +17,13 @@ environment:
     # MinGW 32bit
     - QTDIR: C:\Qt\5.6\mingw49_32
       SPEC: win32-g++
-      COMPILER: mingw32-make
+      MAKE: mingw32-make
       ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win32-mingw.zip
      # Microsoft Visual Studio 64bit
     - QTDIR: C:\Qt\5.6\msvc2015_64
       VSVER: 14.0
       SPEC: win32-msvc2015
-      COMPILER: nmake
+      MAKE: nmake
       #ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%.%APPVEYOR_BUILD_NUMBER%-win64.zip
       ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_REPO_TAG_NAME%-win64-msvc2015.zip
       #GENERATOR: "Visual Studio 14 2015 Win64"
@@ -31,7 +31,7 @@ environment:
     - QTDIR: C:\Qt\5.6\msvc2015
       VSVER: 14.0
       SPEC: win32-msvc2015
-      COMPILER: nmake
+      MAKE: nmake
       ARTIFACT: $(APPVEYOR_PROJECT_NAME)-%APPVEYOR_BUILD_VERSION%_win32-msvc2015.zip
 
 
@@ -63,11 +63,11 @@ before_build:
   - set Path=%QTDIR%\bin;%Path%
   # show qmake and make version
   - qmake -v
-  - if %COMPILER%==mingw32-make call %COMPILER% -v
+  - if %MAKE%==mingw32-make call %MAKE% -v
   # detect architecture (32bit or 64bit)
   - if %QTDIR:_64=%==%QTDIR% (set ARCH=x86) else (set ARCH=x64)
   # Set more... if Microsoft Visual Studio
-  - if %COMPILER%==nmake call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
+  - if %MAKE%==nmake call "%ProgramFiles(x86)%\Microsoft Visual Studio %VSVER%\VC\vcvarsall.bat" %ARCH%
   # Show build folder
   - echo %APPVEYOR_BUILD_FOLDER%
   - echo %CONFIGURATION%
@@ -76,11 +76,12 @@ build_script:
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
   # build dependencies  
-  - if %COMPILER%==mingw32-make call build-dependencies-mingw.bat
+  - if %MAKE%==mingw32-make call build-dependencies-mingw.bat
+  - if %MAKE%==nmake call build-dependencies-msvc.bat
   # run qmake
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
-  # Run compiler
-  - call %COMPILER%
+  # Run make
+  #- call %MAKE%
 
 #after_build:
 
