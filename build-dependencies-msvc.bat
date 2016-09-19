@@ -35,7 +35,7 @@ pushd "%~dp0"
 cd third-party\quazip\quazip
 :: 1) configure
 mkdir build && cd build
-cmake.exe .. -DCMAKE_INSTALL_PREFIX=../../../libs -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
+cmake.exe .. -DCMAKE_INSTALL_PREFIX=../../../libs CONFIG+=statliclib -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
 :: 2) make
 popd
 echo Done.
