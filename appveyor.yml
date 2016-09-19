@@ -89,7 +89,7 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
   - dir
   # identify and copy dependencies
-  - windeployqt.exe --no-system-d3d-compiler --%CONFIGURATION% wpn-xm.exe
+  - windeployqt.exe --no-system-d3d-compiler --no-opengl --no-translations --%CONFIGURATION% wpn-xm.exe
   - xcopy /Y /s %APPVEYOR_BUILD_FOLDER%\libs .
   # cleanups
   - del *.obj
