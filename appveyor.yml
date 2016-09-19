@@ -81,9 +81,15 @@ build_script:
   # run qmake
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
   # Run make
-  #- call %MAKE%
+  - call %MAKE%
 
-#after_build:
+after_build:
+  - cmd: 'echo %cd%'
+  - cd %CONFIGURATION%
+  - windeployqt.exe wpn-xm.exe
+  - xcopy /Y /s %APPVEYOR_BUILD_FOLDER%\libs .
+  - 7z a wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip .
+  - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip
 
 #artifacts:
 #- path: build/scp-*.7z
