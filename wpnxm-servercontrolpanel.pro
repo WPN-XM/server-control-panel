@@ -43,42 +43,13 @@ LIBS += -luuid -lole32
 #CONFIG(release, debug|release):DEFINES += QT_NO_WARNING_OUTPUT QT_NO_DEBUG_OUTPUT QT_NO_TRANSLATION
 #@
 
-DEFINES += QUAZIP_BUILD
-DEFINES += QUAZIP_STATIC
-include(third-party/quazip/quazip.pri)
-include(third-party/zlib/zlib.pri)
-
-#
-# Dependency: QuaZip
-#
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/third-party/quazip/release/ -lquazip
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/third-party/quazip/debug/ -lquazip
-else:unix: LIBS += -L$$OUT_PWD/third-party/quazip/ -lquazip
-
-INCLUDEPATH += $$PWD/third-party/quazip
-DEPENDPATH += $$PWD/third-party/quazip
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/quazip/release/libquazip.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/quazip/debug/libquazip.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/quazip/release/quazip.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/quazip/debug/quazip.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/third-party/quazip/libquazip.a
-
-#
-# Dependency: zlib
-#
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/third-party/zlib/release/ -lzlib
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/third-party/zlib/debug/ -lzlib
-else:unix: LIBS += -L$$OUT_PWD/third-party/zlib/ -lzlib
-
+# ZLIB
 INCLUDEPATH += $$PWD/third-party/zlib
-DEPENDPATH += $$PWD/third-party/zlib
+LIBS += -L$$PWD/libs -lz
 
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/zlib/release/libzlib.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/zlib/debug/libzlib.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/zlib/release/zlib.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/third-party/zlib/debug/zlib.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/third-party/zlib/libzlib.a
+# QuaZIP
+INCLUDEPATH += $$PWD/third-party/quazip
+LIBS += -L$$PWD/libs -lquazip
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 
@@ -199,7 +170,7 @@ static {                                      # everything below takes effect wi
     # for extra security on Windows: enable ASLR and DEP via GCC linker flags
     QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--nxcompat
 
-    QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter -Wstack-protector
+    QMAKE_CXXFLAGS_WARN_ON = -fdiagnostics-show-option -Wall -Wextra -Wformat -Wformat-security -Wno-ignored-qualifiers  -Wno-unused-parameter -Wstack-protector
 }
 
 message($$QMAKESPEC) # Determine the platform we are on
@@ -219,6 +190,13 @@ win32-g++ {
 win32-msvc* {
     message("using win32 msvc")
     QMAKE_CXXFLAGS += /MP
+}
+
+*-g++-32 {
+    message("using g++-32, adding -msse2 flag")
+
+    QMAKE_CXXFLAGS += -msse2
+    QMAKE_CFLAGS += -msse2
 }
 
 # Deployment - Automatically Copy Dependencies to Build Folder
