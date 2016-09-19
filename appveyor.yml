@@ -86,10 +86,14 @@ build_script:
 after_build:
   - echo %cd%
   - dir %APPVEYOR_BUILD_FOLDER% /s
-  - cd %CONFIGURATION%
+  - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
+  - dir
+  # identify and copy dependencies
   - windeployqt.exe wpn-xm.exe
   - xcopy /Y /s %APPVEYOR_BUILD_FOLDER%\libs .
+  # package
   - 7z a wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip .
+  # deploy
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%ARCH%.zip
 
 #artifacts:
