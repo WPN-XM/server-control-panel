@@ -76,7 +76,7 @@ build_script:
   - if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
   # build dependencies  
-  - call build-dependencies.bat
+  - if %COMPILER%==mingw32-make call build-dependencies-mingw.bat
   # run qmake
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
   # Run compiler
