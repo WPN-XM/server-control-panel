@@ -13,13 +13,7 @@ configuration:
 
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount
-  matrix:
-    # MinGW
-    - bitsize: win32
-      platform: mingw
-      qt: 5.6\mingw49_32
-      suffix: mingw
-
+  matrix: 
     # MSVC x86
     - bitsize: win32
       platform: amd64_x86
@@ -31,6 +25,12 @@ environment:
       platform: amd64
       qt: 5.6\msvc2015_64
       suffix: msvc2015
+
+    # MinGW
+    - bitsize: win32
+      platform: mingw
+      qt: 5.6\mingw49_32
+      suffix: mingw
 
 matrix:
   fast_finish: true
@@ -71,7 +71,7 @@ before_build:
   # show qmake and make version
   - qmake -v
   - if %platform%==mingw (call mingw32-make -v)
-  
+
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
