@@ -9,7 +9,7 @@ echo.
 pushd "%~dp0"
 cd third-party\zlib
 :: 1) configure
-cmake -G "NMake Makefiles" CMakeLists.txt -B./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../libs
+cmake -G "Visual Studio 14 2015" CMakeLists.txt -B./build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../libs
 :: 2) make
 msbuild .\build\zlib.vcxproj /p:Configuration=Release /verbosity:minimal /p:OutDir=..\..\..\libs\
 msbuild .\build\zlibstatic.vcxproj /p:Configuration=Release /verbosity:minimal /p:OutDir=..\..\..\libs\
@@ -23,7 +23,7 @@ pushd "%~dp0"
 cd third-party\quazip\quazip
 :: 1) configure
 mkdir build && cd build
-cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCONFIG+=statliclib -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
+cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCONFIG+=statliclib -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
 :: 2) make
 cmake --build . --config %CONFIGURATION%
 popd
