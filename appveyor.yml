@@ -63,7 +63,7 @@ before_build:
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
   # Set more... if Microsoft Visual Studio
   - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
-  - if not %platform%==mingw (set makefiles="NMake Makefiles") else (set makefiles="MinGW Makefiles")
+  - if not %platform%==mingw (set GENERATOR="NMake Makefiles") else (set GENERATOR="MinGW Makefiles")
   - if not %platform%==mingw (set SPEC="win32-msvc2015") else (set SPEC="win32-g++")
   # Show build folder
   - echo %APPVEYOR_BUILD_FOLDER%
