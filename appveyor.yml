@@ -70,7 +70,7 @@ before_build:
   - echo %CONFIGURATION%
   # show qmake and make version
   - qmake -v
-  - if %platform%==mingw call %MAKE% -v
+  - if %platform%==mingw (call mingw32-make -v) else (call nmake -v)
 
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
@@ -79,8 +79,8 @@ build_script:
   - if %platform%==mingw (call build-dependencies-mingw.bat) else (call build-dependencies-msvc.bat)
   # run qmake  
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
-  # Run make
-  - call %MAKE%
+  # run make
+  - if %platform%==mingw (mingw32-make) else (nmake)
 
 after_build:
   - echo %cd%
