@@ -21,6 +21,8 @@ echo -- Building QuaZip
 echo.
 pushd "%~dp0"
 cd third-party\quazip\quazip
+call qtenv2.bat
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
 :: 1) configure
 mkdir build && cd build
 cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCONFIG+=statliclib -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
