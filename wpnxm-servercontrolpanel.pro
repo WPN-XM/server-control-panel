@@ -39,15 +39,15 @@ QT += core network widgets
 LIBS += -luuid -lole32
 
 # ZLIB
-INCLUDEPATH += $$PWD/third-party/zlib
+INCLUDEPATH += $$PWD/libs/zlib/include
 release {
-    LIBS += -L$$PWD/libs -lz
+    LIBS += -L$$PWD/libs/zlib/bin -lz
 }
 
 # QuaZIP
-INCLUDEPATH += $$PWD/third-party/quazip
+INCLUDEPATH += $$PWD/libs/quazip/include
 release {
-    LIBS += -L$$PWD/libs -lquazip
+    LIBS += -L$$PWD/libs/quazip/bin -lquazip
 }
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
