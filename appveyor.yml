@@ -54,6 +54,10 @@ init:
 
 shallow_clone: true
 
+install:
+  - cd %REPO_DIR%
+  - git submodule update --init --recursive
+
 before_build:
   # init mingw paths
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
@@ -70,16 +74,28 @@ before_build:
   # show qmake and make version
   - qmake -v
   - if %platform%==mingw (call mingw32-make -v)
+  # zlib
+  - cd %APPVEYOR_BUILD_FOLDER%\third-party\zlib
+  - mkdir build
+  - cd build
+  - cmake -G "Visual Studio 14 2015" ../
+  - msbuild /nologo /t:Build /p:Configuration=%CONFIGURATION% zlib.sln
+  # quazip
+  - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
+  - mkdir build
+  - cd build
+  - cmake -G "Visual Studio 14 2015" -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\third-party\zlib;%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\Debug\zlibd.lib" ../
+  - msbuild /nologo /t:Build /p:Configuration=Debug quazip.sln
 
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
   # build dependencies  
-  - if %platform%==mingw (call build-dependencies-mingw.bat) else (call build-dependencies-msvc.bat)
+  #- if %platform%==mingw (call build-dependencies-mingw.bat) else (call build-dependencies-msvc.bat)
   # run qmake  
-  - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% "CONFIG+=%CONFIGURATION%"
+  - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% -config %CONFIGURATION% 
   # run make
-  - if %platform%==mingw (mingw32-make) else (nmake)
+  - if %platform%==mingw (mingw32-make) else (nmake BUILD=release)
 
 after_build:
   - echo %cd%
