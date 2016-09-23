@@ -126,6 +126,23 @@ namespace Configuration
         ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
 
         /**
+         * Configuration > Components > Xdebug
+         */
+
+        // remote
+        ui->checkBox_xdebug_remote_enable->setChecked(settings->get("xdebug/remote_enable", true).toBool());
+        ui->lineEdit_xdebug_remote_host->setText(settings->get("xdebug/remote_host", QVariant(QString("127.0.0.1"))).toString());
+        ui->lineEdit_xdebug_remote_port->setText(settings->get("xdebug/remote_port", QVariant(QString("9100"))).toString());
+        ui->checkBox_xdebug_remote_autostart->setChecked(settings->get("xdebug/remote_autostart", true).toBool());
+        ui->lineEdit_xdebug_remote_handler->setText(settings->get("xdebug/remote_handler", QVariant(QString("dbgp"))).toString());
+        ui->comboBox_xdebug_remote_mode->setCurrentText(settings->get("xdebug/remote_mode", QVariant(QString("req"))).toString());
+        // profiler
+        ui->checkBox_xdebug_enable_profiler->setChecked(settings->get("xdebug/enable_profiler", true).toBool());
+        ui->checkBox_xdebug_remove_old_logs->setChecked(settings->get("xdebug/remove_old_logs", true).toBool());
+
+        ui->lineEdit_xdebug_idekey->setText(settings->get("xdebug/idekey", QVariant(QString("netbeans-xdebug"))).toString());
+
+        /**
          * Configuration > Components > MariaDB
          */
 
@@ -222,6 +239,15 @@ namespace Configuration
          * Configuration > Components > XDebug
          */
 
+        settings->set("xdebug/remote_enable",     QString(ui->checkBox_xdebug_remote_enable->isChecked()));
+        settings->set("xdebug/remote_host",       QString(ui->lineEdit_xdebug_remote_host->text()));
+        settings->set("xdebug/remote_port",       QString(ui->lineEdit_xdebug_remote_port->text()));
+        settings->set("xdebug/remote_autostart",  QString(ui->checkBox_xdebug_remote_autostart->isChecked()));
+        settings->set("xdebug/remote_handler",    QString(ui->lineEdit_xdebug_remote_handler->text()));
+        settings->set("xdebug/remote_mode",       QString(ui->comboBox_xdebug_remote_mode->currentText()));
+
+        settings->set("xdebug/idekey",            QString(ui->lineEdit_xdebug_idekey->text()));
+
         /**
          * Configuration > Components > MariaDB
          */
@@ -306,6 +332,31 @@ namespace Configuration
         ini->writeConfigFile();
     }
 
+    void ConfigurationDialog::saveSettings_Xdebug_Configuration()
+    {
+        // xdebug configuration diretives are set in php.ini
+
+        QString file = settings->get("php/config").toString();
+        if(!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::INI *ini = new File::INI(file.toLatin1());
+        // remote
+        ini->setBoolValue("xdebug", "remote_enable",       ui->checkBox_xdebug_remote_enable->isChecked());
+        ini->setStringValue("xdebug", "remote_host",       ui->lineEdit_xdebug_remote_host->text().toLatin1());
+        ini->setStringValue("xdebug", "remote_port",       ui->lineEdit_xdebug_remote_port->text().toLatin1());
+        ini->setBoolValue("xdebug", "remote_autostart",    ui->checkBox_xdebug_remote_autostart->isChecked());
+        ini->setStringValue("xdebug", "remote_handler",    ui->lineEdit_xdebug_remote_handler->text().toLatin1());
+        ini->setStringValue("xdebug", "remote_mode",       ui->comboBox_xdebug_remote_mode->currentText().toLatin1());
+        // profiler
+        ini->setBoolValue("xdebug", "enable_profiler",     ui->checkBox_xdebug_enable_profiler->isChecked());
+        ini->setBoolValue("xdebug", "remove_old_logs",     ui->checkBox_xdebug_remove_old_logs->isChecked());
+
+        ini->setStringValue("xdebug", "idekey",            ui->lineEdit_xdebug_idekey->text().toLatin1());
+
+        ini->writeConfigFile();
+    }
 
     void ConfigurationDialog::saveSettings_MariaDB_Configuration()
     {
