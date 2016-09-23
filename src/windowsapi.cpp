@@ -14,7 +14,7 @@ namespace WindowsAPI
     /*
      * http://msdn.microsoft.com/en-us/library/windows/desktop/bb776891%28v=vs.85%29.aspx
      */
-    IShellLink* CreateShellLink(QString target_app_path, QString app_args, QString description,
+    IShellLink* QtWin::CreateShellLink(QString target_app_path, QString app_args, QString description,
                                 QString icon_path, int icon_index, QString working_dir,
                                 QString linkShortcut)
     {
@@ -55,7 +55,7 @@ namespace WindowsAPI
 
     typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
-    static BOOL IsWow64()
+    static BOOL QtWin::IsWow64()
     {
         BOOL bIsWow64 = FALSE;
         LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;
@@ -72,7 +72,7 @@ namespace WindowsAPI
         return bIsWow64;
     }
 
-    bool running_on_64_bits_os()
+    bool QtWin::running_on_64_bits_os()
     {
         #if defined(_M_X64) || defined(x86_64)
         return true;
@@ -81,7 +81,7 @@ namespace WindowsAPI
         #endif
     }
 
-    /*QString getProcessPathByPid(QString pid)
+    /*QString QtWin::getProcessPathByPid(QString pid)
     {
         // get process handle
         DWORD pidwin = pid.toLongLong(); // dword = unsigned long
