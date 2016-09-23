@@ -73,11 +73,11 @@ namespace Servers
     {
         if(serverName == "nginx") { return "Nginx"; }
         if(serverName == "memcached") { return "Memcached"; }
-        if(serverName == "mongodb" or serverName == "mongod") { return "MongoDb"; }
-        if(serverName == "mariadb" or serverName == "mysqld") { return "MariaDb"; }
-        if(serverName == "php" or serverName == "php-cgi") { return "PHP"; }
-        if(serverName == "postgresql" or serverName == "postgres") { return "PostgreSQL"; }
-        if(serverName == "redis" or serverName == "redis-server") { return "Redis"; }
+        if((serverName == "mongodb") or (serverName == "mongod")) { return "MongoDb"; }
+        if((serverName == "mariadb") or (serverName == "mysqld")) { return "MariaDb"; }
+        if((serverName == "php") or (serverName == "php-cgi")) { return "PHP"; }
+        if((serverName == "postgresql") or (serverName == "postgres")) { return "PostgreSQL"; }
+        if((serverName == "redis") or (serverName == "redis-server")) { return "Redis"; }
 
         return QString("Unknown");
     }
