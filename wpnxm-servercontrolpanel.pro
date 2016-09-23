@@ -36,7 +36,7 @@ CONFIG += qt console c++11 #warn-on static
 QT += core network widgets
 
 # needed for "createShellLink", see ConfigurationDialog
-LIBS += -luuid -lole32
+LIBS += -luuid -lole32 -lshell32
 
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
