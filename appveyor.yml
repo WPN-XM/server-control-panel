@@ -12,7 +12,7 @@ configuration:
   #- debug
 
 environment:
-  MSBUILD_FLAGS: /verbosity:minimal /maxcpucount
+  MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
   matrix: 
     # MSVC x86
     - bitsize: win32
