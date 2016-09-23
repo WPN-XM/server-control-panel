@@ -15,22 +15,25 @@ environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
   matrix: 
     # MSVC x86
-    - bitsize: win32
-      platform: x86
-      qt: 5.6\msvc2015
-      suffix: msvc2015
+    - arch:     win32
+      bitsize:  x86
+      platform: amd64_x86
+      qt:       5.6\msvc2015
+      suffix:   msvc2015
 
     # MSVC x64
-    - bitsize: win64
-      platform: x64
-      qt: 5.6\msvc2015_64
-      suffix: msvc2015
+    - arch:     win32
+      bitsize:  x64
+      platform: amd64
+      qt:       5.6\msvc2015_64
+      suffix:   msvc2015
 
     # MinGW
-    - bitsize: win32
+    - arch:     win32
+      bitsize:  x86
       platform: mingw
-      qt: 5.6\mingw49_32
-      suffix: mingw
+      qt:       5.6\mingw49_32
+      suffix:   mingw
 
 matrix:
   fast_finish: true
@@ -79,13 +82,13 @@ before_build:
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ../
-  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%platform% zlib.sln 
+  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%bitsize% zlib.sln 
   # quazip
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\third-party\zlib;%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\Debug\zlibd.lib" ../
-  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%platform% quazip.sln
+  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%bitsize% quazip.sln
 
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
