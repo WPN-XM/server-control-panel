@@ -10,7 +10,9 @@ JobScheduler::JobScheduler()
  */
 QList<QString> JobScheduler::getActiveJobs()
 {
-
+    QList<QString> list; 
+    list << "foo";
+    return list;
 }
 
 /**
@@ -18,7 +20,9 @@ QList<QString> JobScheduler::getActiveJobs()
  */
 QList<QString> JobScheduler::getHistoricJobs()
 {
-
+    QList<QString> list; 
+    list << "foo";
+    return list;
 }
 
 /**
@@ -27,4 +31,8 @@ QList<QString> JobScheduler::getHistoricJobs()
 QList<QString> JobScheduler::getDetailsForJobId(int jobId)
 {
     Q_UNUSED(jobId);
+
+    QList<QString> list; 
+    list << "foo";
+    return list;
 }
