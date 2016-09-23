@@ -25,7 +25,7 @@ cd third-party\quazip\quazip
 :: 1) configure
 mkdir build 
 cd build
-cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCMAKE_PREFIX_PATH="C:\Qt\%qt%\bin" -DCONFIG+=statliclib  -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
+cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DQT_MOC_EXECUTABLE="C:\Qt\%qt%\bin" -DCMAKE_PREFIX_PATH="C:\Qt\%qt%\bin" -DCONFIG+=statliclib  -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
 :: 2) make
 cmake --build . --config %CONFIGURATION%
 popd
