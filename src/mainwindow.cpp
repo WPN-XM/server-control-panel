@@ -713,8 +713,7 @@ namespace ServerControlPanel
             return;
         }
 
-        QProcess *process = new QProcess(this);
-        process->startDetached(command);
+        QProcess::startDetached(command);
     }
 
     void MainWindow::openWebinterface()
@@ -754,8 +753,7 @@ namespace ServerControlPanel
             cmd = "cmd.exe";
         }
 
-        QProcess *process = new QProcess(this);
-        process->startDetached(cmd);
+        QProcess::startDetached(cmd);
     }
 
     QString MainWindow::getProjectFolder() const
@@ -859,10 +857,10 @@ namespace ServerControlPanel
 
     void MainWindow::execEditor(QUrl logfile)
     {
-        QProcess *process = new QProcess(this);
         QString program = settings->get("global/editor").toString();
         qDebug() << logfile.toLocalFile();
-        process->startDetached(program, QStringList() << logfile.toLocalFile());
+        
+        QProcess::startDetached(program, QStringList() << logfile.toLocalFile());
     }
 
     void MainWindow::openHelpDialog()
