@@ -424,7 +424,7 @@ namespace Servers
 
                 // we want to start local servers only.
                 // external servers are possible, but the user has to start (and take care) of them.
-                if(s["address"].toString() == "localhost" or s["address"].toString() == "127.0.0.1") {
+                if( (s["address"].toString() == "localhost") || (s["address"].toString() == "127.0.0.1") ) {
 
                     // for starting local servers, we only need the Port and the number of PHP child processes to spawn
                     serversToStart.insert(s["port"].toString(), s["phpchildren"].toString());
@@ -799,7 +799,7 @@ namespace Servers
 
                     // if NGINX or PHP are not running, disable PushButtons inside Tools section,
                     // because target URL is not available.
-                    if((serverName == "Nginx") or (serverName == "PHP")) {
+                    if( (serverName == "Nginx") || (serverName == "PHP") ) {
                         emit signalMainWindow_EnableToolsPushButtons(false);
                     }
                 break;
