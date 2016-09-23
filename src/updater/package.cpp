@@ -10,7 +10,9 @@ Package::Package(QObject *parent) : QObject(parent)
  */
 QList<QString> Package::listUpgrades()
 {
-
+    QList<QString> list; 
+    list << "foo";
+    return list;
 }
 
 /**
