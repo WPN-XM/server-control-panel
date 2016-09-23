@@ -8,8 +8,8 @@ branches:
     - master
 
 configuration: 
-  - release 
-  #- debug
+  - Release 
+  #- Debug
 
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
