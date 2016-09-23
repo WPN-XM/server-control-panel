@@ -35,6 +35,8 @@ environment:
 matrix:
   fast_finish: true
 
+clone_depth: 5
+
 # scripts that are called at very beginning, before repo cloning
 init:
   - date /T & time /T
@@ -51,8 +53,6 @@ init:
       {
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
       }
-
-shallow_clone: true
 
 install:
   - cd %REPO_DIR%
