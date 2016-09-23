@@ -20,11 +20,12 @@ echo.
 echo -- Building QuaZip
 echo.
 pushd "%~dp0"
+echo C:\Qt\%qt%\bin
 cd third-party\quazip\quazip
 :: 1) configure
 mkdir build 
 cd build
-cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCONFIG+=statliclib -DCMAKE_PREFIX_PATH="C:\Qt\%qt%" -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
+cmake .. -G "Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../../libs -DCMAKE_PREFIX_PATH="C:\Qt\%qt%\bin" -DCONFIG+=statliclib  -DINCLUDEPATH="$$PWD/../../zlib" -DLIBS+="-L$$PWD/../../../libs -lz" -DDESTDIR="$$PWD/../../../libs"
 :: 2) make
 cmake --build . --config %CONFIGURATION%
 popd
