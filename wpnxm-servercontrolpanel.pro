@@ -41,15 +41,15 @@ LIBS += -luuid -lole32
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
 release {
-    win32:LIBS += -L$$PWD/libs/zlib/bin -lzlib
-    unix:LIBS  += -L$$PWD/libs/zlib/bin -lz
+    win32:LIBS += -L$$PWD/libs/zlib/lib -lzlib
+    unix:LIBS  += -L$$PWD/libs/zlib/lib -lz
 }
 
 # QuaZIP
 INCLUDEPATH += $$PWD/libs/quazip/include
 release {
-   win32:LIBS  += -L$$PWD/libs/quazip/bin -lquazip
-    unix:LIBS  += -L$$PWD/libs/quazip/bin -lquazip
+   win32:LIBS  += -L$$PWD/libs/quazip/lib -lquazip
+    unix:LIBS  += -L$$PWD/libs/quazip/lib -lquazip
 }
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
