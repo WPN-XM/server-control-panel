@@ -82,13 +82,13 @@ before_build:
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" ../
-  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%bitsize% zlib.sln 
+  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release zlib.sln 
   # quazip
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 14 2015" -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\third-party\zlib;%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\Debug\zlibd.lib" ../
-  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release /p:Platform=%bitsize% quazip.sln
+  - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=Release quazip.sln
 
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
