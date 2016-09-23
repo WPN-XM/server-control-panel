@@ -4,6 +4,7 @@
 // Windows / C++
 #include <stdlib.h>
 #include <windows.h>
+#include <shellapi.h>
 #include <string>
 
 #include <QStringList>
