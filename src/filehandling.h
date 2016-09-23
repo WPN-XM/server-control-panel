@@ -1,7 +1,7 @@
 #ifndef FILEHANDLING_H
 #define FILEHANDLING_H
 
-#include <utime.h>
+//#include <utime.h>
 
 #include <QByteArray>
 #include <QDataStream>
