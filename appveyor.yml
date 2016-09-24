@@ -129,6 +129,7 @@ after_build:
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
   - wpn-xm.exe -v
+  - wpn-xm.exe --help
 
 #artifacts:
 #- path: build/scp-*.7z
