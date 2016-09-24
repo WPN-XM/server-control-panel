@@ -1,10 +1,7 @@
 #include "QApplication"
 #include "QLibrary"
 
-// this is needed for "createShellLink"
-#include <windows.h>
-#include <objbase.h>
-#include <shlobj.h> // type defintion for IShellLink
+#include "windowsapi.h"
 
 /*
  * Some access methods for Windows libraries
@@ -55,7 +52,7 @@ namespace WindowsAPI
 
     typedef BOOL (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, PBOOL);
 
-    static BOOL QtWin::IsWow64()
+    BOOL QtWin::IsWow64()
     {
         BOOL bIsWow64 = FALSE;
         LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;

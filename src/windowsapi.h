@@ -1,18 +1,25 @@
 #ifndef WINDOWSAPI_H
 #define WINDOWSAPI_H
 
-#include "windows.h"
+#include <windows.h>
+
+// this is needed for "createShellLink"
+#include <windows.h>
+#include <objbase.h>
+#include <shlobj.h> // type defintion for IShellLink
+//#include <Shobjidl.h>
+
 #include <QtCore>
 
 namespace WindowsAPI
 {
-    class /*Q_CORE_EXPORT*/ QtWin : public QObject
+    class QtWin : public QObject
     {
         Q_OBJECT
 
         public:
 
-            IShellLink* CreateShellLink(QString target_app_path,
+            static IShellLink* CreateShellLink(QString target_app_path,
                                     QString app_args,
                                     QString description,
                                     QString icon_path,
@@ -20,8 +27,9 @@ namespace WindowsAPI
                                     QString working_dir,
                                     QString linkShortcut);
 
-            bool running_on_64_bits_os();
-    }
+            static BOOL IsWow64();
+            static bool running_on_64_bits_os();
+    };
 }
 
 #endif // WINDOWSAPI_H

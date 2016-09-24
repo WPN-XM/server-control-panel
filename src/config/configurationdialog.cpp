@@ -640,7 +640,7 @@ namespace Configuration
         if(runOnStartUp()) {
             // Add WPN-XM SCP shortcut to the Windows Autostart folder.
             // In Windows terminology "shortcuts" are "shell links".
-            WindowsAPI::CreateShellLink(
+            WindowsAPI::QtWin::CreateShellLink(
                 qApp->applicationFilePath(),"","WPN-XM Server Control Panel", // app, args, desc
                 qApp->applicationFilePath(),0,                                // icon path and idx
                 qApp->applicationDirPath(),                                   // working dir
