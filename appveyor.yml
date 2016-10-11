@@ -15,25 +15,28 @@ environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
   matrix: 
     # MSVC x86
-    - arch:     win32
-      bitsize:  x86
-      platform: amd64_x86
-      qt:       5.6\msvc2015
-      suffix:   msvc2015
+    - arch:       win32
+      bitsize:    x86
+      platform:   amd64_x86
+      qt:         5.6\msvc2015
+      suffix:     msvc2015
+      generator:  "Visual Studio 14 2015"
 
     # MSVC x64
-    - arch:     win32
-      bitsize:  x64
-      platform: amd64
-      qt:       5.6\msvc2015_64
-      suffix:   msvc2015
+    - arch:       win32
+      bitsize:    x64
+      platform:   amd64
+      qt:         5.6\msvc2015_64
+      suffix:     msvc2015
+      generator:  "Visual Studio 14 2015 Win64"
 
     # MinGW
-    - arch:     win32
-      bitsize:  x86
-      platform: mingw
-      qt:       5.6\mingw49_32
-      suffix:   mingw
+    - arch:       win32
+      bitsize:    x86
+      platform:   mingw
+      qt:         5.6\mingw49_32
+      suffix:     mingw
+      generator:  "MinGW Makefiles"
 
 matrix:
   fast_finish: true
@@ -81,14 +84,14 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\zlib
   - mkdir build
   - cd build
-  - cmake -G "Visual Studio 14 2015" ../ -DCMAKE_INSTALL_PREFIX=../../../libs/zlib
+  - cmake -G %generator% ../ -DCMAKE_INSTALL_PREFIX=../../../libs/zlib
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform=%arch% zlib.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
   # quazip
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
   - cd build
-  - cmake -G "Visual Studio 14 2015" -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\third-party\zlib;%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\Release\zlib.lib" ../
+  - cmake -G %generator% -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\third-party\zlib;%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\Release\zlib.lib" ../
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform=%arch% quazip.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
 
