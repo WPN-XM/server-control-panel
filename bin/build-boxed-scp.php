@@ -35,8 +35,8 @@ function repackage($version, $bitsize)
     passthru('php EnigmaVirtualBox.php wpnxm-scp-'. $bitsize .' wpn-xm.exe wpn-xm-'. $bitsize .'_boxed.exe');
     rename(__DIR__ . '\wpn-xm-'. $bitsize .'_boxed.exe', __DIR__ . '\wpn-xm.exe');
     // 4    
-    $7zipPath = ($bitsize === 'x86_64') ? '\7zip\x64' : '\7zip\x86';
-    passthru(__DIR__ . $7zipPath . '\7za.exe a -tzip wpnxm-scp-'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
+    $zipPath = ($bitsize === 'x86_64') ? '\7zip\x64' : '\7zip\x86';
+    passthru(__DIR__ . $zipPath . '\7za.exe a -tzip wpnxm-scp-'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
     // 5
     unlink(__DIR__ . '\wpn-xm.exe');
     unlink(__DIR__ . '\wpnxm-scp-'. $bitsize .'.zip');
