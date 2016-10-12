@@ -1,4 +1,6 @@
 @echo off
-set PATH=%PATH%;c:\server\bin\php\
-php build-boxed-scp.php
+:: show PHP version
+%~dp0\php\php -v
+:: start boxing the Qt application
+%~dp0\php\php build-boxed-scp.php
 pause
