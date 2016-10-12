@@ -1,0 +1,310 @@
+Enigma Virtual Box v7.70 Build 20160914
+- Added support of FileNormalizedNameInformation class for ZwQueryInformationFile
+
+Enigma Virtual Box v7.60 Build 20160812
+- Fixed crash problems for some applications
+- Fixed crash of console version for non-English systems
+
+Enigma Virtual Box v7.50 Build 20160701
+- Fixed duplicated entries in file search (file open/save dialogs)
+- Added compatibility with RestartScan flag for ZwQueryDirectoryFile
+- Fixed stack overflow exception for multithreaded packed applications
+- Error fixed with Package Builder in GUI
+
+Enigma Virtual Box v7.40 Build 20160125
+- Fixed issue with codesign for some files
+- Few minor issues are fixed
+
+Enigma Virtual Box v7.30 Build 20150619
+- Fixed issue with Windows 8+
+- Fixed problem packaging feature if duplicated files are found
+- Bug fixed, Command Line options were not read in packages
+
+Enigma Virtual Box v7.20 Build 20141013
+- Fixed problem with CreateProcess function for x64 applications
+- Fixed issue with ZwQuerySecurityObject
+- Added Vietnamese translation
+- Some problems fixed with the Registry Importing feature
+
+Enigma Virtual Box v7.10 Build 20131218
+- Added ability to import registry data from .reg files
+- Improved handling of files with sections of zero virtual size
+- Bug fixed processing particular exe and dll files (Watcom files)
+- Bug fixed with memory leaks when create a new virtual process
+- Bug fixed when adding files into virtual tree (files were not added)
+
+Enigma Virtual Box v7.00 Build 20131111
+- Improved read and write file operations handling (bug caused access denied error)
+
+Enigma Virtual Box v6.90 Build 20131107
+- Added handling of ZwNotifyChangeDirectoryFile function
+- Improved handling of ZwSetInformationFile function
+
+Enigma Virtual Box v6.80 Build 20131003
+- Bug fixed loading virtual dll files under Windows 8 x64
+- Bug fixed running some virtual exe files on Windows 8
+- Bug fixed processing particular files
+
+Enigma Virtual Box v6.70 Build 20130604
+- Bug fixed running multiple instances of virtual processes
+
+Enigma Virtual Box v6.60 Build 20130402
+- Improved packing of big files
+- Improved handling of manifest files
+
+Enigma Virtual Box v6.50 Build 20130313
+- Improved virtualization of dll files
+
+Enigma Virtual Box v6.40 Build 20130222
+- Improved handling of asynchronous read-write operations under virtual files
+- Bug fixed processing particular files
+
+Enigma Virtual Box v6.30 Build 20130128
+- Critical improvements of handling of file read-write operations
+
+Enigma Virtual Box v6.20 Build 20130114
+- Bug fixed running one packed exe from another
+- GUI improved for working with relative file names
+
+Enigma Virtual Box v6.10 Build 20130109
+- Improved handing of ZwSetInformationFile function
+- Bug fixed writing to virtual files
+- Minor problems fixed with console version
+
+Enigma Virtual Box v6.00 Build 20121224
+- Improved files virtualization core
+- Added ability to setup and install ActiveX components
+- Improved ActiveX/COM registration process
+- Bug fixed virtualizing particular x64 applications
+
+Enigma Virtual Box v5.80 Build 20121129
+- Added ability to run virtual x64 files
+- Added ability to share virtual system to x64 processes
+- Added ability to make packages through command line version
+
+Enigma Virtual Box v5.70 Build 20121113
+- Fixed compatibility issue with Windows 2000 for some files
+
+Enigma Virtual Box v5.60 Build 20121108
+- Improved compatibility with different versions of Windows and softwares
+- Bug fixed working 64 bit files under Windows 8 x64
+
+Enigma Virtual Box v5.50 Build 20121022
+- Bug fixed processing some files
+- Bug fixed extracting files to the disk from external package
+
+Enigma Virtual Box v5.40 Build 20121018
+- Added Italian localization
+- Bug fixed loading packages for x64
+- Minor improvements and fixes
+
+Enigma Virtual Box v5.30 Build 20120824
+- Improved Registry Virtualization
+
+Enigma Virtual Box v5.20 Build 20120815
+- Added handling of ZwUnmapViewOfSectionEx function
+- Bug fixed working of .net applications under Windows 8
+
+Enigma Virtual Box v5.10 Build 20120814
+- Improved compatibility with Windows 8
+
+Enigma Virtual Box v5.00 Build 20120801
+- Bug fixed loading external packages with path variables
+
+Enigma Virtual Box v4.90 Build 20120717
+- Bug fixed handling of ZwDeleteValueKey function caused application freezing
+- Bug fixed editing file virtual path in File Properties dialog
+- Bug fixed activating context
+
+Enigma Virtual Box v4.80 Build 20120705
+- Added ability to create activation context for manifests
+- Bug fixed loading virtual registry values
+
+Enigma Virtual Box v4.70 Build 20120614
+- Improved handling of ZwMapViewOfSection function
+
+Enigma Virtual Box v4.60 Build 20120607
+- Added ability to write to virtual files
+- Added ability to load package from an external folder
+- Added ability to enter path variables as a value of registry items
+- Added Swedish localization
+- Improved stability with multi-threaded applications
+- Improved handling of ZwMapViewOfSection function
+- Improved access handling for files operations
+- Improved ZwSetInformationFile function for working with files deleting
+- Bug fixed saving virtual registry settings
+- Bug fixed mapping particular files
+
+Enigma Virtual Box v4.50 Build 20120424
+- Bug fixed launching packed application from a network device
+
+Enigma Virtual Box v4.40 Build 20120419
+- Improved working with big files
+
+Enigma Virtual Box v4.30 Build 20120322
+- Bug fixed loading packages
+
+Enigma Virtual Box v4.20 Build 20120319
+- Improved virtualization of .net executables
+- Improved detection of virtual registry keys
+- Bug fixed deleting extracted files with hidden attribute
+
+Enigma Virtual Box v4.10 Build 20120221
+- Improved virtualization of .net files
+- Improved loaders handling that allows to decrease size of virtualized output file
+- Improved case sensitive proccessing for files and registry
+- Improved files and registry virtualization
+- Bug fixed deleting extracted files on exit
+- Bug fixed storing of overwritten attributes for virtual files
+- Bug fixed querying objects security information (caused crash on Windows 8)
+- Problem fixed handing ZwDeviceIoControlFile function
+- Added option Allow runing of virtual exe files
+
+Enigma Virtual Box v4.00 Build 20120130
+- Improved multi-threading support
+- Added handing of registry values of REG_NONE type
+
+Enigma Virtual Box v3.90 Build 20120116
+- Bug fixed casual crash with files virtualization
+
+Enigma Virtual Box v3.80 Build 20111222
+- Added root folder for files virtualization %Local, ApplicationData FOLDER%
+- Improved detection of virtual files in very particular applications
+- Improved carrying of original file name for virtual executable
+- Bug fixed with registry virtualization, function ZwQueryKeyValue
+- Bug fixed with interface hiding when Alt key is pressed
+
+Enigma Virtual Box v3.70 Build 20111213
+- Added two more root folders for files virtualization %Temp FOLDER% and %AllUsers, ApplicationData FOLDER%
+- Added French and Portuguese-Brazilian localization
+- Improved speed of files virtualization
+- Improved speed of registry virtualization
+- Bug fixed enumerating registry keys
+
+Enigma Virtual Box v3.60 Build 20111201
+- Added handing of ZwDeviceIoControlFile function
+- Improved handling of ZwFsControlFile function
+- Bug fixed opening device handles
+
+Enigma Virtual Box v3.50 Build 20111118
+- Automatic detection of new versions
+- Improved handing of ZwUnmapViewOfSection
+- Improved memory saving
+- Bug fixed with memory leak in files and registry virtualization
+
+Enigma Virtual Box v3.40 Build 20111024
+- Improved execution of particular virtual files
+- Bug fixed sharing virtual system for already packed executables
+
+Enigma Virtual Box v3.30 Build 20111005
+- Improved handling of file query functions
+- Improved option Share Virtual System to Child Processes
+- Improved execution of virtual exe files
+- Bug fixed with registry virtualization
+
+Enigma Virtual Box v3.20 Build 20111003
+- Added option Map Executable Files Using Temporary File for better compatibility with the virtual executable files
+- Added Dutch_Flemish localization
+- Improved handling few more Windows API functions
+- Improved folders deleting for extracted files
+- Bug fixed mapping dll files in x64 only
+- Bug fixed running boxed file in a root drive folder
+- Few minor bugs fixed
+
+Enigma Virtual Box v3.10 Build 20110912
+- Added virtualization "over the folder" files located in folder ".."
+- Improved working with the huge amount of virtual files
+- Improved loading of virtual files inside boxed application
+- Bug fixed modifying files properties
+- Bug fixed accepting draged files
+- Bug fixed deleting extracted files
+
+Enigma Virtual Box v3.00 Build 20110901
+- Added possibility to set up external packages
+- Added possibility to drag files and folders to files tree
+- Added Portuguese-Brazilian localization
+- Improved memory usage when loading big virtual files
+- Bug fixed deleting registry items in virtual registry designer
+- Bug fixed saving virtual registry to boxed file
+- Bug fixed crashing when running new child process
+- Bug fixed mapping very rare virtual files
+
+Enigma Virtual Box v2.60 Build 20110725
+- Improved compatibility of boxing files packed with other run-time packers
+- Improved handing of ZwQueryKey 
+- Bug fixed handling of ZwDuplicateObject
+
+Enigma Virtual Box v2.50 Build 20110708
+- Fixed very rare incompatibility issue
+
+Enigma Virtual Box v2.40 Build 20110622
+- Added option Share virtual system to child processes for 32bit files only
+- Added optional virtualization of registry values and keys
+- Some rare bugs fixed
+
+Enigma Virtual Box v2.30 Build 20110603
+- Improved handling of ZwDuplicateHandle
+- Bug fixed with handling of ZwMapViewOfSection for Windows 2000
+- Some small bugs fixed
+
+Enigma Virtual Box v2.20 Build 20110520
+- Improved handing of ZwMapViewOfSection
+- Improved functions hooking
+- Bug fixed using write to disk actions for files virtualization
+- Few bugs fixed with registry virtualization
+- Bugs fixed working particular applications on Windows 2000
+
+Enigma Virtual Box v2.10 Build 20110419
+- Improved handing of ZwQueryFullAttributesFile
+- Improved handling of the result status of ZwReadFile
+- Bug fixed deleting virtual registry keys
+- Bug fixed detecting virtual files
+
+Enigma Virtual Box v2.00 Build 20110414
+- Added whole Virtualization of Registry
+- Added Check for New Versions feature
+- Added Enable Files Virtualization option
+- Added Enable Registry Virtualization option
+- Improved project loading
+- Bug fixed detecting files
+
+Enigma Virtual Box v1.70 Build 20110401
+- Improved detection of virtualized executable files
+- Bug fixed handing ZwQueryInformationProcess
+
+Enigma Virtual Box v1.60 Build 20110328
+- Added supporting of execution virtualized exe files (only x86 files support)
+- Improved detecting of virtualized files
+- Added Farsi (Persian) and Romanian localizations
+- Improved handling of ZwQuerySection
+
+Enigma Virtual Box v1.50 Build 20110301
+- Added German and Korean localizations
+- Bug fixed detecting of virtualized files
+
+Enigma Virtual Box v1.40 Build 20110209
+- Bug fixed protecting .NET 4 applications
+
+Enigma Virtual Box v1.30 Build 20101122
+- Added handling of ZwQueryVolumeInformationFile
+- Improved handling of ZwQueryInformationFile
+- Improved detection of virtualized files
+- Bug fixed mapping files with SEC_IMAGE
+
+Enigma Virtual Box v1.21 Build 20101111
+- Bug fixed with GUI flowing with 125% font in Vista/Seven
+
+Enigma Virtual Box v1.20 Build 20101107
+- Added native API support
+
+Enigma Virtual Box v1.11 Build 20101006
+- Bug fixed related to bound import
+
+Enigma Virtual Box v1.10 Build 20101005
+- Added console version
+- Added .net support
+- Optimised x64 loader
+- Fixed stripped relocations bug
+
+Enigma Virtual Box v1.00 Build 20101004
+- First release
