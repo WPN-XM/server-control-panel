@@ -13,7 +13,7 @@
  *
  * This util generates a "evb" packaging configuration file.
  * It includes all files and folders of a given folder with absolute paths.
- * Then it boxes the application via enigmavbconsole.
+ * Then it uses "enigmavbconole" to box the application.
  *
  * CLI example:
  * > php evb.php wpnxm-scp-x86 wpn-xm.exe wpn-xm_x86_boxed.exe
