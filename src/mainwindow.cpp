@@ -865,7 +865,7 @@ namespace ServerControlPanel
 
     void MainWindow::openHelpDialog()
     {
-        QDesktopServices::openUrl(QUrl("http://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panell"));
+        QDesktopServices::openUrl(QUrl("http://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
     }
 
     void MainWindow::openAboutDialog()
