@@ -117,10 +117,12 @@ after_build:
   # copy dependencies 
   # 1) zlib 
   - copy %APPVEYOR_BUILD_FOLDER%\libs\zlib\bin\zlib.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\zlib.dll
+  - copy %APPVEYOR_BUILD_FOLDER%\third-party\zlib\build\%CONFIGURATION%\zlib.exp %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.exp
   # 2) quazip
   - mkdir %APPVEYOR_BUILD_FOLDER%\libs\quazip\bin
   - copy %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.dll %APPVEYOR_BUILD_FOLDER%\libs\quazip\bin\quazip.dll
   - copy %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\quazip.dll
+  - copy %APPVEYOR_BUILD_FOLDER%\third-party\quazip\build\%CONFIGURATION%\quazip.exp %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.exp
   # cleanups
   - del *.obj
   - del *.o
