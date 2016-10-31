@@ -1335,7 +1335,7 @@ namespace ServerControlPanel
                 pushButton_ConfigureEdit->setIcon(iconConfigEdit);
                 pushButton_ConfigureEdit->setFlat(true);
                 pushButton_ConfigureEdit->setToolTip(QApplication::translate(
-                    "MainWindow", "Open "+ server->name.toLocal8Bit() +" Configuration File with Editor", 0)
+                    "MainWindow", "Edit "+ server->name.toLocal8Bit() +" config file", 0)
                 );
                 DaemonsGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
 
