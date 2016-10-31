@@ -1705,7 +1705,7 @@ QPushButton:pressed
         </size>
        </property>
        <property name="toolTip">
-        <string>Open the WPN-XM wiki help pages.</string>
+        <string>Open the WPN-XM help pages.</string>
        </property>
        <property name="styleSheet">
         <string notr="true"/>
