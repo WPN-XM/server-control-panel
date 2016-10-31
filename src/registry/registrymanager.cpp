@@ -16,6 +16,12 @@ namespace SoftwareRegistry
          *     write to JSON file
          */
 
+        // create "/bin/wpnxm-scp" folder, if not exists
+        QDir dir(QDir::currentPath() + "/bin/wpnxm-scp");
+        if(!dir.exists()) {
+            dir.mkpath(".");
+        }
+
         /**
          * Server Stack Software Registry
          */
