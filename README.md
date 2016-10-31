@@ -21,19 +21,20 @@ The WPN-XM Server Control Panel is written in Qt v5.2+.
 
 Install Qt binaries from either the Qt SDK or standalone binary package or just use the Qt Online Installer.
 
-You should be able to find everything at http://www.qt.io/download-open-source/ or ftp://ftp.qt-project.org/
+You should be able to find everything at http://www.qt.io/download-open-source/
 
 * Qt Online Installer
 
   http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
 
-* Qt 5.7.x
+* Qt 5.7.x - MSVC 2015
 
-  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-mingw530-5.7.0.exe
+  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-msvc2015-5.7.0.exe
+  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-msvc2015_64-5.7.0.exe
 
 * Qt Creator
 
-  http://download.qt.io/official_releases/qtcreator/4.0/4.0.2/qt-creator-opensource-windows-x86-4.0.2.exe
+  http://download.qt.io/official_releases/qtcreator/4.1/4.1.0/qt-creator-opensource-windows-x86-4.1.0.exe
 
 ### Installation Steps and Requirements for Qt
 
