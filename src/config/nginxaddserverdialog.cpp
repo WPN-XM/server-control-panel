@@ -7,6 +7,9 @@ namespace Configuration
         QDialog(parent),
         ui(new Configuration::Ui::NginxAddServerDialog)
     {
+        // remove question mark from the title bar
+        setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
         ui->setupUi(this);
     }
 
