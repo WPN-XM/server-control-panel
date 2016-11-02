@@ -226,8 +226,8 @@ namespace Servers
 
         // http://wiki.nginx.org/CommandLine - start daemon
         QString const startNginx = getServer("Nginx")->exe
-                + " -p " + qApp->applicationDirPath() +
-                + " -c " + qApp->applicationDirPath() + "/bin/nginx/conf/nginx.conf";
+                + " -p " + QDir::currentPath() +
+                + " -c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
 
         qDebug() << "[Nginx] Starting...\n" << startNginx;
 
@@ -244,9 +244,10 @@ namespace Servers
 
         // http://wiki.nginx.org/CommandLine - stop daemon
         QString const stopNginx = getServer("Nginx")->exe
-                + " -p " + qApp->applicationDirPath()
-                + " -c " + qApp->applicationDirPath() + "/bin/nginx/conf/nginx.conf"
+                + " -p " + QDir::currentPath()
+                + " -c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf"
                 + " -s stop";
+
         qDebug() << "[Nginx] Stopping...\n" << stopNginx;
 
         QProcess::execute(stopNginx);
@@ -257,8 +258,8 @@ namespace Servers
         QProcess *process = getProcess("Nginx");
 
         QString const reloadNginx = getServer("Nginx")->exe
-                + " -p " + qApp->applicationDirPath()
-                + " -c " + qApp->applicationDirPath() + "/bin/nginx/conf/nginx.conf"
+                + " -p " + QDir::currentPath()
+                + " -c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf"
                 + "-s reload";
 
         qDebug() << "[Nginx] Reloading...\n" << reloadNginx;
@@ -279,13 +280,14 @@ namespace Servers
     void Servers::startPostgreSQL()
     {
         // if not installed, skip
-        if(!QFile().exists(qApp->applicationDirPath() + "/bin/pgsql/bin/pg_ctl.exe")) {
+        if(!QFile().exists(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")) {
+            qDebug() << "Not found: " + QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe";
             qDebug() << "[PostgreSQL] Is not installed. Skipping start command.";
             return;
         }
 
         // already running
-        if(QFile().exists(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid")) {
+        if(QFile().exists(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid")) {
             QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
             return;
         }
@@ -295,9 +297,9 @@ namespace Servers
         emit signalMainWindow_updateVersion("PostgreSQL");
 
         // start daemon
-        QString const startCmd = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/bin/pg_ctl.exe")
-                + " --pgdata " + QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data")
-                + " --log " + QDir::toNativeSeparators(qApp->applicationDirPath() + "/logs/postgresql.log")
+        QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")
+                + " --pgdata " + QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data")
+                + " --log " + QDir::toNativeSeparators(QDir::currentPath() + "/logs/postgresql.log")
                 + " start";
 
         qDebug() << "[PostgreSQL] Starting...\n" << startCmd;
@@ -325,7 +327,7 @@ namespace Servers
         }
 
         // if not running, skip
-        QString file = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
+        QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
         if(!QFile().exists(file)) {
             qDebug() << "[PostgreSQL] NO PID file found. Postgres is not running. Skipping stop command.";
             server->trayMenu->setIcon(QIcon(":/status_stop"));
@@ -339,10 +341,10 @@ namespace Servers
         //disconnect(getProcess("PostgreSQL"), SIGNAL(error(QProcess::ProcessError)),
                   // this, SLOT(showProcessError(QProcess::ProcessError)));
 
-        QString stopCommand = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/bin/pg_ctl.exe")
+        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")
                 + " stop "
-                + " --pgdata " + QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data")
-                + " --log " + QDir::toNativeSeparators(qApp->applicationDirPath() + "/logs/postgresql.log")
+                + " --pgdata " + QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data")
+                + " --log " + QDir::toNativeSeparators(QDir::currentPath() + "/logs/postgresql.log")
                 + " --mode=fast"
                 + " -W";
 
@@ -434,7 +436,7 @@ namespace Servers
 
         if(serversToStart.count() == 0) {
             qDebug() << "[PHP] Found no servers to start. Check your upstream configuration.";
-            qDebug() << "[PHP] Some addresses must be localhost or 127.0.0.1.";
+            qDebug() << "[PHP] At least one address must be localhost or 127.0.0.1.";
         }
 
         return serversToStart;
@@ -499,7 +501,7 @@ namespace Servers
 
         // start
         QString const startMariaDb = getServer("MariaDb")->exe
-                + " --defaults-file=" + QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/mariadb/my.ini");
+                + " --defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
 
         qDebug() << "[MariaDB] Starting...\n" << startMariaDb;
 
@@ -522,8 +524,8 @@ namespace Servers
 
         qDebug() << "[MariaDB] Stopping...";
 
-        QString stopCommand = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/mariadb/bin/mysqladmin.exe")
-                + " --defaults-file=" + QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/mariadb/my.ini")
+        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe")
+                + " --defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini")
                 + " -uroot -h127.0.0.1 --protocol=tcp"
                 + " shutdown";
 
@@ -565,25 +567,25 @@ namespace Servers
         emit signalMainWindow_updateVersion("MongoDb");
 
         // MongoDb doesn't start, when data dir is missing...
-        QString const mongoDbDataDir = qApp->applicationDirPath() + "/bin/mongodb/data/db";
-        if(QDir().exists(qApp->applicationDirPath() + "/bin/mongodb") && !QDir().exists(mongoDbDataDir)) {
+        QString const mongoDbDataDir = QDir::currentPath() + "/bin/mongodb/data/db";
+        if(QDir().exists(QDir::currentPath() + "/bin/mongodb") && !QDir().exists(mongoDbDataDir)) {
             qDebug() << "[MongoDb] Creating Directory for Mongo's Database...\n" << mongoDbDataDir;
             QDir().mkpath(mongoDbDataDir);
         }
 
         // MongoDb doesn't start, when logfile is missing...
-        QFile f(qApp->applicationDirPath() + "/logs/mongodb.log");
+        QFile f(QDir::currentPath() + "/logs/mongodb.log");
         if(!f.exists()) {
-            qDebug() << "[MongoDb] Creating empty logfile...\n" << qApp->applicationDirPath() + "/logs/mongodb.log";
+            qDebug() << "[MongoDb] Creating empty logfile...\n" << QDir::currentPath() + "/logs/mongodb.log";
             f.open(QIODevice::ReadWrite);
             f.close();
         }
 
         // build mongo start command
         QString const mongoStartCommand = getServer("MongoDb")->exe
-                 + " --config " + qApp->applicationDirPath() + "/bin/mongodb/mongodb.conf"
-                 + " --dbpath " + qApp->applicationDirPath() + "/bin/mongodb/data/db"
-                 + " --logpath " + qApp->applicationDirPath() + "/logs/mongodb.log"
+                 + " --config " + QDir::currentPath() + "/bin/mongodb/mongodb.conf"
+                 + " --dbpath " + QDir::currentPath() + "/bin/mongodb/data/db"
+                 + " --logpath " + QDir::currentPath() + "/logs/mongodb.log"
                  + " --rest";
 
         qDebug() << "[MongoDb] Starting...\n"<< mongoStartCommand;
@@ -608,7 +610,7 @@ namespace Servers
 
         // build mongo stop command based on CLI evaluation
         // mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
-        QString const mongoStopCommand = qApp->applicationDirPath() + "/bin/mongodb/bin/mongo.exe"
+        QString const mongoStopCommand = QDir::currentPath() + "/bin/mongodb/bin/mongo.exe"
                  + " --eval \"db.getSiblingDB('admin').shutdownServer()\"";
 
         qDebug() << "[MongoDb] Stopping...\n" << mongoStopCommand;
@@ -631,15 +633,18 @@ namespace Servers
      */
     void Servers::startMemcached()
     {
+
+        // https://github.com/memcached/memcached/wiki/ConfiguringServer#commandline-arguments
+
         QString const memcachedStartCommand = getServer("Memcached")->exe
-                + "-p " + settings->get("memcached/tcpport").toString()
-                + "-U " + settings->get("memcached/udpport").toString()
-                + "-t " + settings->get("memcached/threads").toString()
-                + "-c " + settings->get("memcached/maxconnections").toString()
-                + "-m " + settings->get("memcached/maxmemory").toString();
+                + " -p " + settings->get("memcached/tcpport").toString()
+                + " -U " + settings->get("memcached/udpport").toString()
+                + " -t " + settings->get("memcached/threads").toString()
+                + " -c " + settings->get("memcached/maxconnections").toString()
+                + " -m " + settings->get("memcached/maxmemory").toString();
 
         // if not installed, skip
-        if(!QFile().exists(memcachedStartCommand)) {
+        if(!QFile().exists(getServer("Memcached")->exe)) {
             qDebug() << "[Memcached] Is not installed. Skipping start command.";
             return;
         }
@@ -830,7 +835,7 @@ namespace Servers
 
             delay(1250); // delay PID file check, PostgreSQL must start up
 
-            QString file = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
+            QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
 
             if(QFile().exists(file)) {
                 qDebug() << "[PostgreSQL] PID file found. Postgres is running.";
