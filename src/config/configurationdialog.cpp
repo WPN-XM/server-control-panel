@@ -183,6 +183,7 @@ namespace Configuration
         /**
          * Configuration > Components > Redis
          */
+        ui->lineEdit_redis_bind->setText(settings->get("redis/bind", QVariant(QString("127.0.0.1"))).toString() );
         ui->lineEdit_redis_port->setText(settings->get("redis/port", QVariant(QString("6379"))).toString() );
     }
 
@@ -275,6 +276,7 @@ namespace Configuration
         /**
          * Configuration > Components > Redis
          */
+        settings->set("redis/bind",               QString(ui->lineEdit_redis_bind->text()));
         settings->set("redis/port",               QString(ui->lineEdit_redis_port->text()));
 
         /**
@@ -320,21 +322,67 @@ namespace Configuration
         ini->writeConfigFile();
     }
 
+    /**
+     * Redis uses a custom configuration file format
+     * with a custom read and write mechanism for the config file: CONFIG GET + CONFIG SET.
+     * We read the file as a standard text file and replace lines in the content.
+     */
     void ConfigurationDialog::saveSettings_Redis_Configuration()
     {
+        // get redis configuration file path
         QString file = settings->get("redis/config").toString();
         if(!QFile(file).exists()) {
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::INI *ini = new File::INI(file.toLatin1());
-        ini->setStringValue("redis", "port", ui->lineEdit_redis_port->text().toLatin1());
-        ini->writeConfigFile();
+        // read file
+        QString configContent = File::Text::load(file.toLatin1());
+
+        // split linewise by newline command
+        QStringList configLines = configContent.split(QRegExp("\n|\r\n|\r"));
+
+        // clear the content (so that we can re-add all the lines)
+        configContent.clear();
+
+        // prepare line(s) to replace
+        QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
+        QString newline_port = "port " + ui->lineEdit_redis_port->text().toLatin1();
+
+        // iterate over all lines and replace or re-add lines
+        QString line;
+        for (int i = 0; i < configLines.size(); i++)
+        {
+            line = configLines.at(i);
+
+            // replace line: port
+            if(line.startsWith("port", Qt::CaseInsensitive)) {
+                configContent.append(QString("%0\n").arg(newline_port));
+            }
+
+            // replace line: bind
+            else if(line.startsWith("bind", Qt::CaseInsensitive)) {
+                configContent.append(QString("%0\n").arg(newline_bind));
+            }
+
+            // append "old" line
+            else {
+                configContent.append(QString("%0\n").arg(line));
+            }
+
+            line.clear();
+        }
+
+
+        // remove last newline command
+        configContent = configContent.trimmed();
+
+        // write file
+        File::Text::save(configContent, file);
     }
 
     void ConfigurationDialog::saveSettings_Xdebug_Configuration()
     {
-        // xdebug configuration diretives are set in php.ini
+        // xdebug configuration directives are set in php.ini
 
         QString file = settings->get("php/config").toString();
         if(!QFile(file).exists()) {

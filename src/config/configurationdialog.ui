@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>9</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1152,25 +1152,38 @@
       <widget class="QGroupBox" name="groupBox_3">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>250</y>
-         <width>121</width>
-         <height>81</height>
+         <x>220</x>
+         <y>10</y>
+         <width>281</width>
+         <height>161</height>
         </rect>
        </property>
        <property name="title">
         <string>Profiler</string>
        </property>
-       <widget class="QWidget" name="formLayoutWidget_10">
+       <widget class="QLabel" name="label_22">
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
-          <width>103</width>
+          <y>70</y>
+          <width>158</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Set output folder and filename</string>
+        </property>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>24</y>
+          <width>109</width>
           <height>42</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_5">
+        <layout class="QFormLayout" name="formLayout_9">
          <item row="0" column="0">
           <widget class="QCheckBox" name="checkBox_xdebug_enable_profiler">
            <property name="text">
@@ -1187,14 +1200,79 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>92</y>
+          <width>263</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QLineEdit" name="lineEdit_xdebug_profiler_output_dir">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>50</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QToolButton" name="toolButton_xdebug_profiler_output_dir">
+           <property name="text">
+            <string>Select Folder</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="toolButton_xdebug_reset_profiler_output_dir">
+           <property name="text">
+            <string>Reset</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>11</x>
+          <y>119</y>
+          <width>261</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_xdebug_profiler_output_dir">
+           <property name="text">
+            <string>Filename</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_xdebug_profiler_output_name">
+           <property name="text">
+            <string>cachegrind.out.%t-%s</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="geometry">
         <rect>
-         <x>300</x>
+         <x>10</x>
          <y>10</y>
          <width>191</width>
-         <height>171</height>
+         <height>211</height>
         </rect>
        </property>
        <property name="title">
@@ -1204,12 +1282,36 @@
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
-          <width>178</width>
-          <height>146</height>
+          <y>21</y>
+          <width>171</width>
+          <height>181</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="lineEdit_xdebug_remote_handler"/>
+         </item>
+         <item row="5" column="1">
+          <widget class="QComboBox" name="comboBox_xdebug_remote_mode">
+           <item>
+            <property name="text">
+             <string>req</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>jit</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="label_xdebug_remote_mode">
+           <property name="text">
+            <string>Mode</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0" colspan="2">
           <widget class="QCheckBox" name="checkBox_xdebug_remote_enable">
            <property name="text">
@@ -1227,6 +1329,13 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEdit_xdebug_remote_host"/>
          </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_xdebug_remote_handler">
+           <property name="text">
+            <string>Handler</string>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_xdebug_remote_port">
            <property name="text">
@@ -1237,42 +1346,21 @@
          <item row="2" column="1">
           <widget class="QLineEdit" name="lineEdit_xdebug_remote_port"/>
          </item>
-         <item row="3" column="0" colspan="2">
+         <item row="6" column="0">
+          <widget class="QLabel" name="label_xdebug_idekey">
+           <property name="text">
+            <string>IDE key</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLineEdit" name="lineEdit_xdebug_idekey"/>
+         </item>
+         <item row="3" column="0">
           <widget class="QCheckBox" name="checkBox_xdebug_remote_autostart">
            <property name="text">
             <string>Autostart</string>
            </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_xdebug_remote_handler">
-           <property name="text">
-            <string>Handler</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_xdebug_remote_handler"/>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_xdebug_remote_mode">
-           <property name="text">
-            <string>Mode</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QComboBox" name="comboBox_xdebug_remote_mode">
-           <item>
-            <property name="text">
-             <string>req</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>jit</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -1282,9 +1370,9 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>10</y>
-         <width>201</width>
-         <height>111</height>
+         <y>230</y>
+         <width>191</width>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
@@ -1295,8 +1383,8 @@
          <rect>
           <x>9</x>
           <y>9</y>
-          <width>185</width>
-          <height>48</height>
+          <width>84</width>
+          <height>51</height>
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout_8">
@@ -1326,26 +1414,16 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_xdebug_idekey">
-           <property name="text">
-            <string>IdeKey</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_xdebug_idekey"/>
-         </item>
         </layout>
        </widget>
       </widget>
       <widget class="QGroupBox" name="groupBox_6">
        <property name="geometry">
         <rect>
-         <x>300</x>
-         <y>190</y>
-         <width>181</width>
-         <height>141</height>
+         <x>220</x>
+         <y>180</y>
+         <width>121</width>
+         <height>121</height>
         </rect>
        </property>
        <property name="title">
@@ -1356,13 +1434,93 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>160</width>
-          <height>114</height>
+          <width>101</width>
+          <height>96</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_7">
+         <property name="sizeConstraint">
+          <enum>QLayout::SetNoConstraint</enum>
+         </property>
+         <property name="horizontalSpacing">
+          <number>6</number>
+         </property>
+         <item row="4" column="0">
+          <widget class="QSpinBox" name="spinBox_xdebug_collect_params">
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="maximum">
+            <number>5</number>
+           </property>
+           <property name="value">
+            <number>3</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="checkBox_xdebug_collect_return">
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>Includes</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="checkBox_xdebug_collect_vars">
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>Variables</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>Return</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLabel" name="label_10">
+           <property name="text">
+            <string>Parameters</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0">
           <widget class="QCheckBox" name="checkBox_xdebug_collect_assignments">
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_17">
            <property name="text">
             <string>Assignments</string>
            </property>
@@ -1370,32 +1528,11 @@
          </item>
          <item row="1" column="0">
           <widget class="QCheckBox" name="checkBox">
-           <property name="text">
-            <string>Includes</string>
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
            </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>Parameters</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="comboBox_xdebug_collect_params"/>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="checkBox_xdebug_collect_return">
-           <property name="text">
-            <string>Return</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="checkBox_xdebug_collect_vars">
-           <property name="text">
-            <string>Variables</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -1405,10 +1542,10 @@
       <widget class="QGroupBox" name="groupBox_7">
        <property name="geometry">
         <rect>
-         <x>140</x>
-         <y>230</y>
+         <x>350</x>
+         <y>180</y>
          <width>151</width>
-         <height>101</height>
+         <height>121</height>
         </rect>
        </property>
        <property name="title">
@@ -1417,24 +1554,10 @@
        <layout class="QGridLayout" name="gridLayout_10">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Children</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="lineEdit_xdebug_var_display_max_children">
             <property name="text">
              <string>128</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="text">
-             <string>Data</string>
             </property>
            </widget>
           </item>
@@ -1445,13 +1568,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>Depth</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
            <widget class="QLineEdit" name="lineEdit_xdebug_var_display_max_depth">
             <property name="text">
@@ -1459,15 +1575,53 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Data</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Children</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Depth</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
       </widget>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Seite</string>
-      </attribute>
+      <widget class="QLabel" name="label_16">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>311</y>
+         <width>481</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Documentation for configuration settings: &lt;a href=&quot;https://xdebug.org/docs/all_settings&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://xdebug.org/docs/all_settings&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::AutoText</enum>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -1906,15 +2060,25 @@
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_7">
-        <item row="0" column="1">
+        <item row="1" column="1">
          <widget class="QLineEdit" name="lineEdit_redis_port"/>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_redis_port">
           <property name="text">
            <string>Port</string>
           </property>
          </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_redis_bind">
+          <property name="text">
+           <string>Bind</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_redis_bind"/>
         </item>
        </layout>
       </widget>

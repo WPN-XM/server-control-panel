@@ -6,7 +6,9 @@ namespace File
     {
         QFile file(fileName);
         file.open(QIODevice::ReadOnly | QIODevice::Text);
-        return QJsonDocument::fromJson(file.readAll());
+        QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+        file.close();
+        return document;
     }
 
     void JSON::save(QJsonDocument document, QString fileName)
@@ -14,6 +16,27 @@ namespace File
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
         file.write(document.toJson());
+        file.close();
+    }
+
+    QString Text::load(QString fileName)
+    {
+        //qDebug() << "[TEXT] Reading file [" << fileName << "]";
+
+        QFile file(fileName);
+        file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QString text = QString(file.readAll());
+        file.close();
+        return text;
+    }
+
+    void Text::save(QString text, QString fileName)
+    {
+        //qDebug() << "[TEXT] Writing file [" << fileName << "]";
+
+        QFile file(fileName);
+        file.open(QFile::WriteOnly);
+        file.write(text.toLatin1());
         file.close();
     }
 }
