@@ -28,23 +28,25 @@ void INI::loadConfigFile()
     fstream fStream;
     string p = iniFileName;
 
-    fStream.open(p,ios::in);
+    fStream.open(p, ios::in);
     if(!fStream){
-        if(!autoCreate){
+        if(!autoCreate) {
             log("[INI] config file [%s] does not exist", iniFileName);
-        }else{
+        } else {
             log("[INI] config file [%s] not found. Creating new file (auto-create on)", iniFileName);
         }
         return;
-    }else{
+    } else {
         log("[INI] Reading config file [%s]", iniFileName);
     }
+
     char line[4096];
     char ch;
     int i=0;
     string index;
     string str;
     bool isComment=false;
+
     while(!fStream.eof())
     {
         fStream.read(&ch, 1);
@@ -52,7 +54,7 @@ void INI::loadConfigFile()
         INIEntry entry;
 
         // handle empty lines
-        if(isComment== false && ch == '\n' && i==0) {
+        if(isComment == false && ch == '\n' && i==0) {
             //entry.index = str;
             entry.isEmptyLine = true;
             datas.push_back(entry);
@@ -61,15 +63,19 @@ void INI::loadConfigFile()
         }
 
         // handle comments
-        if(ch=='#' && i==0) isComment = true;
-        if(isComment==true && (ch=='\n' || ch=='\r')) {
-            isComment=false;
+        if((ch == '#' || ch == ';') && i==0) {
+            isComment = true;
+        }
+
+        if(isComment == true && (ch=='\n' || ch=='\r')) {
+            isComment = false;
             line[i++]='\0';
             i=0;
             entry.isComment = true;
             entry.comment = line;
             datas.push_back(entry);
         }
+
         if(isComment==true) {
             line[i++]=ch;
             continue;
@@ -79,16 +85,15 @@ void INI::loadConfigFile()
         if(ch != '\n' || ch=='\r') {
             line[i++]=ch;
         }
-        else{
+        else {
             if(i==0) continue;            
             line[i]='\0';
             str = string(line);
-            log("[INI] read one line {%s}", str.c_str());
-            // section start
-            if(line[0]=='['){
+            log("[INI] read line: %s", str.c_str());
+            // [section] start
+            if(line[0]=='[') {
                 index = str;
-            }
-            else{
+            } else {
                 // key value pair
                 entry.index = index.substr(1,index.length()-2);
                 int fIndex = str.find_first_of('=');
@@ -123,7 +128,7 @@ void INI::loadConfigFile()
 
 INI::~INI()
 {
-    if(autoSave){
+    if(autoSave) {
         log("[INI] Deconstructor. AutoSaving config file: [%s]", iniFileName);
         writeConfigFile();
     }
