@@ -706,6 +706,8 @@ namespace Servers
             return;
         }
 
+        clearLogFile("Redis");
+
         emit signalMainWindow_updateVersion("Redis");
 
         // start
@@ -716,10 +718,8 @@ namespace Servers
 
     void Servers::stopRedis()
     {
-        QString const redisCli("./bin/redis/redis-cli.exe");
-
         // if not installed, skip
-        if(!QFile().exists(redisCli)) {
+        if(!QFile().exists(getServer("Redis")->exe)) {
             qDebug() << "[Redis] Is not installed. Skipping stop command.";
             return;
         }
@@ -730,11 +730,14 @@ namespace Servers
             return;
         }
 
-        // disconnect process monitoring before sending shutdown
-        disconnect(getProcess("Redis"), SIGNAL(error(QProcess::ProcessError)),
-                       this, SLOT(showProcessError(QProcess::ProcessError)));
+        QString const redisStopCommand = QString("./bin/redis/redis-cli.exe")
+                + " -h " + settings->get("redis/bind").toString()
+                + " -p " + settings->get("redis/port").toString()
+                + " shutdown";
 
-        QProcess::execute(redisCli + " shutdown");
+        qDebug() << "[Redis] Stopping...\n" << redisStopCommand;
+
+        QProcess::execute(redisStopCommand);
     }
 
     void Servers::restartRedis()
