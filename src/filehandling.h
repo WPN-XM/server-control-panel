@@ -14,9 +14,10 @@
 
 namespace File
 {
+    bool truncate(const QString &file);
+    bool move(const QString &source, const QString &target);
     bool copyFile(const QString &source, const QString &target);
-    bool copyFileToStream(const QString &source, QDataStream &target);
-    bool moveFile(const QString &source, const QString &target);
+    bool copyData(const QString &source, QDataStream &target);
 }
 
 #endif // FILEHANDLING_H

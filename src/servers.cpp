@@ -171,19 +171,6 @@ namespace Servers
         return getProcess(serverName)->state();
     }
 
-    bool Servers::truncateFile(const QString &file) const
-    {
-        QFile f(file);
-
-        if(f.exists()) {
-            f.open(QFile::WriteOnly|QFile::Truncate);
-            f.close();
-            return true;
-        }
-        f.close();
-        return false;
-    }
-
     void Servers::clearLogFile(const QString &serverName) const
     {
         if(settings->get("global/clearlogsonstart").toBool()) {
@@ -192,18 +179,19 @@ namespace Servers
             QString logfile = "";
 
             if(serverName == "Nginx") {
-                truncateFile(dirLogs + "/access.log");
-                truncateFile(dirLogs + "/error.log");
+                File::truncate(dirLogs + "/access.log");
+                File::truncate(dirLogs + "/error.log");
             }
 
             if(serverName == "PHP")        { logfile = dirLogs + "/php_error.log";}
             if(serverName == "MariaDb")    { logfile = dirLogs + "/mariadb_error.log";}
             if(serverName == "MongoDb")    { logfile = dirLogs + "/mongodb.log";}
             if(serverName == "PostgreSQL") { logfile = dirLogs + "/postgresql.log";}
+            if(serverName == "Redis")      { logfile = dirLogs + "/redis.log";}
 
-            truncateFile(logfile);
+            File::truncate(logfile);
 
-            qDebug() << "[" << serverName << "] Cleared logs...\n";
+            qDebug() << ("[" + serverName + "] Log was cleared.\n");
         }
     }
 
@@ -329,7 +317,7 @@ namespace Servers
         // if not running, skip
         QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
         if(!QFile().exists(file)) {
-            qDebug() << "[PostgreSQL] NO PID file found. Postgres is not running. Skipping stop command.";
+            qDebug() << "[PostgreSQL] Not running.. Skipping stop command. (NO PID file found.)";
             server->trayMenu->setIcon(QIcon(":/status_stop"));
             emit signalMainWindow_ServerStatusChange("postgresql", false);
             return;

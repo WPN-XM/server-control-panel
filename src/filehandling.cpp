@@ -2,7 +2,20 @@
 
 namespace File
 {
-    bool moveFile(const QString& source, const QString& target)
+    bool truncate(const QString &file)
+    {
+        QFile f(file);
+
+        if(f.exists()) {
+            f.open(QFile::WriteOnly|QFile::Truncate);
+            f.close();
+            return true;
+        }
+        f.close();
+        return false;
+    }
+
+    bool move(const QString& source, const QString& target)
     {
         if (source.isEmpty() || target.isEmpty()) {
                 return false;

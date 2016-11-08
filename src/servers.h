@@ -16,6 +16,7 @@
 
 #include "settings.h"
 #include "json.h"
+#include "filehandling.h"
 
 namespace Servers
 {
@@ -56,7 +57,6 @@ namespace Servers
 
             QStringList getLogFiles(QString &serverName) const;
 
-            bool truncateFile(const QString &file) const;
             void clearLogFile(const QString &serverName) const;
 
             void delay(int millisecondsToWait) const;
@@ -116,7 +116,7 @@ namespace Servers
             QList<Server*> serverList;
             QString getProcessErrorMessage(QProcess::ProcessError);
 
-            QMap<QString, QString> getServersFromUpstreamConfig();
+            QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
 
     };
 
