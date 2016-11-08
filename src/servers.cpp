@@ -373,14 +373,16 @@ namespace Servers
         env.insert("PHP_FCGI_MAX_REQUESTS", "0");
         qDebug() << "[PHP] Set PHP_FCGI_MAX_REQUESTS \"0\" (disabled).";
 
+
+
         QString const startCmdWithPlaceholders("./bin/tools/spawn.exe ./bin/php/php-cgi.exe %1 %2");
 
-        QMapIterator<QString, QString> serversToStart( getServersFromUpstreamConfig() );
+        QMapIterator<QString, QString> PHPServersToStart( getPHPServersFromNginxUpstreamConfig() );
 
-        while(serversToStart.hasNext()) {
-            serversToStart.next();
-            QString port = serversToStart.key();
-            QString phpchildren = serversToStart.value();
+        while(PHPServersToStart.hasNext()) {
+            PHPServersToStart.next();
+            QString port = PHPServersToStart.key();
+            QString phpchildren = PHPServersToStart.value();
             QString startPHPCGI = QString(startCmdWithPlaceholders).arg(port, phpchildren);
             qDebug() << "[PHP] Starting...\n" << startPHPCGI;
 
@@ -390,9 +392,14 @@ namespace Servers
         }
     }
 
-    QMap<QString, QString> Servers::getServersFromUpstreamConfig()
+    QMap<QString, QString> Servers::getPHPServersFromNginxUpstreamConfig()
     {
         QMap<QString, QString> serversToStart;
+
+        QFile upstreamConfigFile = "./bin/wpnxm-scp/nginx-upstreams.json";
+        if(!upstreamConfigFile.exists()) {
+            qDebug() << "[PHP] Nginx Upstream Configuration file not found.\n";
+        }
 
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
