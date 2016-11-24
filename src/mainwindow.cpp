@@ -964,6 +964,7 @@ namespace ServerControlPanel
                           << "apache"
                           << "memcached"
                           << "mysqld"
+                          << "spawn"
                           << "php-cgi"
                           << "mongod"
                           << "postgres"
@@ -1053,7 +1054,7 @@ namespace ServerControlPanel
                    QCheckBox *cb = allCheckBoxes.at(i);
                    if(cb->isChecked())
                    {
-                       qDebug() << "Process Shutdown:" << cb->text();
+                       qDebug() << "[Process Shutdown]" << cb->text();
 
                        // handle the PostgreSQL PID file deletion, too
                        if(cb->text() == "postgres") {
@@ -1066,7 +1067,10 @@ namespace ServerControlPanel
                        // taskkill parameters:
                        // /f = force shutdown, /t = structure shutdown, /im = the name of the process
                        // nginx and mariadb need a forced shutdown !
-                       QProcess::startDetached("cmd.exe", QStringList()<<"/c"<<"taskkill /f /t /im "+cb->text()+".exe");
+                       QProcess process;
+                       process.start("cmd.exe", QStringList() <<"/c"<<"taskkill /f /t /im "+cb->text()+".exe");
+                       process.waitForFinished();
+                       qDebug() << "[Process Shutdown] Result:\n" << process.readAllStandardOutput();
                    }
                    delete cb;
                 }
