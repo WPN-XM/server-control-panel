@@ -95,7 +95,7 @@ namespace Configuration
 
     void ConfigurationDialog::readSettings()
     {
-        // Read Settings from INI and prefill config dialog items
+        // read settings from INI and prefill config dialog items with default values
 
         ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
         ui->checkbox_autostartDaemons->setChecked(settings->get("global/autostartdaemons", false).toBool());
@@ -162,7 +162,9 @@ namespace Configuration
         ui->checkBox_mongodb_rest->setChecked(settings->get("mongodb/rest", true).toBool());
         ui->checkBox_mongodb_verbose->setChecked(settings->get("mongodb/verbose", true).toBool());
         ui->checkBox_mongodb_noauth->setChecked(settings->get("mongodb/noauth", true).toBool());
-        ui->lineEdit_mongodb_dbpath->setText(settings->get("mongodb/dbpath", QVariant(QString("db/path"))).toString());
+        ui->lineEdit_mongodb_dbpath->setText(settings->get("mongodb/dbpath",
+            QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db"))).toString()
+        );
 
         /**
          * Configuration > Components > PostgreSQL
@@ -318,7 +320,9 @@ namespace Configuration
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
+
         ini->setStringValue("postgresql", "port", ui->lineEdit_postgresql_port->text().toLatin1());
+
         ini->writeConfigFile();
     }
 
@@ -382,14 +386,15 @@ namespace Configuration
 
     void ConfigurationDialog::saveSettings_Xdebug_Configuration()
     {
+        // get xdebug configuration file path
         // xdebug configuration directives are set in php.ini
-
         QString file = settings->get("php/config").toString();
         if(!QFile(file).exists()) {
             qDebug() << "[Error]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
+
         // remote
         ini->setBoolValue("xdebug", "remote_enable",       ui->checkBox_xdebug_remote_enable->isChecked());
         ini->setStringValue("xdebug", "remote_host",       ui->lineEdit_xdebug_remote_host->text().toLatin1());
@@ -400,7 +405,6 @@ namespace Configuration
         // profiler
         ini->setBoolValue("xdebug", "enable_profiler",     ui->checkBox_xdebug_enable_profiler->isChecked());
         ini->setBoolValue("xdebug", "remove_old_logs",     ui->checkBox_xdebug_remove_old_logs->isChecked());
-
         ini->setStringValue("xdebug", "idekey",            ui->lineEdit_xdebug_idekey->text().toLatin1());
 
         ini->writeConfigFile();
@@ -414,6 +418,8 @@ namespace Configuration
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
+        // set port to "[client] port" and "[mysqld] port"
+        ini->setStringValue("client", "port", ui->lineEdit_mariadb_port->text().toLatin1());
         ini->setStringValue("mysqld", "port", ui->lineEdit_mariadb_port->text().toLatin1());
         ini->writeConfigFile();
     }
@@ -430,6 +436,7 @@ namespace Configuration
         // TODO switch to YAML (because the newer Mongodb versions use YAML as config format)
 
         File::INI *ini = new File::INI(file.toLatin1());
+
         ini->setStringValue("mongodb", "bind_ip",       ui->lineEdit_mongodb_bindip->text().toLatin1());
         ini->setStringValue("mongodb", "port",          ui->lineEdit_mongodb_port->text().toLatin1());
         ini->setStringValue("mongodb", "storageengine", ui->comboBox_mongodb_storageengine->currentText().toLatin1());
@@ -438,6 +445,7 @@ namespace Configuration
         ini->setBoolValue("mongodb", "verbose",         ui->checkBox_mongodb_verbose->isChecked());
         ini->setBoolValue("mongodb", "noauth",          ui->checkBox_mongodb_noauth->isChecked());
         ini->setStringValue("mongodb", "dbpath",        ui->lineEdit_mongodb_dbpath->text().toLatin1());
+
         ini->writeConfigFile();
     }
 
@@ -492,6 +500,7 @@ namespace Configuration
                 servers.append(server);
             }
 
+            // upstream template string
             QString upstream(
                 "#\n"
                 "# Automatically generated Nginx Upstream definition.\n"
