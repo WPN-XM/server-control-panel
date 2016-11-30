@@ -45,6 +45,8 @@ namespace Configuration
             void setServers(Servers::Servers *servers);
             void hideAutostartCheckboxesOfNotInstalledServers();
 
+            void setCurrentStackWidget(QString widgetname);
+
             // TODO move config stuff into own class per component
 
             void saveSettings_MariaDB_Configuration();
@@ -74,7 +76,7 @@ namespace Configuration
 
             void on_configMenuTreeWidget_clicked(const QModelIndex &index);
 
-            void on_pushButton_Nginx_Upstream_AddPool_clicked();
+            void on_pushButton_Nginx_Upstream_AddUpstream_clicked();
             void on_pushButton_Nginx_Upstream_AddServer_clicked();
 
             void on_configMenuSearchLineEdit_textChanged(const QString &string);

@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>9</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -376,7 +376,7 @@
          <height>55</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="gridLayout" rowminimumheight="23,23">
+       <layout class="QGridLayout" name="gridLayout_editor" rowminimumheight="23,23">
         <property name="sizeConstraint">
          <enum>QLayout::SetFixedSize</enum>
         </property>
@@ -800,7 +800,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="nginx_tab_1">
       <attribute name="title">
@@ -816,19 +816,6 @@
       <attribute name="title">
        <string>Upstream</string>
       </attribute>
-      <widget class="QPushButton" name="pushButton_Nginx_Upstream_AddPool">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Add Pool</string>
-       </property>
-      </widget>
       <widget class="QTableWidget" name="tableWidget_pools">
        <property name="enabled">
         <bool>true</bool>
@@ -902,19 +889,6 @@
          <string>$request_uri consistent</string>
         </property>
        </item>
-      </widget>
-      <widget class="QPushButton" name="pushButton_Nginx_Upstream_AddServer">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>150</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Add Server</string>
-       </property>
       </widget>
       <widget class="QTableWidget" name="tableWidget_servers">
        <property name="geometry">
@@ -1106,6 +1080,98 @@
         </property>
        </item>
       </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>321</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_11">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_Nginx_Upstream_AddUpstream">
+          <property name="text">
+           <string>Add Upstream</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QPushButton" name="pushButton_reset_AddUpstream">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_Nginx_AddUpstream">
+          <property name="text">
+           <string>Define upstream(s):</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_Nginx_AddUpstream">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>150</y>
+         <width>481</width>
+         <height>25</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_Nginx_AddServer">
+          <property name="text">
+           <string>Add Server(s) to the selected upstream:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QPushButton" name="pushButton_reset_AddServer">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_Nginx_Upstream_AddServer">
+          <property name="text">
+           <string>Add Server</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_Nginx_AddServer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -1149,7 +1215,7 @@
       <attribute name="title">
        <string>Configuration</string>
       </attribute>
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="groupBox_xdebug_profiler">
        <property name="geometry">
         <rect>
          <x>220</x>
@@ -1266,7 +1332,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_4">
+      <widget class="QGroupBox" name="groupBox_xdebug_remote_debugger">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1276,7 +1342,7 @@
         </rect>
        </property>
        <property name="title">
-        <string>Remote</string>
+        <string>Remote Debugger</string>
        </property>
        <widget class="QWidget" name="formLayoutWidget_11">
         <property name="geometry">
@@ -1366,7 +1432,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_5">
+      <widget class="QGroupBox" name="groupBox_xdebug_5">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1417,7 +1483,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_6">
+      <widget class="QGroupBox" name="groupBox_xdebug_collect">
        <property name="geometry">
         <rect>
          <x>220</x>
@@ -1539,7 +1605,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QGroupBox" name="groupBox_7">
+      <widget class="QGroupBox" name="groupBox_xdebug_var_display_max">
        <property name="geometry">
         <rect>
          <x>350</x>
@@ -1590,7 +1656,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="label_15">
+           <widget class="QLabel" name="label_xdebug_var_display_max_depth">
             <property name="text">
              <string>Depth</string>
             </property>
@@ -1676,7 +1742,7 @@
          <widget class="QLineEdit" name="lineEdit_mariadb_port"/>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="label_mariadb_port">
           <property name="text">
            <string>Port</string>
           </property>
@@ -1735,7 +1801,7 @@
        </property>
        <layout class="QFormLayout" name="formLayout_5">
         <item row="0" column="0">
-         <widget class="QLabel" name="label_13">
+         <widget class="QLabel" name="label_mongodb_ip">
           <property name="text">
            <string>IP</string>
           </property>
@@ -1749,7 +1815,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="label_3">
+         <widget class="QLabel" name="label_mongodb_port">
           <property name="text">
            <string>Port</string>
           </property>
@@ -1763,7 +1829,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
+         <widget class="QLabel" name="label_mongodb_storageengine">
           <property name="text">
            <string>Storage Engine</string>
           </property>
@@ -1818,7 +1884,7 @@
          <widget class="QLineEdit" name="lineEdit_mongodb_dbpath"/>
         </item>
         <item row="7" column="0">
-         <widget class="QLabel" name="label_6">
+         <widget class="QLabel" name="label_mongodb_dbpath">
           <property name="text">
            <string>DB Path</string>
           </property>
@@ -1880,7 +1946,7 @@
          <widget class="QLineEdit" name="lineEdit_postgresql_port"/>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="label_4">
+         <widget class="QLabel" name="label_postgresql_port">
           <property name="text">
            <string>Port</string>
           </property>
@@ -2116,7 +2182,7 @@
   <tabstop>tabWidget_postgresql</tabstop>
   <tabstop>tabWidget_memcached</tabstop>
   <tabstop>tabWidget_redis</tabstop>
-  <tabstop>pushButton_Nginx_Upstream_AddPool</tabstop>
+  <tabstop>pushButton_Nginx_Upstream_AddUpstream</tabstop>
   <tabstop>tableWidget_pools</tabstop>
   <tabstop>pushButton_Nginx_Upstream_AddServer</tabstop>
   <tabstop>tableWidget_servers</tabstop>

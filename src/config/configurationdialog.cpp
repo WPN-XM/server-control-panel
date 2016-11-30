@@ -1,7 +1,7 @@
 #include "configurationdialog.h"
 #include "ui_configurationdialog.h"
 
-#include "nginxaddpooldialog.h"
+#include "nginxaddupstreamdialog.h"
 #include "nginxaddserverdialog.h"
 #include "../json.h"
 #include "src/ini.h"
@@ -13,6 +13,8 @@ namespace Configuration
         ui(new Ui::ConfigurationDialog)
     {
         ui->setupUi(this);
+
+        setWindowTitle("WPN-XM Server Control Panel - Configuration");
 
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -552,8 +554,8 @@ namespace Configuration
 
         for (int i = 0; i < rows; ++i) {
 
-            QString poolName = pools->item(i, NginxAddPoolDialog::Column::Pool)->text();
-            QString method = pools->item(i, NginxAddPoolDialog::Column::Method)->text();
+            QString poolName = pools->item(i, NginxAddUpstreamDialog::Column::Pool)->text();
+            QString method = pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
 
             jsonPool.insert("name", poolName);
             jsonPool.insert("method", method);
@@ -731,20 +733,26 @@ namespace Configuration
 
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
     {
-        // a click on a menu item switches to the matching page in the stacked widget
+        // a click on a menu item returns the name of the item
+        // switches to the matching page in the stacked widget
         QString menuitem = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
-        QWidget *w = ui->stackedWidget->findChild<QWidget *>(menuitem);
+        setCurrentStackWidget(menuitem);
+    }
+
+    void ConfigurationDialog::setCurrentStackWidget(QString widgetname)
+    {
+        QWidget *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
         if(w != 0)
             ui->stackedWidget->setCurrentWidget(w);
         else
-            qDebug() << "[Config Menu] There is no page " << menuitem << " in the stack widget.";
+            qDebug() << "[Config Menu] There is no page " << widgetname << " in the stack widget.";
     }
 
-    void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddPool_clicked()
+    void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddUpstream_clicked()
     {
         int result;
 
-        NginxAddPoolDialog *dialog = new NginxAddPoolDialog();
+        NginxAddUpstreamDialog *dialog = new NginxAddUpstreamDialog();
         dialog->setWindowTitle("Nginx - Add Pool");
 
         //ui->tableWidget_pools->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -755,8 +763,8 @@ namespace Configuration
         if(result == QDialog::Accepted) {
             int row = ui->tableWidget_pools->rowCount();
             ui->tableWidget_pools->insertRow(row);
-            ui->tableWidget_pools->setItem(row, NginxAddPoolDialog::Column::Pool,   new QTableWidgetItem(dialog->pool()));
-            ui->tableWidget_pools->setItem(row, NginxAddPoolDialog::Column::Method, new QTableWidgetItem(dialog->method()));
+            ui->tableWidget_pools->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem(dialog->pool()));
+            ui->tableWidget_pools->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem(dialog->method()));
         }
 
         delete dialog;
@@ -812,9 +820,9 @@ namespace Configuration
             ui->tableWidget_pools->insertRow(insertRow);
 
             // insert column values
-            ui->tableWidget_pools->setItem(insertRow,NginxAddPoolDialog::Column::Pool,
+            ui->tableWidget_pools->setItem(insertRow,NginxAddUpstreamDialog::Column::Pool,
                                            new QTableWidgetItem(jsonPool["name"].toString()));
-            ui->tableWidget_pools->setItem(insertRow,NginxAddPoolDialog::Column::Method,
+            ui->tableWidget_pools->setItem(insertRow,NginxAddUpstreamDialog::Column::Method,
                                            new QTableWidgetItem(jsonPool["method"].toString()));
         }
 

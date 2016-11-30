@@ -1,5 +1,5 @@
-#ifndef NGINXADDPOOLDIALOG_H
-#define NGINXADDPOOLDIALOG_H
+#ifndef NGINXADDUPSTREAMDIALOG_H
+#define NGINXADDUPSTREAMDIALOG_H
 
 #include <QDialog>
 
@@ -9,13 +9,13 @@ namespace Configuration
         class NginxAddPoolDialog;
     }
 
-    class NginxAddPoolDialog : public QDialog
+    class NginxAddUpstreamDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        explicit NginxAddPoolDialog(QWidget *parent = 0);
-        ~NginxAddPoolDialog();
+        explicit NginxAddUpstreamDialog(QWidget *parent = 0);
+        ~NginxAddUpstreamDialog();
 
         QString pool();
         QString method();
@@ -29,4 +29,4 @@ namespace Configuration
     };
 
 }
-#endif // NGINXADDPOOLDIALOG_H
+#endif // NGINXADDUPSTREAMDIALOG_H

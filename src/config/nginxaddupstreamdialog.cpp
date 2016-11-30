@@ -1,9 +1,9 @@
-#include "nginxaddpooldialog.h"
-#include "ui_nginxaddpooldialog.h"
+#include "nginxaddupstreamdialog.h"
+#include "ui_nginxaddupstreamdialog.h"
 
 namespace Configuration
 {
-    NginxAddPoolDialog::NginxAddPoolDialog(QWidget *parent) :
+    NginxAddUpstreamDialog::NginxAddUpstreamDialog(QWidget *parent) :
         QDialog(parent),
         ui(new Configuration::Ui::NginxAddPoolDialog)
     {
@@ -13,17 +13,17 @@ namespace Configuration
         ui->setupUi(this);
     }
 
-    NginxAddPoolDialog::~NginxAddPoolDialog()
+    NginxAddUpstreamDialog::~NginxAddUpstreamDialog()
     {
         delete ui;
     }
 
-    QString NginxAddPoolDialog::pool()
+    QString NginxAddUpstreamDialog::pool()
     {
         return ui->lineEdit_pool->text().trimmed();
     }
 
-    QString NginxAddPoolDialog::method()
+    QString NginxAddUpstreamDialog::method()
     {
         return ui->lineEdit_method->text().trimmed();
     }
