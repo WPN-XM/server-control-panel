@@ -23,11 +23,11 @@ if(!equals(QT_MAJOR_VERSION, 5)) {
 
 message("You are running qmake on wpnxm-servercontrolpanel.pro file.")
 
-VERSION = 0.000
-QMAKE_TARGET_COMPANY = Koch Softwaresystemtechnik
-QMAKE_TARGET_PRODUCT = WPN-XM Server Control Panel
+VERSION                  = 0.870
+QMAKE_TARGET_COMPANY     = Koch Softwaresystemtechnik
+QMAKE_TARGET_PRODUCT     = WPN-XM Server Control Panel
 QMAKE_TARGET_DESCRIPTION = WPN-XM Server Control Panel
-QMAKE_TARGET_COPYRIGHT = Copyright 2010-2015 Jens A. Koch
+QMAKE_TARGET_COPYRIGHT   = Copyright 2010-2016 Jens A. Koch
 
 DEPLOYMENT.display_name = WPN-XM Server Control Panel
 
@@ -64,7 +64,7 @@ HEADERS += \
     src/hostmanager/adddialog.h \
     src/hostmanager/hostmanagerdialog.h \
     src/config/configurationdialog.h \
-    src/config/nginxaddpooldialog.h \
+    src/config/nginxaddupstreamdialog.h \
     src/config/nginxaddserverdialog.h \
     src/settings.h \
     src/splashscreen.h \
@@ -87,6 +87,7 @@ HEADERS += \
     src/processviewerdialog.h \
     src/ini.h
 
+
 SOURCES += \
     src/app/main.cpp \
     src/tray.cpp \
@@ -96,8 +97,8 @@ SOURCES += \
     src/hostmanager/adddialog.cpp \
     src/hostmanager/hostmanagerdialog.cpp \
     src/config/configurationdialog.cpp \
-    src/config/nginxaddpooldialog.cpp \
     src/config/nginxaddserverdialog.cpp \
+    src/config/nginxaddupstreamdialog.cpp \
     src/settings.cpp \
     src/splashscreen.cpp \
     src/windowsapi.cpp \
@@ -120,13 +121,14 @@ SOURCES += \
     src/processviewerdialog.cpp \
     src/ini.cpp
 
+
 RESOURCES += \
     src/resources/resources.qrc
 
 FORMS += \
     src/mainwindow.ui \
     src/config/configurationdialog.ui \
-    src/config/nginxaddpooldialog.ui \
+    src/config/nginxaddupstreamdialog.ui \
     src/config/nginxaddserverdialog.ui \
     src/updater/updaterdialog.ui \
     src/processviewerdialog.ui
@@ -140,28 +142,27 @@ exists(C:\Windows\System32\cmd.exe) {
     RC_FILE = src/resources/application.rc
 }
 
-# Build destination and binary name
-CONFIG(debug, debug|release) {
-    TARGET = wpn-xm-debug
-} else {
-    TARGET = wpn-xm
-}
+# set binary name
+CONFIG(release, debug|release): TARGET = wpn-xm
+CONFIG(debug, debug|release):   TARGET = wpn-xm-debug
 
 # if using Shadow build, you need to get the output folder
 CONFIG(release, debug|release): DESTDIR = $$OUT_PWD/release
-CONFIG(debug, debug|release): DESTDIR = $$OUT_PWD/debug
+CONFIG(debug, debug|release):   DESTDIR = $$OUT_PWD/debug
 
 # if using normal build (non-shadow) that would have worked as well.
 CONFIG(release, debug|release): DESTDIR = release
-CONFIG(debug, debug|release): DESTDIR = debug
+CONFIG(debug, debug|release):   DESTDIR = debug
 
-static {                                      # everything below takes effect with CONFIG += static
-    message("~~~ Static Build ~~~")           # this is for information, that a static build is done
+# everything below takes effect with CONFIG += static
+static {
+    message("~~~ Static Build ~~~")
 
     CONFIG += staticlib
     DEFINES += STATIC
 
-    TARGET = $$join(TARGET,,,-static)  # this appends -static to the exe, so you can seperate static build from non static build
+    # append -static to the exe (to seperate static build from non static build)
+    TARGET = $$join(TARGET,,,-static)
 
     QMAKE_LFLAGS += -static -static-libgcc
 
@@ -202,17 +203,19 @@ win32-msvc* {
 
 # Deployment - Automatically Copy Dependencies to Build Folder
 
-win32:contains($(TRAVIS), false) {
-
-    TARGET_CUSTOM_EXT = .exe
-    DEPLOY_COMMAND = windeployqt
-
-    CONFIG( debug, debug|release ) {
-        # debug
-        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}$${TARGET_CUSTOM_EXT}))
+win32 {
+    isEmpty(TARGET_EXT) {
+        TARGET_CUSTOM_EXT = .exe
     } else {
-        # release
-        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/release/$${TARGET}$${TARGET_CUSTOM_EXT}))
+        TARGET_CUSTOM_EXT = $${TARGET_EXT}
+    }
+
+    DEPLOY_COMMAND = $(QTDIR)/bin/windeployqt
+
+    CONFIG(debug, debug|release) {
+        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}.exe))
+    } else {
+        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/release/$${TARGET}.exe))
     }
 
     # Uncomment the following line to help debug the deploy command when running qmake
