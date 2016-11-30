@@ -37,6 +37,14 @@ namespace ServerControlPanel
             QString getPostgresqlVersion();
             QString getRedisVersion();
 
+            QString getPHPPort();
+            QString getNginxPort();
+            QString getMariaPort();
+            QString getMongoPort();
+            QString getMemcachedPort();
+            QString getPostgresqlPort();
+            QString getRedisPort();
+
             QString parseVersionNumber(QString stringWithVersion);
 
         public slots:
@@ -78,6 +86,7 @@ namespace ServerControlPanel
 
             void setLabelStatusActive(QString label, bool enabled);
             void updateVersion(QString server);
+            void updatePort(QString port);
 
             void enableToolsPushButtons(bool enabled);
             void updateTrayIconTooltip();
@@ -86,7 +95,7 @@ namespace ServerControlPanel
 
             void execEditor(QUrl logfile);
 
-            void runSelfUpdate();
+            void runSelfUpdate();            
 
         private:
             Ui::MainWindow *ui;
@@ -115,6 +124,7 @@ namespace ServerControlPanel
             void showPushButtonsOnlyForInstalledTools();
 
             QString getVersion(QString server);
+            QString getPort(QString server);
 
             QString getLogfile(QString objectName);
             QString getServerNameFromPushButton(QPushButton *button);           
@@ -130,7 +140,7 @@ namespace ServerControlPanel
             void MainWindow_ShowEvent();
 
             void show_SelfUpdater_UpdateNotification(QJsonObject versionInfo);
-            void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);
+            void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);           
 
         protected:
             void closeEvent(QCloseEvent *event);

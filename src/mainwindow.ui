@@ -90,9 +90,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>380</x>
       <y>0</y>
-      <width>211</width>
+      <width>241</width>
       <height>61</height>
      </rect>
     </property>
@@ -206,20 +206,33 @@
       </widget>
      </item>
      <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton_Donate">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>26</height>
+         <width>109</width>
+         <height>24</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>101</width>
-         <height>26</height>
+         <width>109</width>
+         <height>24</height>
         </size>
        </property>
        <property name="baseSize">
@@ -266,6 +279,7 @@
     <zorder>pushButton_ReportBug</zorder>
     <zorder>pushButton_Donate</zorder>
     <zorder>pushButton_Website</zorder>
+    <zorder>horizontalSpacer</zorder>
    </widget>
    <widget class="QWidget" name="RightSideWidget" native="true">
     <property name="geometry">
@@ -1595,10 +1609,10 @@ QPushButton:pressed
       <x>510</x>
       <y>80</y>
       <width>111</width>
-      <height>151</height>
+      <height>170</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="RightsideVBoxLayout" stretch="0,0,0,0,0">
+    <layout class="QVBoxLayout" name="RightsideVBoxLayout" stretch="0,0,0,0,0,0">
      <property name="spacing">
       <number>5</number>
      </property>
@@ -1688,6 +1702,13 @@ QPushButton:pressed
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="pushButton_Updater">
+       <property name="text">
+        <string>Updater</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pushButton_Help">
        <property name="enabled">
         <bool>true</bool>
@@ -1771,19 +1792,7 @@ QPushButton:pressed
     <zorder>pushButton_Help</zorder>
     <zorder>pushButton_About</zorder>
     <zorder>pushButton_Close</zorder>
-   </widget>
-   <widget class="QPushButton" name="pushButton_Updater">
-    <property name="geometry">
-     <rect>
-      <x>294</x>
-      <y>20</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Updater</string>
-    </property>
+    <zorder>pushButton_Updater</zorder>
    </widget>
   </widget>
  </widget>

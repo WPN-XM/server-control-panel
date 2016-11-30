@@ -48,6 +48,9 @@ namespace ServerControlPanel
 
         connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
 
+        connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
+        connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this, SLOT(updatePort(QString)));
+
         // daemon autostart
         if(settings->get("global/autostartdaemons").toBool()) {
             qDebug() << "[Daemons] Autostart enabled";
@@ -367,7 +370,7 @@ namespace ServerControlPanel
 
     void MainWindow::enableToolsPushButtons(bool enabled)
     {
-        // get all PushButtons from the Tools GroupBox of MainWindow::UI
+        // get all PushButtons from the Tools GroupBox of MainWindow::UI        
         QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons enabled/disabled
@@ -386,16 +389,6 @@ namespace ServerControlPanel
            if(actions.at(i)->iconText() == tr("Webinterface")) {
                 actions.at(i)->setEnabled(enabled);
            }
-        }
-
-        // webinterface configuration is only available, when nginx and php are running
-        // disable "pushButton_Configure_*"
-        QList<QPushButton *> allConfigurePushButtons = ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_Configure_\\w"));
-
-        // set all PushButtons enabled/disabled
-        for(int i = 0; i < allConfigurePushButtons.size(); ++i)
-        {
-            allConfigurePushButtons[i]->setEnabled(enabled);
         }
     }
 
@@ -489,13 +482,14 @@ namespace ServerControlPanel
     QString MainWindow::getMariaVersion()
     {
         // this happens only during testing
-        if(!QFile().exists("./bin/mariadb/bin/mysqld.exe")) {
+        if(!QFile().exists("./bin/mariadb/bin/mysqld.exe") ||
+           !QFile().exists("./bin/mariadb/bin/mysqlcheck.exe")) {
             return "0.0.0";
         }
 
         QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start("./bin/mariadb/bin/mysql.exe -V"); // upper-case V
+        process.start("./bin/mariadb/bin/mysqlcheck.exe -V"); // upper-case V
 
         if (!process.waitForFinished()) {
             qDebug() << "[MariaDb] Version failed:" << process.errorString();
@@ -758,45 +752,62 @@ namespace ServerControlPanel
 
     QString MainWindow::getProjectFolder() const
     {
-        return QDir::toNativeSeparators(QApplication::applicationDirPath() + "/www");
+        return QDir::toNativeSeparators(QDir::currentPath() + "/www");
     }
 
     void MainWindow::openConfigurationDialog()
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setWindowTitle("WPN-XM Server Control Panel - Configuration");
         cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogNginx()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#nginx"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("nginx");
+        cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogPHP()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#php"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("php");
+        cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogMariaDb()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#mariadb"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("mariadb");
+        cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogMongoDb()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#mongodb"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("mongodb");
+        cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogPostgresql()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#postgresql"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("postgresql");
+        cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogRedis()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=config#redis"));
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("redis");
+        cfgDlg.exec();
     }
 
     QString MainWindow::getServerNameFromPushButton(QPushButton *button)
@@ -1298,7 +1309,7 @@ namespace ServerControlPanel
             // Port
             QLabel* labelPort = new QLabel();
             labelPort->setObjectName(QString("label_"+server->name+"_Port"));
-            labelPort->setText( settings->get(server->lowercaseName+"/port").toString() );
+            labelPort->setText(getPort(server->lowercaseName));
             labelPort->setAlignment(Qt::AlignCenter);
             labelPort->setFont(fontNotBold);
             DaemonsGridLayout->addWidget(labelPort, rowCounter, 1);
@@ -1329,7 +1340,7 @@ namespace ServerControlPanel
                 pushButton_Configure->setIcon(iconConfig);
                 pushButton_Configure->setFlat(true);
                 pushButton_Configure->setToolTip(QApplication::translate(
-                    "MainWindow", "Open the Webinterface Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
+                    "MainWindow", "Open the Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
                 );
                 DaemonsGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
@@ -1447,7 +1458,9 @@ namespace ServerControlPanel
         if(s == "postgresql"){ return getPostgresqlVersion(); }
         if(s == "redis")     { return getRedisVersion(); }
 
-        return "The function for fetching the version for " + s + "is not implemented, yet.";
+        qDebug() << "The function for fetching the version for " + s + " is not implemented, yet.";
+
+        return ":(";
     }
 
     void MainWindow::updateVersion(QString server)
@@ -1457,6 +1470,66 @@ namespace ServerControlPanel
         if(label != 0) {
             label->setText(version);
         }
+    }
+
+    QString MainWindow::getPort(QString server)
+    {
+        QString s = server.toLower();
+        if(s == "nginx")     { return getNginxPort(); }
+        if(s == "memcached") { return getMemcachedPort(); }
+        if(s == "mongodb")   { return getMongoPort(); }
+        if(s == "mariadb")   { return getMariaPort(); }
+        if(s == "php")       { return getPHPPort(); }
+        if(s == "postgresql"){ return getPostgresqlPort(); }
+        if(s == "redis")     { return getRedisPort(); }
+
+        qDebug() << "The function for fetching the port for " + s + " is not implemented, yet.";
+
+        return ":(";
+    }
+
+    void MainWindow::updatePort(QString server)
+    {
+        QString port = getPort(server);
+        QLabel* label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Port");
+        if(label != 0) {
+            label->setText(port);
+        }
+    }
+
+    QString MainWindow::getNginxPort()
+    {
+        return settings->get("nginx/port").toString();
+    }
+
+    QString MainWindow::getMemcachedPort()
+    {
+        return settings->get("memcached/tcpport").toString();
+    }
+
+    QString MainWindow::getMongoPort()
+    {
+        return settings->get("mongodb/port").toString();
+    }
+
+    QString MainWindow::getMariaPort()
+    {
+        return settings->get("mariadb/port").toString();
+    }
+
+    QString MainWindow::getPHPPort()
+    {
+        return "Pool";
+    }
+
+    QString MainWindow::getPostgresqlPort()
+    {
+        return settings->get("postgresql/port").toString();
+    }
+
+    QString MainWindow::getRedisPort()
+    {
+        return settings->get("redis/port").toString();
     }
 
     void MainWindow::on_pushButton_Updater_clicked()
