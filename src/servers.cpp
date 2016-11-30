@@ -209,8 +209,8 @@ namespace Servers
         }
 
         clearLogFile("Nginx");
-
         emit signalMainWindow_updateVersion("Nginx");
+        emit signalMainWindow_updatePort("Nginx");
 
         // http://wiki.nginx.org/CommandLine - start daemon
         QString const startNginx = getServer("Nginx")->exe
@@ -281,8 +281,8 @@ namespace Servers
         }
 
         clearLogFile("PostgreSQL");
-
         emit signalMainWindow_updateVersion("PostgreSQL");
+        emit signalMainWindow_updatePort("PostgreSQL");
 
         // start daemon
         QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")
@@ -365,30 +365,55 @@ namespace Servers
         }
 
         clearLogFile("PHP");
-
         emit signalMainWindow_updateVersion("PHP");
+        //emit signalMainWindow_updatePort("PHP");
 
         // disable PHP_FCGI_MAX_REQUESTS to go beyond the default request limit of 500 requests
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("PHP_FCGI_MAX_REQUESTS", "0");
         qDebug() << "[PHP] Set PHP_FCGI_MAX_REQUESTS \"0\" (disabled).";
 
+        // get the PHP version
+        QProcess process;
+        process.start("./bin/php/php.exe -r \"echo PHP_VERSION_ID;\"");
+        process.waitForFinished();
+        int phpVersion = process.readAllStandardOutput().toInt();
+        qDebug() << "[PHP] Version " << phpVersion;
 
+        // check that the spawn tool is present
+        QString spawnUtilFile = QDir::toNativeSeparators(QDir::currentPath() + "/bin/tools/spawn.exe");
+        if(!QFile().exists(spawnUtilFile)) {
+            qDebug() << "[PHP] Starting PHP failed. Tool \"spawn.exe\" missing.";
+            return;
+        }
 
-        QString const startCmdWithPlaceholders("./bin/tools/spawn.exe ./bin/php/php-cgi.exe %1 %2");
+        // if PHP version below 7.1, then utilize spawn.exe to spawn multiple processes
+        QString startCmdWithPlaceholders(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
+        // get the nginx upstream configuration and read the defined PHP pools
         QMapIterator<QString, QString> PHPServersToStart( getPHPServersFromNginxUpstreamConfig() );
 
         while(PHPServersToStart.hasNext()) {
             PHPServersToStart.next();
             QString port = PHPServersToStart.key();
             QString phpchildren = PHPServersToStart.value();
+
+            // if PHP version 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP spawning childs
+            if(phpVersion >= 71000) {
+                env.insert("PHP_FCGI_CHILDREN", phpchildren);
+                qDebug() << "[PHP] Set PHP_FCGI_CHILDREN " << phpchildren;
+
+                startCmdWithPlaceholders.clear();
+                startCmdWithPlaceholders.append(QDir::currentPath() + "/bin/php/php-cgi.exe");
+            }
+
             QString startPHPCGI = QString(startCmdWithPlaceholders).arg(port, phpchildren);
+
             qDebug() << "[PHP] Starting...\n" << startPHPCGI;
 
             QProcess* process = getProcess("PHP");
             process->setEnvironment(env.toStringList());
-            process->startDetached(startPHPCGI);
+            process->startDetached(startPHPCGI);            
         }
     }
 
@@ -491,8 +516,8 @@ namespace Servers
         }
 
         clearLogFile("MariaDb");
-
         emit signalMainWindow_updateVersion("MariaDb");
+        emit signalMainWindow_updatePort("MariaDb");
 
         // start
         QString const startMariaDb = getServer("MariaDb")->exe
@@ -500,7 +525,7 @@ namespace Servers
 
         qDebug() << "[MariaDB] Starting...\n" << startMariaDb;
 
-        getServer("MariaDb")->process->start(startMariaDb);
+        getProcess("MariaDb")->start(startMariaDb);
     }
 
     void Servers::stopMariaDb()
@@ -541,7 +566,7 @@ namespace Servers
     }
 
     /*
-     * MongoDb Actions - run, stop, restart
+     * MongoDb Actions - start, stop, restart
      */
     void Servers::startMongoDb()
     {
@@ -557,10 +582,6 @@ namespace Servers
             return;
         }
 
-        clearLogFile("MongoDb");
-
-        emit signalMainWindow_updateVersion("MongoDb");
-
         // MongoDb doesn't start, when data dir is missing...
         QString const mongoDbDataDir = QDir::currentPath() + "/bin/mongodb/data/db";
         if(QDir().exists(QDir::currentPath() + "/bin/mongodb") && !QDir().exists(mongoDbDataDir)) {
@@ -574,14 +595,21 @@ namespace Servers
             qDebug() << "[MongoDb] Creating empty logfile...\n" << QDir::currentPath() + "/logs/mongodb.log";
             f.open(QIODevice::ReadWrite);
             f.close();
+        } else {
+            clearLogFile("MongoDb");
         }
+
+        emit signalMainWindow_updateVersion("MongoDb");
+        emit signalMainWindow_updatePort("MongoDb");
 
         // build mongo start command
         QString const mongoStartCommand = getServer("MongoDb")->exe
                  + " --config " + QDir::currentPath() + "/bin/mongodb/mongodb.conf"
                  + " --dbpath " + QDir::currentPath() + "/bin/mongodb/data/db"
                  + " --logpath " + QDir::currentPath() + "/logs/mongodb.log"
-                 + " --rest";
+                 + " --storageEngine=" + settings->get("mongodb/storageengine").toString()
+                 + " --journal"
+                 + " --httpinterface --rest";
 
         qDebug() << "[MongoDb] Starting...\n"<< mongoStartCommand;
 
@@ -651,6 +679,7 @@ namespace Servers
         }
 
         emit signalMainWindow_updateVersion("Memcached");
+        emit signalMainWindow_updatePort("Memcached");
 
         // start
         qDebug() << "[Memcached] Starting...\n" << memcachedStartCommand;
@@ -707,8 +736,8 @@ namespace Servers
         }
 
         clearLogFile("Redis");
-
         emit signalMainWindow_updateVersion("Redis");
+        emit signalMainWindow_updatePort("Redis");
 
         // start
         qDebug() << "[Redis] Starting...\n" << redisStartCommand;
@@ -730,6 +759,8 @@ namespace Servers
             return;
         }
 
+        // build redis stop command
+        // Note: "-a password" is not supported, yet
         QString const redisStopCommand = QString("./bin/redis/redis-cli.exe")
                 + " -h " + settings->get("redis/bind").toString()
                 + " -p " + settings->get("redis/port").toString()

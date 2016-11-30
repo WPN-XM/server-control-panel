@@ -82,7 +82,7 @@ namespace Servers
             void stopPHP();
             void restartPHP();
 
-            // MySQL Action Slots
+            // MariaDb Action Slots
             void startMariaDb();
             void stopMariaDb();
             void restartMariaDb();
@@ -111,6 +111,7 @@ namespace Servers
             void signalMainWindow_ServerStatusChange(QString label, bool enabled);
             void signalMainWindow_EnableToolsPushButtons(bool enabled);
             void signalMainWindow_updateVersion(QString server);
+            void signalMainWindow_updatePort(QString server);
 
         private:
             QList<Server*> serverList;
