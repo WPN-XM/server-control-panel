@@ -69,7 +69,7 @@ before_build:
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
   - if %platform%==mingw set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
   - set PATH=C:\Qt\%qt%\bin;C:\Qt\%qt%;%PATH%
-  - set QTDIR=C:\Qt\%qt%;
+  - set QTDIR=C:\Qt\%qt%
   # set QT path and env variables
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
   # Set more... if Microsoft Visual Studio
