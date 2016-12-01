@@ -210,7 +210,7 @@ win32 {
         TARGET_CUSTOM_EXT = $${TARGET_EXT}
     }
 
-    DEPLOY_COMMAND = $(QTDIR)/bin/windeployqt
+    DEPLOY_COMMAND = $$shell_quote($$shell_path($$[QT_INSTALL_BINS]/windeployqt))
 
     CONFIG(debug, debug|release) {
         DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}.exe))
