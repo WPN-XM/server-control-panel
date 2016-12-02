@@ -499,10 +499,13 @@ namespace ServerControlPanel
         QByteArray p_stdout = process.readAll();
 
         // string for regexp testing
-        //QString p_stdout = "mysql  Ver 15.1 Distrib 5.5.24-MariaDB, for Win32 (x86)";
+        //QString p_stdout = ".\\bin\\mariadb\\bin\\mysqlcheck.exe  Ver 15.1 Distrib 5.5.24-MariaDB, for Win32 (x86)";
+        //QString p_stdout = ".\\bin\\mariadb\\bin\\mysqlcheck.exe  Ver 2.7.4-MariaDB Distrib 10.1.6-MariaDB, for Win64 (AMD64)\r\n";
+
         qDebug() << "[MariaDb] Version: \n" << p_stdout;
 
-        return parseVersionNumber(p_stdout.mid(45, 15));
+        // scrape second version number
+        return parseVersionNumber(p_stdout.mid(p_stdout.lastIndexOf("Distrib "), 15));
     }
 
     QString MainWindow::getPHPVersion()
