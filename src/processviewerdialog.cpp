@@ -16,21 +16,26 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     ui->treeWidget->setColumnWidth(0, 130);
     ui->treeWidget->setColumnWidth(1, 90);
 
+    // get process data in CSV format using a "Windows Management Instrumentation Commandline" query
     QString cmd = "wmic process where \"ExecutablePath LIKE '%server_main%'\" GET Name, ExecutablePath, ProcessId, ParentProcessId /format:csv";
+
     QList<QStringList> list = execute(cmd);
 
     foreach(QStringList item, list) {
+
+        // skip items
         if(item.first() == "") continue;      // 1 empty list element
         if(item.first() == "Node") continue;  // 2 list with keys
+
         //qDebug() << item;
 
-        // always a root node
+        // add elements, which are always a root node
         if(item.at(2) == "spawn.exe" || item.at(2) != "php-cgi.exe") {
             addRoot(item.at(2), item.at(4));
             continue;
         }
 
-        // PHP process - is a child, when the spawner is used
+        // add PHP process as child, that's the case, when the spawner is used
         if(item.at(2) == "php-cgi.exe") {
             // find root by parentId
             QTreeWidgetItem *rootItem = ui->treeWidget->findItems(item.at(3), Qt::MatchExactly, 1).at(0);
