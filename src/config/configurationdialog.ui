@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>4</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1080,7 +1080,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_Nginx_Upstream">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1126,7 +1126,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget_Nginx">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1240,7 +1240,7 @@
          <string>Set output folder and filename</string>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget_xdebug_profiler">
         <property name="geometry">
          <rect>
           <x>11</x>
@@ -1266,7 +1266,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget_xdebug_profiler2">
         <property name="geometry">
          <rect>
           <x>11</x>
@@ -1305,7 +1305,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget_xdebug_profiler_out">
         <property name="geometry">
          <rect>
           <x>11</x>
@@ -1455,7 +1455,7 @@
         </property>
         <layout class="QFormLayout" name="formLayout_8">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_11">
+          <widget class="QLabel" name="xdebug_clicolor_label">
            <property name="text">
             <string>CLI Color</string>
            </property>
@@ -1538,7 +1538,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLabel" name="label_18">
+          <widget class="QLabel" name="xdebug_includes_label">
            <property name="text">
             <string>Includes</string>
            </property>
@@ -1555,21 +1555,21 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QLabel" name="label_20">
+          <widget class="QLabel" name="xdebug_variables_label">
            <property name="text">
             <string>Variables</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLabel" name="label_19">
+          <widget class="QLabel" name="xdebug_return_label">
            <property name="text">
             <string>Return</string>
            </property>
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QLabel" name="label_10">
+          <widget class="QLabel" name="xdebug_parameters_label">
            <property name="text">
             <string>Parameters</string>
            </property>
@@ -1586,7 +1586,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="QLabel" name="label_17">
+          <widget class="QLabel" name="xdebug_assignments_label">
            <property name="text">
             <string>Assignments</string>
            </property>
@@ -1642,14 +1642,14 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_14">
+           <widget class="QLabel" name="xdebug_data_label">
             <property name="text">
              <string>Data</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_12">
+           <widget class="QLabel" name="xdebug_children_label">
             <property name="text">
              <string>Children</string>
             </property>
@@ -1666,7 +1666,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QLabel" name="label_16">
+      <widget class="QLabel" name="xdebug_documentation_link">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -2125,7 +2125,7 @@
          <height>80</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout_7">
+       <layout class="QFormLayout" name="redis_formLayout">
         <item row="1" column="1">
          <widget class="QLineEdit" name="lineEdit_redis_port"/>
         </item>
