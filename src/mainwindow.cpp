@@ -68,7 +68,7 @@ namespace ServerControlPanel
           enableToolsPushButtons(false);
         }
 
-        //updateTrayIconTooltip();
+        updateTrayIconTooltip();
 
         //ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
         //pvd->exec();
