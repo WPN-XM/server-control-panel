@@ -1,5 +1,4 @@
 #include "tray.h"
-//#include "tooltips/TrayToolTip.h"
 
 namespace ServerControlPanel
 {
