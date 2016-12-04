@@ -1,13 +1,15 @@
 #include "tray.h"
+//#include "tooltips/TrayToolTip.h"
 
 namespace ServerControlPanel
 {
-    Tray::Tray(QApplication *parent, Settings::SettingsManager *settings, Servers::Servers *servers) :
-        QSystemTrayIcon(QIcon(":/wpnxm.png"), parent),
-        settings(settings),
+    Tray::Tray(QApplication *parent, Servers::Servers *servers) :
+        QSystemTrayIcon(parent),
         servers(servers)
     {
         createTrayMenu();
+
+        setIcon(QIcon(":/wpnxm"));
     }
 
     void Tray::createTrayMenu()
@@ -18,11 +20,7 @@ namespace ServerControlPanel
             trayMenu->clear();
         } else {
             trayMenu = new QMenu;
-            setContextMenu(trayMenu);
         }
-
-        // set tray menu icon
-        trayMenu->setIcon(QIcon(QPixmap(":/wpnxm.png")));
 
         // add title entry like for WPN-XM in KVirc style (background gray, bold, small font)
         trayMenu->addAction("WPN-XM v" APP_VERSION_SHORT)->setFont(QFont("Arial", 9, QFont::Bold));
@@ -42,7 +40,7 @@ namespace ServerControlPanel
         // add all server submenus to the tray menu
         foreach(Servers::Server *server, servers->servers()) {
             trayMenu->addMenu(server->trayMenu);
-            qDebug() << "[" + server->name + "] SubMenu was added to the TrayMenu.";
+            qDebug() << "[" + server->name + "] SubMenu added to TrayMenu.";
         }
 
         trayMenu->addSeparator();
@@ -52,6 +50,8 @@ namespace ServerControlPanel
         trayMenu->addAction(QIcon(":/report_bug"), tr("&Report Bug"), this, SLOT(goToReportIssue()), QKeySequence());
         trayMenu->addAction(QIcon(":/question"),tr("&Help"), this, SLOT(goToWebsiteHelp()), QKeySequence());
         trayMenu->addAction(QIcon(":/quit"),tr("&Quit"), qApp, SLOT(quit()), QKeySequence());
+
+        setContextMenu(trayMenu);
     }
 
     void Tray::goToWebinterface()
@@ -76,6 +76,8 @@ namespace ServerControlPanel
         servers->startMariaDb();
         servers->startMongoDb();
         servers->startMemcached();
+        servers->startPostgreSQL();
+        servers->startRedis();
     }
 
     void Tray::stopAllDaemons()
@@ -85,11 +87,13 @@ namespace ServerControlPanel
         servers->stopNginx();
         servers->stopMongoDb();
         servers->stopMemcached();
+        servers->stopPostgreSQL();
+        servers->stopRedis();
     }
 
     void Tray::openHostManagerDialog()
     {
         HostsFileManager::HostsManagerDialog dlg;
         dlg.exec();
-    }   
+    }
 }

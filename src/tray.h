@@ -35,7 +35,7 @@ namespace ServerControlPanel
         Q_OBJECT
 
         public:
-            explicit Tray(QApplication *parent, Settings::SettingsManager *settings, Servers::Servers *servers);
+            explicit Tray(QApplication *parent, Servers::Servers *servers);
 
         public slots:
             void startAllDaemons();
@@ -46,7 +46,7 @@ namespace ServerControlPanel
             void openHostManagerDialog();
 
         private:
-            void createTrayMenu();
+            void createTrayMenu();            
 
             Settings::SettingsManager *settings;
             Servers::Servers          *servers;

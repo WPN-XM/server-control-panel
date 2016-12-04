@@ -19,8 +19,9 @@ namespace ServerControlPanel
             QApplication::exit(1);
         }
 
-        setDefaultSettings();
         setWindowTitle(APP_NAME_AND_VERSION);
+
+        setDefaultSettings();
 
         this->servers = new Servers::Servers();
 
@@ -41,6 +42,9 @@ namespace ServerControlPanel
 
         // disable Maximize button functionality
         setWindowFlags( (windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
+
+        // set window size fixed
+        setFixedSize(width(), height());
 
         checkAlreadyActiveDaemons();
 
@@ -64,8 +68,7 @@ namespace ServerControlPanel
           enableToolsPushButtons(false);
         }
 
-        // set window size fixed
-        setFixedSize(width(), height());
+        //updateTrayIconTooltip();
 
         //ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
         //pvd->exec();
@@ -133,11 +136,9 @@ namespace ServerControlPanel
 
     void MainWindow::createTrayIcon()
     {
-        tray = new ServerControlPanel::Tray(qApp, settings, servers);
+        tray = new ServerControlPanel::Tray(qApp, servers);
 
-        tray->setIcon(QIcon(":/wpnxm"));
-
-        // handle clicks on the icon
+        // handle clicks on the tray icon
         connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                 this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
@@ -382,7 +383,7 @@ namespace ServerControlPanel
         // change state of "Open Projects Folder" >> "Browser" button
         ui->pushButton_OpenProjects_Browser->setEnabled(enabled);
 
-        // disable "webinterface" in TrayMenu, if PHP/Nginx is off
+        // disable Action "Webinterface" in TrayMenu, when PHP+Nginx are off
         QList<QAction *>actions = tray->contextMenu()->actions();
         const int listSize = actions.size();
         for (int i = 0; i < listSize; ++i) {
@@ -990,7 +991,7 @@ namespace ServerControlPanel
         // foreach processesToSearch take a look in the processList
         for (int i = 0; i < processesToSearch.size(); ++i)
         {
-            //qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData() << endl;
+            //qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
 
             if(processList.contains( processesToSearch.at(i).toLatin1().constData() ))
             {
