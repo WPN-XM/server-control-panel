@@ -721,7 +721,16 @@ namespace ServerControlPanel
 
     void MainWindow::openProjectFolderInBrowser()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost"));
+        // we have to take the NGINX port into account
+        QString nginxPort = settings->get("nginx/port").toString();
+
+        QString url = "http://localhost";
+
+        if(nginxPort != "80") {
+            url.append(":" + nginxPort + "/");
+        }
+
+        QDesktopServices::openUrl(QUrl(url));
     }
 
     void MainWindow::openProjectFolderInExplorer()
