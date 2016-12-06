@@ -137,7 +137,7 @@ after_build:
   - del libEGL.dll
   # - remove SVG stuff
   - del Qt5SVG.dll
-  - rd /s %APPVEYOR_BUILD_FOLDER%\iconengines
+  - rd /s /q %APPVEYOR_BUILD_FOLDER%\iconengines
   # - remove imagehandlers
   - del %APPVEYOR_BUILD_FOLDER%\imageformats\qwebp.dll
   - del %APPVEYOR_BUILD_FOLDER%\imageformats\qtiff.dll
