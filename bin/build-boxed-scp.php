@@ -23,14 +23,14 @@ package($version, $bitsize);
  * 3. zip the executable (the file suffix is "_boxed.zip").
  * 4. cleanup
  */
-function package($folder, $version, $bitsize)
+function package($version, $bitsize)
 {
     // 1 build enigma box
     passthru('php EnigmaVirtualBox.php ..\release wpn-xm.exe wpn-xm_boxed.exe');
     // 2 overwrite old exe by renaming
     rename(__DIR__ . '\wpn-xm_boxed.exe', __DIR__ . '\wpn-xm.exe');
     // 3 package
-    passthru('7za a -tzip wpnxm-scp-v'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
+    passthru('7z a -tzip wpnxm-scp-v'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
     // 4 cleanup
     unlink(__DIR__ . '\project.evb');
 }
