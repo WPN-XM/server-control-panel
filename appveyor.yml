@@ -146,6 +146,7 @@ after_build:
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qdds.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qtga.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qgif.dll
+  - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qicns.dll
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
