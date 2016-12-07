@@ -9,37 +9,29 @@
  */
 
 $version = getVersion();
+$bitsize = (isset($_ENV['bitsize']) && $_ENV['bitsize'] == 'x64') ? 'x86_64' : 'x86';
 
-repackage($version, 'x86');
-repackage($version, 'x86_64');
+package($version, $bitsize);
 
 /**
- * Repackage
+ * Package
  *
- * 1. download the latest version of the server control panel
- * 2. unzip
- * 3. use EngimaVirtualBox helper script to box the Qt application
+ * 1. use EngimaVirtualBox helper script to box the Qt application
  *    - build an EVB project from the unzipped application folder
  *    - "box" the Qt application: result is a single executable.
- * 4. zip the executable (the file suffix is "_boxed.zip").
- * 5. cleanup
+ * 2. rename "wpn-xm_boxed.exe" to "wpn-xm.exe"
+ * 3. zip the executable (the file suffix is "_boxed.zip").
+ * 4. cleanup
  */
-function repackage($version, $bitsize)
+function package($folder, $version, $bitsize)
 {
-    // 1
-    download('https://github.com/WPN-XM/server-control-panel/releases/download/v'. $version . '/wpnxm-scp-'. $version . '-'. $bitsize .'.zip',
-             'wpnxm-scp-'. $bitsize .'.zip');
-    // 2
-    unzip('wpnxm-scp-'. $bitsize .'.zip', __DIR__ . '/wpnxm-scp-'. $bitsize);
-    // 3
-    passthru('php EnigmaVirtualBox.php wpnxm-scp-'. $bitsize .' wpn-xm.exe wpn-xm-'. $bitsize .'_boxed.exe');
-    rename(__DIR__ . '\wpn-xm-'. $bitsize .'_boxed.exe', __DIR__ . '\wpn-xm.exe');
-    // 4    
-    $zipPath = ($bitsize === 'x86_64') ? '\7zip\x64' : '\7zip\x86';
-    passthru(__DIR__ . $zipPath . '\7za.exe a -tzip wpnxm-scp-'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
-    // 5
-    unlink(__DIR__ . '\wpn-xm.exe');
-    unlink(__DIR__ . '\wpnxm-scp-'. $bitsize .'.zip');
+    // 1 build enigma box
+    passthru('php EnigmaVirtualBox.php ..\release wpn-xm.exe wpn-xm_boxed.exe');
+    // 2 overwrite old exe by renaming
+    rename(__DIR__ . '\wpn-xm_boxed.exe', __DIR__ . '\wpn-xm.exe');
+    // 3 package
+    passthru('7za a -tzip wpnxm-scp-v'. $version . '-'. $bitsize .'_boxed.zip wpn-xm.exe -mx9 -mmt');
+    // 4 cleanup
     unlink(__DIR__ . '\project.evb');
 }
 
@@ -62,44 +54,3 @@ function getVersion()
 
     return $version;
 }
-
-function unzip($zipfile, $folder)
-{
-    $zip = new ZipArchive;
-    $res = $zip->open($zipfile);
-    if ($res === TRUE) {
-        $zip->extractTo($folder);
-        $zip->close();
-    }
-}
-
-function download($url, $targetFile)
-{
-    // disable the SSL certificate check
-    $context = stream_context_create([
-        "ssl" => [
-            "verify_peer" => false,
-            "verify_peer_name" => false,
-        ]
-    ]);
-
-    $file = fopen($url, "rb", false, $context);
-
-    if ($file) {
-        $newf = fopen($targetFile, "wb");
-
-        if ($newf) {
-            while(!feof($file)) {
-                fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
-            }
-        }
-    }
-
-    if ($file) {
-        fclose($file);
-    }
-
-    if ($newf) {
-        fclose($newf);
-    }
- }

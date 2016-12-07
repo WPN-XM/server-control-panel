@@ -142,8 +142,6 @@ after_build:
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qwebp.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qtiff.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qdds.dll
-  # build enigma package
-  - 
   # package server control panel
   - 7z a wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip .
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
@@ -151,6 +149,8 @@ after_build:
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z a wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs
   - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
+  # build enigma package
+  - call "%APPVEYOR_BUILD_FOLDER%\bin\box.bat"
 
 test_script:
   - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
