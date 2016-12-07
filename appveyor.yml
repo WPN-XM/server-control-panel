@@ -147,6 +147,7 @@ after_build:
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
+  - del wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # package dependencies 
   - cd %APPVEYOR_BUILD_FOLDER%
   - 7z a -tzip wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
