@@ -143,11 +143,11 @@ after_build:
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qtiff.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qdds.dll
   # package server control panel
-  - 7z a wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip .
+  - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # package dependencies 
   - cd %APPVEYOR_BUILD_FOLDER%
-  - 7z a wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs
+  - 7z a -tzip wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
   - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # build enigma package
   - cd %APPVEYOR_BUILD_FOLDER%\bin
