@@ -101,8 +101,10 @@ before_build:
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
   - cd %APPVEYOR_BUILD_FOLDER%
-  # build dependencies  
+  # build dependencies, see before_build section 
   #- if %platform%==mingw (call build-dependencies-mingw.bat) else (call build-dependencies-msvc.bat)
+  # versionize 
+  - call bin\phing\phing.bat -f build.appveyor.xml
   # run qmake  
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% -config %CONFIGURATION% 
   # run make
