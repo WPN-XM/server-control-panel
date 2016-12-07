@@ -34,5 +34,6 @@
         <file alias="explorer">folder-smiley.png</file>
         <file>comment.png</file>
         <file alias="update">update.png</file>
+        <file>update-circle.png</file>
     </qresource>
 </RCC>
