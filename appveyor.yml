@@ -150,10 +150,16 @@ after_build:
   - 7z a wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs
   - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # build enigma package
-  - call "%APPVEYOR_BUILD_FOLDER%\bin\box.bat"
-
+  - cd %APPVEYOR_BUILD_FOLDER%\bin
+  - call box.bat
+  
 test_script:
+  # test normal executable
   - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
+  - wpn-xm.exe -v
+  - wpn-xm.exe --help
+  # test boxed executable
+  - cd %APPVEYOR_BUILD_FOLDER%\bin
   - wpn-xm.exe -v
   - wpn-xm.exe --help
 
