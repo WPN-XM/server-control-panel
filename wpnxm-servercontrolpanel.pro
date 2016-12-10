@@ -57,6 +57,7 @@ QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 HEADERS += \
     src/version.h \
     src/app/main.h \
+    src/tooltips/TrayTooltip.h \
     src/tray.h \
     src/mainwindow.h \
     src/hostmanager/host.h \
@@ -90,6 +91,7 @@ HEADERS += \
 
 SOURCES += \
     src/app/main.cpp \
+    src/tooltips/TrayTooltip.cpp \
     src/tray.cpp \
     src/mainwindow.cpp \
     src/hostmanager/host.cpp \

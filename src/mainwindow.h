@@ -145,7 +145,7 @@ namespace ServerControlPanel
         protected:
             void closeEvent(QCloseEvent *event);
             void changeEvent(QEvent *event);
-            void showEvent(QShowEvent *ev);
+            void showEvent(QShowEvent *ev);            
     };
 
 }

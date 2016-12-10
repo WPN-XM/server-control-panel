@@ -1,14 +1,31 @@
 #include "tray.h"
+#include "src/tooltips/TrayToolTip.h"
 
 namespace ServerControlPanel
 {
     Tray::Tray(QApplication *parent, Servers::Servers *servers) :
-        QSystemTrayIcon(parent),
+        QSystemTrayIcon(QIcon(":/wpnxm"), parent),
         servers(servers)
     {
         createTrayMenu();
 
-        setIcon(QIcon(":/wpnxm"));
+        /**
+         * TrayToolTip:
+         *  - we instantiate a QWidget based tooltip
+         *  - and set visibility false
+         *  - then, we start a timer, which polls the mouse position, see timerEvent()
+         *  - then, when the cursor.pos is inside the rectangle of the SystemTrayIcon,
+         *    we display the tooltip widget
+         *
+         * Note: it's not possible to use event() or eventFilter() methods
+         *       to wait for the events QEvent:ToolTip or QHelpEvent
+         *       to capture the mouse hover event of the tray icon.
+         *       It's not supported by Qt, yet (v5.7).
+         */
+        tooltip = new TrayToolTip;
+        tooltipVisible = false;
+
+        startTimer(500);
     }
 
     void Tray::createTrayMenu()
@@ -95,4 +112,59 @@ namespace ServerControlPanel
         HostsFileManager::HostsManagerDialog dlg;
         dlg.exec();
     }
+
+    void Tray::timerEvent(QTimerEvent *event)
+    {
+        Q_UNUSED(event);
+
+        QPoint relativeMousePos = QCursor::pos();
+
+        // hide tooltip
+        if (!geometry().contains(relativeMousePos))
+        {
+            if(tooltipVisible) {
+                tooltip->hide();
+            }
+            tooltipVisible = false;
+            return;
+        }
+
+        // do not show tooltip
+        if (tooltipVisible || contextMenu()->isVisible()) {
+            return;
+        }
+
+        // show tooltip
+
+        //const QPixmap pixmap = QIcon(":/wpnxm").pixmap(QSize(22, 22), QIcon::Normal, QIcon::On);
+        //tooltip->showMessage(pixmap, tooltipTitle, tooltipMsg, relativeMousePos);
+        tooltip->showMessage(tooltipMsg, relativeMousePos);
+
+        tooltipVisible = true;
+    }
+
+    void Tray::setMessage(const QString &title)
+    {
+        tooltipTitle = "Info";
+        tooltipMsg   = title;
+        return;
+    }
+
+    void Tray::setMessage(const QString &title, const QString &msg)
+    {
+        tooltipTitle = title;
+        tooltipMsg   = msg;
+        return;
+    }
+
+    bool Tray::isTooltipVisible()
+    {
+        return tooltipVisible;
+    }
+
+    void Tray::hideTooltip()
+    {
+        tooltip->hide();
+    }
+
 }

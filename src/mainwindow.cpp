@@ -118,20 +118,19 @@ namespace ServerControlPanel
             versionInfo["software_name"].toString(),
             versionInfo["latest_version"].toString()
         );
-        QString title("WPN-XM Server Control Panel\nUpdate available:\n");
+        QString title("Update available:\n");
         QString msg(softwareNameAndLatestVersion);
 
-        tray->showMessage(title, msg, QSystemTrayIcon::Information, 12000);
+        tray->showMessage(title, msg);
     }
 
     // TODO move to Notification Class
     // if "selfupdater/autorestart" is on, just show a tray info
     void MainWindow::show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo)
     {
-        QString title("WPN-XM Server Control Panel\nUpdate successful! Restarting...\n");
+        QString title("Update successful! Restarting...\n");
         QString msg("Version v" + versionInfo["latest_version"].toString());
-
-        tray->showMessage(title, msg, QSystemTrayIcon::Information, 12000);
+        tray->showMessage(title, msg);
     }
 
     void MainWindow::createTrayIcon()
@@ -360,9 +359,10 @@ namespace ServerControlPanel
                     activateWindow();
                 }
                 break;
-            case QSystemTrayIcon::Trigger:
-                break;
-            case QSystemTrayIcon::MiddleClick:
+            case QSystemTrayIcon::Context:
+                if(tray->isTooltipVisible()) {
+                    tray->hideTooltip();
+                }
                 break;
             default:
                 return;
@@ -427,22 +427,21 @@ namespace ServerControlPanel
 
     void MainWindow::updateTrayIconTooltip()
     {
-       QString tip(APP_NAME_AND_VERSION);
-               tip.append("\n\n");
+       QString tip = "";
 
-       if(ui->centralWidget->findChild<QLabel*>("label_Nginx_Status")->isEnabled())      { tip.append(" - Nginx: running\n"); }
-       if(ui->centralWidget->findChild<QLabel*>("label_PHP_Status")->isEnabled())        { tip.append(" - PHP: running\n"); }
-       if(ui->centralWidget->findChild<QLabel*>("label_MariaDb_Status")->isEnabled())    { tip.append(" - MariaDb: running\n"); }
+       if(ui->centralWidget->findChild<QLabel*>("label_Nginx_Status")->isEnabled())      { tip.append("Nginx: running\n"); }
+       if(ui->centralWidget->findChild<QLabel*>("label_PHP_Status")->isEnabled())        { tip.append("PHP: running\n"); }
+       if(ui->centralWidget->findChild<QLabel*>("label_MariaDb_Status")->isEnabled())    { tip.append("MariaDb: running\n"); }
        if(ui->centralWidget->findChild<QLabel*>("label_MongoDb_Status") &&
-          ui->centralWidget->findChild<QLabel*>("label_MongoDb_Status")->isEnabled())    { tip.append(" - MongoDb: running\n"); }
+          ui->centralWidget->findChild<QLabel*>("label_MongoDb_Status")->isEnabled())    { tip.append("MongoDb: running\n"); }
        if(ui->centralWidget->findChild<QLabel*>("label_Memcached_Status") &&
-          ui->centralWidget->findChild<QLabel*>("label_Memcached_Status")->isEnabled())  { tip.append(" - Memcached: running\n"); }
+          ui->centralWidget->findChild<QLabel*>("label_Memcached_Status")->isEnabled())  { tip.append("Memcached: running\n"); }
        if(ui->centralWidget->findChild<QLabel*>("label_PostgreSQL_Status") &&
-          ui->centralWidget->findChild<QLabel*>("label_PostgreSQL_Status")->isEnabled()) { tip.append(" - PostgreSQL: running\n"); }
+          ui->centralWidget->findChild<QLabel*>("label_PostgreSQL_Status")->isEnabled()) { tip.append("PostgreSQL: running\n"); }
        if(ui->centralWidget->findChild<QLabel*>("label_Redis_Status") &&
-          ui->centralWidget->findChild<QLabel*>("label_Redis_Status")->isEnabled())      { tip.append(" - Redis: running\n"); }
+          ui->centralWidget->findChild<QLabel*>("label_Redis_Status")->isEnabled())      { tip.append("Redis: running\n"); }
 
-       tray->setToolTip(tip);
+       tray->setMessage(tip);
     }
 
     void MainWindow::quitApplication()

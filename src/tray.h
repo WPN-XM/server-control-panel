@@ -21,6 +21,7 @@
 #include "hostmanager/hostmanagerdialog.h"
 #include "settings.h"
 #include "networkutils.h"
+#include "src/tooltips/TrayToolTip.h"
 
 namespace ServerControlPanel
 {
@@ -37,6 +38,11 @@ namespace ServerControlPanel
         public:
             explicit Tray(QApplication *parent, Servers::Servers *servers);
 
+            void setMessage(const QString &title);
+            void setMessage(const QString &title, const QString &msg);
+            bool isTooltipVisible();
+            void hideTooltip();
+
         public slots:
             void startAllDaemons();
             void stopAllDaemons();
@@ -50,6 +56,14 @@ namespace ServerControlPanel
 
             Settings::SettingsManager *settings;
             Servers::Servers          *servers;
+            TrayToolTip               *tooltip;
+
+            bool        tooltipVisible;
+            QString     tooltipTitle;
+            QString     tooltipMsg;
+
+        protected:
+            void timerEvent(QTimerEvent *event);
     };
 }
 

@@ -405,6 +405,9 @@
      <property name="title">
       <string>Open Projects Folder</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
      <property name="flat">
       <bool>false</bool>
      </property>
@@ -469,6 +472,9 @@
      </property>
      <property name="title">
       <string>All Daemons</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
      <property name="flat">
       <bool>false</bool>
@@ -1609,7 +1615,7 @@ QPushButton:pressed
       <x>510</x>
       <y>80</y>
       <width>111</width>
-      <height>170</height>
+      <height>177</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="RightsideVBoxLayout" stretch="0,0,0,0,0,0">
@@ -1671,6 +1677,9 @@ QPushButton:pressed
          <height>24</height>
         </size>
        </property>
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="layoutDirection">
         <enum>Qt::LeftToRight</enum>
        </property>
@@ -1703,8 +1712,21 @@ QPushButton:pressed
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_Updater">
+       <property name="toolTip">
+        <string/>
+       </property>
        <property name="text">
         <string>Updater</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources/resources.qrc">
+         <normaloff>:/update-circle.png</normaloff>:/update-circle.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
       </widget>
      </item>
@@ -1753,6 +1775,9 @@ QPushButton:pressed
          <width>16777215</width>
          <height>24</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string/>
        </property>
        <property name="text">
         <string>About</string>
