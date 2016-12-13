@@ -454,7 +454,7 @@ namespace Configuration
     void ConfigurationDialog::saveSettings_Nginx_Upstream()
     {
         QJsonObject upstreams;
-        upstreams.insert("pools", serialize_toJSON_Nginx_Upstream_PoolsTable(ui->tableWidget_pools));
+        upstreams.insert("pools", serialize_toJSON_Nginx_Upstream_PoolsTable(ui->tableWidget_Nginx_Upstreams));
 
         // write JSON file
         QJsonDocument jsonDoc;
@@ -561,11 +561,11 @@ namespace Configuration
             jsonPool.insert("method", method);
 
             // serialize the currently displayed server table
-            if(ui->tableWidget_servers->property("servers_of_pool_name") == poolName) {
+            if(ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == poolName) {
                 qDebug() << "Serializing the currently displayed";
-                qDebug() << "Servers Table of Pool" << ui->tableWidget_servers->property("servers_of_pool_name") << poolName;
+                qDebug() << "Servers Table of Pool" << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") << poolName;
 
-                jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(ui->tableWidget_servers));
+                jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(ui->tableWidget_Nginx_Servers));
             } else {
                 qDebug() << "Loading table data from file -- Servers of Pool" << poolName;
 
@@ -731,6 +731,36 @@ namespace Configuration
         ui->lineEdit_SelectedEditor->setText("notepad.exe");
     }
 
+    void ConfigurationDialog::on_pushButton_Nginx_Reset_Upstreams_clicked()
+    {
+        // reset table content
+        ui->tableWidget_Nginx_Upstreams->clearContents();
+        ui->tableWidget_Nginx_Upstreams->model()->removeRows(0, ui->tableWidget_Nginx_Upstreams->rowCount());
+
+        // insert default data: "php_upstream_pool $request_uri consistent"
+        int row = ui->tableWidget_Nginx_Upstreams->rowCount();
+        ui->tableWidget_Nginx_Upstreams->insertRow(row);
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem("php_upstream_pool"));
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem("$request_uri consistent"));
+        ui->tableWidget_Nginx_Upstreams->resizeColumnToContents(0);
+    }
+
+    void ConfigurationDialog::on_pushButton_Nginx_Reset_Servers_clicked()
+    {
+        // reset table content
+        ui->tableWidget_Nginx_Servers->clearContents();
+        ui->tableWidget_Nginx_Servers->model()->removeRows(0, ui->tableWidget_Nginx_Servers->rowCount());
+
+        int row = ui->tableWidget_Nginx_Servers->rowCount();
+        ui->tableWidget_Nginx_Servers->insertRow(row);
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address,     new QTableWidgetItem("127.0.0.1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port,        new QTableWidgetItem("9000"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight,      new QTableWidgetItem("1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails,    new QTableWidgetItem("1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout,     new QTableWidgetItem("1s"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren, new QTableWidgetItem("5"));
+    }
+
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
     {
         // a click on a menu item returns the name of the item
@@ -761,10 +791,10 @@ namespace Configuration
         result = dialog->exec();
 
         if(result == QDialog::Accepted) {
-            int row = ui->tableWidget_pools->rowCount();
-            ui->tableWidget_pools->insertRow(row);
-            ui->tableWidget_pools->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem(dialog->pool()));
-            ui->tableWidget_pools->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem(dialog->method()));
+            int row = ui->tableWidget_Nginx_Upstreams->rowCount();
+            ui->tableWidget_Nginx_Upstreams->insertRow(row);
+            ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem(dialog->pool()));
+            ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem(dialog->method()));
         }
 
         delete dialog;
@@ -777,21 +807,21 @@ namespace Configuration
         NginxAddServerDialog *dialog = new NginxAddServerDialog();
         dialog->setWindowTitle("Nginx - Add Server");
 
-        ui->tableWidget_servers->setSelectionBehavior(QAbstractItemView::SelectRows);
-        ui->tableWidget_servers->setSelectionMode(QAbstractItemView::SingleSelection);
+        ui->tableWidget_Nginx_Servers->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->tableWidget_Nginx_Servers->setSelectionMode(QAbstractItemView::SingleSelection);
 
         result = dialog->exec();
 
         if(result == QDialog::Accepted) {
-            int row = ui->tableWidget_servers->rowCount();
-            ui->tableWidget_servers->insertRow(row);
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::Address,     new QTableWidgetItem(dialog->address()));
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::Port,        new QTableWidgetItem(dialog->port()));
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::Weight,      new QTableWidgetItem(dialog->weight()));
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::MaxFails,    new QTableWidgetItem(dialog->maxfails()));
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::Timeout,     new QTableWidgetItem(dialog->timeout()));
-            ui->tableWidget_servers->setItem(row, NginxAddServerDialog::Column::PHPChildren, new QTableWidgetItem(dialog->phpchildren()));
-        }
+            int row = ui->tableWidget_Nginx_Servers->rowCount();
+            ui->tableWidget_Nginx_Servers->insertRow(row);
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address,     new QTableWidgetItem(dialog->address()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port,        new QTableWidgetItem(dialog->port()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight,      new QTableWidgetItem(dialog->weight()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails,    new QTableWidgetItem(dialog->maxfails()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout,     new QTableWidgetItem(dialog->timeout()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren, new QTableWidgetItem(dialog->phpchildren()));
+            }
 
         delete dialog;
     }
@@ -799,8 +829,8 @@ namespace Configuration
     void ConfigurationDialog::loadNginxUpstreams()
     {
         // clear servers table - clear content and remove all rows
-        ui->tableWidget_pools->setRowCount(0);
-        ui->tableWidget_servers->setRowCount(0);
+        ui->tableWidget_Nginx_Upstreams->setRowCount(0);
+        ui->tableWidget_Nginx_Servers->setRowCount(0);
 
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
@@ -816,13 +846,13 @@ namespace Configuration
             // --- Fill Pools Table ---
 
             // insert new row
-            int insertRow = ui->tableWidget_pools->rowCount();
-            ui->tableWidget_pools->insertRow(insertRow);
+            int insertRow = ui->tableWidget_Nginx_Upstreams->rowCount();
+            ui->tableWidget_Nginx_Upstreams->insertRow(insertRow);
 
             // insert column values
-            ui->tableWidget_pools->setItem(insertRow,NginxAddUpstreamDialog::Column::Pool,
+            ui->tableWidget_Nginx_Upstreams->setItem(insertRow,NginxAddUpstreamDialog::Column::Pool,
                                            new QTableWidgetItem(jsonPool["name"].toString()));
-            ui->tableWidget_pools->setItem(insertRow,NginxAddUpstreamDialog::Column::Method,
+            ui->tableWidget_Nginx_Upstreams->setItem(insertRow,NginxAddUpstreamDialog::Column::Method,
                                            new QTableWidgetItem(jsonPool["method"].toString()));
         }
 
@@ -834,33 +864,33 @@ namespace Configuration
         updateServersTable(jsonPoolFirst);
     }
 
-    void ConfigurationDialog::on_tableWidget_pools_itemSelectionChanged()
+    void ConfigurationDialog::on_tableWidget_Upstream_itemSelectionChanged()
     {
         // there is a selection, but its not a row selection
-        if(ui->tableWidget_pools->selectionModel()->selectedRows(0).size() <= 0) {
+        if(ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows(0).size() <= 0) {
             return;
         }
 
         // get "pool" from selection
-        QString selectedPoolName = ui->tableWidget_pools->selectionModel()->selectedRows().first().data().toString();
+        QString selectedUpstreamName = ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows().first().data().toString();
 
         // there is a selection, but the selection is already the currently displayed table view
-        if (ui->tableWidget_servers->property("servers_of_pool_name") == selectedPoolName) {
+        if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == selectedUpstreamName) {
             return;
         }
 
         // get the pool and update servers table
-        QJsonObject jsonPool = getNginxUpstreamPoolByName(selectedPoolName);
+        QJsonObject jsonPool = getNginxUpstreamPoolByName(selectedUpstreamName);
         updateServersTable(jsonPool);
     }
 
     void ConfigurationDialog::updateServersTable(QJsonObject jsonPool)
     {
         // clear servers table - clear content and remove all rows
-        ui->tableWidget_servers->setRowCount(0);
+        ui->tableWidget_Nginx_Servers->setRowCount(0);
 
         // set new "pool name" as table property (table view identifier)
-        ui->tableWidget_servers->setProperty("servers_of_pool_name", jsonPool["name"].toString());
+        ui->tableWidget_Nginx_Servers->setProperty("servers_of_pool_name", jsonPool["name"].toString());
 
         // key "servers"
         QJsonObject jsonServers = jsonPool["servers"].toObject();
@@ -871,26 +901,26 @@ namespace Configuration
             QJsonObject values = jsonServers.value(QString::number(i)).toObject();
 
             // insert new row
-            int insertRow = ui->tableWidget_servers->rowCount();
-            ui->tableWidget_servers->insertRow(insertRow);
+            int insertRow = ui->tableWidget_Nginx_Servers->rowCount();
+            ui->tableWidget_Nginx_Servers->insertRow(insertRow);
 
             // insert column values
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,0/*NginxAddServerDialog::Column::Address*/,     new QTableWidgetItem(values["address"].toString()));
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,1/*NginxAddServerDialog::Column::Port*/,        new QTableWidgetItem(values["port"].toString()));
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,2/*NginxAddServerDialog::Column::Weight*/,      new QTableWidgetItem(values["weight"].toString()));
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,3/*NginxAddServerDialog::Column::MaxFails*/,    new QTableWidgetItem(values["maxfails"].toString()));
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,4/*NginxAddServerDialog::Column::FailTimeout*/, new QTableWidgetItem(values["failtimeout"].toString()));
-            ui->tableWidget_servers->setItem(
+            ui->tableWidget_Nginx_Servers->setItem(
                         insertRow,5/*NginxAddServerDialog::Column::PHPChildren*/, new QTableWidgetItem(values["phpchildren"].toString()));
         }
     }
 
-    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(QString requestedPoolName)
+    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(QString requestedUpstreamPoolName)
     {
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
@@ -904,7 +934,7 @@ namespace Configuration
             QJsonObject jsonPool = iter.value().toObject();
 
             // key "name" = poolName
-            if(jsonPool["name"].toString() == requestedPoolName) {
+            if(jsonPool["name"].toString() == requestedUpstreamPoolName) {
                 return jsonPool;
             }
         }

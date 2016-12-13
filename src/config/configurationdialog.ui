@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -816,16 +816,16 @@
       <attribute name="title">
        <string>Upstream</string>
       </attribute>
-      <widget class="QTableWidget" name="tableWidget_pools">
+      <widget class="QTableWidget" name="tableWidget_Nginx_Upstreams">
        <property name="enabled">
         <bool>true</bool>
        </property>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>50</y>
-         <width>321</width>
-         <height>81</height>
+         <y>40</y>
+         <width>481</width>
+         <height>101</height>
         </rect>
        </property>
        <property name="horizontalScrollBarPolicy">
@@ -890,7 +890,7 @@
         </property>
        </item>
       </widget>
-      <widget class="QTableWidget" name="tableWidget_servers">
+      <widget class="QTableWidget" name="tableWidget_Nginx_Servers">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1084,8 +1084,8 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>321</width>
+         <y>10</y>
+         <width>481</width>
          <height>25</height>
         </rect>
        </property>
@@ -1098,7 +1098,7 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QPushButton" name="pushButton_reset_AddUpstream">
+         <widget class="QPushButton" name="pushButton_Nginx_Reset_Upstreams">
           <property name="text">
            <string>Reset</string>
           </property>
@@ -1144,7 +1144,7 @@
          </widget>
         </item>
         <item row="0" column="4">
-         <widget class="QPushButton" name="pushButton_reset_AddServer">
+         <widget class="QPushButton" name="pushButton_Nginx_Reset_Servers">
           <property name="text">
            <string>Reset</string>
           </property>
@@ -2183,9 +2183,9 @@
   <tabstop>tabWidget_memcached</tabstop>
   <tabstop>tabWidget_redis</tabstop>
   <tabstop>pushButton_Nginx_Upstream_AddUpstream</tabstop>
-  <tabstop>tableWidget_pools</tabstop>
+  <tabstop>tableWidget_Nginx_Upstreams</tabstop>
   <tabstop>pushButton_Nginx_Upstream_AddServer</tabstop>
-  <tabstop>tableWidget_servers</tabstop>
+  <tabstop>tableWidget_Nginx_Servers</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resources.qrc"/>

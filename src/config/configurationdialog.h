@@ -62,7 +62,7 @@ namespace Configuration
             QJsonValue serialize_toJSON_Nginx_Upstream_PoolsTable(QTableWidget *pools);
 
             void writeNginxUpstreamConfigs(QJsonDocument jsonDoc);
-            QJsonObject getNginxUpstreamPoolByName(QString poolName);
+            QJsonObject getNginxUpstreamPoolByName(QString requestedUpstreamPoolName);
             void updateServersTable(QJsonObject jsonPool);
 
             void createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs();
@@ -79,9 +79,12 @@ namespace Configuration
             void on_pushButton_Nginx_Upstream_AddUpstream_clicked();
             void on_pushButton_Nginx_Upstream_AddServer_clicked();
 
+            void on_pushButton_Nginx_Reset_Upstreams_clicked();
+            void on_pushButton_Nginx_Reset_Servers_clicked();
+
             void on_configMenuSearchLineEdit_textChanged(const QString &string);
 
-            void on_tableWidget_pools_itemSelectionChanged();
+            void on_tableWidget_Upstream_itemSelectionChanged();
 
     private:
             Ui::ConfigurationDialog *ui;
