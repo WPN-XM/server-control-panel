@@ -11,6 +11,31 @@ The WPN-XM Server Control Panel is written in Qt v5.2+.
 
 ![WPN-XM Server Control Panel v0.8.0 - Main Application Window](https://cloud.githubusercontent.com/assets/85608/4353466/85a395c2-4233-11e4-9ff3-5d7d975e7396.jpg)
 
+## Features
+
+- hybrid Windows application (uh, like, is this possible? YES, apparently)
+  - CLI mode
+  - GUI mode with MainWindow and TrayMenu
+- Server Control 
+  - PHP        - start, stop, restart
+  - Nginx      - start, stop, restart, reload
+  - MariaDB    - start, stop, restart
+  - PostgreSQL - start, stop, restart
+  - Redis      - start, stop, restart
+  - Memcached  - start, stop, restart
+  - MongoDB    - start, stop, restart
+- Log File Access
+  - one-click "Open Log File"
+  - automatically clear log file on start of a server (do not append to existing log file)
+- Configuration File Access
+  - one-click "Edit Config"
+  - select "Editor"
+- Server Process Monitoring
+- Supported Configuration File formats:
+  - CSV
+  - INI
+  - JSON  
+
 ## Build Dependencies
 
 * Qt >= 5.2
