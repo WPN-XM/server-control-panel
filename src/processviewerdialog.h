@@ -7,6 +7,7 @@
 #include <QTreeWidgetItem>
 #include <QProcess>
 #include <QDebug>
+#include <QDesktopWidget>
 
 namespace Ui {
     class ProcessViewerDialog;
@@ -20,13 +21,15 @@ class ProcessViewerDialog : public QDialog
         explicit ProcessViewerDialog(QWidget *parent = 0);
         ~ProcessViewerDialog();
 
-        QTreeWidgetItem* addRoot(QString name, QString description);
-        void addChild(QTreeWidgetItem *parent, QString name, QString description);
+        QTreeWidgetItem* addRoot(QString processName, QString pid, QString mem);
+        void addChild(QTreeWidgetItem *parent, QString processName, QString pid, QString mem);
 
-        QList<QStringList> execute(const QString &cmd);
+        QList<QStringList> runWMICQuery(const QString &cmd);
 
     private:
         Ui::ProcessViewerDialog *ui;
+
+        QString getSizeHumanReadable(QString bytes);
 };
 
 #endif // PROCESSVIEWERDIALOG_H

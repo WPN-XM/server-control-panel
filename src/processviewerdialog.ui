@@ -45,7 +45,12 @@
    </column>
    <column>
     <property name="text">
-     <string>Process ID</string>
+     <string>Process Identifier</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Memory Usage</string>
     </property>
    </column>
   </widget>
