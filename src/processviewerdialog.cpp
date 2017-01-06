@@ -1,6 +1,12 @@
 #include "processviewerdialog.h"
 #include "ui_processviewerdialog.h"
 
+#include <QFileInfo>
+#include <QFileIconProvider>
+
+#include <Windows.h>
+#include <tlhelp32.h>
+
 ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProcessViewerDialog)
@@ -17,39 +23,20 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
 
     ui->treeWidget->setColumnCount(3);
 
-    // get process data in CSV format using a "Windows Management Instrumentation Commandline" query
-    //QString cmd = "wmic process where \"ExecutablePath LIKE '%c%'\" GET Name, ExecutablePath, ProcessId, ParentProcessId, WorkingSetSize /format:csv";
-    QString cmd = "wmic process GET Name, ExecutablePath, ParentProcessId, ProcessId, WorkingSetSize /format:csv";
+    QList<Process> processes = getRunningProcesses();
 
-    QList<QStringList> list = runWMICQuery(cmd);
-
-    foreach(QStringList item, list) {
-
-        // skip items
-        if(item.first() == "") continue;      // 1 line: empty list element
-        if(item.first() == "Node") continue;  // 2 line: list with column keys
-
-        qDebug() << item;
-
-        QString host        = item.at(0);
-        QString path        = item.at(1);
-        QString name        = item.at(2);
-        QString parentpid   = item.at(3);
-        QString pid         = item.at(4);
-        QString mem         = getSizeHumanReadable(item.at(5));
-
+    foreach(Process process, processes)
+    {
         // find parentItem in the tree by looking for parentId recursivley
-        QList<QTreeWidgetItem *> parentItem = ui->treeWidget->findItems(parentpid, Qt::MatchContains | Qt::MatchRecursive, 1);
+        QList<QTreeWidgetItem *> parentItem = ui->treeWidget->findItems(
+            process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1
+        );
 
-        // found a parentItem?
+        // if there is a parent item, then add the proccess as a child, else it's a parent itself
         if(!parentItem.empty()) {
-            // grab the rootItem
-            QTreeWidgetItem *rootItem = parentItem.at(0);
-
-            addChild(rootItem, name, pid, mem);
+            addChild(parentItem.at(0), process);
         } else {
-            addRoot(name, pid, mem);
-            continue;
+            addRoot(process);
         }
     }
 
@@ -65,64 +52,120 @@ ProcessViewerDialog::~ProcessViewerDialog()
     delete ui;
 }
 
-QTreeWidgetItem* ProcessViewerDialog::addRoot(QString processName, QString pid, QString mem)
+QTreeWidgetItem* ProcessViewerDialog::addRoot(Process process)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-    item->setText(0, processName);
-    item->setText(1, pid);
-    item->setText(2, mem);
+    item->setText(0, process.name);
+    item->setIcon(0, process.icon);
+    item->setText(1, process.pid);
+    item->setText(2, process.memoryUsage);
     ui->treeWidget->addTopLevelItem(item);
     return item;
 }
 
-void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, QString processName, QString pid, QString mem)
+void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, processName);
-    item->setText(1, pid);
-    item->setText(2, mem);
+    item->setText(0, process.name);
+    item->setIcon(0, process.icon);
+    item->setText(1, process.pid);
+    item->setText(2, process.memoryUsage);
     parent->addChild(item);
 }
 
-QList<QStringList> ProcessViewerDialog::runWMICQuery(const QString &cmd)
+QString ProcessViewerDialog::getSizeHumanReadable(float bytes)
 {
-    QProcess process;
-    process.start(cmd);
-
-    if (!process.waitForStarted()) {
-        return QList<QStringList>();
-    }
-
-    if (!process.waitForFinished()) {
-        return QList<QStringList>();
-    }
-
-    int res = process.exitCode();
-    if (res) {  //error
-        return QList<QStringList>();
-    }
-
-    QByteArray data = process.readAllStandardOutput();
-    QString string = QString::fromLocal8Bit(data);
-
-    QList<QStringList> list = File::CSV::parseFromString(string);
-
-    return list;
-}
-
-QString ProcessViewerDialog::getSizeHumanReadable(QString bytes)
-{
-     float num = bytes.toFloat();
      QStringList list;
      list << "KB" << "MB";
 
      QStringListIterator i(list);
      QString unit("bytes");
 
-     while(num >= 1024.0 && i.hasNext())
+     while(bytes >= 1024.0 && i.hasNext())
       {
          unit = i.next();
-         num /= 1024.0;
+         bytes /= 1024.0;
      }
-     return QString::fromLatin1("%1 %2").arg(num, 3, 'f', 1).arg(unit);
+     return QString::fromLatin1("%1 %2").arg(bytes, 3, 'f', 1).arg(unit);
 }
+
+QList<Process> ProcessViewerDialog::getRunningProcesses()
+{
+    QList<Process> processes;
+
+    PROCESSENTRY32 pe;
+
+    // set the size of the structure before using it
+    pe.dwSize = sizeof(PROCESSENTRY32);
+
+    // take a snapshot of all processes in the system
+    HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+    if (hSnapshot == INVALID_HANDLE_VALUE) {
+        return processes;
+    }
+
+    BOOL hasNext = Process32First(hSnapshot, &pe);
+
+    while( hasNext )
+    {
+        QStringList details = getProcessDetails(pe.th32ProcessID);
+
+        Process p;
+        p.pid       = QString::number( (int) pe.th32ProcessID);
+        p.ppid      = QString::number( (int) pe.th32ParentProcessID);
+        p.name      = QString::fromWCharArray(pe.szExeFile);
+
+        if(!details.empty()) {
+            p.path          = details.at(0);
+            p.memoryUsage   = details.at(1);
+
+            // get icon
+            QFileInfo fileInfo = QFileInfo(p.path);
+            QFileIconProvider fileicon;
+            p.icon = fileicon.icon(fileInfo);
+        }
+
+        processes.append(p);
+
+        hasNext = Process32Next(hSnapshot, &pe);
+    }
+
+    CloseHandle(hSnapshot);
+
+    return processes;
+}
+
+
+QStringList ProcessViewerDialog::getProcessDetails(DWORD processID)
+{
+    QStringList processInfos;
+
+    // init: get a handle to the process
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
+
+    // we will inevitable run into processes that don't let us peek at them,
+    // because we don't have enough rights. including the "System" process,
+    // which is a place-holder for ring0 code. let's move on, nothing to see there...
+    if(!hProcess) {
+        return processInfos;
+    }
+
+    // 0 = get executable path
+    WCHAR szProcessPath[MAX_PATH];
+    DWORD bufSize = MAX_PATH;
+    QueryFullProcessImageNameW( hProcess, 0,(LPWSTR) &szProcessPath, &bufSize);
+    QString processPath = QString::fromUtf16((ushort*)szProcessPath, bufSize);
+    processInfos.append(processPath);
+
+    // 1 - add memory usage
+    PROCESS_MEMORY_COUNTERS pmc;
+    if(GetProcessMemoryInfo(hProcess,&pmc, sizeof(pmc))){
+        QString memoryUsage = getSizeHumanReadable((float) pmc.WorkingSetSize);
+        processInfos.append(memoryUsage);
+    }
+    CloseHandle(hProcess);
+
+    return processInfos;
+}
+

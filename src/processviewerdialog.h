@@ -8,10 +8,25 @@
 #include <QProcess>
 #include <QDebug>
 #include <QDesktopWidget>
+#include <QList>
+
+#include <windows.h>
+#include <stdio.h>
+#include <psapi.h>
 
 namespace Ui {
     class ProcessViewerDialog;
 }
+
+struct Process
+{
+    QString pid;
+    QString ppid;
+    QString name;
+    QString path;
+    QString memoryUsage;
+    QIcon icon;
+};
 
 class ProcessViewerDialog : public QDialog
 {
@@ -21,15 +36,16 @@ class ProcessViewerDialog : public QDialog
         explicit ProcessViewerDialog(QWidget *parent = 0);
         ~ProcessViewerDialog();
 
-        QTreeWidgetItem* addRoot(QString processName, QString pid, QString mem);
-        void addChild(QTreeWidgetItem *parent, QString processName, QString pid, QString mem);
-
-        QList<QStringList> runWMICQuery(const QString &cmd);
+        QTreeWidgetItem* addRoot(Process process);
+        void addChild(QTreeWidgetItem *parent, Process process);
 
     private:
         Ui::ProcessViewerDialog *ui;
 
-        QString getSizeHumanReadable(QString bytes);
+        QString getSizeHumanReadable(float bytes);
+        QList<Process> getRunningProcesses();
+        QStringList getProcessDetails(DWORD processID);
+
 };
 
 #endif // PROCESSVIEWERDIALOG_H
