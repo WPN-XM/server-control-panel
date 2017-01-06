@@ -1,12 +1,6 @@
 #include "processviewerdialog.h"
 #include "ui_processviewerdialog.h"
 
-#include <QFileInfo>
-#include <QFileIconProvider>
-
-#include <Windows.h>
-#include <tlhelp32.h>
-
 ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProcessViewerDialog)

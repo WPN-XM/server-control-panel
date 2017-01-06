@@ -8,11 +8,13 @@
 #include <QProcess>
 #include <QDebug>
 #include <QDesktopWidget>
-#include <QList>
+#include <QFileInfo>
+#include <QFileIconProvider>
 
 #include <windows.h>
 #include <stdio.h>
 #include <psapi.h>
+#include <TlHelp32.h>
 
 namespace Ui {
     class ProcessViewerDialog;
