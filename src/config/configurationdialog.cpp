@@ -42,7 +42,7 @@ namespace Configuration
     }
 
     /**
-     * Search for items in the "Configuration Menu" TreeWidget
+     * Search for items in the "Configuration Menu" TreeWidget by using type-ahead search
      *
      * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
      * @param query
