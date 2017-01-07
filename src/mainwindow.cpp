@@ -70,7 +70,7 @@ namespace ServerControlPanel
 
         updateTrayIconTooltip();
 
-        #ifndef QT_DEBUG
+        #ifdef QT_DEBUG
         ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
         pvd->exec();
         #endif
@@ -79,7 +79,7 @@ namespace ServerControlPanel
             runSelfUpdate();
         }
 
-        #ifndef QT_DEBUG
+        #ifdef QT_DEBUG
         ui->pushButton_Updater->setEnabled(true);
         #endif
     }
