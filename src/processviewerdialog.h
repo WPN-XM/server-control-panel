@@ -48,6 +48,8 @@ class ProcessViewerDialog : public QDialog
         QList<Process> getRunningProcesses();
         QStringList getProcessDetails(DWORD processID);
 
+    private slots:
+        void on_searchProcessLineEdit_textChanged(const QString &query);
 };
 
 #endif // PROCESSVIEWERDIALOG_H

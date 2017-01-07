@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
+    <width>750</width>
     <height>431</height>
    </rect>
   </property>
@@ -16,8 +16,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>600</x>
-     <y>360</y>
+     <x>660</x>
+     <y>370</y>
      <width>81</width>
      <height>61</height>
     </rect>
@@ -33,9 +33,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>571</width>
-     <height>411</height>
+     <y>60</y>
+     <width>631</width>
+     <height>361</height>
     </rect>
    </property>
    <column>
@@ -53,6 +53,42 @@
      <string>Memory Usage</string>
     </property>
    </column>
+  </widget>
+  <widget class="QPushButton" name="pushButton_KillProcess">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>60</y>
+     <width>81</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kill Process</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="searchProcessLineEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>113</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Search Process:</string>
+   </property>
   </widget>
  </widget>
  <resources/>

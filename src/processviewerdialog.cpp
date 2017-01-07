@@ -38,7 +38,33 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
+    ui->treeWidget->setSortingEnabled(true);
+
     ui->treeWidget->expandAll();
+}
+
+/**
+ * Search for items in the Progess TreeWidget by using type-ahead search
+ *
+ * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
+ * @param query
+ */
+void ProcessViewerDialog::on_searchProcessLineEdit_textChanged(const QString &query)
+{
+    ui->treeWidget->expandAll();
+
+    // Iterate over all child items : filter items with "contains" query
+    QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
+    while(*iterator)
+    {
+        QTreeWidgetItem *item = *iterator;
+        if(item && item->text(0).contains(query, Qt::CaseInsensitive)) {
+            item->setHidden(false);
+        } else {
+            item->setHidden(true);
+        }
+        ++iterator;
+    }
 }
 
 ProcessViewerDialog::~ProcessViewerDialog()
