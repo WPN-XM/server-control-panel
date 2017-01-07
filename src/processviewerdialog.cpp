@@ -61,9 +61,34 @@ void ProcessViewerDialog::on_searchProcessLineEdit_textChanged(const QString &qu
         if(item && item->text(0).contains(query, Qt::CaseInsensitive)) {
             item->setHidden(false);
         } else {
-            item->setHidden(true);
+            // Problem: the matched child is visibile, but parent is hidden, because no match.
+            // so, lets hide only items without childs.
+            // any not matching parent will stay visible.. until next iteration, see below.
+            if(item->childCount() == 0) {
+                item->setHidden(true);
+            }
         }
         ++iterator;
+    }
+
+    // Iterate over items with childs : hide, if they do not have a matching (visible) child (see above).
+    QTreeWidgetItemIterator parentIterator(ui->treeWidget, QTreeWidgetItemIterator::HasChildren);
+    while(*parentIterator)
+    {
+        QTreeWidgetItem *item = *parentIterator;
+        // count the number of hidden childs
+        int childs = item->childCount();
+        int hiddenChilds = 0;
+        for (int i = 0; i < childs; ++i) {
+            if(item->child(i)->isHidden()) {
+                ++hiddenChilds;
+            }
+        }
+        // finally: if all childs are hidden, hide the parent (*item), too
+        if(hiddenChilds == childs) {
+            item->setHidden(true);
+        }
+        ++parentIterator;
     }
 }
 
