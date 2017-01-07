@@ -23,9 +23,11 @@ namespace ServerControlPanel
 
         public slots:
             void setProgress(int value);
+            void setMessage(QString msg, int progress);
 
         private:
             int progress;
+            QString message = "Loading ..";
 
         protected:
             void drawContents(QPainter *painter);

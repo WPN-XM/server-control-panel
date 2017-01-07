@@ -23,7 +23,6 @@ namespace ServerControlPanel
         QString titleText       = QString(QApplication::applicationName());
         QString versionText     = QString("Version %1").arg(QString::fromStdString(APP_VERSION_SHORT));
         QString copyrightText   = QChar(0xA9)+QString(" 2010-%1 ").arg(QDate::currentDate().toString("yyyy")) + QString(tr("Jens-André Koch"));
-        //QString madeinText      = QString("Made in Germany.");
 
         QString font            = "Arial";
 
@@ -58,15 +57,9 @@ namespace ServerControlPanel
         int copyrightTextWidth = pixPaint.fontMetrics().width(copyrightText);
         pixPaint.drawText(newPixmap.width()-copyrightTextWidth-paddingRight-2,paddingTop+titleCopyrightVSpace,copyrightText);
 
-        // made in germany
-        //int madeinTextWidth = pixPaint.fontMetrics().width(madeinText) + 5;
-        //pixPaint.drawText(newPixmap.width()-madeinTextWidth,newPixmap.height()-5,madeinText);
-
         pixPaint.end();
 
         this->setPixmap(newPixmap);
-
-        this->showMessage("Loading...", Qt::AlignBottom | Qt::AlignLeft, Qt::gray);
     }
 
     void SplashScreen::drawContents(QPainter *painter)
@@ -79,7 +72,7 @@ namespace ServerControlPanel
       QProgressBar bar;
       bar.setStyleSheet(style);
 
-      // Set base style for progressbar...
+      // set style for progressbar
       QStyleOptionProgressBar progressBar;
       progressBar.initFrom(&bar);
       progressBar.state = QStyle::State_Enabled | QStyle::State_Active;
@@ -88,20 +81,33 @@ namespace ServerControlPanel
       progressBar.maximum = 100;
       progressBar.progress = progress;
       progressBar.invertedAppearance = false;
-      progressBar.rect = QRect(60, 308, 400, 6); // Position of the progressBar
+      progressBar.rect = QRect(20, 308, 440, 6); // Position of the progressBar
 
       painter->save();
-      QStyle *drawStyle = bar.style();
-      // draw the progress bar onto the view
+
+      // draw progress bar
+      QStyle *drawStyle = bar.style();      
       drawStyle->drawControl(QStyle::CE_ProgressBar, &progressBar, painter, &bar);
+
+      // draw status message
+      // y = 308-15 = 308px (y of progress bar, see above) - 15px (height 12px + 3px space)
+      painter->setPen(Qt::gray);
+      painter->drawText(QRect::QRect(20, 308-15, 440, 12), Qt::AlignBottom | Qt::AlignRight, message);
+
       painter->restore();
     }
 
     void SplashScreen::setProgress(int value)
     {
-      progress = value;
-      if (progress > 100) progress = 100;
-      if (progress < 0) progress = 0;
-      update();
+        progress = value;
+        if (progress > 100) progress = 100;
+        if (progress < 0) progress = 0;
+        update();
+    }
+
+    void SplashScreen::setMessage(QString msg, int progress)
+    {
+        message = msg;
+        setProgress(progress);
     }
 }

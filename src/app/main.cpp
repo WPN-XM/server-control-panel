@@ -91,7 +91,23 @@ int main(int argc, char * argv[])
     splash.show();
     #endif
 
-    #ifndef QT_DEBUG
+    /*splash.setMessage("Initial scan of installed applications ..", 15);
+    QObject().thread()->usleep(1000*1000*1);
+    app.processEvents();
+
+    splash.setMessage("Getting System Processes ..", 25);
+    QObject().thread()->usleep(1000*1000*1);
+    app.processEvents();
+
+    splash.setMessage("Searching for already running processes ..", 35);
+    QObject().thread()->usleep(1000*1000*1);
+    app.processEvents();
+
+    splash.setMessage("Searching for blocked ports ..", 45);
+    QObject().thread()->usleep(1000*1000*1);
+    app.processEvents();*/
+
+    #ifndef QT_DEBUG    
     splash.setProgress(50);
     #endif
 
@@ -100,7 +116,7 @@ int main(int argc, char * argv[])
     mainWindow.show();
 
     #ifndef QT_DEBUG
-    splash.setProgress(100);
+    splash.setMessage("", 100);
     #endif
 
      // Deactivate SplashScreen
