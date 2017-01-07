@@ -477,6 +477,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_Updater">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string/>
         </property>
