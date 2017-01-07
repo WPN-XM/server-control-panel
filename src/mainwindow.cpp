@@ -70,12 +70,18 @@ namespace ServerControlPanel
 
         updateTrayIconTooltip();
 
-        //ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
-        //pvd->exec();
+        #ifndef QT_DEBUG
+        ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
+        pvd->exec();
+        #endif
 
         if(settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
         }
+
+        #ifndef QT_DEBUG
+        ui->pushButton_Updater->setEnabled(true);
+        #endif
     }
 
     MainWindow::~MainWindow()
