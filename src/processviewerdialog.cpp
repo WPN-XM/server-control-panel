@@ -1,5 +1,6 @@
 #include "processviewerdialog.h"
 #include "ui_processviewerdialog.h"
+#include <QThread>
 
 ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     QDialog(parent),
@@ -16,8 +17,71 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
     ui->treeWidget->setColumnCount(3);
+    ui->treeWidget->setSortingEnabled(true);
 
+    // resize columns to contents
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_NAME, QHeaderView::ResizeToContents);
+
+    renderProcesses();
+
+    ui->treeWidget->expandAll();
+}
+
+// Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
+#include <iphlpapi.h>
+#pragma comment(lib, "iphlpapi.lib")
+
+QList<PidAndPort> ProcessViewerDialog::getPorts()
+{
+    QList<PidAndPort> ports;
+
+    MIB_TCPTABLE_OWNER_PID *pTCPInfo;
+    MIB_TCPROW_OWNER_PID *owner;
+    DWORD size;
+    DWORD result;
+
+    result = GetExtendedTcpTable(NULL,     &size, false, AF_INET, TCP_TABLE_OWNER_PID_LISTENER, 0);
+    pTCPInfo = (MIB_TCPTABLE_OWNER_PID*)malloc(size);
+    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_LISTENER, 0);
+
+    if (result != NO_ERROR)
+    {
+       qDebug() << "Couldn't get our IP table";
+       return ports;
+    }
+
+    // iterate through tcpinfo table
+    for (DWORD dwLoop = 0; dwLoop < pTCPInfo->dwNumEntries; dwLoop++)
+    {
+       owner = &pTCPInfo->table[dwLoop];
+
+       PidAndPort p;
+       p.pid = QString::number(owner->dwOwningPid);
+       p.port = QString::number(owner->dwLocalPort);
+
+       ports.append(p);
+    }
+
+    return ports;
+}
+
+void ProcessViewerDialog::refreshProcesses()
+{
+    ui->treeWidget->clear();
+    renderProcesses();
+    ui->treeWidget->expandAll();
+}
+
+void ProcessViewerDialog::on_pushButton_Refresh_released()
+{
+    refreshProcesses();
+}
+
+void ProcessViewerDialog::renderProcesses()
+{
     QList<Process> processes = getRunningProcesses();
+
+    QList<PidAndPort> ports = getPorts();
 
     foreach(Process process, processes)
     {
@@ -26,6 +90,14 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
             process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1
         );
 
+        // lookup port for this pid and add it to the process struct
+        foreach (const PidAndPort &p, ports) {
+            if (p.pid == process.pid) {
+                process.port = p.port;
+                break;
+            }
+        }
+
         // if there is a parent item, then add the proccess as a child, else it's a parent itself
         if(!parentItem.empty()) {
             addChild(parentItem.at(0), process);
@@ -33,24 +105,40 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
             addRoot(process);
         }
     }
+}
 
-    // resize columns to contents
-    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ui->treeWidget->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+void ProcessViewerDialog::on_lineEdit_searchProcessByName_textChanged(const QString &query)
+{
+    filter("byName", query);
+}
 
-    ui->treeWidget->setSortingEnabled(true);
+void ProcessViewerDialog::on_lineEdit_searchProcessByPid_textChanged(const QString &query)
+{
+    filter("byPid", query);
+}
 
-    ui->treeWidget->expandAll();
+void ProcessViewerDialog::on_lineEdit_searchProcessByPort_textChanged(const QString &query)
+{
+    filter("byPort", query);
 }
 
 /**
  * Search for items in the Progess TreeWidget by using type-ahead search
- *
- * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
- * @param query
  */
-void ProcessViewerDialog::on_searchProcessLineEdit_textChanged(const QString &query)
+void ProcessViewerDialog::filter(QString filterByItem, const QString &query)
 {
+    int searchInColumn = Columns::COLUMN_NAME;
+
+    if(filterByItem == "byName") {
+        searchInColumn = Columns::COLUMN_NAME;
+    }
+    if(filterByItem == "byPort") {
+        searchInColumn = Columns::COLUMN_PORT;
+    }
+    if(filterByItem == "byPID") {
+        searchInColumn = Columns::COLUMN_PID;
+    }
+
     ui->treeWidget->expandAll();
 
     // Iterate over all child items : filter items with "contains" query
@@ -58,7 +146,7 @@ void ProcessViewerDialog::on_searchProcessLineEdit_textChanged(const QString &qu
     while(*iterator)
     {
         QTreeWidgetItem *item = *iterator;
-        if(item && item->text(0).contains(query, Qt::CaseInsensitive)) {
+        if(item && item->text(searchInColumn).contains(query, Qt::CaseInsensitive)) {
             item->setHidden(false);
         } else {
             // Problem: the matched child is visibile, but parent is hidden, because no match.
@@ -102,8 +190,10 @@ QTreeWidgetItem* ProcessViewerDialog::addRoot(Process process)
     QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
     item->setText(0, process.name);
     item->setIcon(0, process.icon);
+    item->setData(0, Qt::ItemDataRole::ToolTipRole, process.path);
     item->setText(1, process.pid);
-    item->setText(2, process.memoryUsage);
+    item->setText(2, process.port);
+    item->setText(3, process.memoryUsage);
     ui->treeWidget->addTopLevelItem(item);
     return item;
 }
@@ -113,8 +203,10 @@ void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process)
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, process.name);
     item->setIcon(0, process.icon);
+    item->setData(0, Qt::ItemDataRole::ToolTipRole, process.path);
     item->setText(1, process.pid);
-    item->setText(2, process.memoryUsage);
+    item->setText(2, process.port);
+    item->setText(3, process.memoryUsage);
     parent->addChild(item);
 }
 
@@ -209,8 +301,36 @@ QStringList ProcessViewerDialog::getProcessDetails(DWORD processID)
         QString memoryUsage = getSizeHumanReadable((float) pmc.WorkingSetSize);
         processInfos.append(memoryUsage);
     }
+
     CloseHandle(hProcess);
 
     return processInfos;
 }
 
+void ProcessViewerDialog::on_pushButton_KillProcess_released()
+{
+    QTreeWidgetItem *item = ui->treeWidget->currentItem();
+    quint64 pid = item->text(1).toLong();
+    if(killProcess(pid)) {
+        QObject().thread()->usleep(1000*1000*0.5); // 0,5sec
+        refreshProcesses();
+    }
+}
+
+bool ProcessViewerDialog::killProcess(quint64 pid)
+{
+    HANDLE hProcess;
+    hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
+    if(hProcess){
+        TerminateProcess(hProcess, 0);
+        CloseHandle(hProcess);
+        return true;
+    }
+    return false;
+}
+
+void ProcessViewerDialog::on_checkBox_filterExcludeWindowsProcesses_checked()
+{
+    // remove PIDs below 1000
+    // remove names with c:\windows
+}

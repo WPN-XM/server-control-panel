@@ -22,12 +22,19 @@ namespace Ui {
 
 struct Process
 {
-    QString pid;
-    QString ppid;
-    QString name;
+    QString name;        // 1
     QString path;
-    QString memoryUsage;
+    QString pid;         // 2
+    QString ppid;
+    QString port;        // 3
+    QString memoryUsage; // 4
     QIcon icon;
+};
+
+
+struct PidAndPort {
+    QString pid;
+    QString port;
 };
 
 class ProcessViewerDialog : public QDialog
@@ -44,12 +51,36 @@ class ProcessViewerDialog : public QDialog
     private:
         Ui::ProcessViewerDialog *ui;
 
-        QString getSizeHumanReadable(float bytes);
         QList<Process> getRunningProcesses();
         QStringList getProcessDetails(DWORD processID);
 
+        QString getSizeHumanReadable(float bytes);
+
+        void renderProcesses();
+        void refreshProcesses();
+
+        bool killProcess(quint64 pid);
+
+        QList<PidAndPort> getPorts();
+
+        enum Columns {
+            COLUMN_NAME = 0,
+            COLUMN_PID  = 1,
+            COLUMN_PORT = 2,
+            COLUMN_MEM  = 3,
+        };
+
+        void filter(QString filterByItem, const QString &query);
+
     private slots:
-        void on_searchProcessLineEdit_textChanged(const QString &query);
+        void on_lineEdit_searchProcessByName_textChanged(const QString &query);
+        void on_lineEdit_searchProcessByPid_textChanged(const QString &query);
+        void on_lineEdit_searchProcessByPort_textChanged(const QString &query);
+
+        void on_pushButton_Refresh_released();
+        void on_pushButton_KillProcess_released();
+        void on_checkBox_filterExcludeWindowsProcesses_checked();
+
 };
 
 #endif // PROCESSVIEWERDIALOG_H
