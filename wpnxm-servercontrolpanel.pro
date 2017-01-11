@@ -37,6 +37,8 @@ QT += core network widgets
 
 # needed for "createShellLink", see ConfigurationDialog
 LIBS += -luuid -lole32 -lshell32
+# needed for process and port detection, see ProcessViewerDialog
+#LIBS += -liphlpapi -lws2_32 -lwsock32
 
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
@@ -85,7 +87,7 @@ HEADERS += \
     src/networkutils.h \
     src/jobscheduler.h \
     src/csv.h \
-    src/processviewerdialog.h \
+    src/processviewer/processviewerdialog.h \
     src/ini.h
 
 
@@ -120,7 +122,7 @@ SOURCES += \
     src/networkutils.cpp \
     src/jobscheduler.cpp \
     src/csv.cpp \
-    src/processviewerdialog.cpp \
+    src/processviewer/processviewerdialog.cpp \
     src/ini.cpp
 
 
@@ -133,7 +135,7 @@ FORMS += \
     src/config/nginxaddupstreamdialog.ui \
     src/config/nginxaddserverdialog.ui \
     src/updater/updaterdialog.ui \
-    src/processviewerdialog.ui
+    src/processviewer/processviewerdialog.ui
 
 # WINDOWS RC-FILE (sets the executable attributes)
 exists(C:\Windows\System32\cmd.exe) {
