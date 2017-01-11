@@ -10,11 +10,16 @@
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QFileIconProvider>
+#include <QThread>
 
 #include <windows.h>
 #include <stdio.h>
 #include <psapi.h>
 #include <TlHelp32.h>
+
+// Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
+#include <iphlpapi.h>
+#pragma comment(lib, "iphlpapi.lib")
 
 namespace Ui {
     class ProcessViewerDialog;
@@ -79,7 +84,7 @@ class ProcessViewerDialog : public QDialog
 
         void on_pushButton_Refresh_released();
         void on_pushButton_KillProcess_released();
-        void on_checkBox_filterExcludeWindowsProcesses_checked();
+        void on_checkBox_filterExcludeWindowsProcesses_checked();        
 
 };
 

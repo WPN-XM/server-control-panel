@@ -1,6 +1,5 @@
 #include "processviewerdialog.h"
 #include "ui_processviewerdialog.h"
-#include <QThread>
 
 ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     QDialog(parent),
@@ -16,20 +15,22 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     // center dialog
     this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
-    ui->treeWidget->setColumnCount(3);
+    ui->treeWidget->setColumnCount(4);
     ui->treeWidget->setSortingEnabled(true);
 
     // resize columns to contents
     ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_NAME, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PID, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PORT, QHeaderView::ResizeToContents);
+
+    // set text alignment for columns
+    //ui->treeWidget->setText()
 
     renderProcesses();
 
     ui->treeWidget->expandAll();
 }
 
-// Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
-#include <iphlpapi.h>
-#pragma comment(lib, "iphlpapi.lib")
 
 QList<PidAndPort> ProcessViewerDialog::getPorts()
 {
@@ -40,9 +41,9 @@ QList<PidAndPort> ProcessViewerDialog::getPorts()
     DWORD size;
     DWORD result;
 
-    result = GetExtendedTcpTable(NULL,     &size, false, AF_INET, TCP_TABLE_OWNER_PID_LISTENER, 0);
+    result = GetExtendedTcpTable(NULL,     &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
     pTCPInfo = (MIB_TCPTABLE_OWNER_PID*)malloc(size);
-    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_LISTENER, 0);
+    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
     if (result != NO_ERROR)
     {
@@ -55,9 +56,14 @@ QList<PidAndPort> ProcessViewerDialog::getPorts()
     {
        owner = &pTCPInfo->table[dwLoop];
 
+       // The dwLocalPort, and dwRemotePort members are in network byte order.
+       // The ntohs() or inet_ntoa() functions in Windows Sockets or conversion is needed.
+       // here's a trick, which saves header inclusion headache:
+       long port = (owner->dwLocalPort/256) + (owner->dwLocalPort%256) * 256;
+
        PidAndPort p;
        p.pid = QString::number(owner->dwOwningPid);
-       p.port = QString::number(owner->dwLocalPort);
+       p.port = QString::number(port);
 
        ports.append(p);
     }
