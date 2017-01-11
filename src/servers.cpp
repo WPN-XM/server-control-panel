@@ -387,7 +387,7 @@ namespace Servers
             return;
         }
 
-        // if PHP version below 7.1, then utilize spawn.exe to spawn multiple processes
+        // if PHP version below 7.1, then use "spawn.exe" to spawn multiple processes
         QString startCmdWithPlaceholders(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
         // get the nginx upstream configuration and read the defined PHP pools
@@ -413,7 +413,8 @@ namespace Servers
 
             QProcess* process = getProcess("PHP");
             process->setEnvironment(env.toStringList());
-            process->startDetached(startPHPCGI);            
+            process->startDetached(startPHPCGI);
+            qDebug() << "[PHP] Process PID" << process->pid();
         }
     }
 
