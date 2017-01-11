@@ -35,5 +35,7 @@
         <file>comment.png</file>
         <file alias="update">update.png</file>
         <file>update-circle.png</file>
+        <file>system-monitor.png</file>
+        <file>clock-history.png</file>
     </qresource>
 </RCC>
