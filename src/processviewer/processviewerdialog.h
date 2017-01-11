@@ -1,5 +1,5 @@
 #ifndef PROCESSVIEWERDIALOG_H
-#define PROCESSVIEWERDIALOGg_H
+#define PROCESSVIEWERDIALOG_H
 
 #include "src/csv.h"
 
