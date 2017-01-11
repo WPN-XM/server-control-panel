@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "processviewerdialog.h"
+#include "processviewer/processviewerdialog.h"
 
 namespace ServerControlPanel
 {
@@ -206,17 +206,19 @@ namespace ServerControlPanel
         connect(ui->pushButton_AllDaemons_Start, SIGNAL(clicked()), this, SLOT(startAllDaemons()));
         connect(ui->pushButton_AllDaemons_Stop,  SIGNAL(clicked()), this, SLOT(stopAllDaemons()));
 
-        // PushButtons:: Website, Mailinglist, ReportBug, Donate
+        // PushButtons:: Website, Forum, Help, About, ReportBug, Donate
         connect(ui->pushButton_Website,   SIGNAL(clicked()), this, SLOT(goToWebsite()));
         connect(ui->pushButton_Forum,     SIGNAL(clicked()), this, SLOT(goToForum()));
+        connect(ui->pushButton_Help,      SIGNAL(clicked()), this, SLOT(openHelpDialog()));
+        connect(ui->pushButton_About,     SIGNAL(clicked()), this, SLOT(openAboutDialog()));
         connect(ui->pushButton_ReportBug, SIGNAL(clicked()), this, SLOT(goToReportIssue()));
         connect(ui->pushButton_Donate,    SIGNAL(clicked()), this, SLOT(goToDonate()));
 
         // PushButtons: Configuration, Help, About, Close
         connect(ui->pushButton_Console,       SIGNAL(clicked()), this, SLOT(openConsole()));
         connect(ui->pushButton_Configuration, SIGNAL(clicked()), this, SLOT(openConfigurationDialog()));
-        connect(ui->pushButton_Help,          SIGNAL(clicked()), this, SLOT(openHelpDialog()));
-        connect(ui->pushButton_About,         SIGNAL(clicked()), this, SLOT(openAboutDialog()));
+        connect(ui->pushButton_Processes,     SIGNAL(clicked()), this, SLOT(openProcessViewerDialog()));
+
         // clicking Close, does not quit, but closes the window to tray
         connect(ui->pushButton_Close,         SIGNAL(clicked()), this, SLOT(hide()));
 
@@ -1558,8 +1560,13 @@ namespace ServerControlPanel
     void MainWindow::openUpdaterDialog()
     {
         Updater::UpdaterDialog updaterDialog;
-        updaterDialog.setWindowTitle("WPN-XM Server Control Panel - Updater");
         updaterDialog.exec();
+    }
+
+    void MainWindow::openProcessViewerDialog()
+    {
+        ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
+        pvd->exec();
     }
 
 }

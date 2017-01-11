@@ -55,6 +55,8 @@ namespace ServerControlPanel
 
             void goToWebsite();
             void goToForum();
+            void openHelpDialog();
+            void openAboutDialog();
             void goToReportIssue();
             void goToDonate();
 
@@ -70,8 +72,7 @@ namespace ServerControlPanel
             void openConsole();
             void openWebinterface();
             void openConfigurationDialog();
-            void openHelpDialog();
-            void openAboutDialog();
+            void openProcessViewerDialog();
             void openUpdaterDialog();
 
             void openConfigurationDialogNginx();
