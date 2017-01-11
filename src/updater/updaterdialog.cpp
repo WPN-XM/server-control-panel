@@ -19,6 +19,8 @@ namespace Updater
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+        setWindowTitle("WPN-XM Server Control Panel - Updater");
+
         softwareRegistry  = new SoftwareRegistry::Manager();
 
         initModel(softwareRegistry->getServerStackSoftwareRegistry());
