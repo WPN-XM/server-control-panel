@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
-    <height>381</height>
+    <width>621</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -92,13 +92,34 @@
      <rect>
       <x>300</x>
       <y>0</y>
-      <width>166</width>
+      <width>311</width>
       <height>61</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="TopHBoxLayout">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>2</number>
+     </property>
+     <property name="rightMargin">
+      <number>1</number>
+     </property>
      <item>
       <widget class="QPushButton" name="pushButton_Website">
+       <property name="minimumSize">
+        <size>
+         <width>29</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Visit wpn-xm.org.</string>
        </property>
@@ -134,6 +155,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_Forum">
+       <property name="minimumSize">
+        <size>
+         <width>29</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Go to WPN-XM Community Forums.</string>
        </property>
@@ -172,6 +199,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_ReportBug">
+       <property name="minimumSize">
+        <size>
+         <width>29</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Report Issue or Request Feature!</string>
        </property>
@@ -207,6 +240,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_Help">
+       <property name="minimumSize">
+        <size>
+         <width>29</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>Open the WPN-XM help pages.</string>
        </property>
@@ -242,6 +281,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_About">
+       <property name="minimumSize">
+        <size>
+         <width>29</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="toolTip">
         <string>About WPN-XM SCP.</string>
        </property>
@@ -275,20 +320,106 @@
        </property>
       </widget>
      </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>23</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_Donate">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>109</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>109</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>109</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Support the development of WPN-XM by donating.</string>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string>Donate</string>
+       </property>
+       <property name="icon">
+        <iconset resource="resources/resources.qrc">
+         <normaloff>:/money</normaloff>:/money</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
     <zorder>pushButton_Forum</zorder>
     <zorder>pushButton_ReportBug</zorder>
     <zorder>pushButton_Website</zorder>
     <zorder>pushButton_Help</zorder>
     <zorder>pushButton_About</zorder>
+    <zorder>pushButton_Donate</zorder>
+    <zorder>horizontalSpacer</zorder>
    </widget>
    <widget class="QWidget" name="RightSideWidget" native="true">
     <property name="geometry">
      <rect>
       <x>490</x>
-      <y>0</y>
+      <y>80</y>
       <width>121</width>
-      <height>261</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -309,10 +440,10 @@
        <x>10</x>
        <y>0</y>
        <width>111</width>
-       <height>261</height>
+       <height>171</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="RightsideVBoxLayout" stretch="0,0,0,0,0,0,0,0,0">
+     <layout class="QVBoxLayout" name="RightsideVBoxLayout" stretch="0,0,0,0,0,0">
       <property name="spacing">
        <number>5</number>
       </property>
@@ -322,82 +453,6 @@
       <property name="leftMargin">
        <number>0</number>
       </property>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton_Donate">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Support the development of WPN-XM by donating.</string>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-        <property name="text">
-         <string>Donate</string>
-        </property>
-        <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/money</normaloff>:/money</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>16</width>
-          <height>16</height>
-         </size>
-        </property>
-        <property name="autoDefault">
-         <bool>false</bool>
-        </property>
-        <property name="flat">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Maximum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>45</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item>
        <widget class="QPushButton" name="pushButton_Console">
         <property name="enabled">
@@ -583,9 +638,6 @@
      <zorder>pushButton_Console</zorder>
      <zorder>pushButton_Close</zorder>
      <zorder>pushButton_Updater</zorder>
-     <zorder>verticalSpacer</zorder>
-     <zorder>pushButton_Donate</zorder>
-     <zorder>verticalSpacer_2</zorder>
      <zorder>pushButton_Scheduler</zorder>
      <zorder>pushButton_Processes</zorder>
     </widget>
@@ -594,7 +646,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>270</y>
+      <y>300</y>
       <width>601</width>
       <height>101</height>
      </rect>

@@ -1455,11 +1455,11 @@ namespace ServerControlPanel
 
         if(BottomWidgetGeo.y() > bottomWidgetY) {
             // 3 or 4 elements - move things from the bottom up
-            ui->BottomWidget->move(QPoint(BottomWidgetGeo.x(), bottomWidgetY + 10));
+            ui->BottomWidget->move(QPoint(BottomWidgetGeo.x(), bottomWidgetY + 20));
             ui->ToolsGroupBox->move(QPoint(ui->ToolsGroupBox->x(), ui->ToolsGroupBox->y()));
             QRect RightWidgetGeo = ui->RightSideWidget->geometry();
-            ui->RightSideWidget->move(QPoint(RightWidgetGeo.x(), RightWidgetGeo.y() - 20));
-            this->resize(QSize(this->geometry().width(), bottomWidgetY + BottomWidgetGeo.height() + 20));
+            ui->RightSideWidget->move(QPoint(RightWidgetGeo.x(), RightWidgetGeo.y() - 15));
+            this->resize(QSize(this->geometry().width(), bottomWidgetY + BottomWidgetGeo.height() + 30));
         } else {
             // more then 4 elements - auto-expand
             ui->BottomWidget->move(QPoint(BottomWidgetGeo.x(), bottomWidgetY - 10));
