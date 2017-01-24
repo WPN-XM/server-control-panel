@@ -1,5 +1,3 @@
-#include <QDebug>
-
 #include "src/version.h"
 #include "src/tooltips/TrayToolTip.h"
 

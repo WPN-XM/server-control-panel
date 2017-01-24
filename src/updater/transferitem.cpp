@@ -1,7 +1,6 @@
 #include "downloadmanager.h"
 
 #include <QDir>
-#include <QDebug>
 
 namespace Downloader
 {

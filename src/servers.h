@@ -4,7 +4,6 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDir>
-#include <QDebug>
 #include <QProcess>
 #include <QTimer>
 #include <QTime>

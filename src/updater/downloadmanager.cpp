@@ -3,8 +3,6 @@
 #include <QCoreApplication>
 #include <QSslError>
 
-#include <QDebug>
-
 namespace Downloader
 {
     DownloadManager::DownloadManager()

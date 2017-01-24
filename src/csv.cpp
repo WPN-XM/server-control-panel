@@ -4,7 +4,6 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include <QRegExp>
-#include <QDebug>
 
 namespace File
 {

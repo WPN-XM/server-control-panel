@@ -12,6 +12,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QDir>
+#include <QNetworkProxy>
 
 #include "src/json.h"
 #include "src/registry/registrymanager.h"

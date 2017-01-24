@@ -1,9 +1,6 @@
 #include "updaterdialog.h"
 #include "ui_updaterdialog.h"
 
-#include <QDebug>
-#include <QNetworkProxy>
-
 namespace Updater
 {
 
@@ -24,6 +21,7 @@ namespace Updater
         softwareRegistry  = new SoftwareRegistry::Manager();
 
         initModel(softwareRegistry->getServerStackSoftwareRegistry());
+
         initView();
     }
 
@@ -238,6 +236,7 @@ namespace Updater
     ProgressBarUpdater::ProgressBarUpdater(UpdaterDialog *parent, int indexRow) :
         QObject(parent), currentRow(indexRow)
     {
+        // outside access to UpdaterDialog *ui - todo provide getModel()
         model = parent->ui->tableView_1->model();
         index = model->index(currentRow, UpdaterDialog::Columns::Action);
     }

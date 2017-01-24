@@ -6,7 +6,6 @@
 #include <string>
 #include <map>
 
-#include <QDebug>
 #include <QString>
 
 namespace File {

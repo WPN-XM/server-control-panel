@@ -1,8 +1,6 @@
 #include "actioncolumnitemdelegate.h"
 #include "updaterdialog.h"
 
-#include <QDebug>
-
 namespace Updater
 {
 

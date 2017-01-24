@@ -1,5 +1,7 @@
 #include "servers.h"
 
+#include <QDebug>
+
 namespace Servers
 {
     Servers::Servers(QObject *parent) : QObject(parent), settings(new Settings::SettingsManager)
