@@ -448,7 +448,7 @@
        <number>5</number>
       </property>
       <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
+       <enum>QLayout::SetMinAndMaxSize</enum>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -634,11 +634,11 @@
        </widget>
       </item>
      </layout>
+     <zorder>pushButton_Scheduler</zorder>
      <zorder>pushButton_Configuration</zorder>
      <zorder>pushButton_Console</zorder>
      <zorder>pushButton_Close</zorder>
      <zorder>pushButton_Updater</zorder>
-     <zorder>pushButton_Scheduler</zorder>
      <zorder>pushButton_Processes</zorder>
     </widget>
    </widget>

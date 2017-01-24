@@ -2,64 +2,38 @@
 #define PROCESSVIEWERDIALOG_H
 
 #include "src/csv.h"
+#include "src/processviewer/processes.h"
 
 #include <QDialog>
 #include <QTreeWidgetItem>
 #include <QProcess>
-#include <QDebug>
 #include <QDesktopWidget>
-#include <QFileInfo>
-#include <QFileIconProvider>
 #include <QThread>
-
-#include <windows.h>
-#include <stdio.h>
-#include <psapi.h>
-#include <TlHelp32.h>
-
-// Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
-#include <iphlpapi.h>
-#pragma comment(lib, "iphlpapi.lib")
 
 namespace Ui {
     class ProcessViewerDialog;
 }
-
-struct Process
-{
-    QString name;        // 1
-    QString path;
-    QString pid;         // 2
-    QString ppid;
-    QString port;        // 3
-    QString memoryUsage; // 4
-    QIcon icon;
-};
-
-
-struct PidAndPort {
-    QString pid;
-    QString port;
-};
 
 class ProcessViewerDialog : public QDialog
 {
     Q_OBJECT
 
     public:
-        explicit ProcessViewerDialog(QWidget *parent = 0);
+        explicit ProcessViewerDialog(QWidget *parent = false);
         ~ProcessViewerDialog();
 
         QTreeWidgetItem* addRoot(Process process);
         void addChild(QTreeWidgetItem *parent, Process process);
 
+        void setChecked_ShowOnlyWpnxmProcesses();
+        void setProcessesInstance(Processes *p);
+
     private:
         Ui::ProcessViewerDialog *ui;
+        Processes *processes;
 
-        QList<Process> getRunningProcesses();
-        QStringList getProcessDetails(DWORD processID);
-
-        QString getSizeHumanReadable(float bytes);
+        QList<Process> runningProcesses;
+        QList<PidAndPort> ports;
 
         void renderProcesses();
         void refreshProcesses();
@@ -84,7 +58,8 @@ class ProcessViewerDialog : public QDialog
 
         void on_pushButton_Refresh_released();
         void on_pushButton_KillProcess_released();
-        void on_checkBox_filterExcludeWindowsProcesses_checked();        
+        void on_checkBox_filterExcludeWindowsProcesses_checked();
+        void on_checkBox_filterIncludeOnlyWpnxmProcesses_checked();
 
 };
 

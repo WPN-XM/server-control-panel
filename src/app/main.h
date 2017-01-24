@@ -7,6 +7,9 @@
 #include "../splashscreen.h"
 #include "../cli.h"
 
+#include "../processviewer/processes.h"
+#include "../processviewer/processviewerdialog.h"
+
 #include <QtWidgets>
 #include <QtCore>
 #include <QSharedMemory>

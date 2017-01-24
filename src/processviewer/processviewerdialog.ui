@@ -7,28 +7,12 @@
     <x>0</x>
     <y>0</y>
     <width>651</width>
-    <height>641</height>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>550</x>
-     <y>20</y>
-     <width>81</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
   <widget class="QTreeWidget" name="treeWidget">
    <property name="geometry">
     <rect>
@@ -59,38 +43,12 @@
     </property>
    </column>
   </widget>
-  <widget class="QPushButton" name="pushButton_KillProcess">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>50</y>
-     <width>81</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Kill Process</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_Refresh">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>20</y>
-     <width>81</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Refresh</string>
-   </property>
-  </widget>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>400</x>
      <y>10</y>
-     <width>121</width>
+     <width>241</width>
      <height>71</height>
     </rect>
    </property>
@@ -105,12 +63,28 @@
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>111</width>
+      <width>201</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Exclude Windows</string>
+     <string>Exclude Windows system processes</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_filterShowOnlyWpnxmProcesses">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>211</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show only WPN-XM processes</string>
     </property>
    </widget>
   </widget>
@@ -190,40 +164,49 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>640</y>
+     <width>621</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+   <property name="centerButtons">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>10</y>
+     <width>111</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_Refresh">
+      <property name="text">
+       <string>Refresh</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_KillProcess">
+      <property name="text">
+       <string>Kill Process</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>ProcessViewerDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>ProcessViewerDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

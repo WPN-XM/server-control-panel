@@ -12,6 +12,7 @@
 #include "config/configurationdialog.h"
 #include "updater/updaterdialog.h"
 #include "selfupdater.h"
+#include "processviewer/processes.h"
 
 namespace ServerControlPanel
 {
@@ -96,7 +97,13 @@ namespace ServerControlPanel
 
             void execEditor(QUrl logfile);
 
-            void runSelfUpdate();            
+            void runSelfUpdate();
+
+            MainWindow *getMainWindow();
+            void setup();
+
+            void setProcessesInstance(Processes *oProcesses);
+            Processes *getProcessesObject();
 
         private:
             Ui::MainWindow *ui;
@@ -104,8 +111,8 @@ namespace ServerControlPanel
             ServerControlPanel::Tray  *tray;
             Settings::SettingsManager *settings;
             Servers::Servers          *servers;
-
             Updater::SelfUpdater      *selfUpdater;
+            Processes                 *processes;
 
             QAction *minimizeAction;
             QAction *restoreAction;
@@ -128,7 +135,7 @@ namespace ServerControlPanel
             QString getPort(QString server);
 
             QString getLogfile(QString objectName);
-            QString getServerNameFromPushButton(QPushButton *button);           
+            QString getServerNameFromPushButton(QPushButton *button);
 
         signals:
             void mainwindow_show();

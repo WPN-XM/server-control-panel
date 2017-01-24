@@ -84,45 +84,58 @@ int main(int argc, char * argv[])
     p.setColor(QPalette::ButtonText, QColor(255,255,255));
     app.setPalette(p);*/
 
+    // Initialize Application MainWindow
+    // so that we can inject data. but do not show it, yet.
+    ServerControlPanel::MainWindow mainWindow;
+
     // Activate SplashScreen
-    #ifndef QT_DEBUG
+    //#ifndef QT_DEBUG
     ServerControlPanel::SplashScreen splash(QPixmap(), Qt::WindowStaysOnTopHint);
     splash.setProgress(0);
     splash.show();
-    #endif
+    //#endif
 
-    /*splash.setMessage("Initial scan of installed applications ..", 15);
-    QObject().thread()->usleep(1000*1000*1);
+    splash.setMessage("Initial scan of installed applications ..", 15);
+        QObject().thread()->usleep(1000*1000*1);
     app.processEvents();
 
     splash.setMessage("Getting System Processes ..", 25);
-    QObject().thread()->usleep(1000*1000*1);
+        Processes *processes = Processes::getInstance();
+        mainWindow.setProcessesInstance(processes);
     app.processEvents();
 
     splash.setMessage("Searching for already running processes ..", 35);
-    QObject().thread()->usleep(1000*1000*1);
+        if(processes->areThereAlreadyRunningProcesses()) {
+            //displayShutdownAlreadyRunningProcessesOrContinueDialog
+            ProcessViewerDialog *pvd = new ProcessViewerDialog();
+            pvd->setChecked_ShowOnlyWpnxmProcesses();
+            pvd->setProcessesInstance(processes);
+            pvd->exec();
+        }
     app.processEvents();
 
     splash.setMessage("Searching for blocked ports ..", 45);
     QObject().thread()->usleep(1000*1000*1);
-    app.processEvents();*/
+    app.processEvents();
 
-    #ifndef QT_DEBUG    
+    //#ifndef QT_DEBUG
     splash.setProgress(50);
-    #endif
+    //#endif
 
-    // Initialize Application main window and show it
-    ServerControlPanel::MainWindow mainWindow;
+    // setup the env: trayicon, actions, servers, process monitoring
+    mainWindow.setup();
+
+    // Finally, show the MainWindow
     mainWindow.show();
 
-    #ifndef QT_DEBUG
+    //#ifndef QT_DEBUG
     splash.setMessage("", 100);
-    #endif
+    //#endif
 
      // Deactivate SplashScreen
-    #ifndef QT_DEBUG
+    //#ifndef QT_DEBUG
     splash.finish(&mainWindow);
-    #endif
+    //#endif
 
     // enter the Qt Event loop here
     return app.exec();

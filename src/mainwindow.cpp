@@ -23,14 +23,6 @@ namespace ServerControlPanel
 
         setDefaultSettings();
 
-        this->servers = new Servers::Servers();
-
-        createTrayIcon();
-
-        renderInstalledDaemons();
-
-        createActions();
-
         // start minimized to tray
         if(settings->get("global/startminimized").toBool()) {
             setWindowState( Qt::WindowMinimized );
@@ -46,11 +38,25 @@ namespace ServerControlPanel
         // set window size fixed
         setFixedSize(width(), height());
 
-        checkAlreadyActiveDaemons();
-
-        showPushButtonsOnlyForInstalledTools();
+        ui->pushButton_Scheduler->hide();
+        ui->pushButton_Updater->hide();
 
         connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
+    }
+
+    void MainWindow::setup()
+    {
+        this->servers = new Servers::Servers();
+
+        createTrayIcon();
+
+        renderInstalledDaemons();
+
+        createActions();
+
+        //checkAlreadyActiveDaemons();
+
+        showPushButtonsOnlyForInstalledTools();
 
         connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
         connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this, SLOT(updatePort(QString)));
@@ -70,10 +76,10 @@ namespace ServerControlPanel
 
         updateTrayIconTooltip();
 
-        #ifdef QT_DEBUG
+        /*#ifdef QT_DEBUG
         ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
         pvd->exec();
-        #endif
+        #endif*/
 
         if(settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
@@ -94,6 +100,21 @@ namespace ServerControlPanel
 
         delete ui;
         delete tray;
+    }
+
+    MainWindow* MainWindow::getMainWindow()
+    {
+        return this;
+    }
+
+    void MainWindow::setProcessesInstance(Processes *oProcesses)
+    {
+        processes = oProcesses;
+    }
+
+    Processes* MainWindow::getProcessesObject()
+    {
+        return processes;
     }
 
     void MainWindow::runSelfUpdate()
