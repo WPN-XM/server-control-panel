@@ -87,8 +87,9 @@ HEADERS += \
     src/networkutils.h \
     src/jobscheduler.h \
     src/csv.h \
-    src/processviewer/processviewerdialog.h \
-    src/ini.h
+    src/ini.h \
+    src/processviewer/processes.h \
+    src/processviewer/processviewerdialog.h
 
 
 SOURCES += \
@@ -121,9 +122,10 @@ SOURCES += \
     src/services.cpp \
     src/networkutils.cpp \
     src/jobscheduler.cpp \
-    src/csv.cpp \
-    src/processviewer/processviewerdialog.cpp \
-    src/ini.cpp
+    src/csv.cpp \    
+    src/ini.cpp \
+    src/processviewer/processes.cpp \
+    src/processviewer/processviewerdialog.cpp
 
 
 RESOURCES += \
@@ -135,6 +137,7 @@ FORMS += \
     src/config/nginxaddupstreamdialog.ui \
     src/config/nginxaddserverdialog.ui \
     src/updater/updaterdialog.ui \
+    src/hostmanager/hostmanagerdialog.ui \
     src/processviewer/processviewerdialog.ui
 
 # WINDOWS RC-FILE (sets the executable attributes)
