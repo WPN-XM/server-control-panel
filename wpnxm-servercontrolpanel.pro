@@ -137,8 +137,7 @@ FORMS += \
     src/config/nginxaddupstreamdialog.ui \
     src/config/nginxaddserverdialog.ui \
     src/updater/updaterdialog.ui \
-    src/hostmanager/hostmanagerdialog.ui \
-    src/processviewer/processviewerdialog.ui
+    src/processviewer/processviewerdialog.ui    
 
 # WINDOWS RC-FILE (sets the executable attributes)
 exists(C:\Windows\System32\cmd.exe) {
