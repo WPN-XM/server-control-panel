@@ -1,12 +1,13 @@
 #include "processes.h"
 #include <QApplication>
 
-//#include <QDebug>
+#include <QDebug>
 
 // initialize static members
 Processes *Processes::theInstance = NULL;
 QList<Process> Processes::processesList;
 QList<PidAndPort> Processes::portsList;
+QList<Process> Processes::monitoredProcessesList;
 
 Processes *Processes::getInstance()
 {
@@ -34,10 +35,13 @@ QList<Process> Processes::getProcessesList()
 {
     return processesList;
 }
-
 QList<PidAndPort> Processes::getPortsList()
 {
     return portsList;
+}
+QList<Process> Processes::getMonitoredProcessesList()
+{
+    return monitoredProcessesList;
 }
 
 void Processes::refresh()
@@ -51,24 +55,18 @@ Process Processes::find(const QString &name)
     Process p;
     foreach(p, getProcessesList())
     {
-        if (p.pid < 0) {
-            //qDebug() << "negative pid!";
-            continue;
+        if (p.pid < 0) {            
+            continue; // if negative pid
         }
         if (p.name != name && p.name != name + ".exe") {
-            continue;
-        }
-        if (!p.path.isEmpty() && !p.path.toLower().startsWith(qApp->applicationDirPath())) {
-            // process is outside of installation directory
-            //qDebug() << "path of the process" << name << "seems to be outside of the installPath:" << p->path << qApp->applicationDirPath();
-            continue;
+            continue; // if executable name doesn't match
         }
         return p;
     }
     return p;
 }
 
-QStringList Processes::getProcessesToSearchFor()
+QStringList Processes::getProcessNamesToSearchFor()
 {
     QStringList processesToSearch;
 
@@ -85,34 +83,26 @@ QStringList Processes::getProcessesToSearchFor()
     return processesToSearch;
 }
 
-QStringList Processes::searchForAlreadyRunningProcesses(QStringList processesToSearch)
+bool Processes::areThereAlreadyRunningProcesses()
 {
-    QStringList processesFoundList;
+    qDebug() << "[Processes] Check for already running processes.";
+
+    QStringList processesToSearch = getProcessNamesToSearchFor();
 
     // foreach processesToSearch take a look in the runningProcessesList
     for (int i = 0; i < processesToSearch.size(); ++i)
     {
-        //qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
+        qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
         foreach(Process process, getProcessesList()) {
             if(process.name.contains( processesToSearch.at(i).toLatin1().constData() )) {
-                processesFoundList << process.name;
+                qDebug() << "Found: " << process.name;
+                monitoredProcessesList.append(process);
             }
         }
     }
 
-    return processesFoundList;
-}
-
-bool Processes::areThereAlreadyRunningProcesses()
-{
-    //qDebug() << "[Processes] Check for already running processes.";
-
-    QStringList alreadyRunningProcessesList = searchForAlreadyRunningProcesses(getProcessesToSearchFor());
-
-   //qDebug() << "Already running Processes found : " << alreadyRunningProcessesList;
-
-   // only show the "process shutdown" dialog, when there are processes to shutdown
-   return alreadyRunningProcessesList.isEmpty();
+    // only show the "process shutdown" dialog, when there are processes to shutdown
+    return (!monitoredProcessesList.isEmpty());
 }
 
 // static

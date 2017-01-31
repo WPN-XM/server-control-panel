@@ -43,6 +43,7 @@ class Processes : public QObject
 
         static QList<Process> getProcessesList();
         static QList<PidAndPort> getPortsList();
+        static QList<Process> getMonitoredProcessesList();
 
         static bool killProcess(quint64 pid);
         static bool killProcess(const QString &name);
@@ -61,12 +62,12 @@ class Processes : public QObject
         explicit Processes();
         static QList<Process> processesList;
         static QList<PidAndPort> portsList;
+        static QList<Process> monitoredProcessesList;
 
         static QStringList getProcessDetails(DWORD processID);
         static QString getSizeHumanReadable(float bytes);
 
-        static QStringList getProcessesToSearchFor();
-        static QStringList searchForAlreadyRunningProcesses(QStringList processesToSearch);
+        static QStringList getProcessNamesToSearchFor();
 
     signals:
 
