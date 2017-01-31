@@ -106,12 +106,15 @@ int main(int argc, char * argv[])
 
     splash.setMessage("Searching for already running processes ..", 35);
         if(processes->areThereAlreadyRunningProcesses()) {
+            splash.hide();
             //displayShutdownAlreadyRunningProcessesOrContinueDialog
             ProcessViewerDialog *pvd = new ProcessViewerDialog();
+            pvd->setWindowTitle("Process Viewer - Already Running Processes");
             pvd->setChecked_ShowOnlyWpnxmProcesses();
             pvd->setProcessesInstance(processes);
             pvd->exec();
-        }
+            splash.show();
+        }        
     app.processEvents();
 
     splash.setMessage("Searching for blocked ports ..", 45);
