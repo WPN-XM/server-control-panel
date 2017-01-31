@@ -22,10 +22,9 @@ namespace ServerControlPanel
          *       to capture the mouse hover event of the tray icon.
          *       It's not supported by Qt, yet (v5.7).
          */
-        tooltip = new TrayToolTip;
-        tooltipVisible = false;
-
-        startTimer(500);
+        //tooltip = new TrayToolTip;
+        //tooltipVisible = false;
+        //startTimer(500);
     }
 
     void Tray::createTrayMenu()
@@ -159,6 +158,10 @@ namespace ServerControlPanel
 
     bool Tray::isTooltipVisible()
     {
+        // no tooltip object, means the feature isn't active
+        if(!tooltip) {
+            return false;
+        }
         return tooltipVisible;
     }
 

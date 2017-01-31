@@ -56,7 +56,7 @@ namespace ServerControlPanel
 
             Settings::SettingsManager *settings;
             Servers::Servers          *servers;
-            TrayToolTip               *tooltip;
+            TrayToolTip               *tooltip = NULL;
 
             bool        tooltipVisible;
             QString     tooltipTitle;
