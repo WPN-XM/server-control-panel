@@ -13,7 +13,7 @@ namespace ServerControlPanel
         ui->setupUi(this);
 
         // The tray icon is an instance of the QSystemTrayIcon class.
-        // check whether a system tray is present on the user's desktop
+        // Check, whether a system tray is present on the user's desktop.
         if ( false == QSystemTrayIcon::isSystemTrayAvailable()) {
             QMessageBox::critical(0, APP_NAME, tr("You don't have a system tray."));
             QApplication::exit(1);
@@ -50,7 +50,7 @@ namespace ServerControlPanel
 
         createTrayIcon();
 
-        renderInstalledDaemons();
+        renderServerStatusPanel();
 
         createActions();
 
@@ -75,11 +75,6 @@ namespace ServerControlPanel
         }
 
         updateTrayIconTooltip();
-
-        /*#ifdef QT_DEBUG
-        ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
-        pvd->exec();
-        #endif*/
 
         if(settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
@@ -1174,7 +1169,6 @@ namespace ServerControlPanel
             settings->set("global/onstartallopenwebinterface", 0);
             settings->set("global/onstartallminimize",         0);
             settings->set("global/editor",                     "notepad.exe");
-            //settings->set("global/showballooninfos",         0);
 
             settings->set("paths/logs",             "./logs");
             settings->set("paths/php",              "./bin/php");
@@ -1227,7 +1221,7 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::renderInstalledDaemons()
+    void MainWindow::renderServerStatusPanel()
     {
         QFont font1;
         font1.setBold(true);
@@ -1242,15 +1236,15 @@ namespace ServerControlPanel
         DaemonStatusGroupBox->setEnabled(true);
         DaemonStatusGroupBox->setGeometry(QRect(10, 70, 471, 121));
         DaemonStatusGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
-        DaemonStatusGroupBox->setMinimumSize(QSize(0, 121));
-        DaemonStatusGroupBox->setBaseSize(QSize(471, 100));
+        DaemonStatusGroupBox->setMinimumSize(QSize(471, 121)); // 3 server rows added
+        DaemonStatusGroupBox->setBaseSize(QSize(471, 121));
         DaemonStatusGroupBox->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
         DaemonStatusGroupBox->setFlat(false);
 
         QGridLayout *DaemonsGridLayout = new QGridLayout(DaemonStatusGroupBox);
         DaemonsGridLayout->setSpacing(10);
         DaemonsGridLayout->setObjectName(QStringLiteral("DaemonsGridLayout"));
-        DaemonsGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
+        //DaemonsGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
         /**
          * The DaemonsGrid has the following columns:
@@ -1462,30 +1456,38 @@ namespace ServerControlPanel
          * The BottomWidget has to move down (y + height of DaemonsGridLayout + margin)
          * The RightSideWidget moves up, if there are only 3-4 elements,
          * the "Webinterface" PushButton will be on par with the Labels.
-         * If there are more then 4 elements, the "webinterface" PushButton
+         * If there are more then 4 elements, the "console" PushButton
          * is on par with the first server.
          */
 
-        QRect DaemonsBox = DaemonStatusGroupBox->frameGeometry();
-        QSize DaemonsSize = DaemonStatusGroupBox->sizeHint();
+        // 0) we added a lot of widgets dynamically,
+        // now we need to adjust the size of the widgets to fit its contents.
+        // in other words: let's update all size/geometry data,
+        // before we do additional calculations and start moving things around.
+        DaemonStatusGroupBox->adjustSize();
 
-        // (top left corner y) + (dynamic height y, based on rows for daemons)
-        int bottomWidgetY = DaemonsBox.y() + DaemonsSize.height();
+        // 1) get rectangle of the status panel
+        QRect DaemonsBox = DaemonStatusGroupBox->geometry();
+        // 2) get bottom Y of status panel (bottom = top edge Y + height + 1)
+        int DaemonsBoxBottomY = DaemonsBox.bottom() + 5;
 
-        QRect BottomWidgetGeo = ui->BottomWidget->geometry();
+        /*qDebug() << DaemonStatusGroupBox->frameGeometry();
+        qDebug() << DaemonStatusGroupBox->geometry().x();
+        qDebug() << DaemonStatusGroupBox->geometry().y();
+        qDebug() << DaemonStatusGroupBox->geometry().height();
+        qDebug() << DaemonStatusGroupBox->geometry().bottom();
+        qDebug() << DaemonsBoxBottomY;
 
-        if(BottomWidgetGeo.y() > bottomWidgetY) {
-            // 3 or 4 elements - move things from the bottom up
-            ui->BottomWidget->move(QPoint(BottomWidgetGeo.x(), bottomWidgetY + 20));
-            ui->ToolsGroupBox->move(QPoint(ui->ToolsGroupBox->x(), ui->ToolsGroupBox->y()));
-            QRect RightWidgetGeo = ui->RightSideWidget->geometry();
-            ui->RightSideWidget->move(QPoint(RightWidgetGeo.x(), RightWidgetGeo.y() - 15));
-            this->resize(QSize(this->geometry().width(), bottomWidgetY + BottomWidgetGeo.height() + 30));
-        } else {
-            // more then 4 elements - auto-expand
-            ui->BottomWidget->move(QPoint(BottomWidgetGeo.x(), bottomWidgetY - 10));
-            this->resize(QSize(this->geometry().width(), bottomWidgetY + BottomWidgetGeo.height()));
-        }
+        qDebug() << ui->BottomWidget->frameGeometry();
+        qDebug() << ui->ToolsGroupBox->contentsRect();*/
+
+        QRect BottomWidget = ui->BottomWidget->frameGeometry();
+
+        // 3) re-position bottom widget
+        ui->BottomWidget->move(QPoint(BottomWidget.x(), DaemonsBoxBottomY));
+
+        // 4) finally, re-size the window accordingly
+        this->setFixedHeight(DaemonsBoxBottomY + BottomWidget.height() + 10);
     }
 
     QString MainWindow::getVersion(QString server)

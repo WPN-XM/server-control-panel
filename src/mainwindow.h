@@ -126,7 +126,7 @@ namespace ServerControlPanel
             void setDefaultSettings();
             void autostartDaemons();
 
-            void renderInstalledDaemons();
+            void renderServerStatusPanel();
 
             QString getProjectFolder() const;
             void showPushButtonsOnlyForInstalledTools();
