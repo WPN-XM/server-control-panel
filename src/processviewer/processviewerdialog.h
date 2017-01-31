@@ -58,8 +58,8 @@ class ProcessViewerDialog : public QDialog
 
         void on_pushButton_Refresh_released();
         void on_pushButton_KillProcess_released();
-        void on_checkBox_filterExcludeWindowsProcesses_checked();
-        void on_checkBox_filterIncludeOnlyWpnxmProcesses_checked();
+        void on_checkBox_filterExcludeWindowsProcesses_stateChanged(int state);
+        void on_checkBox_filterShowOnlyWpnxmProcesses_stateChanged(int state);
 
 };
 

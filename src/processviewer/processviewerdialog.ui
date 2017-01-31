@@ -7,200 +7,292 @@
     <x>0</x>
     <y>0</y>
     <width>651</width>
-    <height>671</height>
+    <height>520</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QTreeWidget" name="treeWidget">
+  <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>90</y>
+     <y>10</y>
      <width>631</width>
-     <height>541</height>
+     <height>501</height>
     </rect>
    </property>
-   <column>
-    <property name="text">
-     <string>Process Name</string>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
     </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Process Identifier</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Port</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Memory Usage</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>400</x>
-     <y>10</y>
-     <width>241</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Filter</string>
-   </property>
-   <widget class="QCheckBox" name="checkBox_filterExcludeWindowsProcesses">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>201</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Exclude Windows system processes</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_filterShowOnlyWpnxmProcesses">
-    <property name="enabled">
-     <bool>false</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>211</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Show only WPN-XM processes</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QGroupBox" name="groupBox_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>241</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="title">
-    <string>Search Process by</string>
-   </property>
-   <widget class="QWidget" name="formLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>221</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_searchByPID">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <item>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Search Process by</string>
+        </property>
+        <widget class="QWidget" name="formLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>221</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_searchByPID">
+            <property name="text">
+             <string>PID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_searchByName">
+            <property name="text">
+             <string>Name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLineEdit" name="lineEdit_searchProcessByName">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_searchProcessByPid">
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_searchByPort">
+            <property name="text">
+             <string>Port</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="lineEdit_searchProcessByPort">
+            <property name="maximumSize">
+             <size>
+              <width>60</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="pushButton_Refresh">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>109</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Refresh</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_KillProcess">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>109</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Kill Process</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>240</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="title">
+         <string>Filter</string>
+        </property>
+        <widget class="QCheckBox" name="checkBox_filterExcludeWindowsProcesses">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>201</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Exclude Windows system processes</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="checkBox_filterShowOnlyWpnxmProcesses">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>40</y>
+           <width>211</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Show only WPN-XM processes</string>
+         </property>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Preferred</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>5</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QTreeWidget" name="treeWidget">
+      <column>
        <property name="text">
-        <string>PID</string>
+        <string>Process Name</string>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_searchByName">
+      </column>
+      <column>
        <property name="text">
-        <string>Name</string>
+        <string>Process Identifier</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit_searchProcessByName">
-       <property name="maximumSize">
-        <size>
-         <width>100</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_searchProcessByPid">
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLabel" name="label_searchByPort">
+      </column>
+      <column>
        <property name="text">
         <string>Port</string>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEdit_searchProcessByPort">
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
+      </column>
+      <column>
+       <property name="text">
+        <string>Memory Usage</string>
        </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>15</x>
-     <y>640</y>
-     <width>621</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-   <property name="centerButtons">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QWidget" name="verticalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>10</y>
-     <width>111</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QPushButton" name="pushButton_Refresh">
-      <property name="text">
-       <string>Refresh</string>
-      </property>
+      </column>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_KillProcess">
-      <property name="text">
-       <string>Kill Process</string>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+      <property name="centerButtons">
+       <bool>true</bool>
       </property>
      </widget>
     </item>

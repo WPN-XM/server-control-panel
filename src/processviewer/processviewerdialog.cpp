@@ -35,6 +35,8 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) :
     // connect buttons
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(close()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(close()));
+
+    setFocus();
 }
 
 void ProcessViewerDialog::setProcessesInstance(Processes *p)
@@ -44,8 +46,8 @@ void ProcessViewerDialog::setProcessesInstance(Processes *p)
 
 void ProcessViewerDialog::setChecked_ShowOnlyWpnxmProcesses()
 {
-    ui->checkBox_filterShowOnlyWpnxmProcesses->setEnabled(true);
-    ui->checkBox_filterShowOnlyWpnxmProcesses->setChecked(true);
+    //ui->checkBox_filterShowOnlyWpnxmProcesses->setEnabled(true);
+    //ui->checkBox_filterShowOnlyWpnxmProcesses->setChecked(true);
 }
 
 void ProcessViewerDialog::refreshProcesses()
@@ -205,19 +207,80 @@ bool ProcessViewerDialog::killProcess(quint64 pid)
     return Processes::killProcess(pid);
 }
 
-
-void ProcessViewerDialog::on_checkBox_filterExcludeWindowsProcesses_checked()
+void ProcessViewerDialog::on_checkBox_filterExcludeWindowsProcesses_stateChanged(int state)
 {
-    // exclude all windows system processes
+    if(state == Qt::Checked) {
 
-    // remove PIDs below 1000
-    // remove names with c:\windows
+        qDebug() << "exclude all windows system processes";
+
+        QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
+
+        while(*iterator)
+        {
+            QTreeWidgetItem *item = *iterator;
+
+            if(item && !item->isHidden())
+            {
+                // remove PIDs below 1000
+                /*if(item->text(Columns::COLUMN_PID).toInt() < 1000) {
+                    qDebug() << "removed windows item because PID under 1000:" << item->text(Columns::COLUMN_NAME);
+                    item->setHidden(true);
+                }*/
+
+                // remove names with c:\windows
+                QString path = item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole).toString();
+                if(path.contains("C:\\Windows", Qt::CaseInsensitive)) {
+                    qDebug() << "removed windows item" << path;
+                    item->setHidden(true);
+                }
+
+                // name
+                if(item->text(Columns::COLUMN_NAME).contains("svchost.exe") ||
+                   item->text(Columns::COLUMN_NAME).contains("fontdrvhost.exe") ||
+                   item->text(Columns::COLUMN_NAME).contains("dwm.exe") ||
+                   item->text(Columns::COLUMN_NAME).contains("upeksvr.exe")
+                  ) {
+                    qDebug() << "removed windows item because name:" << item->text(Columns::COLUMN_NAME);
+                    item->setHidden(true);
+                }
+
+            }
+            ++iterator;
+        }
+    }
+
+    if(state == Qt::Unchecked) {
+        refreshProcesses();
+    }
 }
 
-void ProcessViewerDialog::on_checkBox_filterIncludeOnlyWpnxmProcesses_checked()
+void ProcessViewerDialog::on_checkBox_filterShowOnlyWpnxmProcesses_stateChanged(int state)
 {
-    // show only processes from our folder structure
+     if(state == Qt::Checked) {
 
-    // remove PIDs below 1000
-    // remove all names without the install location of the server stack
+         qDebug() << "show only processes from our folder structure";
+
+         QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
+
+         while(*iterator)
+         {
+             QTreeWidgetItem *item = *iterator;
+
+             if(item && !item->isHidden() && !item->text(Columns::COLUMN_NAME).contains("wpn-xm"))
+             {
+                 // remove all names without the install location of the server stack
+                 QString path = item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole).toString();
+                 if(!path.contains(qApp->applicationDirPath(), Qt::CaseInsensitive)) {
+                     qDebug() << "removed app dir " << path << qApp->applicationDirPath();
+                     item->setHidden(true);
+                 }
+             }
+             ++iterator;
+         }
+
+     }
+
+     if(state == Qt::Unchecked) {
+         refreshProcesses();
+     }
 }
