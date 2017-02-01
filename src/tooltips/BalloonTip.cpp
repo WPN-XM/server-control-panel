@@ -72,7 +72,7 @@ void BalloonTip::createRects()
 
     // font for title
     font.setBold(true);
-    font.setPixelSize(10);
+    font.setPixelSize(11);
     QFontMetrics metrics(font);
 
     // title rect
@@ -82,7 +82,7 @@ void BalloonTip::createRects()
     }
 
     // font for text
-    font.setPixelSize(10);
+    font.setPixelSize(11);
     font.setBold(false);
     setFont(font);
     metrics = QFontMetrics(font);
