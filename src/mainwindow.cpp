@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "processviewer/processviewerdialog.h"
+
 
 namespace ServerControlPanel
 {
@@ -270,7 +270,7 @@ namespace ServerControlPanel
         if(buttonConfigureRedis != 0) {
             connect(buttonConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
-    }
+    }    
 
     void MainWindow::changeEvent(QEvent *event)
     {
@@ -929,7 +929,7 @@ namespace ServerControlPanel
                 "</td></tr>"
                 "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
                 "<tr><td align=center><b>Website</b></td><td><a href=\"http://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
-                "<tr><td align=center><b>Author(s)</b></td><td>Jens-André Koch (c) 2011 - ").append(year).append(", <br>Yann Le Moigne (c) 2010.<br></td></tr>"
+                "<tr><td align=center><b>Author(s)</b></td><td>Jens A. Koch (c) 2011 - ").append(year).append(", <br>Yann Le Moigne (c) 2010.<br></td></tr>"
                 "<tr><td align=center><b>Github</b></td><td>WPN-XM is developed on Github.<br><a href=\"https://github.com/WPN-XM/WPN-XM/\">https://github.com/WPN-XM/WPN-XM/</a><br></td></tr>"
                 "<tr><td align=center><b>Icons</b></td><td>We are using Yusukue Kamiyamane's Fugue Icon Set.<br><a href=\"http://p.yusukekamiyamane.com/\">http://p.yusukekamiyamane.com/</a><br></td></tr>"
                 "<tr><td align=center><b>+1?</b></td><td>If you like using WPN-XM, consider supporting it:<br><a href=\"http://wpn-xm.org/#donate\">http://wpn-xm.org/#donate</a><br></td></tr>"
@@ -1342,10 +1342,9 @@ namespace ServerControlPanel
             DaemonsGridLayout->addWidget(labelStatus, rowCounter, 0);
 
             // Port
-            QLabel* labelPort = new QLabel();
+            LabelWithHoverTooltip* labelPort = new LabelWithHoverTooltip();
             labelPort->setObjectName(QString("label_"+server->name+"_Port"));
             labelPort->setText(getPort(server->lowercaseName));
-            labelPort->setAlignment(Qt::AlignCenter);
             labelPort->setFont(fontNotBold);
             DaemonsGridLayout->addWidget(labelPort, rowCounter, 1);
 

@@ -60,7 +60,9 @@ HEADERS += \
     src/version.h \
     src/app/main.h \
     src/tooltips/TrayTooltip.h \
+    src/tooltips/BalloonTip.h \
     src/tray.h \
+    src/tooltips/LabelWithHoverTooltip.h \
     src/mainwindow.h \
     src/hostmanager/host.h \
     src/hostmanager/hosttablemodel.h \
@@ -95,7 +97,9 @@ HEADERS += \
 SOURCES += \
     src/app/main.cpp \
     src/tooltips/TrayTooltip.cpp \
+    src/tooltips/BalloonTip.cpp \
     src/tray.cpp \
+    src/tooltips/LabelWithHoverTooltip.cpp \
     src/mainwindow.cpp \
     src/hostmanager/host.cpp \
     src/hostmanager/hosttablemodel.cpp \
@@ -126,6 +130,7 @@ SOURCES += \
     src/ini.cpp \
     src/processviewer/processes.cpp \
     src/processviewer/processviewerdialog.cpp
+
 
 
 RESOURCES += \

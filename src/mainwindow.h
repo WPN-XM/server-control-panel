@@ -13,6 +13,9 @@
 #include "updater/updaterdialog.h"
 #include "selfupdater.h"
 #include "processviewer/processes.h"
+#include "processviewer/processviewerdialog.h"
+#include "tooltips/BalloonTip.h"
+#include "tooltips/LabelWithHoverTooltip.h"
 
 namespace ServerControlPanel
 {
@@ -153,7 +156,7 @@ namespace ServerControlPanel
         protected:
             void closeEvent(QCloseEvent *event);
             void changeEvent(QEvent *event);
-            void showEvent(QShowEvent *ev);            
+            void showEvent(QShowEvent *event);
     };
 
 }
