@@ -15,12 +15,12 @@ class TipButton : public QPushButton
 {
         Q_OBJECT
     public:
-        /* The role determines the look-and-feel of the button. Not used for now... */
+        /* The role determines the look-and-feel of the button. */
         enum TipButtonRoles {
             Close,
-            Config
+            Config,
+            NoButton
         };
-
         Q_DECLARE_FLAGS( TipButtonRole, TipButtonRoles )
         Q_ENUMS( TipButtonRoles )
 
@@ -37,6 +37,10 @@ class TipButton : public QPushButton
 
         void paintEvent(QPaintEvent *)
         {
+            if(my_role == TipButton::NoButton) {
+                return;
+            }
+
             QPainter painter( this );
             painter.setRenderHint( QPainter::Antialiasing );
 

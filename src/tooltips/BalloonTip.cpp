@@ -10,32 +10,32 @@
 #include <QStyle>
 #include <QIcon>
 
-BalloonTip::BalloonTip( QStyle::StandardPixmap icon, QString title, QString text, int duration, QWidget* parent ) :
+BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text, int duration, QWidget* parent) :
     QWidget( parent )
 {
-    my_closeButton = new TipButton( TipButton::Close, this );
+    my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
     my_text = text;
     my_duration = duration;
-    my_icon = qApp->style()->standardIcon( icon ).pixmap( QSize( 15, 15 ) );
+    my_icon = qApp->style()->standardIcon(icon).pixmap(QSize(15, 15));
     init();
 }
 
-BalloonTip::BalloonTip( QPixmap icon, QString title, QString text, int duration, QWidget* parent ) :
+BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget* parent) :
     QWidget( parent )
 {
-    my_closeButton = new TipButton( TipButton::Close, this );
+    my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
     my_text = text;
     my_duration = duration;
-    my_icon = icon.scaled( QSize( 15, 15 ), Qt::KeepAspectRatio );
+    my_icon = icon.scaled(QSize(15, 15), Qt::KeepAspectRatio);
     init();
 }
 
-BalloonTip::BalloonTip( QString title, QString text, int duration, QWidget* parent ) :
+BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget* parent) :
     QWidget( parent )
 {
-    my_closeButton = new TipButton( TipButton::Close, this );
+    my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
     my_text = text;
     my_duration = duration;
@@ -44,8 +44,8 @@ BalloonTip::BalloonTip( QString title, QString text, int duration, QWidget* pare
 
 void BalloonTip::init()
 {
-    setWindowFlags( Qt::FramelessWindowHint | Qt::ToolTip );
-    setAttribute( Qt::WA_TranslucentBackground, true );
+    setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip);
+    setAttribute(Qt::WA_TranslucentBackground, true);
 
     createRects();
 
@@ -54,16 +54,17 @@ void BalloonTip::init()
 
     connect(my_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
+    // install event filter
     if ( parentWidget() != 0 ) {
-        parentWidget()->installEventFilter( this );
+        parentWidget()->installEventFilter(this);
         QWidget* w = parentWidget()->parentWidget();
         while ( w != 0  ) {
-            w->installEventFilter( this );
+            w->installEventFilter(this);
             w = w->parentWidget();
         }
     }
 
-    setFixedSize( my_popupRect.size() + QSize( 60, 60 ) );
+    setFixedSize(my_popupRect.size() + QSize(60, 60));
 }
 
 void BalloonTip::createRects()
@@ -166,7 +167,7 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/ )
     }
 
     path.addPolygon(arrowTriangle);
-    path.addRoundedRect(popupRect, 3, 3);
+    path.addRoundedRect(popupRect, 1, 1);
     path = path.simplified();
     painter.drawPath(path);
     painter.setPen(QColor(20, 20, 20));
@@ -256,13 +257,19 @@ bool BalloonTip::eventFilter(QObject *object, QEvent *event)
         return false;
     }
 
+    if (event->type() == QEvent::FocusOut || event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress)
+    {
+        qDebug() << Q_FUNC_INFO << this;
+        close();
+    }
+
     return false;
 }
 
-void BalloonTip::move( QPoint pos )
+void BalloonTip::move(QPoint pos)
 {
-    QWidget::move( pos );
-    switch( my_arrowPos )
+    QWidget::move(pos);
+    switch(my_arrowPos)
     {
         case BottomLeft :
             pos.setY(pos.y() - my_popupRect.height() - 60);
@@ -275,7 +282,7 @@ void BalloonTip::move( QPoint pos )
             pos.setX(pos.x() - my_popupRect.width() + 30);
             break;
         case LeftTop :
-            pos.setX(pos.x() + 8);
+            pos.setX(pos.x() + 10);
             pos.setY(pos.y() - my_popupRect.height() * 0.63);
             break;
     }
