@@ -54,17 +54,15 @@ namespace ServerControlPanel
 
         createActions();
 
-        //checkAlreadyActiveDaemons();
-
         showPushButtonsOnlyForInstalledTools();
 
         connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
         connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this, SLOT(updatePort(QString)));
 
-        // daemon autostart
-        if(settings->get("global/autostartdaemons").toBool()) {
-            qDebug() << "[Daemons] Autostart enabled";
-            autostartDaemons();
+        // server autostart
+        if(settings->get("global/autostartservers").toBool()) {
+            qDebug() << "[Servers] Autostart enabled";
+            autostartServers();
         };
 
         if(ui->centralWidget->findChild<QLabel*>("label_Nginx_Status")->isEnabled() &&
@@ -87,10 +85,10 @@ namespace ServerControlPanel
 
     MainWindow::~MainWindow()
     {
-        // stop all daemons, when quitting the tray application
-        if(settings->get("global/stopdaemonsonquit").toBool()) {
-            qDebug() << "[Daemons] Stopping All Daemons on Quit...";
-            stopAllDaemons();
+        // stop all servers, when quitting the tray application
+        if(settings->get("global/stopserversonquit").toBool()) {
+            qDebug() << "[Servers] Stopping All Servers on Quit...";
+            stopAllServers();
         }
 
         delete ui;
@@ -218,9 +216,9 @@ namespace ServerControlPanel
         QPushButton *buttonStopRedis =  ui->centralWidget->findChild<QPushButton*>("pushButton_Stop_Redis");
         if(buttonStopRedis != 0) { connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis())); }
 
-        // Connect Actions for Status Table - AllDaemons Start, Stop
-        connect(ui->pushButton_AllDaemons_Start, SIGNAL(clicked()), this, SLOT(startAllDaemons()));
-        connect(ui->pushButton_AllDaemons_Stop,  SIGNAL(clicked()), this, SLOT(stopAllDaemons()));
+        // Connect Actions for Status Table - AllServers Start, Stop
+        connect(ui->pushButton_AllServers_Start, SIGNAL(clicked()), this, SLOT(startAllServers()));
+        connect(ui->pushButton_AllServers_Stop,  SIGNAL(clicked()), this, SLOT(stopAllServers()));
 
         // PushButtons:: Website, Forum, Help, About, ReportBug, Donate
         connect(ui->pushButton_Website,   SIGNAL(clicked()), this, SLOT(goToWebsite()));
@@ -470,9 +468,9 @@ namespace ServerControlPanel
 
     void MainWindow::quitApplication()
     {
-        if(settings->get("global/stopdaemonsonquit").toBool()) {
-            qDebug() << "[Daemons] Stopping on Quit...\n";
-            stopAllDaemons();
+        if(settings->get("global/stopserversonquit").toBool()) {
+            qDebug() << "[Servers] Stopping on Quit...\n";
+            stopAllServers();
         }
         qApp->quit();
     }
@@ -656,7 +654,7 @@ namespace ServerControlPanel
     //*
     //* Action slots
     //*
-    void MainWindow::startAllDaemons()
+    void MainWindow::startAllServers()
     {
         servers->startNginx();
         servers->startPHP();
@@ -675,7 +673,7 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::stopAllDaemons()
+    void MainWindow::stopAllServers()
     {
         servers->stopMariaDb();
         servers->stopPHP();
@@ -949,9 +947,9 @@ namespace ServerControlPanel
         about.exec();
     }
 
-    void MainWindow::autostartDaemons()
+    void MainWindow::autostartServers()
     {
-        qDebug() << "[Daemons] Autostart...";
+        qDebug() << "[Servers] Autostarting...";
         if(settings->get("autostart/nginx").toBool()) servers->startNginx();
         if(settings->get("autostart/php").toBool()) servers->startPHP();
         if(settings->get("autostart/mariadb").toBool()) servers->startMariaDb();
@@ -982,178 +980,6 @@ namespace ServerControlPanel
         qDebug() << "Port check netstat -abno needs higher privileges" << strLines;
     }
 
-    void MainWindow::checkAlreadyActiveDaemons()
-    {
-        qDebug() << "[Processes Running] Check for already running processes.";
-
-        //checkPorts();
-
-        // Check active processes and report, if processes are already running.
-        // We do this to avoid collisions.
-        // A modal dialog with checkboxes for running processes is shown.
-        // The user might then select the processes to shutdown or continue.
-
-        // fetch processes via tasklist stdout
-        QProcess process;
-        process.setReadChannel(QProcess::StandardOutput);
-        process.setReadChannelMode(QProcess::MergedChannels);
-        process.start("cmd", QStringList() << "/c tasklist.exe");
-        process.waitForFinished();
-
-        // processList contains the tasklist output
-        QByteArray processList = process.readAll();
-        //qDebug() << "Read" << processList.length() << "bytes";
-        //qDebug() << processList;
-
-        // define processes to look for
-        QStringList processesToSearch;
-        processesToSearch << "nginx"
-                          << "apache"
-                          << "memcached"
-                          << "mysqld"
-                          << "spawn"
-                          << "php-cgi"
-                          << "mongod"
-                          << "postgres"
-                          << "redis-server";
-
-        // init a list for found processes
-        QStringList processesFoundList;
-
-        // foreach processesToSearch take a look in the processList
-        for (int i = 0; i < processesToSearch.size(); ++i)
-        {
-            //qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
-
-            if(processList.contains( processesToSearch.at(i).toLatin1().constData() ))
-            {
-                // process found
-                processesFoundList << processesToSearch.at(i).toLatin1().constData();
-            }
-        }
-
-        //qDebug() << "Already running Processes found : " << processesFoundList;
-
-        // only show the "process shutdown" dialog, when there are processes to shutdown
-        if(false == processesFoundList.isEmpty())
-        {
-            QLabel *labelA = new QLabel(tr("The following processes are already running:"));
-            QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
-            QVBoxLayout *vbox = new QVBoxLayout;
-
-            // iterate over proccesFoundList and draw a "process shutdown" checkbox for each one
-            int c = processesFoundList.size();
-            for(int i = 0; i < c; ++i) {
-               // create checkbox
-               QCheckBox *checkbox = new QCheckBox(processesFoundList.at(i));
-               checkbox->setChecked(true);
-               checkbox->setCheckable(true);
-               // add checkbox to view
-               vbox->addWidget(checkbox);
-            }
-
-            groupBox->setLayout(vbox);
-
-            QLabel *labelB = new QLabel(tr("Please select the processes you wish to shutdown.<br><br>"
-                                           "Click Shutdown to shut the selected processes down and continue using the server control panel.<br>"
-                                           "To proceed without shutting processes down, click Continue.<br>"));
-
-            QPushButton *ShutdownButton = new QPushButton(tr("Shutdown"));
-            QPushButton *ContinueButton = new QPushButton(tr("Continue"));
-            ShutdownButton->setDefault(true);
-
-            QDialogButtonBox *buttonBox = new QDialogButtonBox(Qt::Horizontal);
-            buttonBox->addButton(ShutdownButton, QDialogButtonBox::ActionRole);
-            buttonBox->addButton(ContinueButton, QDialogButtonBox::ActionRole);
-
-            // e) build dialog to inform user about running processes
-            QGridLayout *grid = new QGridLayout;
-            grid->addWidget(labelA);
-            grid->addWidget(groupBox);
-            grid->addWidget(labelB);
-            grid->addWidget(buttonBox);
-
-            QDialog *dlg = new QDialog(this);
-            dlg->setWindowModality(Qt::WindowModal);
-            dlg->setLayout(grid);
-            dlg->resize(250, 100);
-            dlg->setWindowTitle(tr(APP_NAME));
-            dlg->setWindowFlags(dlg->windowFlags() | Qt::WindowStaysOnTopHint);
-
-            // Set signal and slot for "Buttons"
-            connect(ShutdownButton, SIGNAL(clicked()), dlg, SLOT(accept()));
-            connect(ContinueButton, SIGNAL(clicked()), dlg, SLOT(reject()));
-
-            // show modal window
-            int dialogCode = dlg->exec();
-
-            // fire modal window event loop and wait for button clicks
-            // if shutdown was clicked (accept), execute shutdowns
-            // if continue was clicked (reject), do nothing and proceed to mainwindow
-            if(dialogCode == QDialog::Accepted)
-            {
-                // fetch all checkboxes
-                QList<QCheckBox *> allCheckBoxes = dlg->findChildren<QCheckBox *>();
-
-                // iterate checkbox values
-                c = allCheckBoxes.size();
-                for(int i = 0; i < c; ++i) {
-                   QCheckBox *cb = allCheckBoxes.at(i);
-                   if(cb->isChecked())
-                   {
-                       qDebug() << "[Process Shutdown]" << cb->text();
-
-                       // handle the PostgreSQL PID file deletion, too
-                       if(cb->text() == "postgres") {
-                           QString file = QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
-                           if(QFile().exists(file)) {
-                               QFile().remove(file);
-                           }
-                       }
-
-                       // taskkill parameters:
-                       // /f = force shutdown, /t = structure shutdown, /im = the name of the process
-                       // nginx and mariadb need a forced shutdown !
-                       QProcess process;
-                       process.start("cmd.exe", QStringList() <<"/c"<<"taskkill /f /t /im "+cb->text()+".exe");
-                       process.waitForFinished();
-                       qDebug() << "[Process Shutdown] Result:\n" << process.readAllStandardOutput();
-                   }
-                   delete cb;
-                }
-            }
-
-            // if continue was clicked (reject), do update status indicators in mainwindow and tray
-            if(dialogCode == QDialog::Rejected)
-            {
-                int c = processesFoundList.size();
-                for(int i = 0; i < c; ++i) {
-                    QString procname = processesFoundList.at(i);
-                    QString servername = this->servers->getCamelCasedServerName(procname).toLocal8Bit().constData();
-                    Servers::Server *server = this->servers->getServer(servername.toLocal8Bit().constData());
-                    qDebug() << "[Processes Running] The process" << procname << " has the Server" << server->name;
-
-                    if(server->name != "Not Installed") {
-                        // set indicator - main window
-                        setLabelStatusActive(servername, true);
-                        // set indicator - tray menu
-                        server->trayMenu->setIcon(QIcon(":/status_run"));
-                    }
-                }
-            }
-
-            delete vbox;
-            delete labelA;
-            delete labelB;
-            delete ShutdownButton;
-            delete ContinueButton;
-            delete buttonBox;
-            delete groupBox;
-            delete grid;
-            delete dlg;
-        }
-    }
-
     void MainWindow::setDefaultSettings()
     {
         // if the INI is not existing yet, set defaults, they will be written to file
@@ -1161,9 +987,9 @@ namespace ServerControlPanel
         if(false == QFile(settings->file()).exists()) {
 
             settings->set("global/runonstartup",               0);
-            settings->set("global/autostartdaemons",           0);
+            settings->set("global/autostartservers",           0);
             settings->set("global/startminimized",             0);
-            settings->set("global/stopdaemonsonquit",          1);
+            settings->set("global/stopserversonquit",          1);
             settings->set("global/clearlogsonstart",           0);
             settings->set("global/donotaskagainclosetotray",   0);
             settings->set("global/onstartallopenwebinterface", 0);
@@ -1231,25 +1057,25 @@ namespace ServerControlPanel
         QFont fontNotBold = font1;
         fontNotBold.setBold(false);
 
-        QGroupBox *DaemonStatusGroupBox = new QGroupBox(ui->centralWidget);
-        DaemonStatusGroupBox->setObjectName(QStringLiteral("DaemonStatusGroupBox"));
-        DaemonStatusGroupBox->setEnabled(true);
-        DaemonStatusGroupBox->setGeometry(QRect(10, 70, 471, 121));
-        DaemonStatusGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
-        DaemonStatusGroupBox->setMinimumSize(QSize(471, 121)); // 3 server rows added
-        DaemonStatusGroupBox->setBaseSize(QSize(471, 121));
-        DaemonStatusGroupBox->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
-        DaemonStatusGroupBox->setFlat(false);
+        QGroupBox *ServerStatusGroupBox = new QGroupBox(ui->centralWidget);
+        ServerStatusGroupBox->setObjectName(QStringLiteral("ServerStatusGroupBox"));
+        ServerStatusGroupBox->setEnabled(true);
+        ServerStatusGroupBox->setGeometry(QRect(10, 70, 471, 121));
+        ServerStatusGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
+        ServerStatusGroupBox->setMinimumSize(QSize(471, 121)); // 3 server rows added
+        ServerStatusGroupBox->setBaseSize(QSize(471, 121));
+        ServerStatusGroupBox->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        ServerStatusGroupBox->setFlat(false);
 
-        QGridLayout *DaemonsGridLayout = new QGridLayout(DaemonStatusGroupBox);
-        DaemonsGridLayout->setSpacing(10);
-        DaemonsGridLayout->setObjectName(QStringLiteral("DaemonsGridLayout"));
-        //DaemonsGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
+        QGridLayout *ServersGridLayout = new QGridLayout(ServerStatusGroupBox);
+        ServersGridLayout->setSpacing(10);
+        ServersGridLayout->setObjectName(QStringLiteral("ServersGridLayout"));
+        //ServersGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
         /**
-         * The DaemonsGrid has the following columns:
+         * The ServersGrid has the following columns:
          *
-         * Status | Port | Daemon | Version | Config | Logs (2) | Actions (2)
+         * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
          */
 
         QLabel* label_Status = new QLabel();
@@ -1257,49 +1083,49 @@ namespace ServerControlPanel
         label_Status->setAlignment(Qt::AlignCenter);
         label_Status->setFont(font1);
         label_Status->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Status, 1, 0);
+        ServersGridLayout->addWidget(label_Status, 1, 0);
 
         QLabel* label_Port = new QLabel();
         label_Port->setText(QApplication::translate("MainWindow", "Port", 0));
         label_Port->setAlignment(Qt::AlignCenter);
         label_Port->setFont(font1);
         label_Port->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Port, 1, 1);
+        ServersGridLayout->addWidget(label_Port, 1, 1);
 
-        QLabel* label_Daemon = new QLabel();
-        label_Daemon->setText(QApplication::translate("MainWindow", "Daemon", 0));
-        label_Daemon->setAlignment(Qt::AlignCenter);
-        label_Daemon->setFont(font1);
-        label_Daemon->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Daemon, 1, 2);
+        QLabel* label_Server = new QLabel();
+        label_Server->setText(QApplication::translate("MainWindow", "Server", 0));
+        label_Server->setAlignment(Qt::AlignCenter);
+        label_Server->setFont(font1);
+        label_Server->setEnabled(false);
+        ServersGridLayout->addWidget(label_Server, 1, 2);
 
         QLabel* label_Version = new QLabel();
         label_Version->setText(QApplication::translate("MainWindow", "Version", 0));
         label_Version->setAlignment(Qt::AlignCenter);
         label_Version->setFont(font1);
         label_Version->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Version, 1, 3);
+        ServersGridLayout->addWidget(label_Version, 1, 3);
 
         QLabel* label_Config = new QLabel();
         label_Config->setText(QApplication::translate("MainWindow", "Config", 0));
         label_Config->setAlignment(Qt::AlignCenter);
         label_Config->setFont(font1);
         label_Config->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Config, 1, 4, 1, 2); // two columns (gear and gear-pencil)
+        ServersGridLayout->addWidget(label_Config, 1, 4, 1, 2); // two columns (gear and gear-pencil)
 
         QLabel* label_Logs = new QLabel();
         label_Logs->setText(QApplication::translate("MainWindow", "Logs", 0));
         label_Logs->setAlignment(Qt::AlignCenter);
         label_Logs->setFont(font1);
         label_Logs->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Logs, 1, 6, 1, 2); // two columns (log and log-warning)
+        ServersGridLayout->addWidget(label_Logs, 1, 6, 1, 2); // two columns (log and log-warning)
 
         QLabel* label_Actions = new QLabel();
         label_Actions->setText(QApplication::translate("MainWindow", "Actions", 0));
         label_Actions->setAlignment(Qt::AlignCenter);
         label_Actions->setFont(font1);
         label_Actions->setEnabled(false);
-        DaemonsGridLayout->addWidget(label_Actions, 1, 8, 1, 2); // two columns
+        ServersGridLayout->addWidget(label_Actions, 1, 8, 1, 2); // two columns
 
         /**
          * Define Icons
@@ -1330,7 +1156,7 @@ namespace ServerControlPanel
             /**
              * Columns:
              *
-             * Status | Port | Daemon | Version | Config | Logs (2) | Actions (2)
+             * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
              */
 
             // Status
@@ -1339,22 +1165,22 @@ namespace ServerControlPanel
             labelStatus->setPixmap(QPixmap(QString::fromUtf8(":/status_run_big")));
             labelStatus->setAlignment(Qt::AlignCenter);
             labelStatus->setEnabled(false); // inital state of status leds is disabled
-            DaemonsGridLayout->addWidget(labelStatus, rowCounter, 0);
+            ServersGridLayout->addWidget(labelStatus, rowCounter, 0);
 
             // Port
             LabelWithHoverTooltip* labelPort = new LabelWithHoverTooltip();
             labelPort->setObjectName(QString("label_"+server->name+"_Port"));
             labelPort->setText(getPort(server->lowercaseName));
             labelPort->setFont(fontNotBold);
-            DaemonsGridLayout->addWidget(labelPort, rowCounter, 1);
+            ServersGridLayout->addWidget(labelPort, rowCounter, 1);
 
-            // Daemon
-            QLabel* labelDaemon = new QLabel();
-            labelDaemon->setObjectName(QString("label_" + server->name + "_Name"));
-            labelDaemon->setAlignment(Qt::AlignCenter);
-            labelDaemon->setText(QApplication::translate("MainWindow",
+            // Server
+            QLabel* labelServer = new QLabel();
+            labelServer->setObjectName(QString("label_" + server->name + "_Name"));
+            labelServer->setAlignment(Qt::AlignCenter);
+            labelServer->setText(QApplication::translate("MainWindow",
                 "<span style=\" font-family:'MS Shell Dlg 2'; font-size: 14px; font-weight: bold;\">" + server->name.toLocal8Bit() + "</span><", 0));
-            DaemonsGridLayout->addWidget(labelDaemon, rowCounter, 2);
+            ServersGridLayout->addWidget(labelServer, rowCounter, 2);
 
             // Version
             QLabel* labelVersion = new QLabel();
@@ -1362,7 +1188,7 @@ namespace ServerControlPanel
             labelVersion->setAlignment(Qt::AlignCenter);
             labelVersion->setText(getVersion(server->lowercaseName));
             labelVersion->setFont(fontNotBold);
-            DaemonsGridLayout->addWidget(labelVersion, rowCounter, 3);
+            ServersGridLayout->addWidget(labelVersion, rowCounter, 3);
 
             // Config
 
@@ -1376,7 +1202,7 @@ namespace ServerControlPanel
                 pushButton_Configure->setToolTip(QApplication::translate(
                     "MainWindow", "Open the Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
                 );
-                DaemonsGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
+                ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
                 // Configuration via Editor
                 QPushButton* pushButton_ConfigureEdit = new QPushButton();
@@ -1386,7 +1212,7 @@ namespace ServerControlPanel
                 pushButton_ConfigureEdit->setToolTip(QApplication::translate(
                     "MainWindow", "Edit "+ server->name.toLocal8Bit() +" config file", 0)
                 );
-                DaemonsGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
+                ServersGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
 
                 connect(pushButton_ConfigureEdit, SIGNAL(clicked()), this, SLOT(openConfigurationInEditor()));
             }
@@ -1405,7 +1231,7 @@ namespace ServerControlPanel
                         pushButton_ShowLog->setToolTip(QApplication::translate(
                             "MainWindow", "Open "+ server->name.toLocal8Bit() +" Log", 0)
                         );
-                        DaemonsGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
+                        ServersGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
 
                         connect(pushButton_ShowLog, SIGNAL(clicked()), this, SLOT(openLog()));
                     }
@@ -1420,7 +1246,7 @@ namespace ServerControlPanel
                         pushButton_ShowErrorLog->setToolTip(QApplication::translate(
                             "MainWindow", "Open "+ server->name.toLocal8Bit() +" Error Log", 0)
                         );
-                        DaemonsGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
+                        ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
                         connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));
                     }
@@ -1436,7 +1262,7 @@ namespace ServerControlPanel
             pushButton_Stop->setToolTip(QApplication::translate(
                 "MainWindow", "Stop "+ server->name.toLocal8Bit() +"", 0)
             );
-            DaemonsGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
+            ServersGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
 
             QPushButton* pushButton_Start = new QPushButton();
             pushButton_Start->setObjectName(QString("pushButton_Start_"+ server->name +""));
@@ -1445,14 +1271,14 @@ namespace ServerControlPanel
             pushButton_Start->setToolTip(QApplication::translate(
                 "MainWindow", "Start "+ server->name.toLocal8Bit() +"", 0)
             );
-            DaemonsGridLayout->addWidget(pushButton_Start, rowCounter, 9);
+            ServersGridLayout->addWidget(pushButton_Start, rowCounter, 9);
 
             rowCounter++;
         }
 
         /**
-         * The DaemonsGridLayout size depends on the number of installed Components.
-         * The BottomWidget has to move down (y + height of DaemonsGridLayout + margin)
+         * The ServersGridLayout size depends on the number of installed Components.
+         * The BottomWidget has to move down (y + height of ServersGridLayout + margin)
          * The RightSideWidget moves up, if there are only 3-4 elements,
          * the "Webinterface" PushButton will be on par with the Labels.
          * If there are more then 4 elements, the "console" PushButton
@@ -1463,19 +1289,19 @@ namespace ServerControlPanel
         // now we need to adjust the size of the widgets to fit its contents.
         // in other words: let's update all size/geometry data,
         // before we do additional calculations and start moving things around.
-        DaemonStatusGroupBox->adjustSize();
+        ServerStatusGroupBox->adjustSize();
 
         // 1) get rectangle of the status panel
-        QRect DaemonsBox = DaemonStatusGroupBox->geometry();
+        QRect ServersBox = ServerStatusGroupBox->geometry();
         // 2) get bottom Y of status panel (bottom = top edge Y + height + 1)
-        int DaemonsBoxBottomY = DaemonsBox.bottom() + 5;
+        int ServersBoxBottomY = ServersBox.bottom() + 5;
 
-        /*qDebug() << DaemonStatusGroupBox->frameGeometry();
-        qDebug() << DaemonStatusGroupBox->geometry().x();
-        qDebug() << DaemonStatusGroupBox->geometry().y();
-        qDebug() << DaemonStatusGroupBox->geometry().height();
-        qDebug() << DaemonStatusGroupBox->geometry().bottom();
-        qDebug() << DaemonsBoxBottomY;
+        /*qDebug() << ServerStatusGroupBox->frameGeometry();
+        qDebug() << ServerStatusGroupBox->geometry().x();
+        qDebug() << ServerStatusGroupBox->geometry().y();
+        qDebug() << ServerStatusGroupBox->geometry().height();
+        qDebug() << ServerStatusGroupBox->geometry().bottom();
+        qDebug() << ServersBoxBottomY;
 
         qDebug() << ui->BottomWidget->frameGeometry();
         qDebug() << ui->ToolsGroupBox->contentsRect();*/
@@ -1483,10 +1309,10 @@ namespace ServerControlPanel
         QRect BottomWidget = ui->BottomWidget->frameGeometry();
 
         // 3) re-position bottom widget
-        ui->BottomWidget->move(QPoint(BottomWidget.x(), DaemonsBoxBottomY));
+        ui->BottomWidget->move(QPoint(BottomWidget.x(), ServersBoxBottomY));
 
         // 4) finally, re-size the window accordingly
-        this->setFixedHeight(DaemonsBoxBottomY + BottomWidget.height() + 10);
+        this->setFixedHeight(ServersBoxBottomY + BottomWidget.height() + 10);
     }
 
     QString MainWindow::getVersion(QString server)

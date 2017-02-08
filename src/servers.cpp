@@ -214,7 +214,7 @@ namespace Servers
         emit signalMainWindow_updateVersion("Nginx");
         emit signalMainWindow_updatePort("Nginx");
 
-        // http://wiki.nginx.org/CommandLine - start daemon
+        // http://wiki.nginx.org/CommandLine - start Nginx
         QString const startNginx = getServer("Nginx")->exe
                 + " -p " + QDir::currentPath() +
                 + " -c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
@@ -232,7 +232,7 @@ namespace Servers
             return;
         }
 
-        // http://wiki.nginx.org/CommandLine - stop daemon
+        // http://wiki.nginx.org/CommandLine - stop nginx
         QString const stopNginx = getServer("Nginx")->exe
                 + " -p " + QDir::currentPath()
                 + " -c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf"
@@ -286,7 +286,6 @@ namespace Servers
         emit signalMainWindow_updateVersion("PostgreSQL");
         emit signalMainWindow_updatePort("PostgreSQL");
 
-        // start daemon
         QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")
                 + " --pgdata " + QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data")
                 + " --log " + QDir::toNativeSeparators(QDir::currentPath() + "/logs/postgresql.log")
@@ -484,19 +483,18 @@ namespace Servers
         QProcess *process = getProcess("PHP");
 
         /**
-         * There are two ways to kill the PHP daemon:
+         * There are two ways to kill the PHP server:
          * 1) processPhp->terminate();
          *    This will fail, because the WM_CLOSE message is not handled.
          * 2) By killing the process with kill(). So we are crashing it!
          *
-         * But before we kill/crash the PHP daemon intentionally, we need to disconnect
+         * But before we kill/crash the PHP server intentionally, we need to disconnect
          * the QProcess Error Monitoring (signal/sender from method/receiver),
          * else a "Process Crashed" Error MessageBox would appear.
          */
         disconnect(process, SIGNAL(error(QProcess::ProcessError)),
                    this, SLOT(showProcessError(QProcess::ProcessError)));
 
-        // kill PHP daemon
         process->kill();
         process->waitForFinished(2000);
     }

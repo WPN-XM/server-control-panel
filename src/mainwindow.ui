@@ -806,7 +806,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="AllDaemonsStartStopGroupBox">
+    <widget class="QGroupBox" name="AllServersStartStopGroupBox">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -816,7 +816,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>All Daemons</string>
+      <string>All Servers</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -824,7 +824,7 @@
      <property name="flat">
       <bool>false</bool>
      </property>
-     <widget class="QPushButton" name="pushButton_AllDaemons_Start">
+     <widget class="QPushButton" name="pushButton_AllServers_Start">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -1388,7 +1388,7 @@ QPushButton:pressed
        <string notr="true">Start</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_AllDaemons_Stop">
+     <widget class="QPushButton" name="pushButton_AllServers_Stop">
       <property name="enabled">
        <bool>true</bool>
       </property>
@@ -1958,8 +1958,8 @@ QPushButton:pressed
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
-  <tabstop>pushButton_AllDaemons_Start</tabstop>
-  <tabstop>pushButton_AllDaemons_Stop</tabstop>
+  <tabstop>pushButton_AllServers_Start</tabstop>
+  <tabstop>pushButton_AllServers_Stop</tabstop>
   <tabstop>pushButton_Console</tabstop>
   <tabstop>pushButton_Configuration</tabstop>
   <tabstop>pushButton_Close</tabstop>

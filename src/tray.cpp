@@ -47,9 +47,9 @@ namespace ServerControlPanel
         }
         trayMenu->addSeparator();
 
-        // start and stop all daemons; the connection to these actions is made from mainwindow
-        trayMenu->addAction(QIcon(":/action_run"), tr("Start All"), this, SLOT(startAllDaemons()), QKeySequence());
-        trayMenu->addAction(QIcon(":/action_stop"), tr("Stop All"), this, SLOT(stopAllDaemons()), QKeySequence());
+        // start and stop all servers; the connection to these actions is made from mainwindow
+        trayMenu->addAction(QIcon(":/action_run"), tr("Start All"), this, SLOT(startAllServers()), QKeySequence());
+        trayMenu->addAction(QIcon(":/action_stop"), tr("Stop All"), this, SLOT(stopAllServers()), QKeySequence());
         trayMenu->addSeparator();
 
         // add all server submenus to the tray menu
@@ -84,7 +84,7 @@ namespace ServerControlPanel
         QDesktopServices::openUrl(QUrl("http://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
     }
 
-    void Tray::startAllDaemons()
+    void Tray::startAllServers()
     {
         servers->startNginx();
         servers->startPHP();
@@ -95,7 +95,7 @@ namespace ServerControlPanel
         servers->startRedis();
     }
 
-    void Tray::stopAllDaemons()
+    void Tray::stopAllServers()
     {
         servers->stopMariaDb();
         servers->stopPHP();

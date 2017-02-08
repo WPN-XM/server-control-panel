@@ -54,8 +54,8 @@ namespace ServerControlPanel
         public slots:
 
             // General Action Slots of the MainWindow
-            void startAllDaemons();
-            void stopAllDaemons();
+            void startAllServers();
+            void stopAllServers();
 
             void goToWebsite();
             void goToForum();
@@ -121,13 +121,12 @@ namespace ServerControlPanel
             QAction *restoreAction;
             QAction *quitAction;
 
-            void checkAlreadyActiveDaemons();
             void checkPorts();
             void createActions();
             void createTrayIcon();
 
             void setDefaultSettings();
-            void autostartDaemons();
+            void autostartServers();
 
             void renderServerStatusPanel();
 

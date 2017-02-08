@@ -67,7 +67,7 @@ namespace Servers
             // Status Action Slots
             void updateProcessStates(QProcess::ProcessState state);
 
-            // slot action handling the clicks on daemon commands in the tray menu
+            // This slot action handles clicks on server commands in the tray menu.
             void mapAction(QAction *action);
 
             // Nginx Action Slots

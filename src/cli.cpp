@@ -23,24 +23,24 @@ namespace ServerControlPanel
         parser.addOption(versionOption);
 
         // -s, --service
-        // TODO: install / uninstall daemon as service from CLI (part1)
-        //QCommandLineOption serviceOption(QStringList() << "s" << "service", "Install/Uninstall daemon as service.", "[daemon] [command]");
+        // TODO: install / uninstall server as service from CLI (part1)
+        //QCommandLineOption serviceOption(QStringList() << "s" << "service", "Install/Uninstall server as service.", "[server] [command]");
         //parser.addOption(serviceOption);
 
-        // -d, --daemon
-        QCommandLineOption daemonOption(QStringList() << "d" << "daemon", "Execute a command on daemon.", "[daemon] [command]");
-        parser.addOption(daemonOption);
+        // -srv, --server
+        QCommandLineOption serverOption(QStringList() << "srv" << "server", "Execute a command on server.", "[server] [command]");
+        parser.addOption(serverOption);
 
         // --start
-        QCommandLineOption startOption("start", "Starts a daemon.", "[daemon/s]");
+        QCommandLineOption startOption("start", "Starts a server.", "[server/s]");
         parser.addOption(startOption);
 
         // --stop
-        QCommandLineOption stopOption("stop", "Stops a daemon.", "[daemon/s]");
+        QCommandLineOption stopOption("stop", "Stops a server.", "[server/s]");
         parser.addOption(stopOption);
 
         // --restart
-        QCommandLineOption restartOption("stop", "Restarts a daemon.", "[daemon/s]");
+        QCommandLineOption restartOption("stop", "Restarts a server.", "[server/s]");
         parser.addOption(restartOption);
 
         /**
@@ -63,31 +63,31 @@ namespace ServerControlPanel
             exit(0);
         }
 
-        // -s, --service <daemon> <command>, where <command> is on|off
+        // -s, --service <server> <command>, where <command> is on|off
         //if (parser.isSet(serviceOption)) {
-            // TODO: install / uninstall daemon as service from CLI (part2)
+            // TODO: install / uninstall server as service from CLI (part2)
             // https://github.com/WPN-XM/WPN-XM/issues/39
         //}
 
-        // -d, --daemon <daemon> <command>, where <command> is start|stop|restart
-        if (parser.isSet(daemonOption)) {
+        // -d, --server <server> <command>, where <command> is start|stop|restart
+        if (parser.isSet(serverOption)) {
 
-            // at this point we already have "--daemon <daemon>", but not <command>//
+            // at this point we already have "--server <server>", but not <command>//
 
-            // daemon is the value
-            QString daemon = parser.value(daemonOption);
+            // server is the value
+            QString server = parser.value(serverOption);
 
-            if(daemon.isEmpty()) {
-                printHelpText(QString("Error: no <daemon> specified."));
+            if(server.isEmpty()) {
+                printHelpText(QString("Error: no <server> specified."));
             }
 
             Servers::Servers *servers = new Servers::Servers();
 
-            // check if daemon is whitelisted
-            if(!servers->getListOfServerNames().contains(daemon)) {
+            // check if server is whitelisted
+            if(!servers->getListOfServerNames().contains(server)) {
                 printHelpText(
-                    QString("Error: \"%1\" is not a valid <daemon>.")
-                        .arg(daemon.toLocal8Bit().constData())
+                    QString("Error: \"%1\" is not a valid <server>.")
+                        .arg(server.toLocal8Bit().constData())
                 );
             }
 
@@ -103,7 +103,7 @@ namespace ServerControlPanel
                 );
             }
 
-            QString methodName = command + servers->getCamelCasedServerName(daemon);
+            QString methodName = command + servers->getCamelCasedServerName(server);
 
             if(QMetaObject::invokeMethod(servers, methodName.toLocal8Bit().constData()))
             {
@@ -111,25 +111,25 @@ namespace ServerControlPanel
             }
 
             printHelpText(
-               QString("Command not handled, yet! (daemon = %1) (command = %2) \n")
-                  .arg(daemon.toLocal8Bit().constData(), command.toLocal8Bit().constData())
+               QString("Command not handled, yet! (server = %1) (command = %2) \n")
+                  .arg(server.toLocal8Bit().constData(), command.toLocal8Bit().constData())
             );
             exit(0);
         }
 
-        // --start <daemons>
+        // --start <servers>
         if (parser.isSet(startOption)) {
-            execDaemons("start", startOption, args, parser);
+            execServers("start", startOption, args, parser);
         }
 
-        // --stop <daemons>
+        // --stop <servers>
         if (parser.isSet(stopOption)) {
-            execDaemons("stop", stopOption, args, parser);
+            execServers("stop", stopOption, args, parser);
         }
 
-        // --restart <daemons>
+        // --restart <servers>
         if (parser.isSet(restartOption)) {
-            execDaemons("stop", restartOption, args, parser);
+            execServers("stop", restartOption, args, parser);
         }
 
         //if(parser.unknownOptionNames().count() > 1) {
@@ -138,44 +138,43 @@ namespace ServerControlPanel
     }
 
     /**
-     * @brief execDaemons - executes "command" on multiple daemons
+     * @brief execServers - executes "command" on multiple Servers
      * @param command "start", "stop", "restart"
      * @param clioption
      * @param args
      */
-    void CLI::execDaemons(const QString &command, QCommandLineOption &clioption, QStringList args, QCommandLineParser &parser)
+    void CLI::execServers(const QString &command, QCommandLineOption &clioption, QStringList args, QCommandLineParser &parser)
     {
-        // the value of the key "--start|--stop|--restart" is the first daemon
-        QString daemon = parser.value(clioption);
+        // the value of the key "--start|--stop|--restart" is the first server
+        QString server = parser.value(clioption);
 
-        if(daemon.isEmpty()) {
-            printHelpText(QString("Error: no <daemon> specified."));
+        if(server.isEmpty()) {
+            printHelpText(QString("Error: no <server> specified."));
         }
 
-        // ok, add first daemon to the list
-        QStringList daemons;
-        daemons << daemon;
+        // add first server to the list
+        QStringList serversList;
+        serversList << server;
 
         // add the others args
         if(!args.isEmpty()) {
-            daemons << args;
+            serversList << args;
         }
 
         Servers::Servers *servers = new Servers::Servers();
 
-        for (int i = 0; i < daemons.size(); ++i)
+        for (int i = 0; i < serversList.size(); ++i)
         {
-            QString daemon = daemons.at(i);
+            QString server = serversList.at(i);
 
-            // check if daemon is whitelisted
-            if(!servers->getListOfServerNames().contains(daemon)) {
+            // check if whitelisted
+            if(!servers->getListOfServerNames().contains(server)) {
                 printHelpText(
-                    QString("Error: \"%1\" is not a valid <daemon>.")
-                            .arg(daemon.toLocal8Bit().constData())
+                    QString("Error: \"%1\" is not a valid <server>.").arg(server.toLocal8Bit().constData())
                 );
             }
 
-            QString methodName = command + servers->getCamelCasedServerName(daemon);
+            QString methodName = command + servers->getCamelCasedServerName(server);
 
             QMetaObject::invokeMethod(servers, methodName.toLocal8Bit().constData());
         }
@@ -202,21 +201,21 @@ namespace ServerControlPanel
         QString options =
             "  -v, --version                        Prints the version. \n"
             "  -h, --help                           Prints this help message. \n"
-            "  -d, --daemon <daemon> <command>      Executes <command> on <daemon>. \n"
-            "      --start <daemons>                Starts one or more <daemons>. \n"
-            "      --stop <daemons>                 Stops one or more <daemons>. \n"
-            "      --restart <daemons>              Restarts one or more <daemons>. \n\n";
+            "  -d, --server <server> <command>      Executes <command> on <server>. \n"
+            "      --start <servers>                Starts one or more <servers>. \n"
+            "      --stop <servers>                 Stops one or more <servers>. \n"
+            "      --restart <servers>              Restarts one or more <servers>. \n\n";
         colorPrint(options);
 
         colorPrint("Arguments: \n", "green");
         QString arguments =
-            "  <daemon>:  The name of a daemon, e.g. nginx, mariadb, memcached, mongodb. \n"
+            "  <server>:  The name of a server, e.g. nginx, mariadb, memcached, mongodb. \n"
             "  <command>: The command to execute, e.g. start, stop, restart. \n\n";
         colorPrint(arguments);
 
         colorPrint("Examples: \n", "green");
         QString example =
-                "  " + QCoreApplication::arguments().at(0) + " --daemon nginx start \n"
+                "  " + QCoreApplication::arguments().at(0) + " --server nginx start \n"
                 "  " + QCoreApplication::arguments().at(0) + " --start nginx php mariadb \n\n";
         colorPrint(example);
 

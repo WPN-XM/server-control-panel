@@ -108,11 +108,13 @@ int main(int argc, char * argv[])
         if(processes->areThereAlreadyRunningProcesses()) {
             splash.hide();
             //displayShutdownAlreadyRunningProcessesOrContinueDialog
-            ProcessViewerDialog *pvd = new ProcessViewerDialog();
+            AlreadyRunningProcessesDialog *arpd = new AlreadyRunningProcessesDialog();
+            arpd->checkAlreadyRunningServers(processes);
+            /*ProcessViewerDialog *pvd = new ProcessViewerDialog();
             pvd->setWindowTitle("Process Viewer - Already Running Processes");
             pvd->setChecked_ShowOnlyWpnxmProcesses();
             pvd->setProcessesInstance(processes);
-            pvd->exec();
+            pvd->exec();*/
             splash.show();
         }        
     app.processEvents();

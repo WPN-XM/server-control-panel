@@ -24,9 +24,9 @@ namespace Configuration
 
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
-        toggleAutostartDaemonCheckboxes(ui->checkbox_autostartDaemons->isChecked());
-        connect(ui->checkbox_autostartDaemons, SIGNAL(clicked(bool)),
-                this, SLOT(toggleAutostartDaemonCheckboxes(bool)));
+        toggleAutostartServerCheckboxes(ui->checkbox_autostartServers->isChecked());
+        connect(ui->checkbox_autostartServers, SIGNAL(clicked(bool)),
+                this, SLOT(toggleAutostartServerCheckboxes(bool)));
 
         // load initial data for pages
         loadNginxUpstreams();
@@ -100,7 +100,7 @@ namespace Configuration
         // read settings from INI and prefill config dialog items with default values
 
         ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
-        ui->checkbox_autostartDaemons->setChecked(settings->get("global/autostartdaemons", false).toBool());
+        ui->checkbox_autostartServers->setChecked(settings->get("global/autostartservers", false).toBool());
         ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
 
         ui->checkbox_autostart_PHP->setChecked(settings->get("autostart/php", true).toBool());
@@ -112,7 +112,7 @@ namespace Configuration
         ui->checkbox_autostart_Redis->setChecked(settings->get("autostart/redis", false).toBool());
 
         ui->checkbox_clearLogsOnStart->setChecked(settings->get("global/clearlogsonstart", false).toBool());
-        ui->checkbox_stopDaemonsOnQuit->setChecked(settings->get("global/stopdaemonsonquit", false).toBool());
+        ui->checkbox_stopServersOnQuit->setChecked(settings->get("global/stopServersonquit", false).toBool());
 
         ui->checkbox_onStartAllMinimize->setChecked(settings->get("global/onstartallminimize", false).toBool());
         ui->checkbox_onStartAllOpenWebinterface->setChecked(settings->get("global/onstartallopenwebinterface", false).toBool());
@@ -202,10 +202,10 @@ namespace Configuration
 
         settings->set("global/runonstartup",      int(ui->checkbox_runOnStartUp->isChecked()));
         settings->set("global/startminimized",    int(ui->checkbox_startMinimized->isChecked()));
-        settings->set("global/autostartdaemons",  int(ui->checkbox_autostartDaemons->isChecked()));
+        settings->set("global/autostartservers",  int(ui->checkbox_autostartServers->isChecked()));
 
         settings->set("global/clearlogsonstart",  int(ui->checkbox_clearLogsOnStart->isChecked()));
-        settings->set("global/stopdaemonsonquit", int(ui->checkbox_stopDaemonsOnQuit->isChecked()));
+        settings->set("global/stopserversonquit", int(ui->checkbox_stopServersOnQuit->isChecked()));
 
         settings->set("global/onstartallminimize",         int(ui->checkbox_onStartAllMinimize->isChecked()));
         settings->set("global/onstartallopenwebinterface", int(ui->checkbox_onStartAllOpenWebinterface->isChecked()));
@@ -618,30 +618,30 @@ namespace Configuration
         ui->checkbox_runOnStartUp->setChecked(run);
     }
 
-    bool ConfigurationDialog::runAutostartDaemons() const
+    bool ConfigurationDialog::runAutostartServers() const
     {
-        return (ui->checkbox_autostartDaemons->checkState() == Qt::Checked);
+        return (ui->checkbox_autostartServers->checkState() == Qt::Checked);
     }
 
-    void ConfigurationDialog::setAutostartDaemons(bool run)
+    void ConfigurationDialog::setAutostartServers(bool run)
     {
-        ui->checkbox_autostartDaemons->setChecked(run);
+        ui->checkbox_autostartServers->setChecked(run);
     }
 
-    void ConfigurationDialog::toggleAutostartDaemonCheckboxes(bool run)
+    void ConfigurationDialog::toggleAutostartServerCheckboxes(bool run)
     {
         // Note: layout doesn't "inject" itself in the parent-child tree, so findChildren() doesn't work
 
         // left box
-        for (int i = 0; i < ui->autostartDaemonsFormLayout->count(); ++i)
+        for (int i = 0; i < ui->autostartServersFormLayout->count(); ++i)
         {
-          ui->autostartDaemonsFormLayout->itemAt(i)->widget()->setEnabled(run);
+          ui->autostartServersFormLayout->itemAt(i)->widget()->setEnabled(run);
         }
 
         // right box
-        for (int i = 0; i < ui->autostartDaemonsFormLayout2->count(); ++i)
+        for (int i = 0; i < ui->autostartServersFormLayout2->count(); ++i)
         {
-          ui->autostartDaemonsFormLayout2->itemAt(i)->widget()->setEnabled(run);
+          ui->autostartServersFormLayout2->itemAt(i)->widget()->setEnabled(run);
         }
     }
 
@@ -681,14 +681,14 @@ namespace Configuration
         ui->checkbox_clearLogsOnStart->setChecked(run);
     }
 
-    bool ConfigurationDialog::stopDaemonsOnQuit() const
+    bool ConfigurationDialog::stopServersOnQuit() const
     {
-        return (ui->checkbox_stopDaemonsOnQuit->checkState() == Qt::Checked);
+        return (ui->checkbox_stopServersOnQuit->checkState() == Qt::Checked);
     }
 
-    void ConfigurationDialog::setStopDaemonsOnQuit(bool run)
+    void ConfigurationDialog::setStopServersOnQuit(bool run)
     {
-        ui->checkbox_stopDaemonsOnQuit->setChecked(run);
+        ui->checkbox_stopServersOnQuit->setChecked(run);
     }
 
     void ConfigurationDialog::toggleRunOnStartup()
@@ -737,11 +737,11 @@ namespace Configuration
         ui->tableWidget_Nginx_Upstreams->clearContents();
         ui->tableWidget_Nginx_Upstreams->model()->removeRows(0, ui->tableWidget_Nginx_Upstreams->rowCount());
 
-        // insert default data: "php_upstream_pool $request_uri consistent"
+        // insert default data: "php_upstream_pool ip_hash"
         int row = ui->tableWidget_Nginx_Upstreams->rowCount();
         ui->tableWidget_Nginx_Upstreams->insertRow(row);
         ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem("php_upstream_pool"));
-        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem("$request_uri consistent"));
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem("ip_hash;"));
         ui->tableWidget_Nginx_Upstreams->resizeColumnToContents(0);
     }
 

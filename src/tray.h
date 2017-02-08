@@ -28,8 +28,8 @@ namespace ServerControlPanel
     /// Implements a tray menu with icons.
     /*!
         This class creates a tray menu with icons.
-        The tray menu and the main window might be used to control the daemons.
-        Daemon processes are monitored and their process state is displayed.
+        The tray menu and the mainwindow might be used to control the servers.
+        Servers processes are monitored and their process state is displayed in the server status panel.
     */
     class Tray : public QSystemTrayIcon
     {
@@ -44,8 +44,8 @@ namespace ServerControlPanel
             void hideTooltip();
 
         public slots:
-            void startAllDaemons();
-            void stopAllDaemons();
+            void startAllServers();
+            void stopAllServers();
             void goToWebsiteHelp();
             void goToReportIssue();
             void goToWebinterface();

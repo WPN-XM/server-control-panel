@@ -8,7 +8,8 @@
 #include "../cli.h"
 
 #include "../processviewer/processes.h"
-#include "../processviewer/processviewerdialog.h"
+//#include "../processviewer/processviewerdialog.h"
+#include "../processviewer/AlreadyRunningProcessesDialog.h"
 
 #include <QtWidgets>
 #include <QtCore>

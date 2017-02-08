@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -222,9 +222,9 @@
          </widget>
         </item>
         <item row="2" column="0" alignment="Qt::AlignVCenter">
-         <widget class="QCheckBox" name="checkbox_autostartDaemons">
+         <widget class="QCheckBox" name="checkbox_autostartServers">
           <property name="text">
-           <string>Start these daemons, when starting WPN-XM SCP:</string>
+           <string>Start these Servers, when starting WPN-XM SCP:</string>
           </property>
          </widget>
         </item>
@@ -249,7 +249,7 @@
          <height>91</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="autostartDaemonsFormLayout">
+       <layout class="QFormLayout" name="autostartServersFormLayout">
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
         </property>
@@ -315,12 +315,12 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="1" column="0" alignment="Qt::AlignVCenter">
-         <widget class="QCheckBox" name="checkbox_stopDaemonsOnQuit">
+         <widget class="QCheckBox" name="checkbox_stopServersOnQuit">
           <property name="enabled">
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Stop all daemons on Quit?</string>
+           <string>Stop all servers on Quit?</string>
           </property>
          </widget>
         </item>
@@ -330,7 +330,7 @@
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Clear daemon logs, everytime daemon starts?</string>
+           <string>Clear server logs, everytime server starts?</string>
           </property>
          </widget>
         </item>
@@ -359,9 +359,9 @@
          </layout>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="LabelAfterAllDaemonsStart">
+         <widget class="QLabel" name="LabelAfterAllServersStart">
           <property name="text">
-           <string>After &quot;All Daemons - Start&quot; was pressed:</string>
+           <string>After &quot;All Servers - Start&quot; was clicked:</string>
           </property>
          </widget>
         </item>
@@ -481,7 +481,7 @@
          <height>91</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="autostartDaemonsFormLayout2">
+       <layout class="QFormLayout" name="autostartServersFormLayout2">
         <property name="fieldGrowthPolicy">
          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
         </property>
@@ -2156,7 +2156,7 @@
  <tabstops>
   <tabstop>checkbox_runOnStartUp</tabstop>
   <tabstop>checkbox_startMinimized</tabstop>
-  <tabstop>checkbox_autostartDaemons</tabstop>
+  <tabstop>checkbox_autostartServers</tabstop>
   <tabstop>checkbox_autostart_PHP</tabstop>
   <tabstop>checkbox_autostart_Nginx</tabstop>
   <tabstop>checkbox_autostart_MariaDb</tabstop>
@@ -2165,7 +2165,7 @@
   <tabstop>checkbox_autostart_Postgresql</tabstop>
   <tabstop>checkbox_autostart_Redis</tabstop>
   <tabstop>checkbox_clearLogsOnStart</tabstop>
-  <tabstop>checkbox_stopDaemonsOnQuit</tabstop>
+  <tabstop>checkbox_stopServersOnQuit</tabstop>
   <tabstop>checkbox_onStartAllMinimize</tabstop>
   <tabstop>checkbox_onStartAllOpenWebinterface</tabstop>
   <tabstop>lineEdit_SelectedEditor</tabstop>
