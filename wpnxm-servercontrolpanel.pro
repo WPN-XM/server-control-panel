@@ -59,6 +59,7 @@ QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 HEADERS += \
     src/version.h \
     src/app/main.h \
+    src/processviewer/AlreadyRunningProcessesDialog.h \
     src/tooltips/TrayTooltip.h \
     src/tooltips/BalloonTip.h \
     src/tray.h \
@@ -96,6 +97,7 @@ HEADERS += \
 
 SOURCES += \
     src/app/main.cpp \
+    src/processviewer/AlreadyRunningProcessesDialog.cpp \
     src/tooltips/TrayTooltip.cpp \
     src/tooltips/BalloonTip.cpp \
     src/tray.cpp \
