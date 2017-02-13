@@ -2,7 +2,6 @@ WPN-XM Server Control Panel
 ===========================
 
 [![Build status](https://ci.appveyor.com/api/projects/status/sil30bww9uj6x7id/branch/master?svg=true)](https://ci.appveyor.com/project/jakoch/server-control-panel/branch/master)
-[![Build Status](https://travis-ci.org/WPN-XM/server-control-panel.svg)](https://travis-ci.org/WPN-XM/server-control-panel) [![license](https://img.shields.io/github/license/wpn-xm/server-control-panel.svg?maxAge=2592000)]()
 [![Twitter Follow](https://img.shields.io/twitter/follow/wpnxm.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/wpnxm)
 
 The WPN-XM Server Control Panel is written in Qt v5.2+.
