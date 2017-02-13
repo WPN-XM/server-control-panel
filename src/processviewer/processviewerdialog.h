@@ -38,8 +38,6 @@ class ProcessViewerDialog : public QDialog
         void renderProcesses();
         void refreshProcesses();
 
-        bool killProcess(quint64 pid);
-
         QList<PidAndPort> getPorts();
 
         enum Columns {

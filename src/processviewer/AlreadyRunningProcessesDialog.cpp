@@ -8,60 +8,32 @@ AlreadyRunningProcessesDialog::AlreadyRunningProcessesDialog(QWidget *parent) :
 
 }
 
+/*
+ * Check active processes and report, if processes are already running.
+ * We do this to avoid collisions.
+ * A modal dialog with checkboxes for running processes is shown.
+ * The user can select the processes to shutdown or continue.
+ */
 void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *processes)
 {
     qDebug() << "[Processes Running] Check for already running processes.";
 
-    // Check active processes and report, if processes are already running.
-    // We do this to avoid collisions.
-    // A modal dialog with checkboxes for running processes is shown.
-    // The user might then select the processes to shutdown or continue.
-
-    QList<Process> processList = processes->getRunningProcesses();
-
-    // define processes to look for
-    QStringList processesToSearch;
-    processesToSearch << "nginx"
-                      << "apache"
-                      << "memcached"
-                      << "mysqld"
-                      << "spawn"
-                      << "php-cgi"
-                      << "mongod"
-                      << "postgres"
-                      << "redis-server";
-
-    // init a list for found processes
-    QStringList processesFoundList;
-
-    // foreach processesToSearch take a look in the processList
-    for (int i = 0; i < processesToSearch.size(); ++i)
-    {
-        //qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
-
-        foreach(Process process, processList)
-        {
-            if((process.name).contains(processesToSearch.at(i).toLatin1().constData())) {
-                // process found
-                processesFoundList << processesToSearch.at(i).toLatin1().constData();
-            }
-        }
-    }
-
-    //qDebug() << "Already running Processes found : " << processesFoundList;
+    //qDebug() << "Already running Processes found : " << processes->getMonitoredProcessesList();
 
     // only show the "process shutdown" dialog, when there are processes to shutdown
-    if(false == processesFoundList.isEmpty())
+    if(processes->areThereAlreadyRunningProcesses())
     {
-        QLabel *labelA = new QLabel(tr("The following processes are already running:"));
+        QLabel *labelA  = new QLabel(tr("The following processes are already running:"));
         QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
         QVBoxLayout *vbox = new QVBoxLayout;
 
+        QList<Process> runningProcessesList = processes->getMonitoredProcessesList();
+
         // iterate over proccesFoundList and draw a "process shutdown" checkbox for each one
-        int c = processesFoundList.size();
-        for(int i = 0; i < c; ++i) {
+        foreach(Process p, runningProcessesList)
+        {
            // create checkbox
-           QCheckBox *checkbox = new QCheckBox(processesFoundList.at(i));
+           QCheckBox *checkbox = new QCheckBox(p.name);
            checkbox->setChecked(true);
            checkbox->setCheckable(true);
            // add checkbox to view
@@ -112,7 +84,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
             QList<QCheckBox *> allCheckBoxes = dlg->findChildren<QCheckBox *>();
 
             // iterate checkbox values
-            c = allCheckBoxes.size();
+            int c = allCheckBoxes.size();
             for(int i = 0; i < c; ++i) {
                QCheckBox *cb = allCheckBoxes.at(i);
                if(cb->isChecked())
@@ -131,31 +103,21 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
                    // /f = force shutdown, /t = structure shutdown, /im = the name of the process
                    // nginx and mariadb need a forced shutdown !
                    QProcess process;
-                   process.start("cmd.exe", QStringList() <<"/c"<<"taskkill /f /t /im "+cb->text()+".exe");
+                   process.start("cmd.exe", QStringList() <<"/c"<<"taskkill /f /t /im "+cb->text());
                    process.waitForFinished();
                    qDebug() << "[Process Shutdown] Result:\n" << process.readAllStandardOutput();
                }
                delete cb;
             }
+
+            // refresh the internal list of processes
+            processes->refresh();
         }
 
         // if continue was clicked (reject), do update status indicators in mainwindow and tray
         /*if(dialogCode == QDialog::Rejected)
         {
-            int c = processesFoundList.size();
-            for(int i = 0; i < c; ++i) {
-                QString procname = processesFoundList.at(i);
-                QString servername = this->servers->getCamelCasedServerName(procname).toLocal8Bit().constData();
-                Servers::Server *server = this->servers->getServer(servername.toLocal8Bit().constData());
-                qDebug() << "[Processes Running] The process" << procname << " has the Server" << server->name;
-
-                if(server->name != "Not Installed") {
-                    // set indicator - main window
-                    setLabelStatusActive(servername, true);
-                    // set indicator - tray menu
-                    server->trayMenu->setIcon(QIcon(":/status_run"));
-                }
-            }
+            emit signalUpdateServerStatusIndicators();
         }*/
 
         delete vbox;

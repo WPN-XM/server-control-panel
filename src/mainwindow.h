@@ -150,7 +150,9 @@ namespace ServerControlPanel
             void MainWindow_ShowEvent();
 
             void show_SelfUpdater_UpdateNotification(QJsonObject versionInfo);
-            void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);           
+            void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);
+
+            void updateServerStatusIndicators();
 
         protected:
             void closeEvent(QCloseEvent *event);

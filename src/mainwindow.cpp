@@ -46,11 +46,13 @@ namespace ServerControlPanel
 
     void MainWindow::setup()
     {
-        this->servers = new Servers::Servers();
+        servers = new Servers::Servers();
 
         createTrayIcon();
 
         renderServerStatusPanel();
+
+        updateServerStatusIndicators();
 
         createActions();
 
@@ -108,6 +110,26 @@ namespace ServerControlPanel
     Processes* MainWindow::getProcessesObject()
     {
         return processes;
+    }
+
+    void MainWindow::updateServerStatusIndicators()
+    {
+        foreach(Process process, processes->getMonitoredProcessesList())
+        {
+            QString processName = process.name.section(".",0,0);
+
+            QString serverName  = servers->getCamelCasedServerName(processName);
+
+            Servers::Server *server = servers->getServer(serverName);
+
+            qDebug() << "[Processes Running][updateServerStatusIndicators] The process" << processName << "has the Server" << server->name;
+
+            // set indicators on main window and tray menu
+            if(server->name != "Not Installed") {
+                setLabelStatusActive(serverName, true);
+                server->trayMenu->setIcon(QIcon(":/status_run"));
+            }
+        }        
     }
 
     void MainWindow::runSelfUpdate()

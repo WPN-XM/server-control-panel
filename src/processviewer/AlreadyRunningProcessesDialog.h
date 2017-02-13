@@ -23,7 +23,9 @@ class AlreadyRunningProcessesDialog : public QDialog
 
     public:
         AlreadyRunningProcessesDialog(QWidget *parent = false);
-        void checkAlreadyRunningServers(Processes *vprocesses);
+        void checkAlreadyRunningServers(Processes *processes);
+    /*signals:
+        void signalUpdateServerStatusIndicators();*/
 };
 
 #endif // ALREADYRUNNINGPROCESSESDIALOG_H

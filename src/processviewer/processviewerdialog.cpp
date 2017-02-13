@@ -195,16 +195,11 @@ void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process)
 void ProcessViewerDialog::on_pushButton_KillProcess_released()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
-    quint64 pid = item->text(1).toLong();
-    if(killProcess(pid)) {
+    qint64 pid = item->text(1).toLong();
+    if(Processes::killProcess(pid)) {
         QObject().thread()->usleep(1000*1000*0.5); // 0,5sec
         refreshProcesses();
     }
-}
-
-bool ProcessViewerDialog::killProcess(quint64 pid)
-{
-    return Processes::killProcess(pid);
 }
 
 void ProcessViewerDialog::on_checkBox_filterExcludeWindowsProcesses_stateChanged(int state)

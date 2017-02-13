@@ -45,7 +45,7 @@ class Processes : public QObject
         static QList<PidAndPort> getPortsList();
         static QList<Process> getMonitoredProcessesList();
 
-        static bool killProcess(quint64 pid);
+        static bool killProcess(qint64 pid);
         static bool killProcess(const QString &name);
 
         static Process find(const QString &name);
@@ -55,7 +55,22 @@ class Processes : public QObject
 
         static bool areThereAlreadyRunningProcesses();
 
-        static void refresh();
+        static void refresh();       
+
+        enum ProcessState {
+            NotRunning,
+            Starting,
+            Running
+        };
+        Q_ENUM(ProcessState)
+
+        ProcessState getProcessState(QString processName) const;
+
+        static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory = QString());
+        static bool startDetached(const QString &program, const QStringList &arguments);
+        static bool startDetached(const QString &command);
+
+        static void delay(int millisecondsToWait);
 
     private:
         // constructor is private, because singleton
@@ -69,10 +84,7 @@ class Processes : public QObject
 
         static QStringList getProcessNamesToSearchFor();
 
-    signals:
-
-    public slots:
-
+        static QString qt_create_commandline(const QString &program, const QStringList &arguments);
 };
 
 #endif // PROCESSES_H

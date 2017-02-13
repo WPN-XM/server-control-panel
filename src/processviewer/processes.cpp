@@ -1,7 +1,8 @@
 #include "processes.h"
-#include <QApplication>
 
+#include <QApplication>
 #include <QDebug>
+#include <QTime>
 
 // initialize static members
 Processes *Processes::theInstance = NULL;
@@ -58,11 +59,11 @@ Process Processes::find(const QString &name)
         if (p.pid < 0) {            
             continue; // if negative pid
         }
-        if (p.name != name && p.name != name + ".exe") {
-            continue; // if executable name doesn't match
+        if (name.contains(p.name)) { // || name == p.name || name + ".exe" == p.name
+            return p; // if executable name matches
         }
-        return p;
     }
+    p.name = "process not found";
     return p;
 }
 
@@ -75,6 +76,7 @@ QStringList Processes::getProcessNamesToSearchFor()
                       << "memcached"
                       << "mysqld"
                       << "spawn"
+                      << "php-cgi-spawner"
                       << "php-cgi"
                       << "mongod"
                       << "postgres"
@@ -85,7 +87,7 @@ QStringList Processes::getProcessNamesToSearchFor()
 
 bool Processes::areThereAlreadyRunningProcesses()
 {
-    qDebug() << "[Processes] Check for already running processes.";
+    qDebug() << "[Processes]" << "Check for already running processes.";
 
     QStringList processesToSearch = getProcessNamesToSearchFor();
 
@@ -101,7 +103,6 @@ bool Processes::areThereAlreadyRunningProcesses()
         }
     }
 
-    // only show the "process shutdown" dialog, when there are processes to shutdown
     return (!monitoredProcessesList.isEmpty());
 }
 
@@ -227,12 +228,20 @@ QList<PidAndPort> Processes::getPorts()
     return ports;
 }
 
+Processes::ProcessState Processes::getProcessState(QString processName) const
+{
+    processesList = getRunningProcesses();
+    Process p = find(processName);
+    qDebug() << "[Processes] Getting Process State for " << processName << ".\n[Processes] Found Process?\t" << p.name;
+    return (p.name == "process not found") ? ProcessState::NotRunning : ProcessState::Running;
+}
+
 // static
-bool Processes::killProcess(quint64 pid)
+bool Processes::killProcess(qint64 pid)
 {
     //qDebug() << "going to kill process by pid:" << pid;
     HANDLE hProcess;
-    hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
+    hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, DWORD(pid));
     if(hProcess){
         TerminateProcess(hProcess, 0);
         CloseHandle(hProcess);
@@ -268,4 +277,78 @@ QString Processes::getSizeHumanReadable(float bytes)
          bytes /= 1024.0;
      }
      return QString::fromLatin1("%1 %2").arg(bytes, 3, 'f', 1).arg(unit);
+}
+
+// needed for Processes::startDetached.
+// can be removed, when we compile with Qt5.8 where startDetached() is fixed. whenever that happens.
+QString Processes::qt_create_commandline(const QString &program, const QStringList &arguments)
+{
+    QString cmd;
+
+    cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
+
+    for (int i=0; i<arguments.size(); ++i) {
+        cmd += QLatin1Char(' ') + arguments.at(i);
+    }
+
+    return cmd;
+}
+
+// can be removed, when we compile with Qt5.8 where startDetached() is fixed.
+bool Processes::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
+{
+    bool success = false;
+
+    static const DWORD errorElevationRequired = 740;
+
+    PROCESS_INFORMATION pinfo;
+
+    // the goal is to create a new process, which is able to survive, if the parent (wpn-xm.exe) is killed
+    // we need DETACHED_PROCESS or CREATE_NEW_PROCESS_GROUP for this.
+
+    // changed to parent-> runs cmd.exe with no window -> runs child -> parent kills cmd.exe (child gets parentless)
+
+    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+
+    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
+                                 (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                                 (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                               };    
+
+    qDebug() << program, arguments;
+
+    QString args = qt_create_commandline(program, arguments);
+
+    qDebug() << "[startDetached] Create new process using command: " << args;
+
+    success = CreateProcess(0, (wchar_t*)args.utf16(),
+                            0, 0, FALSE, dwCreationFlags, 0,
+                            workingDir.isEmpty() ? 0 : (wchar_t*)workingDir.utf16(),
+                            &startupInfo, &pinfo);
+
+    if (success) {
+        CloseHandle(pinfo.hThread);
+        CloseHandle(pinfo.hProcess);
+
+        delay(1000);
+
+        // kill child: cmd.exe, so that it's child gets independent/parentless
+        killProcess(pinfo.dwProcessId);
+
+    } else if (GetLastError() == errorElevationRequired) {
+        qDebug() << "[startDetached] errorElevationRequired";
+        success = false;
+    }
+
+    return success;
+}
+
+void Processes::delay(int millisecondsToWait)
+{
+    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
+    while( QTime::currentTime() < dieTime )
+    {
+        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+    }
 }

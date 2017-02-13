@@ -6,7 +6,6 @@
 #include <QDir>
 #include <QProcess>
 #include <QTimer>
-#include <QTime>
 #include <QProcess>
 #include <QMenu>
 
@@ -16,6 +15,7 @@
 #include "settings.h"
 #include "json.h"
 #include "filehandling.h"
+#include "src/processviewer/processes.h"
 
 namespace Servers
 {
@@ -33,7 +33,6 @@ namespace Servers
             QString exe;
 
             QMenu *trayMenu;
-            QProcess *process;
     };
 
     class Servers : public QObject
@@ -42,30 +41,28 @@ namespace Servers
 
         public:
             Servers(QObject *parent = 0);
+            Servers(Processes *processes, QObject *parent = 0);
 
+            Processes *processes;
             Settings::SettingsManager *settings;
 
             QList<Server*> servers() const;
             QStringList getListOfServerNames() const;
             QStringList getListOfServerNamesInstalled();
             QString getCamelCasedServerName(QString &serverName) const;
-            Server *getServer(const char *serverName) const;
-            QProcess *getProcess(const char *serverName) const;
-            QProcess::ProcessState getProcessState(const char *serverName) const;
+            Server *getServer(const QString &serverName) const;
             QString getExecutable(QString &serverName) const;
 
             QStringList getLogFiles(QString &serverName) const;
 
             void clearLogFile(const QString &serverName) const;
 
-            void delay(int millisecondsToWait) const;
-
         public slots:
 
-            void showProcessError(QProcess::ProcessError error);
+            //void showProcessError(Processes::ProcessError error);
 
             // Status Action Slots
-            void updateProcessStates(QProcess::ProcessState state);
+            //void updateProcessStates(Processes::ProcessState state);
 
             // This slot action handles clicks on server commands in the tray menu.
             void mapAction(QAction *action);
@@ -117,6 +114,8 @@ namespace Servers
             QString getProcessErrorMessage(QProcess::ProcessError);
 
             QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
+
+
 
     };
 
