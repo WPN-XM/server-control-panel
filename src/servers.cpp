@@ -489,8 +489,18 @@ namespace Servers
         //disconnect(process, SIGNAL(error(QProcess::ProcessError)),
         //           this, SLOT(showProcessError(QProcess::ProcessError)));
 
-        processes->killProcess("php-cgi.exe");
-        processes->killProcess("spawner.exe");
+        // WARNING! The order is important.
+        // The spawner needs to be killed before we are trying to kill PHP childs.
+
+        while(processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
+            processes->killProcess("spawn.exe");
+            processes->delay(50);
+        }
+
+        while(processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running) {
+            processes->killProcess("php-cgi.exe");
+            processes->delay(50);
+        }
 
         emit signalMainWindow_ServerStatusChange("PHP", false);
     }
