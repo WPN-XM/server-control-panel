@@ -311,10 +311,6 @@ namespace Servers
 
         qDebug() << "[PostgreSQL] Stopping...";
 
-        // disconnect process monitoring, before crashing the process
-        //disconnect(getProcess("PostgreSQL"), SIGNAL(error(QProcess::ProcessError)),
-                  // this, SLOT(showProcessError(QProcess::ProcessError)));
-
         QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
         QStringList args;
@@ -486,8 +482,6 @@ namespace Servers
          * the QProcess Error-Monitoring (signal/sender from method/receiver),
          * else a "Process Crashed" Error MessageBox would appear.
          */
-        //disconnect(process, SIGNAL(error(QProcess::ProcessError)),
-        //           this, SLOT(showProcessError(QProcess::ProcessError)));
 
         // WARNING! The order is important.
         // The spawner needs to be killed before we are trying to kill PHP childs.
@@ -561,10 +555,6 @@ namespace Servers
                 + " shutdown";
 
         QProcess *process = new QProcess();
-
-        // disconnect process monitoring, before crashing the process
-        //disconnect(process, SIGNAL(error(QProcess::ProcessError)),
-        //           this, SLOT(showProcessError(QProcess::ProcessError)));
 
         process->execute(stopCommand);
         process->waitForFinished(2000);
@@ -657,10 +647,6 @@ namespace Servers
 
         qDebug() << "[MongoDb] Stopping...\n" << mongoStopCommand << args;
 
-        // disconnect process monitoring before sending shutdown
-        //disconnect(getProcess("MongoDb"), SIGNAL(error(QProcess::ProcessError)),
-        //               this, SLOT(showProcessError(QProcess::ProcessError)));
-
         Processes::startDetached(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", false);
@@ -725,10 +711,6 @@ namespace Servers
         }
 
         QProcess *process = new QProcess();
-
-        // disconnect process monitoring, before crashing the process
-        disconnect(process, SIGNAL(error(QProcess::ProcessError)),
-                   this, SLOT(showProcessError(QProcess::ProcessError)));
 
         qDebug() << "[Memcached] Stopping...\n";
 
@@ -809,46 +791,6 @@ namespace Servers
     {
         stopRedis();
         startRedis();
-    }
-
-    /*
-     * Process Error Slot
-     */
-    /*void Servers::showProcessError(QProcess::ProcessError error)
-    {
-        QString name = sender()->objectName();
-        QString title = qApp->applicationName() + " - " + name + " Error";
-        QString msg =  name + " Error. " + getProcessErrorMessage(error);
-
-        QMessageBox::warning(0, title, msg);
-    }*/
-
-    QString Servers::getProcessErrorMessage(QProcess::ProcessError error)
-    {
-        QString ret = " <br/> ";
-
-        switch(error){
-            case QProcess::FailedToStart:
-                ret = "The process failed to start. <br/> Either the invoked program is missing, or you may have insufficient permissions to invoke the program.";
-                break;
-            case QProcess::Crashed:
-                ret = "The process crashed some time after starting successfully.";
-                break;
-            case QProcess::Timedout:
-                ret = "The process timed out.";
-                break;
-            case QProcess::WriteError:
-                ret = "An error occurred when attempting to write to the process. <br/> For example, the process may not be running, or it may have closed its input channel.";
-                break;
-            case QProcess::ReadError:
-                ret = "An error occurred when attempting to read from the process. <br/> For example, the process may not be running.";
-                break;
-            case QProcess::UnknownError:
-                ret = "An unknown error occurred.";
-                break;
-        }
-
-        return ret;
     }
 
     /*

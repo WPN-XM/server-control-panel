@@ -59,8 +59,6 @@ namespace Servers
 
         public slots:
 
-            //void showProcessError(Processes::ProcessError error);
-
             // Status Action Slots
             //void updateProcessStates(Processes::ProcessState state);
 
@@ -111,7 +109,6 @@ namespace Servers
 
         private:
             QList<Server*> serverList;
-            QString getProcessErrorMessage(QProcess::ProcessError);
 
             QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
 
