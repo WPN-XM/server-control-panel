@@ -113,7 +113,9 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updateServerStatusIndicators()
-    {
+    {        
+        processes->refresh();
+
         foreach(Process process, processes->getMonitoredProcessesList())
         {
             QString processName = process.name.section(".",0,0);
