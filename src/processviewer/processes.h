@@ -48,7 +48,8 @@ class Processes : public QObject
         static bool killProcess(qint64 pid);
         static bool killProcess(const QString &name);
 
-        static Process find(const QString &name);
+        static Process findByName(const QString &name);
+        static Process findByPid(const QString &pid);
 
         static QList<Process> getRunningProcesses();
         static QList<PidAndPort> getPorts();
@@ -64,7 +65,7 @@ class Processes : public QObject
         };
         Q_ENUM(ProcessState)
 
-        ProcessState getProcessState(QString processName) const;
+        ProcessState getProcessState(const QString &processName) const;
 
         static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory = QString());
         static bool startDetached(const QString &program, const QStringList &arguments);

@@ -34,6 +34,8 @@ Processes::Processes()
 
 QList<Process> Processes::getProcessesList()
 {
+    refresh();
+
     return processesList;
 }
 QList<PidAndPort> Processes::getPortsList()
@@ -51,16 +53,28 @@ void Processes::refresh()
     portsList     = getPorts();
 }
 
-Process Processes::find(const QString &name)
+Process Processes::findByName(const QString &name)
 {
     Process p;
     foreach(p, getProcessesList())
     {
-        if (p.pid < 0) {            
+        if (p.pid < 0) {
             continue; // if negative pid
         }
         if (name.contains(p.name)) { // || name == p.name || name + ".exe" == p.name
             return p; // if executable name matches
+        }
+    }
+    p.name = "process not found";
+    return p;
+}
+
+Process Processes::findByPid(const QString &pid)
+{
+    Process p;
+    foreach(p, getProcessesList()) {
+        if (p.pid == pid) {
+            return p;
         }
     }
     p.name = "process not found";
@@ -228,10 +242,9 @@ QList<PidAndPort> Processes::getPorts()
     return ports;
 }
 
-Processes::ProcessState Processes::getProcessState(QString processName) const
+Processes::ProcessState Processes::getProcessState(const QString &processName) const
 {
-    processesList = getRunningProcesses();
-    Process p = find(processName);
+    Process p = findByName(processName);
     qDebug() << "[Processes] Getting Process State for " << processName << ".\n[Processes] Found Process?\t" << p.name;
     return (p.name == "process not found") ? ProcessState::NotRunning : ProcessState::Running;
 }
@@ -240,26 +253,40 @@ Processes::ProcessState Processes::getProcessState(QString processName) const
 bool Processes::killProcess(qint64 pid)
 {
     //qDebug() << "going to kill process by pid:" << pid;
+
     HANDLE hProcess;
-    hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, DWORD(pid));
-    if(hProcess){
-        TerminateProcess(hProcess, 0);
-        CloseHandle(hProcess);
-        return true;
+
+    hProcess = OpenProcess(PROCESS_ALL_ACCESS | PROCESS_TERMINATE, FALSE, DWORD(pid));
+
+    if (hProcess == NULL){
+        qDebug() << "OpenProcess() failed, ecode:" << GetLastError();
+        return false;
     }
-    return false;
+
+    qDebug() << "terminating process with pid:" << pid;
+
+    BOOL result = TerminateProcess(hProcess, 0); // 137 = SIGKILL
+
+    CloseHandle(hProcess);
+
+    if (result == 0){
+        //qDebug() << "Error. Could not TerminateProcess with pid:" << pid;
+        return false;
+    }
+
+    return true;
 }
 
 // static
 bool Processes::killProcess(const QString &name)
 {
     //qDebug() << "going to kill process by name:" << name;
-    Process p = find(name);
+    Process p = findByName(name);
     if (p.pid < 0) {
-        //qDebug() << "could not find Process for process name: " << name;
         return false;
     }
-    return killProcess(p.pid);
+    qint64 pid = p.pid.toLong();
+    return killProcess(pid);
 }
 
 // static
