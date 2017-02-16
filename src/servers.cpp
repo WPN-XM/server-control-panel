@@ -269,7 +269,8 @@ namespace Servers
         }
 
         // already running
-        if(QFile().exists(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid")) {
+        if(processes->getProcessState("postgres.exe") == Processes::ProcessState::Running) {
+        //if(QFile().exists(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid")) {
             QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
             return;
         }
@@ -287,7 +288,7 @@ namespace Servers
 
         qDebug() << "[PostgreSQL] Starting...\n" << startCmd;
 
-        Processes::startDetached(startCmd, args, getServer("PostgreSQL")->workingDirectory);
+        Processes::start(startCmd, args, getServer("PostgreSQL")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("PostgreSQL", true);
     }    
@@ -304,8 +305,9 @@ namespace Servers
 
         // if not running, skip
         QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
-        if(!QFile().exists(file)) {
-            qDebug() << "[PostgreSQL] Not running.. Skipping stop command. (NO PID file found.)";
+        if(processes->getProcessState("postgres.exe") == Processes::ProcessState::NotRunning) {
+        //if(!QFile().exists(file)) {
+            qDebug() << "[PostgreSQL] Not running.. Skipping stop command.";
             server->trayMenu->setIcon(QIcon(":/status_stop"));
             emit signalMainWindow_ServerStatusChange("postgresql", false);
             return;
@@ -324,8 +326,11 @@ namespace Servers
 
         Processes::start(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
 
+        Processes::delay(1250); // delay PID file check, PostgreSQL must shutdown first
+
         // do we have a failed shutdown? if so, delete PID file, to allow a restart
         if(QFile().exists(file)) {
+            qDebug() << "[PostgreSQL] PID file exists. Removing PID file to allow a restart.";
             QFile().remove(file);
         }
 
