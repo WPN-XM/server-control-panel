@@ -346,7 +346,7 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
         cmd += QLatin1Char(' ') + arguments.at(i);
     }
 
-    qDebug() << "[startDetached] Create new process using command: " << cmd;
+    qDebug() << "[startDetached] Running command:" << cmd;
 
     success = CreateProcess(0, (wchar_t*)cmd.utf16(),
                             0, 0, FALSE, dwCreationFlags, 0,
@@ -392,7 +392,7 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
         cmd += QLatin1Char(' ') + arguments.at(i);
     }
 
-    qDebug() << "[start] Create new process using command: " << cmd;
+    qDebug() << "[start] Running command:" << cmd;
 
     success = CreateProcess(0, (wchar_t*)cmd.utf16(),
                             0, 0, FALSE, dwCreationFlags, 0,
