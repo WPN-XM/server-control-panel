@@ -67,7 +67,11 @@ class Processes : public QObject
 
         ProcessState getProcessState(const QString &processName) const;
 
-        static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory = QString());
+        static bool start(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
+        static bool start(const QString &program, const QStringList &arguments);
+        static bool start(const QString &command);
+
+        static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
         static bool startDetached(const QString &program, const QStringList &arguments);
         static bool startDetached(const QString &command);
 

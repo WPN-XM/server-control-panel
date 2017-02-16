@@ -252,7 +252,7 @@ Processes::ProcessState Processes::getProcessState(const QString &processName) c
 // static
 bool Processes::killProcess(qint64 pid)
 {
-    //qDebug() << "going to kill process by pid:" << pid;
+    qDebug() << "going to kill process by pid:" << pid;
 
     HANDLE hProcess;
 
@@ -262,8 +262,6 @@ bool Processes::killProcess(qint64 pid)
         qDebug() << "OpenProcess() failed, ecode:" << GetLastError();
         return false;
     }
-
-    qDebug() << "terminating process with pid:" << pid;
 
     BOOL result = TerminateProcess(hProcess, 0); // 137 = SIGKILL
 
@@ -325,9 +323,7 @@ QString Processes::qt_create_commandline(const QString &program, const QStringLi
 bool Processes::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
 {
     bool success = false;
-
     static const DWORD errorElevationRequired = 740;
-
     PROCESS_INFORMATION pinfo;
 
     // the goal is to create a new process, which is able to survive, if the parent (wpn-xm.exe) is killed
@@ -336,20 +332,23 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
     // changed to parent-> runs cmd.exe with no window -> runs child -> parent kills cmd.exe (child gets parentless)
 
     DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
-
     STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
                                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
                                  (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
                                  0, 0, 0, 0, 0, 0, 0, 0, 0, 0
                                };    
 
-    qDebug() << program, arguments;
+    //qDebug() << program, arguments;
 
-    QString args = qt_create_commandline(program, arguments);
+    QString cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
 
-    qDebug() << "[startDetached] Create new process using command: " << args;
+    for (int i=0; i<arguments.size(); ++i) {
+        cmd += QLatin1Char(' ') + arguments.at(i);
+    }
 
-    success = CreateProcess(0, (wchar_t*)args.utf16(),
+    qDebug() << "[startDetached] Create new process using command: " << cmd;
+
+    success = CreateProcess(0, (wchar_t*)cmd.utf16(),
                             0, 0, FALSE, dwCreationFlags, 0,
                             workingDir.isEmpty() ? 0 : (wchar_t*)workingDir.utf16(),
                             &startupInfo, &pinfo);
@@ -358,13 +357,54 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
         CloseHandle(pinfo.hThread);
         CloseHandle(pinfo.hProcess);
 
-        delay(1000);
-
-        // kill child: cmd.exe, so that it's child gets independent/parentless
-        killProcess(pinfo.dwProcessId);
+        // if we have a cmd.exe parent, kill it, so that it's child gets independent/parentless
+        if(cmd.contains("cmd.exe")) {
+            delay(500);
+            killProcess(pinfo.dwProcessId);
+        }
 
     } else if (GetLastError() == errorElevationRequired) {
         qDebug() << "[startDetached] errorElevationRequired";
+        success = false;
+    }
+
+    return success;
+}
+
+bool Processes::start(const QString &program, const QStringList &arguments, const QString &workingDir)
+{
+    bool success = false;
+
+    static const DWORD errorElevationRequired = 740;
+    PROCESS_INFORMATION pinfo;
+    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+    STARTUPINFOW startupInfo = { sizeof( STARTUPINFO ), 0, 0, 0,
+                                 (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                                 (ulong)CW_USEDEFAULT, (ulong)CW_USEDEFAULT,
+                                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                               };
+
+    //qDebug() << program, arguments;
+
+    QString cmd = program + QLatin1Char(' ');
+
+    for (int i=0; i<arguments.size(); ++i) {
+        cmd += QLatin1Char(' ') + arguments.at(i);
+    }
+
+    qDebug() << "[start] Create new process using command: " << cmd;
+
+    success = CreateProcess(0, (wchar_t*)cmd.utf16(),
+                            0, 0, FALSE, dwCreationFlags, 0,
+                            workingDir.isEmpty() ? 0 : (wchar_t*)workingDir.utf16(),
+                            &startupInfo, &pinfo);
+
+    if (success) {
+        CloseHandle(pinfo.hThread);
+        CloseHandle(pinfo.hProcess);
+
+    } else if (GetLastError() == errorElevationRequired) {
+        qDebug() << "[start] errorElevationRequired";
         success = false;
     }
 

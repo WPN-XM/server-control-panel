@@ -195,8 +195,8 @@ namespace Servers
             return;
         }
 
-        clearLogFile("Nginx");
-        emit signalMainWindow_updateVersion("Nginx");
+        clearLogFile("Nginx");        
+        emit signalMainWindow_updateVersion("Nginx");        
         emit signalMainWindow_updatePort("Nginx");
 
         // http://wiki.nginx.org/CommandLine - start Nginx
@@ -206,7 +206,7 @@ namespace Servers
         arguments << "-p " + QDir::currentPath();
         arguments << "-c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
 
-        qDebug() << "[Nginx] Starting...\n" << program << arguments;
+        qDebug() << "[Nginx] Starting...\n";
 
         Processes::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
 
@@ -229,9 +229,11 @@ namespace Servers
         args << "-c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
         args << "-s stop";
 
-        qDebug() << "[Nginx] Stopping...\n" << stopNginx;
+        qDebug() << "[Nginx] Stopping...\n";
 
-        Processes::startDetached(stopNginx, args, getServer("Nginx")->workingDirectory);
+        Processes::start(stopNginx, args, getServer("Nginx")->workingDirectory);
+
+        emit signalMainWindow_ServerStatusChange("Nginx", false);
     }
 
     void Servers::reloadNginx()
@@ -309,8 +311,6 @@ namespace Servers
             return;
         }
 
-        qDebug() << "[PostgreSQL] Stopping...";
-
         QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
         QStringList args;
@@ -320,7 +320,9 @@ namespace Servers
         args << "--mode=fast";
         args << "-W";
 
-        Processes::startDetached(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
+        qDebug() << "[PostgreSQL] Stopping...";
+
+        Processes::start(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
 
         // do we have a failed shutdown? if so, delete PID file, to allow a restart
         if(QFile().exists(file)) {
@@ -351,7 +353,6 @@ namespace Servers
         }
 
         clearLogFile("PHP");
-
         emit signalMainWindow_updateVersion("PHP");
         //emit signalMainWindow_updatePort("PHP");
 
@@ -470,21 +471,15 @@ namespace Servers
         qDebug() << "[PHP] Stopping...";
 
         /**
-         * There are two ways to stop the PHP server:
+         * There is only one way stop the PHP server:
+         * By terminating the process. That means we are crashing it!
          *
-         * 1) By using processPhp->terminate();
-         *    This will fail, because the WM_CLOSE message is not handled.
+         * WARNING!
          *
-         * 2) By killing the process with kill().
-         *    That means we are crashing it!
+         * The order is important.
+         * The spawner needs to be killed before we are trying to kill PHP childs.
          *
-         * Before we crash the PHP server intentionally, we need to disconnect
-         * the QProcess Error-Monitoring (signal/sender from method/receiver),
-         * else a "Process Crashed" Error MessageBox would appear.
          */
-
-        // WARNING! The order is important.
-        // The spawner needs to be killed before we are trying to kill PHP childs.
 
         while(processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
             processes->killProcess("spawn.exe");
@@ -520,13 +515,13 @@ namespace Servers
         emit signalMainWindow_updateVersion("MariaDb");
         emit signalMainWindow_updatePort("MariaDb");
 
-        // start
         QString const startMariaDb = getServer("MariaDb")->exe;
 
         QStringList args;
         args << "--defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
+        args << "--standalone"; // important! else maria is started as service and won't detach
 
-        qDebug() << "[MariaDB] Starting...\n" << startMariaDb << args;
+        qDebug() << "[MariaDB] Starting...\n";
 
         Processes::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
 
@@ -547,17 +542,16 @@ namespace Servers
             return;
         }
 
+        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe");
+
+        QStringList args;
+        //args << "--defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
+        //args << "-u root -h 127.0.0.1 --protocol=tcp";
+        args << "-u root shutdown";
+
         qDebug() << "[MariaDB] Stopping...";
 
-        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe")
-                + " --defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini")
-                + " -uroot -h127.0.0.1 --protocol=tcp"
-                + " shutdown";
-
-        QProcess *process = new QProcess();
-
-        process->execute(stopCommand);
-        process->waitForFinished(2000);
+        Processes::start(stopCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MariaDb", false);
     }
@@ -616,7 +610,7 @@ namespace Servers
         args << "--journal";
         args << "--httpinterface --rest";
 
-        qDebug() << "[MongoDb] Starting...\n"<< mongoStartCommand << args;
+        qDebug() << "[MongoDb] Starting...\n";
 
         Processes::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
 
@@ -638,16 +632,19 @@ namespace Servers
             return;
         }
 
-        // build mongo stop command based on CLI evaluation
-        // mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
+        /**
+         * build mongo stop command based on CLI evaluation
+         * mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
+         */
+
         QString const mongoStopCommand = QDir::currentPath() + "/bin/mongodb/bin/mongo.exe";
 
         QStringList args;
         args << "--eval \"db.getSiblingDB('admin').shutdownServer()\"";
 
-        qDebug() << "[MongoDb] Stopping...\n" << mongoStopCommand << args;
+        qDebug() << "[MongoDb] Stopping...\n";
 
-        Processes::startDetached(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
+        Processes::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", false);
     }
@@ -690,10 +687,11 @@ namespace Servers
         emit signalMainWindow_updateVersion("Memcached");
         emit signalMainWindow_updatePort("Memcached");
 
-        // start
-        qDebug() << "[Memcached] Starting...\n" << memcachedStartCommand << args;
+        qDebug() << "[Memcached] Starting...\n";
 
         Processes::startDetached(memcachedStartCommand, args, getServer("Memcached")->workingDirectory);
+
+        emit signalMainWindow_ServerStatusChange("Memcached", true);
     }
 
     void Servers::stopMemcached()
@@ -710,10 +708,9 @@ namespace Servers
             return;
         }
 
-        QProcess *process = new QProcess();
-
         qDebug() << "[Memcached] Stopping...\n";
 
+        QProcess *process = new QProcess();
         process->kill();
         process->waitForFinished(2000);
 
@@ -749,7 +746,6 @@ namespace Servers
         emit signalMainWindow_updateVersion("Redis");
         emit signalMainWindow_updatePort("Redis");
 
-        // start
         qDebug() << "[Redis] Starting...\n" << redisStartCommand;
 
         Processes::startDetached(redisStartCommand, args, getServer("Redis")->workingDirectory);
@@ -780,9 +776,9 @@ namespace Servers
         args << "-p " + settings->get("redis/port").toString(); // , QVariant(QString('6379')).toString()
         args << "shutdown";
 
-        qDebug() << "[Redis] Stopping...\n" << redisStopCommand << args;
+        qDebug() << "[Redis] Stopping...\n";
 
-        Processes::startDetached(redisStopCommand, args, getServer("Redis")->workingDirectory);
+        Processes::start(redisStopCommand, args, getServer("Redis")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Redis", false);
     }
