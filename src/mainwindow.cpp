@@ -1224,7 +1224,7 @@ namespace ServerControlPanel
                 pushButton_Configure->setIcon(iconConfig);
                 pushButton_Configure->setFlat(true);
                 pushButton_Configure->setToolTip(QApplication::translate(
-                    "MainWindow", "Open the Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
+                    "MainWindow", "Open Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
                 );
                 ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
