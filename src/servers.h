@@ -28,7 +28,6 @@ namespace Servers
             QString name;
             QIcon icon;
             QString workingDirectory;
-            //QStringList configFiles;
             QStringList logFiles;
             QString exe;
 

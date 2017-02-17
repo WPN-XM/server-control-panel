@@ -18,7 +18,6 @@ namespace Servers
             server->lowercaseName    = serverName;
             server->name             = getCamelCasedServerName(serverName);
             server->icon             = QIcon(":/status_stop");
-            //server->configFiles    = QStringList() << "a" << "b";
             server->logFiles         = getLogFiles(serverName);
             server->workingDirectory = settings->get("paths/" + serverName).toString();
             server->exe              = getExecutable(server->name);
