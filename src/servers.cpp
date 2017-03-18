@@ -207,7 +207,7 @@ namespace Servers
 
         qDebug() << "[Nginx] Starting...\n";
 
-        Processes::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
+        Processes::start(program, arguments, getServer("Nginx")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Nginx", true);
     }
@@ -610,16 +610,14 @@ namespace Servers
         args << "--config " + QDir::currentPath() + "/bin/mongodb/mongodb.conf";
         args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
         args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
-        args << "--storageEngine=" + settings->get("mongodb/storageengine").toString();
-        args << "--journal";
-        args << "--httpinterface --rest";
+        args << "--storageEngine=" + settings->get("mongodb/storageengine", "wiredTiger").toString();
+        args << "--journal --httpinterface --rest";
 
         qDebug() << "[MongoDb] Starting...\n";
 
         Processes::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", true);
-
     }
 
     void Servers::stopMongoDb()
@@ -712,11 +710,13 @@ namespace Servers
             return;
         }
 
+        // Memcached is a fucked up application.
+        // It doesn't provide a shutdown command.
+        // And needs to be process killed...
+
         qDebug() << "[Memcached] Stopping...\n";
 
-        QProcess *process = new QProcess();
-        process->kill();
-        process->waitForFinished(2000);
+        Processes::killProcess("memcached");
 
         emit signalMainWindow_ServerStatusChange("Memcached", false);
     }
