@@ -21,8 +21,8 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
     //qDebug() << "Already running Processes found : " << processes->getMonitoredProcessesList();
 
     // only show the "process shutdown" dialog, when there are processes to shutdown
-    if(processes->areThereAlreadyRunningProcesses())
-    {
+    //if(processes->areThereAlreadyRunningProcesses())
+    //{
         QLabel *labelA  = new QLabel(tr("The following processes are already running:"));
         QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
         QVBoxLayout *vbox = new QVBoxLayout;
@@ -111,8 +111,9 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
             }
 
             // refresh the internal list of processes
+            processes->delay(250);
             processes->refresh();
-        }
+        //}
 
         // if continue was clicked (reject), do update status indicators in mainwindow and tray
         /*if(dialogCode == QDialog::Rejected)
