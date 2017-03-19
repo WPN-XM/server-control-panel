@@ -152,7 +152,7 @@
     </item>
     <item>
      <property name="text">
-      <string>Memcache</string>
+      <string>Memcached</string>
      </property>
     </item>
    </item>
@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>8</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -613,6 +613,9 @@
         <layout class="QFormLayout" name="formLayout_2">
          <item row="0" column="0">
           <widget class="QCheckBox" name="checkBox_SelfUpdater_RunOnStartUp">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Check for a new version, when starting?</string>
            </property>
@@ -689,7 +692,7 @@
          <item row="0" column="1">
           <widget class="QComboBox" name="comboBox_2">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <item>
             <property name="text">
@@ -886,7 +889,7 @@
        </item>
        <item row="0" column="1">
         <property name="text">
-         <string>$request_uri consistent</string>
+         <string>hash $request_uri consistent</string>
         </property>
        </item>
       </widget>
@@ -1795,7 +1798,7 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>160</width>
+         <width>211</width>
          <height>231</height>
         </rect>
        </property>

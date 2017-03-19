@@ -737,11 +737,11 @@ namespace Configuration
         ui->tableWidget_Nginx_Upstreams->clearContents();
         ui->tableWidget_Nginx_Upstreams->model()->removeRows(0, ui->tableWidget_Nginx_Upstreams->rowCount());
 
-        // insert default data: "php_upstream_pool ip_hash"
+        // insert default data: "php_upstream_pool hash $request_uri consistent;"
         int row = ui->tableWidget_Nginx_Upstreams->rowCount();
         ui->tableWidget_Nginx_Upstreams->insertRow(row);
         ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,   new QTableWidgetItem("php_upstream_pool"));
-        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem("ip_hash;"));
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method, new QTableWidgetItem("hash $request_uri consistent"));
         ui->tableWidget_Nginx_Upstreams->resizeColumnToContents(0);
     }
 

@@ -292,6 +292,11 @@ namespace ServerControlPanel
         if(buttonConfigureRedis != 0) {
             connect(buttonConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
+
+        QPushButton *buttonConfigureMemcached = ui->centralWidget->findChild<QPushButton*>("pushButton_Configure_Memcached");
+        if(buttonConfigureMemcached != 0) {
+            connect(buttonConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
+        }
     }    
 
     void MainWindow::changeEvent(QEvent *event)
@@ -873,6 +878,14 @@ namespace ServerControlPanel
         cfgDlg.exec();
     }
 
+    void MainWindow::openConfigurationDialogMemcached()
+    {
+        Configuration::ConfigurationDialog cfgDlg;
+        cfgDlg.setServers(this->servers);
+        cfgDlg.setCurrentStackWidget("memcached");
+        cfgDlg.exec();
+    }
+
     QString MainWindow::getServerNameFromPushButton(QPushButton *button)
     {
         return button->objectName().split("_").last(); // "pushButton_FooBar_Nginx" => "Nginx"
@@ -1221,17 +1234,17 @@ namespace ServerControlPanel
 
             // Config
 
-            if(server->name != "Memcached") {
+            // Configuration via Webinterface
+            QPushButton* pushButton_Configure = new QPushButton();
+            pushButton_Configure->setObjectName(QString("pushButton_Configure_"+ server->name +""));
+            pushButton_Configure->setIcon(iconConfig);
+            pushButton_Configure->setFlat(true);
+            pushButton_Configure->setToolTip(QApplication::translate(
+                "MainWindow", "Open Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
+            );
+            ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
-                // Configuration via Webinterface
-                QPushButton* pushButton_Configure = new QPushButton();
-                pushButton_Configure->setObjectName(QString("pushButton_Configure_"+ server->name +""));
-                pushButton_Configure->setIcon(iconConfig);
-                pushButton_Configure->setFlat(true);
-                pushButton_Configure->setToolTip(QApplication::translate(
-                    "MainWindow", "Open Configuration Tab for "+ server->name.toLocal8Bit() +" ", 0)
-                );
-                ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
+            if(server->name != "Memcached") { // memcached doesn't have a config file
 
                 // Configuration via Editor
                 QPushButton* pushButton_ConfigureEdit = new QPushButton();

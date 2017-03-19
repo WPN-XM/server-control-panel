@@ -85,6 +85,7 @@ namespace ServerControlPanel
             void openConfigurationDialogMongoDb();
             void openConfigurationDialogPostgresql();
             void openConfigurationDialogRedis();
+            void openConfigurationDialogMemcached();
 
             void openLog();
             void openConfigurationInEditor();
