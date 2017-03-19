@@ -578,7 +578,13 @@ namespace ServerControlPanel
 
         qDebug() << "[PHP] Version: \n" << p_stdout;
 
-        return p_stdout.mid(4, p_stdout.lastIndexOf("cli)")).replace(" (cli)", "");
+        // - grab inside "PHP x (cli)"
+        // - "\\d.\\d.\\d." = grab "1.2.3"
+        // - "(\\w+\\d+)?" = grab optional "alpha2" version
+        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)\\s\\(cli\\)");
+        regex.indexIn(p_stdout);
+
+        return regex.cap(1);
     }
 
     QString MainWindow::getMongoVersion()
@@ -652,13 +658,12 @@ namespace ServerControlPanel
 
     QString MainWindow::parseVersionNumber(QString stringWithVersion)
     {
-        //qDebug() << stringWithVersion;
+        qDebug() << stringWithVersion;
 
         // This RegExp matches version numbers: (\d+\.)?(\d+\.)?(\d+\.)?(\*|\d+)
         // This is the same, but escaped:
         QRegExp regex("(\\d+\\.)?(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)");
 
-        // match
         regex.indexIn(stringWithVersion);
 
         return regex.cap(0);
