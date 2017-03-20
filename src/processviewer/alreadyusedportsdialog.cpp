@@ -7,6 +7,7 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QDialogButtonBox>
+#include <QColorDialog>
 
 AlreadyUsedPortsDialog::AlreadyUsedPortsDialog(QWidget *parent) :
     QDialog(parent)
@@ -30,9 +31,21 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
 
         Process proc = Processes::getInstance()->findByPid(p.pid);
 
-
         // create label
         QLabel *label = new QLabel("Port " + p.port + " used by " + proc.name + " (PID " + p.pid + ")");
+
+        // skip ports used by chrome
+        if(proc.name == "chrome.exe") {
+            continue;
+        }
+
+        // highlight commonly used ports: 80, 8080, 443
+        if(p.port == "80" || p.port == "8080" || p.port == "443") {
+            QPalette palette = label->palette();
+            palette.setColor(QPalette::WindowText, Qt::red);
+            label->setPalette(palette);
+        }
+
         vbox->addWidget(label);
     }
 
