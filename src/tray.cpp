@@ -71,7 +71,7 @@ namespace ServerControlPanel
 
     void Tray::goToWebinterface()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/"));
+        QDesktopServices::openUrl(QUrl("http://wpn.xm/"));
     }
 
     void Tray::goToReportIssue()

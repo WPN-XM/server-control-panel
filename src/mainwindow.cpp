@@ -738,7 +738,7 @@ namespace ServerControlPanel
 
     void MainWindow::openToolPHPInfo()
     {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/index.php?page=phpinfo"));
+        QDesktopServices::openUrl(QUrl("http://wpn.xm/index.php?page=phpinfo"));
     }
 
     void MainWindow::openToolPHPMyAdmin()
