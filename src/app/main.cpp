@@ -120,8 +120,10 @@ int main(int argc, char * argv[])
     app.processEvents();
 
     splash.setMessage("Searching for blocked ports ..", 45);
+        splash.hide();
         AlreadyUsedPortsDialog *aupd = new AlreadyUsedPortsDialog();
         aupd->checkAlreadyUsedPorts();
+        splash.show();
     app.processEvents();
 
     //#ifndef QT_DEBUG
