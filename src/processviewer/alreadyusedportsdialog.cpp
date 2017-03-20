@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 #include <QColorDialog>
+#include <QDir>
 
 AlreadyUsedPortsDialog::AlreadyUsedPortsDialog(QWidget *parent) :
     QDialog(parent)
@@ -27,22 +28,35 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
 
     // iterate over ports list and draw a label for each
     foreach(PidAndPort p, ports) {
-        qDebug() << "[Ports] Used: " << p.pid << p.port;
+        //qDebug() << "[Ports] Used: " << p.pid << p.port;
 
         Process proc = Processes::getInstance()->findByPid(p.pid);
 
         // create label
         QLabel *label = new QLabel("Port " + p.port + " used by " + proc.name + " (PID " + p.pid + ")");
 
-        // skip ports used by chrome
-        if(proc.name == "chrome.exe") {
+        // filter: skip ports used by chrome
+        if(proc.name == "chrome.exe" || proc.name == "[System Process]" || proc.name == "svchost.exe") {
+            continue;
+        }
+
+        // filter: system pid
+        if(p.pid == "4") {
             continue;
         }
 
         // highlight commonly used ports: 80, 8080, 443
         if(p.port == "80" || p.port == "8080" || p.port == "443") {
             QPalette palette = label->palette();
-            palette.setColor(QPalette::WindowText, Qt::red);
+
+            // check, if it a server from a prior wpnxm run (mark it green)
+            if(QDir::cleanPath(proc.path).contains(QDir::currentPath())) {
+                palette.setColor(QPalette::WindowText, Qt::darkGreen);
+            } else {
+                // else it's possible port collision (mark it red)
+                palette.setColor(QPalette::WindowText, Qt::darkRed);
+            }
+
             label->setPalette(palette);
         }
 
@@ -52,6 +66,10 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
     groupBox->setLayout(vbox);
 
     QLabel *labelB = new QLabel(tr("Please configure your servers to avoid port collisions.<br><br>"
+                                   "Items colored green are running servers from WPN-XM.<br>"
+                                   "Items colored red are possible port collisions.<br>"
+                                   "Items colored black are used ports.<br><br>"
+                                   "The list excludes ports used by some system processes, svchost.exe, pid 4, chrome.exe.<br><br>"
                                    "To proceed click Continue.<br>"));
 
     //QPushButton *ShutdownButton = new QPushButton(tr("Shutdown"));
