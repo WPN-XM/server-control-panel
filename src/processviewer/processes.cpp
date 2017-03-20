@@ -34,23 +34,27 @@ Processes::Processes()
 
 QList<Process> Processes::getProcessesList()
 {
-    refresh();
+    getRunningProcesses();
 
     return processesList;
 }
 QList<PidAndPort> Processes::getPortsList()
 {
+    getPorts();
+
     return portsList;
 }
 QList<Process> Processes::getMonitoredProcessesList()
 {
+    refresh();
+
     return monitoredProcessesList;
 }
 
 void Processes::refresh()
 {
-    processesList = getRunningProcesses();
     portsList     = getPorts();
+    processesList = getRunningProcesses();
 }
 
 Process Processes::findByName(const QString &name)

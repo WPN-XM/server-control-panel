@@ -68,7 +68,7 @@ void ProcessViewerDialog::renderProcesses()
         );
 
         // lookup port for this pid and add it to the process struct
-        foreach (const PidAndPort &p, ports) {
+        foreach (const PidAndPort &p, processes->getPortsList()) {
             if (p.pid == process.pid) {
                 process.port = p.port;
                 break;
