@@ -10,6 +10,7 @@
 #include "../processviewer/processes.h"
 //#include "../processviewer/processviewerdialog.h"
 #include "../processviewer/AlreadyRunningProcessesDialog.h"
+#include "../processviewer/AlreadyUsedPortsDialog.h"
 
 #include <QtWidgets>
 #include <QtCore>

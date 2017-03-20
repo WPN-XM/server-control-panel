@@ -92,7 +92,8 @@ HEADERS += \
     src/csv.h \
     src/ini.h \
     src/processviewer/processes.h \
-    src/processviewer/processviewerdialog.h
+    src/processviewer/processviewerdialog.h \
+    src/processviewer/alreadyusedportsdialog.h
 
 
 SOURCES += \
@@ -131,7 +132,8 @@ SOURCES += \
     src/csv.cpp \    
     src/ini.cpp \
     src/processviewer/processes.cpp \
-    src/processviewer/processviewerdialog.cpp
+    src/processviewer/processviewerdialog.cpp \
+    src/processviewer/alreadyusedportsdialog.cpp
 
 
 

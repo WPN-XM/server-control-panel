@@ -14,11 +14,11 @@ AlreadyRunningProcessesDialog::AlreadyRunningProcessesDialog(QWidget *parent) :
  * A modal dialog with checkboxes for running processes is shown.
  * The user can select the processes to shutdown or continue.
  */
-void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *processes)
+void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
 {
     qDebug() << "[Processes Running] Check for already running processes.";
 
-    //qDebug() << "Already running Processes found : " << processes->getMonitoredProcessesList();
+    //qDebug() << "Already running Processes found : " << Processes::getInstance()->getMonitoredProcessesList();
 
     // only show the "process shutdown" dialog, when there are processes to shutdown
     //if(processes->areThereAlreadyRunningProcesses())
@@ -27,7 +27,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
         QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
         QVBoxLayout *vbox = new QVBoxLayout;
 
-        QList<Process> runningProcessesList = processes->getMonitoredProcessesList();
+        QList<Process> runningProcessesList = Processes::getInstance()->getMonitoredProcessesList();
 
         // iterate over proccesFoundList and draw a "process shutdown" checkbox for each one
         foreach(Process p, runningProcessesList)
@@ -54,7 +54,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
         buttonBox->addButton(ShutdownButton, QDialogButtonBox::ActionRole);
         buttonBox->addButton(ContinueButton, QDialogButtonBox::ActionRole);
 
-        // e) build dialog to inform user about running processes
+        // build dialog to inform user about running processes
         QGridLayout *grid = new QGridLayout;
         grid->addWidget(labelA);
         grid->addWidget(groupBox);
@@ -111,8 +111,8 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers(Processes *proces
             }
 
             // refresh the internal list of processes
-            processes->delay(250);
-            processes->refresh();
+            Processes::getInstance()->delay(250);
+            Processes::getInstance()->refresh();
         //}
 
         // if continue was clicked (reject), do update status indicators in mainwindow and tray

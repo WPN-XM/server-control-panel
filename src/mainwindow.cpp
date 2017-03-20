@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
-
 namespace ServerControlPanel
 {
 
@@ -999,27 +997,6 @@ namespace ServerControlPanel
         if(settings->get("autostart/memcached").toBool()) servers->startMemcached();
         if(settings->get("autostart/postgresql").toBool()) servers->startPostgreSQL();
         if(settings->get("autostart/redis").toBool()) servers->startRedis();
-    }
-
-    /**
-     * @brief MainWindow::checkPorts
-     *
-     * check for ports, which are already in use
-     * based on "netstat -abno | grep "80\|8080\|443""
-     * port and service name identification
-     */
-    void MainWindow::checkPorts()
-    {
-        QProcess process;
-        process.setReadChannel(QProcess::StandardOutput);
-        process.setReadChannelMode(QProcess::MergedChannels);
-        process.start("cmd", QStringList() << "/c netstat -abno");
-        process.waitForFinished();
-
-        QByteArray servicesByteArray = process.readAll();
-        QStringList strLines = QString(servicesByteArray).split("\n", QString::SkipEmptyParts);
-
-        qDebug() << "Port check netstat -abno needs higher privileges" << strLines;
     }
 
     void MainWindow::setDefaultSettings()
