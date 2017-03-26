@@ -60,6 +60,7 @@ PointerAlignment: Right
 PointerBindsToType: true
 SortIncludes: 'false'
 SpaceAfterControlStatementKeyword: true
+SpaceBeforeParens: ControlStatements
 SpaceBeforeAssignmentOperators: true
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
