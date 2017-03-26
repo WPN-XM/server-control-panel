@@ -20,11 +20,22 @@ AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: true
 
 # Configure each individual brace in BraceWrapping
-BreakBeforeBraces: Allman
+BraceWrapping:
+  AfterClass:            true
+  AfterControlStatement: false
+  AfterEnum:             true
+  AfterFunction:         true
+  AfterNamespace:        true
+  AfterObjCDeclaration:  true
+  AfterStruct:           true
+  AfterUnion:            true
+  BeforeCatch:           false
+  BeforeElse:            false
+  IndentBraces:          false
+BreakBeforeBraces: Custom
 
 BinPackParameters: false
 BreakBeforeBinaryOperators: false
-BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializersBeforeComma: false
 ColumnLimit: 0
