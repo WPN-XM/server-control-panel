@@ -22,7 +22,7 @@ AlwaysBreakTemplateDeclarations: true
 # Configure each individual brace in BraceWrapping
 BraceWrapping:
   AfterClass:            true
-  AfterControlStatement: false
+  AfterControlStatement: false  
   AfterEnum:             true
   AfterFunction:         true
   AfterNamespace:        true
