@@ -1,36 +1,35 @@
-#include "src/version.h"
 #include "src/tooltips/TrayToolTip.h"
+#include "src/version.h"
 
-TrayToolTip::TrayToolTip(QWidget *parent)
-    : QWidget(parent)
+TrayToolTip::TrayToolTip(QWidget *parent) : QWidget(parent)
 {
-    setWindowFlags(
-        Qt::ToolTip |
-        Qt::FramelessWindowHint |
-        Qt::WindowSystemMenuHint |
-        Qt::WindowStaysOnTopHint
-    );
+    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint |
+                   Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint);
 
     // to hide it from appearing in the task manager
     setAttribute(Qt::WA_ShowWithoutActivating);
-    setAttribute(Qt::WA_TranslucentBackground, true );
+    setAttribute(Qt::WA_TranslucentBackground, true);
 
     this->resize(tipSizeX, tipSizeY);
     this->setObjectName("TrayToolTip");
 
     groupBox = new QGroupBox(this);
-    groupBox->setGeometry(10, 10, tipSizeX-20, tipSizeY-10);
-    groupBox->setStyleSheet("border: 1px solid #ccc; background-color: #eee; border-radius: 2px;");
+    groupBox->setGeometry(10, 10, tipSizeX - 20, tipSizeY - 10);
+    groupBox->setStyleSheet(
+        "border: 1px solid #ccc; background-color: #eee; border-radius: 2px;");
 
     labelGroupBoxTitle = new QLabel(groupBox);
     labelGroupBoxTitle->setText(APP_NAME_AND_VERSION);
     labelGroupBoxTitle->setFont(QFont("Verdana", 7, QFont::Light));
-    labelGroupBoxTitle->setStyleSheet("border-radius: 0; border:0; padding-bottom: 3px; border-bottom: 1px solid #ccc");
+    labelGroupBoxTitle->setStyleSheet(
+        "border-radius: 0; border:0; "
+        "padding-bottom: 3px; border-bottom: 1px "
+        "solid #ccc");
 
     labelIcon = new QLabel(groupBox);
     labelIcon->setStyleSheet("border:0;");
 
-    labelTitle   = new QLabel(groupBox);
+    labelTitle = new QLabel(groupBox);
     labelTitle->setStyleSheet("border:0;");
 
     labelMessage = new QLabel(groupBox);
@@ -74,7 +73,4 @@ void TrayToolTip::showMessage(QString msg, QPoint point)
     QWidget::show();
 }
 
-void TrayToolTip::hoverEvent(QHoverEvent *)
-{
-    hide();
-}
+void TrayToolTip::hoverEvent(QHoverEvent *) { hide(); }

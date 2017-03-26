@@ -1,17 +1,17 @@
 #include "BalloonTip.h"
 
-#include <QFontMetrics>
 #include <QApplication>
-#include <QDesktopWidget>
-#include <QDebug>
-#include <QPushButton>
-#include <QTimer>
 #include <QCloseEvent>
-#include <QStyle>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QFontMetrics>
 #include <QIcon>
+#include <QPushButton>
+#include <QStyle>
+#include <QTimer>
 
-BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text, int duration, QWidget* parent) :
-    QWidget( parent )
+BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text, int duration, QWidget *parent)
+    : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
@@ -21,8 +21,8 @@ BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text,
     init();
 }
 
-BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget* parent) :
-    QWidget( parent )
+BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget *parent)
+    : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
@@ -32,8 +32,8 @@ BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, 
     init();
 }
 
-BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget* parent) :
-    QWidget( parent )
+BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget *parent)
+    : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
@@ -49,16 +49,16 @@ void BalloonTip::init()
 
     createRects();
 
-    //defineArrowPosition();
+    // defineArrowPosition();
     setArrowPosition(my_arrowPos);
 
     connect(my_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // install event filter
-    if ( parentWidget() != 0 ) {
+    if (parentWidget() != 0) {
         parentWidget()->installEventFilter(this);
-        QWidget* w = parentWidget()->parentWidget();
-        while ( w != 0  ) {
+        QWidget *w = parentWidget()->parentWidget();
+        while (w != 0) {
             w->installEventFilter(this);
             w = w->parentWidget();
         }
@@ -77,8 +77,9 @@ void BalloonTip::createRects()
     QFontMetrics metrics(font);
 
     // title rect
-    QRect rect = metrics.boundingRect(QRect(10, 10, 500, 500), Qt::TextSingleLine, my_title);
-    if(rect.width() < 100) {
+    QRect rect = metrics.boundingRect(QRect(10, 10, 500, 500), Qt::TextSingleLine,
+                                      my_title);
+    if (rect.width() < 100) {
         rect.setWidth(100);
     }
 
@@ -89,12 +90,14 @@ void BalloonTip::createRects()
     metrics = QFontMetrics(font);
 
     // text rect
-    my_textRect = metrics.boundingRect(QRect(10, 30, rect.width() + 90, 500), Qt::TextWordWrap, my_text);
-    if(my_textRect.width() < rect.width()) {
+    my_textRect = metrics.boundingRect(QRect(10, 30, rect.width() + 90, 500),
+                                       Qt::TextWordWrap, my_text);
+    if (my_textRect.width() < rect.width()) {
         my_textRect.setWidth(rect.width() + 90);
     }
 
-    my_popupRect = QRect(0, 0, my_textRect.width() + 20, my_textRect.height() + 40);
+    my_popupRect =
+        QRect(0, 0, my_textRect.width() + 20, my_textRect.height() + 40);
 }
 
 void BalloonTip::defineArrowPosition()
@@ -102,14 +105,14 @@ void BalloonTip::defineArrowPosition()
     QSize desktopSize = QApplication::desktop()->size();
     QPoint pos = mapToGlobal(my_pos);
 
-    if(pos.x() < desktopSize.width() / 2) {
-        if(pos.y() < desktopSize.height() / 2) {
+    if (pos.x() < desktopSize.width() / 2) {
+        if (pos.y() < desktopSize.height() / 2) {
             my_arrowPos = TopLeft;
         } else {
             my_arrowPos = BottomLeft;
         }
     } else {
-        if(pos.y() < desktopSize.height() / 2) {
+        if (pos.y() < desktopSize.height() / 2) {
             my_arrowPos = TopRight;
         } else {
             my_arrowPos = BottomRight;
@@ -117,17 +120,14 @@ void BalloonTip::defineArrowPosition()
     }
 }
 
-BalloonTip::~BalloonTip()
-{
-    my_closeButton->deleteLater();
-}
+BalloonTip::~BalloonTip() { my_closeButton->deleteLater(); }
 
-void BalloonTip::paintEvent(QPaintEvent * /*ev*/ )
+void BalloonTip::paintEvent(QPaintEvent * /*ev*/)
 {
-    QPainter painter( this );
+    QPainter painter(this);
 
-    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
-    painter.setBrush( Qt::white );
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+    painter.setBrush(Qt::white);
     painter.setPen(QColor(0, 0, 0, 130));
     painter.setFont(this->font());
 
@@ -137,33 +137,30 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/ )
     QPainterPath path;
     QPolygon arrowTriangle;
 
-    switch(my_arrowPos)
-    {
-        case BottomLeft :
-            arrowTriangle << QPoint(30, popupRect.height() + 60)
-                          << QPoint(60, popupRect.height() + 30)
-                          << QPoint(90, popupRect.height() + 30);
-            break;
-        case TopLeft :
-            arrowTriangle << QPoint(30, 0)
-                          << QPoint(60, 15)
-                          << QPoint(90, 15);
-            break;
-        case BottomRight :
-            arrowTriangle << QPoint(popupRect.width() - 30, popupRect.height() + 60)
-                          << QPoint(popupRect.width() - 60, popupRect.height() + 30)
-                          << QPoint(popupRect.width() - 90, popupRect.height() +30);
-            break;
-        case TopRight :
-            arrowTriangle << QPoint(popupRect.width() - 30, 0)
-                          << QPoint(popupRect.width() - 60, 30)
-                          << QPoint(popupRect.width() - 90, 30);
-            break;
-        case LeftTop :
-            arrowTriangle << QPoint(popupRect.left() - 10, popupRect.height() * 0.6)
-                          << QPoint(popupRect.left()     , popupRect.height() * 0.6 + 5)
-                          << QPoint(popupRect.left()     , popupRect.height() * 0.6 - 5);
-            break;
+    switch (my_arrowPos) {
+    case BottomLeft:
+        arrowTriangle << QPoint(30, popupRect.height() + 60)
+                      << QPoint(60, popupRect.height() + 30)
+                      << QPoint(90, popupRect.height() + 30);
+        break;
+    case TopLeft:
+        arrowTriangle << QPoint(30, 0) << QPoint(60, 15) << QPoint(90, 15);
+        break;
+    case BottomRight:
+        arrowTriangle << QPoint(popupRect.width() - 30, popupRect.height() + 60)
+                      << QPoint(popupRect.width() - 60, popupRect.height() + 30)
+                      << QPoint(popupRect.width() - 90, popupRect.height() + 30);
+        break;
+    case TopRight:
+        arrowTriangle << QPoint(popupRect.width() - 30, 0)
+                      << QPoint(popupRect.width() - 60, 30)
+                      << QPoint(popupRect.width() - 90, 30);
+        break;
+    case LeftTop:
+        arrowTriangle << QPoint(popupRect.left() - 10, popupRect.height() * 0.6)
+                      << QPoint(popupRect.left(), popupRect.height() * 0.6 + 5)
+                      << QPoint(popupRect.left(), popupRect.height() * 0.6 - 5);
+        break;
     }
 
     path.addPolygon(arrowTriangle);
@@ -186,29 +183,26 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/ )
     }
 }
 
-BalloonTip::ArrowPosition BalloonTip::arrowPosition()
-{
-    return my_arrowPos;
-}
+BalloonTip::ArrowPosition BalloonTip::arrowPosition() { return my_arrowPos; }
 
 void BalloonTip::setArrowPosition(BalloonTip::ArrowPosition arrowPos)
 {
     my_arrowPos = arrowPos;
     QRect r = relativePopupRect();
-    my_closeButton->move(r.topRight() - QPoint(30, - 5));
+    my_closeButton->move(r.topRight() - QPoint(30, -5));
 }
-
 
 QRect BalloonTip::relativePopupRect()
 {
     QRect rect = my_popupRect;
     // move tooltip rect based on the arrowPosition
-    if(my_arrowPos == TopLeft || TopRight) {
+    if (my_arrowPos == TopLeft || TopRight) {
         // move the tooltip rect a bit down, to have Y space for the arrow/triangle
         rect.translate(0, 15);
     }
-    if(my_arrowPos == LeftTop) {
-        // move the tooltip rect a bit to right, to have Y space for the arrow/triangle
+    if (my_arrowPos == LeftTop) {
+        // move the tooltip rect a bit to right, to have Y space for the
+        // arrow/triangle
         rect.translate(15, 0);
     }
     return rect;
@@ -217,35 +211,29 @@ QRect BalloonTip::relativePopupRect()
 QRect BalloonTip::relativeTextRect()
 {
     QRect rect = my_textRect;
-    if(my_arrowPos == TopLeft || TopRight) {
+    if (my_arrowPos == TopLeft || TopRight) {
         rect.translate(0, 15);
     }
-    if(my_arrowPos == LeftTop) {
+    if (my_arrowPos == LeftTop) {
         rect.translate(15, 0);
     }
     return rect;
 }
 
-void BalloonTip::enterEvent(QEvent *event)
-{
-    QWidget::enterEvent(event);
-}
+void BalloonTip::enterEvent(QEvent *event) { QWidget::enterEvent(event); }
 
-void BalloonTip::leaveEvent(QEvent *event)
-{
-    QWidget::leaveEvent(event);
-}
+void BalloonTip::leaveEvent(QEvent *event) { QWidget::leaveEvent(event); }
 
 bool BalloonTip::close()
 {
-    //qDebug() << Q_FUNC_INFO << my_title << this;
+    // qDebug() << Q_FUNC_INFO << my_title << this;
     emit finished();
     return QWidget::close();
 }
 
 void BalloonTip::show()
 {
-    //qDebug() << Q_FUNC_INFO << my_title << this;
+    // qDebug() << Q_FUNC_INFO << my_title << this;
     QWidget::show();
 }
 
@@ -253,12 +241,12 @@ bool BalloonTip::eventFilter(QObject *object, QEvent *event)
 {
     Q_UNUSED(object);
 
-    if(event->type() != QEvent::Move && event->type() != QEvent::Resize) {
+    if (event->type() != QEvent::Move && event->type() != QEvent::Resize) {
         return false;
     }
 
-    if (event->type() == QEvent::FocusOut || event->type() == QEvent::KeyPress || event->type() == QEvent::MouseButtonPress)
-    {
+    if (event->type() == QEvent::FocusOut || event->type() == QEvent::KeyPress ||
+        event->type() == QEvent::MouseButtonPress) {
         qDebug() << Q_FUNC_INFO << this;
         close();
     }
@@ -269,22 +257,21 @@ bool BalloonTip::eventFilter(QObject *object, QEvent *event)
 void BalloonTip::move(QPoint pos)
 {
     QWidget::move(pos);
-    switch(my_arrowPos)
-    {
-        case BottomLeft :
-            pos.setY(pos.y() - my_popupRect.height() - 60);
-        case TopLeft :
-            pos.setX(pos.x() - 30 );
-            break;
-        case BottomRight :
-            pos.setY(pos.y() - my_popupRect.height() - 60);
-        case TopRight :
-            pos.setX(pos.x() - my_popupRect.width() + 30);
-            break;
-        case LeftTop :
-            pos.setX(pos.x() + 10);
-            pos.setY(pos.y() - my_popupRect.height() * 0.63);
-            break;
+    switch (my_arrowPos) {
+    case BottomLeft:
+        pos.setY(pos.y() - my_popupRect.height() - 60);
+    case TopLeft:
+        pos.setX(pos.x() - 30);
+        break;
+    case BottomRight:
+        pos.setY(pos.y() - my_popupRect.height() - 60);
+    case TopRight:
+        pos.setX(pos.x() - my_popupRect.width() + 30);
+        break;
+    case LeftTop:
+        pos.setX(pos.x() + 10);
+        pos.setY(pos.y() - my_popupRect.height() * 0.63);
+        break;
     }
     QWidget::move(pos);
     update();

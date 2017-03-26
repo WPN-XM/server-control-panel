@@ -4,21 +4,14 @@
  * @brief Services::Services
  *
  * Windows Service Control Manager
- * API functions to check the status of a windows service and modify Windows Services.
+ * API functions to check the status of a windows service and modify Windows
+ * Services.
  */
-Services::Services()
-{
-}
+Services::Services() {}
 
-void Services::status(QString serviceName)
-{
-    Q_UNUSED(serviceName);
-}
+void Services::status(QString serviceName) { Q_UNUSED(serviceName); }
 
-void Services::available(QString serviceName)
-{
-    Q_UNUSED(serviceName);
-}
+void Services::available(QString serviceName) { Q_UNUSED(serviceName); }
 
 /**
  * @brief Services::install
@@ -26,10 +19,7 @@ void Services::available(QString serviceName)
  *
  * Install a Windows Service
  */
-void Services::install(QString serviceName)
-{
-    Q_UNUSED(serviceName);
-}
+void Services::install(QString serviceName) { Q_UNUSED(serviceName); }
 
 /**
  * @brief Services::remove
@@ -37,10 +27,7 @@ void Services::install(QString serviceName)
  *
  * Remove a Windows Service
  */
-void Services::remove(QString serviceName)
-{
-    Q_UNUSED(serviceName);
-}
+void Services::remove(QString serviceName) { Q_UNUSED(serviceName); }
 
 /**
  * @brief Services::reinstall

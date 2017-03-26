@@ -4,21 +4,21 @@ namespace Updater
 {
 
     /**
-     * @brief self_update::self_update
-     *
-     * Self_Update implements a self-update strategy for this executable.
-     *
-     * 1. check, if new version available
-     *    updateAvailable() -> getUpdateInfo()
-     * 2. download new version (zip)
-     * 3. remove .old file
-     * 4. rename running "wpn-xm.exe" to "wpn-xm.exe.old"
-     * 5. extract "wpn-xm.exe" (new version replaces old one)
-     * 6. indicate need for a manual restart
-     *    - if user selects "restart"
-     *      - start new version as detached Process
-     *      - exit this version
-     */
+ * @brief self_update::self_update
+ *
+ * Self_Update implements a self-update strategy for this executable.
+ *
+ * 1. check, if new version available
+ *    updateAvailable() -> getUpdateInfo()
+ * 2. download new version (zip)
+ * 3. remove .old file
+ * 4. rename running "wpn-xm.exe" to "wpn-xm.exe.old"
+ * 5. extract "wpn-xm.exe" (new version replaces old one)
+ * 6. indicate need for a manual restart
+ *    - if user selects "restart"
+ *      - start new version as detached Process
+ *      - exit this version
+ */
     SelfUpdater::SelfUpdater()
     {
         qDebug() << "[SelfUpdater] Started...";
@@ -26,30 +26,28 @@ namespace Updater
         userRequestedUpdate = false;
     }
 
-    SelfUpdater::~SelfUpdater()
-    {
-    }
+    SelfUpdater::~SelfUpdater() {}
 
     void SelfUpdater::run()
     {
-        if(network.networkAccessible() == QNetworkAccessManager::NotAccessible) {
+        if (network.networkAccessible() == QNetworkAccessManager::NotAccessible) {
             qDebug() << "[SelfUpdater] Run skipped, because no network.";
             return;
         }
 
         // setup download folder
-        downloadFolder = QCoreApplication::applicationDirPath()+QDir::separator()+"downloads";
+        downloadFolder =
+            QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
         if (!QDir(downloadFolder).exists()) {
             QDir(downloadFolder).mkpath(".");
         }
 
-        if(updateAvailable())
-        {
+        if (updateAvailable()) {
             qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
 
             emit notifyUpdateAvailable(versionInfo);
 
-            if(settings->get("selfupdater/autoupdate").toBool()) {
+            if (settings->get("selfupdater/autoupdate").toBool()) {
                 doUpdate();
             }
         }
@@ -59,8 +57,8 @@ namespace Updater
     {
         downloadNewVersion();
         renameExecutable();
-        //extract();             is called when download transfer finished
-        //askForRestart();       is called when extraction finished
+        // extract();             is called when download transfer finished
+        // askForRestart();       is called when extraction finished
     }
 
     bool SelfUpdater::updateAvailable()
@@ -78,15 +76,19 @@ namespace Updater
         QNetworkRequest request(downloadURL);
 
         downloadManager.setDownloadFolder(downloadFolder);
-        downloadManager.setDownloadMode(Downloader::DownloadItem::DownloadMode::SkipIfExists);
+        downloadManager.setDownloadMode(
+            Downloader::DownloadItem::DownloadMode::SkipIfExists);
         downloadManager.setQueueMode(Downloader::DownloadManager::QueueMode::Serial);
         downloadManager.get(request);
 
-        Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
-        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem*)), this, SLOT(extract()));
+        Downloader::TransferItem *transfer =
+            downloadManager.findTransfer(downloadURL);
+        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem *)), this,
+                SLOT(extract()));
 
         // finally: invoke downloading
-        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone",
+                                  Qt::QueuedConnection);
     }
 
     void SelfUpdater::extract()
@@ -95,27 +97,31 @@ namespace Updater
 
         QUrl url(versionInfo["url"].toString());
         QString fileToExtract = "wpn-xm.exe";
-        QString zipFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() + url.fileName()));
-        QString targetPath(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
+        QString zipFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() +
+                                                 url.fileName()));
+        QString targetPath(
+            QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
 
-        if(!QFile(zipFile).exists()) {
+        if (!QFile(zipFile).exists()) {
             qDebug() << "[SelfUpdater] Zip File missing" << zipFile;
         }
 
-        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipFile << "to" << targetPath;
+        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipFile
+                 << "to" << targetPath;
 
         // WTF? extractFile() doesn't work ???
-        //qDebug() << "[SelfUpdater] Filelist:" << JlCompress::getFileList(zipFile);
-        //qDebug() << JlCompress::extractFile( zipFile, fileToExtract, QDir::toNativeSeparators(downloadFolder));
-        //qDebug() << JlCompress::extractFile( zipFile, fileToExtract, targetPath);
+        // qDebug() << "[SelfUpdater] Filelist:" << JlCompress::getFileList(zipFile);
+        // qDebug() << JlCompress::extractFile( zipFile, fileToExtract,
+        // QDir::toNativeSeparators(downloadFolder));
+        // qDebug() << JlCompress::extractFile( zipFile, fileToExtract, targetPath);
 
         // thanks to me, the zip file contains only the executable
         // so extractDir() is basically extractFile(), but still.... grrrr
         QStringList extractedFiles = JlCompress::extractDir(zipFile, targetPath);
-        if(QFileInfo(extractedFiles.at(0)).fileName() == "wpn-xm.exe") {
+        if (QFileInfo(extractedFiles.at(0)).fileName() == "wpn-xm.exe") {
             qDebug() << "[SelfUpdater] ---- Success! ----";
 
-            if(settings->get("selfupdater/autorestart").toBool()) {
+            if (settings->get("selfupdater/autorestart").toBool()) {
                 emit notifyRestartNeeded(versionInfo);
             } else {
                 askForRestart();
@@ -125,38 +131,42 @@ namespace Updater
 
     void SelfUpdater::renameExecutable()
     {
-        QString dirPath        = QCoreApplication::applicationDirPath();
-        QString exeFilePath    = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
-        QString exeName        = QFileInfo(exeFilePath).fileName();
-        QString oldExeName	   = exeName + ".old";
-        QString oldExeFilePath = QDir::toNativeSeparators(dirPath + QDir::separator() + oldExeName);
+        QString dirPath = QCoreApplication::applicationDirPath();
+        QString exeFilePath =
+            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        QString exeName = QFileInfo(exeFilePath).fileName();
+        QString oldExeName = exeName + ".old";
+        QString oldExeFilePath =
+            QDir::toNativeSeparators(dirPath + QDir::separator() + oldExeName);
 
         qDebug() << "[SelfUpdater] Renaming";
         qDebug() << exeFilePath;
         qDebug() << oldExeFilePath;
 
         // delete the destination file first (the old ".old" file)
-        if(QFile().exists(oldExeFilePath)) {
-            qDebug() << "[SelfUpdater] delete target first:" << QFile::remove(oldExeFilePath);
+        if (QFile().exists(oldExeFilePath)) {
+            qDebug() << "[SelfUpdater] delete target first:"
+                     << QFile::remove(oldExeFilePath);
         }
 
-        qDebug() << "[SelfUpdater] Move:" << QFile::rename(exeFilePath, oldExeFilePath);   // wpn-xm.exe -> wpn-xm.exe.old
+        qDebug() << "[SelfUpdater] Move:"
+                 << QFile::rename(exeFilePath,
+                                  oldExeFilePath); // wpn-xm.exe -> wpn-xm.exe.old
     }
 
     void SelfUpdater::askForUpdate()
     {
-        QString t("A new version of the Server Control Panel is available:"
-                  "<p><b><FONT COLOR='#a9a9a9' FONT SIZE = 4>"
-                  "%1 v%2."
-                  "</b></p></br>");
-        QString text = t.arg(
-            versionInfo["software_name"].toString(),
-            versionInfo["latest_version"].toString()
-        );
+        QString t(
+            "A new version of the Server Control Panel is available:"
+            "<p><b><FONT COLOR='#a9a9a9' FONT SIZE = 4>"
+            "%1 v%2."
+            "</b></p></br>");
+        QString text = t.arg(versionInfo["software_name"].toString(),
+                             versionInfo["latest_version"].toString());
 
         QString infoText = "Do you want to update now?";
 
-        QPixmap iconPixmap = QIcon(":/update").pixmap(80,80);
+        QPixmap iconPixmap = QIcon(":/update").pixmap(80, 80);
 
         QMessageBox msgBox;
         msgBox.setIconPixmap(iconPixmap);
@@ -168,7 +178,7 @@ namespace Updater
         msgBox.setButtonText(QMessageBox::No, tr("Continue"));
         msgBox.setDefaultButton(QMessageBox::Yes);
 
-        if(msgBox.exec() == QMessageBox::Yes) {
+        if (msgBox.exec() == QMessageBox::Yes) {
             doUpdate();
         }
     }
@@ -176,13 +186,16 @@ namespace Updater
     void SelfUpdater::askForRestart()
     {
         QString text = "The Server Control Panel was updated from ";
-        text.append(QString("v%1 to v%2.").arg(APP_VERSION_SHORT, versionInfo["latest_version"].toString()));
+        text.append(
+            QString("v%1 to v%2.")
+                .arg(APP_VERSION_SHORT, versionInfo["latest_version"].toString()));
 
-        QString infoText = "The update was installed. "
-                           "You can restart the Server Control Panel now, "
-                           "or continue working and restart later.";
+        QString infoText =
+            "The update was installed. "
+            "You can restart the Server Control Panel now, "
+            "or continue working and restart later.";
 
-        QPixmap iconPixmap = QIcon(":/update").pixmap(80,80);
+        QPixmap iconPixmap = QIcon(":/update").pixmap(80, 80);
 
         QMessageBox msgBox;
         msgBox.setIconPixmap(iconPixmap);
@@ -194,18 +207,17 @@ namespace Updater
         msgBox.setButtonText(QMessageBox::No, tr("Continue"));
         msgBox.setDefaultButton(QMessageBox::Yes);
 
-        if(msgBox.exec() == QMessageBox::Yes)
-        {
-          // Should we send a final farewell signal before we leave?
-          // QApplication::aboutToQuit(finalFarewellSignal);
+        if (msgBox.exec() == QMessageBox::Yes) {
+            // Should we send a final farewell signal before we leave?
+            // QApplication::aboutToQuit(finalFarewellSignal);
 
-          // cross fingers and hope and pray, that starting the new process is slow
-          // and we are not running into the single application check.. ;)
+            // cross fingers and hope and pray, that starting the new process is slow
+            // and we are not running into the single application check.. ;)
 
-          QProcess p;
-          p.startDetached(QApplication::applicationFilePath());
+            QProcess p;
+            p.startDetached(QApplication::applicationFilePath());
 
-          QApplication::exit();
+            QApplication::exit();
         }
     }
 
@@ -215,12 +227,15 @@ namespace Updater
     {
         QString url = getUpdateCheckURL();
 
-        // QNAM is non-blocking / non-synchronous, but we want to wait until reply has been received
-        // create custom temporary event loop on stack to block the stack until finished received
+        // QNAM is non-blocking / non-synchronous, but we want to wait until reply has
+        // been received
+        // create custom temporary event loop on stack to block the stack until
+        // finished received
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop,
+                         SLOT(quit()));
 
         // the HTTP request
         QNetworkRequest req(url);
@@ -234,16 +249,14 @@ namespace Updater
         if (updateCheckResponse->error() == QNetworkReply::NoError) {
 
             // read response and parse JSON
-            QString strReply = (QString) updateCheckResponse->readAll();
+            QString strReply = (QString)updateCheckResponse->readAll();
             jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
-        }
-        else {
+        } else {
             // QNetworkReply::HostNotFoundError
             qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
-            QMessageBox::critical( QApplication::activeWindow(),
-                "Request Failure", updateCheckResponse->errorString(), QMessageBox::Ok
-            );
+            QMessageBox::critical(QApplication::activeWindow(), "Request Failure",
+                                  updateCheckResponse->errorString(), QMessageBox::Ok);
         }
 
         // cleanup
@@ -267,13 +280,13 @@ namespace Updater
         // version
         url.append("&v=");
         QString version(APP_VERSION_SHORT);
-        if(version != "@APPVERSIONSHORT@") {
+        if (version != "@APPVERSIONSHORT@") {
             url.append(version);
         } else {
-            url.append("0.8.4"); // hardcoded for local testing (formerly version_localdev.h)
+            url.append(
+                "0.8.4"); // hardcoded for local testing (formerly version_localdev.h)
         }
 
         return url;
     }
-
 }

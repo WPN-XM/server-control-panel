@@ -3,9 +3,8 @@
 
 namespace Configuration
 {
-    NginxAddUpstreamDialog::NginxAddUpstreamDialog(QWidget *parent) :
-        QDialog(parent),
-        ui(new Configuration::Ui::NginxAddPoolDialog)
+    NginxAddUpstreamDialog::NginxAddUpstreamDialog(QWidget *parent)
+        : QDialog(parent), ui(new Configuration::Ui::NginxAddPoolDialog)
     {
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -13,10 +12,7 @@ namespace Configuration
         ui->setupUi(this);
     }
 
-    NginxAddUpstreamDialog::~NginxAddUpstreamDialog()
-    {
-        delete ui;
-    }
+    NginxAddUpstreamDialog::~NginxAddUpstreamDialog() { delete ui; }
 
     QString NginxAddUpstreamDialog::pool()
     {

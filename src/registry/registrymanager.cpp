@@ -2,47 +2,46 @@
 
 namespace SoftwareRegistry
 {
-    Manager::Manager()
-    {
-        download();
-    }
+    Manager::Manager() { download(); }
 
     void Manager::download()
     {
-        /**         
-         * foreach registry
-         *   if (not JSON file exists) and (JSON file not older than updateInterval)
-         *     fetch API data as JSON
-         *     write to JSON file
-         */
+        /**
+   * foreach registry
+   *   if (not JSON file exists) and (JSON file not older than updateInterval)
+   *     fetch API data as JSON
+   *     write to JSON file
+   */
 
         // create "/bin/wpnxm-scp" folder, if not exists
         QDir dir(QDir::currentPath() + "/bin/wpnxm-scp");
-        if(!dir.exists()) {
+        if (!dir.exists()) {
             dir.mkpath(".");
         }
 
         /**
-         * Server Stack Software Registry
-         */
-        QString stackRegistryFile = QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
+   * Server Stack Software Registry
+   */
+        QString stackRegistryFile =
+            QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
 
-        if(fileNotExistingOrOutdated(stackRegistryFile)) {
-            downloadRegistry(QUrl("http://wpn-xm.org/updatecheck.php?s=all"), stackRegistryFile);
+        if (fileNotExistingOrOutdated(stackRegistryFile)) {
+            downloadRegistry(QUrl("http://wpn-xm.org/updatecheck.php?s=all"),
+                             stackRegistryFile);
         } else {
             qDebug() << "[Loading from Cache] Server Stack Software Registry";
             stackSoftwareRegistry = File::JSON::load(stackRegistryFile);
         }
 
         /**
-         * PHP Application Registry
-         */
+   * PHP Application Registry
+   */
 
         // TODO download PHP Application Registry
 
         /**
-         * Registry Metadata
-         */
+   * Registry Metadata
+   */
 
         // TODO download Registry Metadata
     }
@@ -51,12 +50,15 @@ namespace SoftwareRegistry
     {
         QNetworkAccessManager network;
 
-        // QNAM is non-blocking / non-synchronous, but we want to wait until reply has been received
-        // create custom temporary event loop on stack to block the stack until finished received
+        // QNAM is non-blocking / non-synchronous, but we want to wait until reply has
+        // been received
+        // create custom temporary event loop on stack to block the stack until
+        // finished received
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop,
+                         SLOT(quit()));
 
         // the HTTP request
         QNetworkRequest req(url);
@@ -68,19 +70,17 @@ namespace SoftwareRegistry
         if (updateCheckResponse->error() == QNetworkReply::NoError) {
 
             // read response and parse JSON
-            QString strReply = (QString) updateCheckResponse->readAll();
+            QString strReply = (QString)updateCheckResponse->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
 
             // save JSON to file
             File::JSON::save(jsonResponse, file);
-        }
-        else {
+        } else {
             // QNetworkReply::HostNotFoundError
             qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
-            QMessageBox::critical( QApplication::activeWindow(),
-                "Request Failure", updateCheckResponse->errorString(), QMessageBox::Ok
-            );
+            QMessageBox::critical(QApplication::activeWindow(), "Request Failure",
+                                  updateCheckResponse->errorString(), QMessageBox::Ok);
         }
 
         // cleanup pointer
@@ -90,16 +90,16 @@ namespace SoftwareRegistry
     bool Manager::fileNotExistingOrOutdated(QString fileName)
     {
         // if the file doesn't exist, we need to update
-        if(!QFile::exists(fileName)) {
+        if (!QFile::exists(fileName)) {
             return true;
         }
 
         // if the file exists, we need to check if it is old
         QDateTime fileModificationDate = QFileInfo(fileName).lastModified();
-        QDateTime today                = QDateTime::currentDateTime();
+        QDateTime today = QDateTime::currentDateTime();
 
         // updateInterval hardcoded to 3 days
-        if(3 <= fileModificationDate.daysTo(today)) {
+        if (3 <= fileModificationDate.daysTo(today)) {
             return true;
         }
 
@@ -112,9 +112,8 @@ namespace SoftwareRegistry
     }
 
     /*
-    QJsonObject RegistriesDownloader::getPhpSoftwareRegistry()
-    {
-        return phpSoftwareRegistry.object();
-    }*/
-
+QJsonObject RegistriesDownloader::getPhpSoftwareRegistry()
+{
+    return phpSoftwareRegistry.object();
+}*/
 }

@@ -3,19 +3,19 @@
 
 #include <QObject>
 
-#include <QNetworkInterface>
 #include <QNetworkAddressEntry>
+#include <QNetworkInterface>
 
 class NetworkUtils
 {
-    public:
-        NetworkUtils();
+public:
+    NetworkUtils();
 
-        static QList<QHostAddress> getLocalHostIPs();
+    static QList<QHostAddress> getLocalHostIPs();
 
-        QString getIpAddress();
-        void ping(QString hostname);
-        void traceroute(QString hostname);
+    QString getIpAddress();
+    void ping(QString hostname);
+    void traceroute(QString hostname);
 };
 
 #endif // NETWORKUTILS_H

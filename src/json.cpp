@@ -21,7 +21,7 @@ namespace File
 
     QString Text::load(QString fileName)
     {
-        //qDebug() << "[TEXT] Reading file [" << fileName << "]";
+        // qDebug() << "[TEXT] Reading file [" << fileName << "]";
 
         QFile file(fileName);
         file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -32,7 +32,7 @@ namespace File
 
     void Text::save(QString text, QString fileName)
     {
-        //qDebug() << "[TEXT] Writing file [" << fileName << "]";
+        // qDebug() << "[TEXT] Writing file [" << fileName << "]";
 
         QFile file(fileName);
         file.open(QFile::WriteOnly);

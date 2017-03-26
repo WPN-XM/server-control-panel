@@ -4,13 +4,13 @@
 #include "version.h"
 
 #include <QApplication>
-#include <QPainter>
 #include <QDateTime>
+#include <QPainter>
 #include <QPicture>
-#include <QScreen>
-#include <QStyleOptionProgressBar>
 #include <QProgressBar>
+#include <QScreen>
 #include <QSplashScreen>
+#include <QStyleOptionProgressBar>
 
 namespace ServerControlPanel
 {
@@ -18,19 +18,20 @@ namespace ServerControlPanel
     {
         Q_OBJECT
 
-        public:
-            explicit SplashScreen(const QPixmap &pixmap = QPixmap(), Qt::WindowFlags f = 0);
+    public:
+        explicit SplashScreen(const QPixmap &pixmap = QPixmap(),
+                              Qt::WindowFlags f = 0);
 
-        public slots:
-            void setProgress(int value);
-            void setMessage(QString msg, int progress);
+    public slots:
+        void setProgress(int value);
+        void setMessage(QString msg, int progress);
 
-        private:
-            int progress;
-            QString message = "Loading ..";
+    private:
+        int progress;
+        QString message = "Loading ..";
 
-        protected:
-            void drawContents(QPainter *painter);
+    protected:
+        void drawContents(QPainter *painter);
     };
 }
 

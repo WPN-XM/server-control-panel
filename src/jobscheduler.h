@@ -11,7 +11,6 @@ public:
     QList<QString> getActiveJobs();
     QList<QString> getHistoricJobs();
     QList<QString> getDetailsForJobId(int jobId);
-
 };
 
 #endif // JOBSCHEDULER_H

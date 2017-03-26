@@ -2,14 +2,13 @@
 
 namespace HostsFileManager
 {
-    HostsAddDialog::HostsAddDialog(QWidget *parent) :
-        QDialog(parent)
+    HostsAddDialog::HostsAddDialog(QWidget *parent) : QDialog(parent)
     {
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-        QPushButton* btnOk = new QPushButton("OK", this);
-        QPushButton* btnCancel = new QPushButton("Cancel", this);
+        QPushButton *btnOk = new QPushButton("OK", this);
+        QPushButton *btnCancel = new QPushButton("Cancel", this);
 
         lineEdit_Name = new QLineEdit(this);
         lineEdit_Address = new QLineEdit(this);
@@ -39,22 +38,15 @@ namespace HostsFileManager
         setWindowTitle(tr("Add Host"));
     }
 
-    QString HostsAddDialog::name()
-    {
-        return lineEdit_Name->text().trimmed();
-    }
+    QString HostsAddDialog::name() { return lineEdit_Name->text().trimmed(); }
 
-    QString HostsAddDialog::address()
-    {
-        return lineEdit_Address->text().trimmed();
-    }
+    QString HostsAddDialog::address() { return lineEdit_Address->text().trimmed(); }
 
     void HostsAddDialog::edit(QString name, QString adress)
     {
         setWindowTitle(tr("Edit Host"));
-       // m_leName->setEnabled(false);
+        // m_leName->setEnabled(false);
         lineEdit_Name->setText(name);
         lineEdit_Address->setText(adress);
     }
-
 }

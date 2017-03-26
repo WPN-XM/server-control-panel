@@ -4,17 +4,17 @@ namespace Settings
 {
     const QString appSettingsFileName("wpn-xm.ini");
 
-    SettingsManager::SettingsManager(QObject *parent) : QObject(parent)
-    {
-    }
+    SettingsManager::SettingsManager(QObject *parent) : QObject(parent) {}
 
     QString SettingsManager::file() const
     {
-        QString file = QCoreApplication::applicationDirPath() + '/' + appSettingsFileName;
+        QString file =
+            QCoreApplication::applicationDirPath() + '/' + appSettingsFileName;
         return QDir::toNativeSeparators(file);
     }
 
-    QVariant SettingsManager::get(const QString &key, const QVariant &defaultValue) const
+    QVariant SettingsManager::get(const QString &key,
+                                  const QVariant &defaultValue) const
     {
         QSettings settings(file(), QSettings::IniFormat);
         return settings.value(key, defaultValue);

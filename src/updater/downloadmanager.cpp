@@ -6,20 +6,18 @@
 namespace Downloader
 {
     DownloadManager::DownloadManager()
-        : queueMode (Parallel),
-          FilesDownloadedCounter(0),
-          FilesToDownloadCounter(0)
+        : queueMode(Parallel), FilesDownloadedCounter(0), FilesToDownloadCounter(0)
     {
-        connect(&nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
+        connect(&nam, SIGNAL(finished(QNetworkReply *)), this,
+                SLOT(finished(QNetworkReply *)));
 
-    #ifndef QT_NO_SSL
-        connect(&nam, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrors(QNetworkReply*,QList<QSslError>)));
-    #endif
+#ifndef QT_NO_SSL
+        connect(&nam, SIGNAL(sslErrors(QNetworkReply *, QList<QSslError>)), this,
+                SLOT(sslErrors(QNetworkReply *, QList<QSslError>)));
+#endif
     }
 
-    DownloadManager::~DownloadManager()
-    {
-    }
+    DownloadManager::~DownloadManager() {}
 
     void DownloadManager::get(QNetworkRequest &request, QString dlFolder, DownloadItem::DownloadMode dlMode)
     {
@@ -30,11 +28,13 @@ namespace Downloader
 
     void DownloadManager::get(QNetworkRequest &request)
     {
-        qDebug() << "DownloadManager::get()" << "Download enqueued.";
+        qDebug() << "DownloadManager::get()"
+                 << "Download enqueued.";
 
         // set Request Headers
-        QString appVersion(qApp->applicationName()+qApp->applicationVersion());
-        const static QByteArray userAgent(QByteArray(appVersion.toStdString().c_str()));
+        QString appVersion(qApp->applicationName() + qApp->applicationVersion());
+        const static QByteArray userAgent(
+            QByteArray(appVersion.toStdString().c_str()));
         request.setRawHeader("User-Agent", userAgent);
         request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
 
@@ -47,7 +47,8 @@ namespace Downloader
         transfers.append(dl);
         FilesToDownloadCounter = transfers.count();
 
-        connect(dl, SIGNAL(transferFinished(TransferItem*)), SLOT(downloadFinished(TransferItem*)));
+        connect(dl, SIGNAL(transferFinished(TransferItem *)),
+                SLOT(downloadFinished(TransferItem *)));
     }
 
     void DownloadManager::finished(QNetworkReply *)
@@ -58,9 +59,12 @@ namespace Downloader
     void DownloadManager::downloadFinished(Downloader::TransferItem *item)
     {
         qDebug() << "Download finished " << item->reply->url();
-        qDebug() << " with HTTP Status: " << item->reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qDebug() << " with HTTP Status: "
+                 << item->reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+                        .toInt();
         if (item->reply->error() != QNetworkReply::NoError) {
-            qDebug() << "and error: " << item->reply->error() << item->reply->errorString();
+            qDebug() << "and error: " << item->reply->error()
+                     << item->reply->errorString();
         }
         transfers.removeOne(item);
         FilesToDownloadCounter = transfers.count();
@@ -89,8 +93,9 @@ namespace Downloader
         }
     }
 
-    #ifndef QT_NO_SSL
-    void DownloadManager::sslErrors(QNetworkReply *, const QList<QSslError> &errors)
+#ifndef QT_NO_SSL
+    void DownloadManager::sslErrors(QNetworkReply *,
+                                    const QList<QSslError> &errors)
     {
         qDebug() << "sslErrors";
         foreach (const QSslError &error, errors) {
@@ -98,7 +103,7 @@ namespace Downloader
             qDebug() << error.certificate().toPem();
         }
     }
-    #endif
+#endif
 
     TransferItem *DownloadManager::findTransfer(QUrl url)
     {
@@ -120,10 +125,7 @@ namespace Downloader
         return 0;
     }
 
-    void DownloadManager::setQueueMode(QueueMode mode)
-    {
-        queueMode = mode;
-    }
+    void DownloadManager::setQueueMode(QueueMode mode) { queueMode = mode; }
 
     void DownloadManager::setDownloadFolder(QString folder)
     {

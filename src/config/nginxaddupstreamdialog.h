@@ -5,7 +5,8 @@
 
 namespace Configuration
 {
-    namespace Ui {
+    namespace Ui
+    {
         class NginxAddPoolDialog;
     }
 
@@ -20,13 +21,14 @@ namespace Configuration
         QString pool();
         QString method();
 
-        enum Column {
-            Pool, Method
+        enum Column
+        {
+            Pool,
+            Method
         };
 
     private:
         Configuration::Ui::NginxAddPoolDialog *ui;
     };
-
 }
 #endif // NGINXADDUPSTREAMDIALOG_H

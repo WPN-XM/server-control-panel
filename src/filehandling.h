@@ -8,8 +8,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QString>
 #include <QProcess>
+#include <QString>
 #include <QTemporaryFile>
 
 namespace File

@@ -3,9 +3,8 @@
 
 namespace Configuration
 {
-    NginxAddServerDialog::NginxAddServerDialog(QWidget *parent) :
-        QDialog(parent),
-        ui(new Configuration::Ui::NginxAddServerDialog)
+    NginxAddServerDialog::NginxAddServerDialog(QWidget *parent)
+        : QDialog(parent), ui(new Configuration::Ui::NginxAddServerDialog)
     {
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -13,10 +12,7 @@ namespace Configuration
         ui->setupUi(this);
     }
 
-    NginxAddServerDialog::~NginxAddServerDialog()
-    {
-        delete ui;
-    }
+    NginxAddServerDialog::~NginxAddServerDialog() { delete ui; }
 
     QString NginxAddServerDialog::address()
     {
@@ -47,5 +43,4 @@ namespace Configuration
     {
         return ui->lineEdit_PHPChildren->text().trimmed();
     }
-
 }

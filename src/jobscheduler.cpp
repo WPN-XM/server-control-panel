@@ -1,16 +1,13 @@
 #include "jobscheduler.h"
 
-JobScheduler::JobScheduler()
-{
-
-}
+JobScheduler::JobScheduler() {}
 
 /**
  * Get list of active jobs (JobStatus::Active).
  */
 QList<QString> JobScheduler::getActiveJobs()
 {
-    QList<QString> list; 
+    QList<QString> list;
     list << "foo";
     return list;
 }
@@ -20,7 +17,7 @@ QList<QString> JobScheduler::getActiveJobs()
  */
 QList<QString> JobScheduler::getHistoricJobs()
 {
-    QList<QString> list; 
+    QList<QString> list;
     list << "foo";
     return list;
 }
@@ -32,7 +29,7 @@ QList<QString> JobScheduler::getDetailsForJobId(int jobId)
 {
     Q_UNUSED(jobId);
 
-    QList<QString> list; 
+    QList<QString> list;
     list << "foo";
     return list;
 }

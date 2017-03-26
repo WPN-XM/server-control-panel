@@ -5,7 +5,8 @@
 
 namespace Configuration
 {
-    namespace Ui {
+    namespace Ui
+    {
         class NginxAddServerDialog;
     }
 
@@ -24,8 +25,14 @@ namespace Configuration
         QString timeout();
         QString phpchildren();
 
-        enum Column {
-            Address, Port, Weight, MaxFails, Timeout, PHPChildren
+        enum Column
+        {
+            Address,
+            Port,
+            Weight,
+            MaxFails,
+            Timeout,
+            PHPChildren
         };
 
     private:

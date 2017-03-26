@@ -1,15 +1,15 @@
 #ifndef PROCESSES_H
 #define PROCESSES_H
 
-#include <QObject>
-#include <QIcon>
-#include <QFileInfo>
 #include <QFileIconProvider>
+#include <QFileInfo>
+#include <QIcon>
+#include <QObject>
 
-#include <windows.h>
-#include <stdio.h>
-#include <psapi.h>
 #include <TlHelp32.h>
+#include <psapi.h>
+#include <stdio.h>
+#include <windows.h>
 
 // Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
 #include <iphlpapi.h>
@@ -17,16 +17,17 @@
 
 struct Process
 {
-    QString name;        // 1
+    QString name; // 1
     QString path;
-    QString pid;         // 2
+    QString pid; // 2
     QString ppid;
-    QString port;        // 3
+    QString port; // 3
     QString memoryUsage; // 4
     QIcon icon;
 };
 
-struct PidAndPort {
+struct PidAndPort
+{
     QString pid;
     QString port;
 };
@@ -35,61 +36,66 @@ class Processes : public QObject
 {
     Q_OBJECT
 
-    public:
-        // singleton
-        static Processes *getInstance();
-        static void release();
-        static Processes *theInstance;
+public:
+    // singleton
+    static Processes *getInstance();
+    static void release();
+    static Processes *theInstance;
 
-        static QList<Process> getProcessesList();
-        static QList<PidAndPort> getPortsList();
-        static QList<Process> getMonitoredProcessesList();
+    static QList<Process> getProcessesList();
+    static QList<PidAndPort> getPortsList();
+    static QList<Process> getMonitoredProcessesList();
 
-        static bool killProcess(qint64 pid);
-        static bool killProcess(const QString &name);
+    static bool killProcess(qint64 pid);
+    static bool killProcess(const QString &name);
 
-        static Process findByName(const QString &name);
-        static Process findByPid(const QString &pid);
+    static Process findByName(const QString &name);
+    static Process findByPid(const QString &pid);
 
-        static QList<Process> getRunningProcesses();
-        static QList<PidAndPort> getPorts();
+    static QList<Process> getRunningProcesses();
+    static QList<PidAndPort> getPorts();
 
-        static bool areThereAlreadyRunningProcesses();
+    static bool areThereAlreadyRunningProcesses();
 
-        static void refresh();       
+    static void refresh();
 
-        enum ProcessState {
-            NotRunning,
-            Starting,
-            Running
-        };
-        Q_ENUM(ProcessState)
+    enum ProcessState
+    {
+        NotRunning,
+        Starting,
+        Running
+    };
+    Q_ENUM(ProcessState)
 
-        ProcessState getProcessState(const QString &processName) const;
+    ProcessState getProcessState(const QString &processName) const;
 
-        static bool start(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
-        static bool start(const QString &program, const QStringList &arguments);
-        static bool start(const QString &command);
+    static bool start(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
+    static bool start(const QString &program, const QStringList &arguments);
+    static bool start(const QString &command);
 
-        static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
-        static bool startDetached(const QString &program, const QStringList &arguments);
-        static bool startDetached(const QString &command);
+    static bool startDetached(const QString &program,
+                              const QStringList &arguments,
+                              const QString &workingDir = QString());
+    static bool startDetached(const QString &program,
+                              const QStringList &arguments);
+    static bool startDetached(const QString &command);
 
-        static void delay(int millisecondsToWait);
+    static void delay(int millisecondsToWait);
 
-    private:
-        // constructor is private, because singleton
-        explicit Processes();
-        static QList<Process> processesList;
-        static QList<PidAndPort> portsList;
-        static QList<Process> monitoredProcessesList;
+private:
+    // constructor is private, because singleton
+    explicit Processes();
+    static QList<Process> processesList;
+    static QList<PidAndPort> portsList;
+    static QList<Process> monitoredProcessesList;
 
-        static QStringList getProcessDetails(DWORD processID);
-        static QString getSizeHumanReadable(float bytes);
+    static QStringList getProcessDetails(DWORD processID);
+    static QString getSizeHumanReadable(float bytes);
 
-        static QStringList getProcessNamesToSearchFor();
+    static QStringList getProcessNamesToSearchFor();
 
-        static QString qt_create_commandline(const QString &program, const QStringList &arguments);
+    static QString qt_create_commandline(const QString &program,
+                                         const QStringList &arguments);
 };
 
 #endif // PROCESSES_H

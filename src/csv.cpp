@@ -1,15 +1,19 @@
 #include "csv.h"
 
 #include <QFile>
-#include <QTextStream>
-#include <QTextCodec>
 #include <QRegExp>
+#include <QTextCodec>
+#include <QTextStream>
 
 namespace File
 {
     QList<QStringList> CSV::parse(const QString &string)
     {
-        enum State {Normal, Quote} state = Normal;
+        enum State
+        {
+            Normal,
+            Quote
+        } state = Normal;
         QList<QStringList> data;
         QStringList line;
         QString value;
@@ -47,7 +51,7 @@ namespace File
             else if (state == Quote) {
                 // double quote
                 if (current == '"') {
-                    int index = (i+1 < string.size()) ? i+1 : string.size();
+                    int index = (i + 1 < string.size()) ? i + 1 : string.size();
                     QChar next = string.at(index);
                     if (next == '"') {
                         value += '"';
@@ -68,12 +72,12 @@ namespace File
 
     QString CSV::initString(const QString &string)
     {
-        QString result = string;        
+        QString result = string;
         result.replace("\r\n", "\n");
         result.replace("\r", "");
-        if (result.at(result.size()-1) != '\n') {
+        if (result.at(result.size() - 1) != '\n') {
             result += '\n';
-        }        
+        }
         return result;
     }
 
@@ -82,14 +86,15 @@ namespace File
         return parse(initString(string));
     }
 
-    QList<QStringList> CSV::parseFromFile(const QString &filename, const QString &codec)
+    QList<QStringList> CSV::parseFromFile(const QString &filename,
+                                          const QString &codec)
     {
         QString string;
         QFile file(filename);
         if (file.open(QIODevice::ReadOnly)) {
             QTextStream in(&file);
             if (!codec.isEmpty()) {
-              in.setCodec(QTextCodec::codecForName(codec.toLatin1()));
+                in.setCodec(QTextCodec::codecForName(codec.toLatin1()));
             }
             string = in.readAll();
             file.close();

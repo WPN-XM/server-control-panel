@@ -2,50 +2,49 @@
 #define HOST_H
 
 // Windows / C++
-#include <stdlib.h>
-#include <windows.h>
 #include <shellapi.h>
+#include <stdlib.h>
 #include <string>
+#include <windows.h>
 
-#include <QStringList>
-#include <QTextStream>
-#include <QFile>
-#include <QTemporaryFile>
 #include <QDir>
-#include <QThread>
+#include <QFile>
 #include <QList>
 #include <QString>
+#include <QStringList>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <QThread>
 
 namespace HostsFileManager
 {
     class Host
     {
-        public:
-            explicit Host();
-            explicit Host(QString strName, QString strAddress);
+    public:
+        explicit Host();
+        explicit Host(QString strName, QString strAddress);
 
-            static QList<Host*> GetHosts();
-            static void SetHosts(QList<Host*> listHosts);
+        static QList<Host *> GetHosts();
+        static void SetHosts(QList<Host *> listHosts);
 
-            QString name();
-            void setName(QString strName);
+        QString name();
+        void setName(QString strName);
 
-            QString address();
-            void setAddress(QString strAddress);
+        QString address();
+        void setAddress(QString strAddress);
 
-            //bool isEnable();
-            //void setEnable(bool bEnable);
+        // bool isEnable();
+        // void setEnable(bool bEnable);
 
-            bool operator==(const Host &host) const;
+        bool operator==(const Host &host) const;
 
-        private:
-            static QString getHostFile();
+    private:
+        static QString getHostFile();
 
-            //bool m_bIsEnable;
-            QString strName;
-            QString strAddress;
+        // bool m_bIsEnable;
+        QString strName;
+        QString strAddress;
     };
-
 }
 
 #endif // HOST_H

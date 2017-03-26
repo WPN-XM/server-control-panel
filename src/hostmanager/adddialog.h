@@ -2,11 +2,11 @@
 #define ADDDIALOG_H
 
 #include <QDialog>
-#include <QLineEdit>
-#include <QLabel>
-#include <QPushButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 #include <QVBoxLayout>
 
 #include "host.h"
@@ -17,22 +17,21 @@ namespace HostsFileManager
     {
         Q_OBJECT
 
-        public:
-            explicit HostsAddDialog(QWidget *parent = 0);
-            QString name();
-            QString address();
+    public:
+        explicit HostsAddDialog(QWidget *parent = 0);
+        QString name();
+        QString address();
 
-            void edit(QString name, QString adress);
+        void edit(QString name, QString adress);
 
-        signals:
+    signals:
 
-        public slots:
+    public slots:
 
-        private:
-            QLineEdit *lineEdit_Name;
-            QLineEdit *lineEdit_Address;
+    private:
+        QLineEdit *lineEdit_Name;
+        QLineEdit *lineEdit_Address;
     };
-
 }
 
 #endif // ADDDIALOG_H

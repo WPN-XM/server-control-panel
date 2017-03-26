@@ -2,10 +2,8 @@
 
 namespace HostsFileManager
 {
-    HostsTableModel::HostsTableModel(QObject *parent) :
-        QAbstractTableModel(parent)
-    {
-    }
+    HostsTableModel::HostsTableModel(QObject *parent)
+        : QAbstractTableModel(parent) {}
 
     int HostsTableModel::rowCount(const QModelIndex &parent) const
     {
@@ -27,17 +25,17 @@ namespace HostsFileManager
         if (index.row() >= listHosts.size() || index.row() < 0)
             return QVariant();
 
-        Host* host = listHosts.at(index.row());
+        Host *host = listHosts.at(index.row());
 
         /*
-        if (role == Qt::CheckStateRole){
-            switch(index.column()){
-            case COLUMN_ADDRESS:
-                return host->isEnable()?Qt::Checked:Qt::Unchecked;
-            }
-        }*/
+  if (role == Qt::CheckStateRole){
+      switch(index.column()){
+      case COLUMN_ADDRESS:
+          return host->isEnable()?Qt::Checked:Qt::Unchecked;
+      }
+  }*/
         if (role == Qt::DisplayRole) {
-            switch(index.column()){
+            switch (index.column()) {
             case COLUMN_ADDRESS:
                 return host->address();
             case COLUMN_NAME:
@@ -54,12 +52,12 @@ namespace HostsFileManager
 
         if (orientation == Qt::Horizontal) {
             switch (section) {
-                case COLUMN_ADDRESS:
-                    return "Address";
-                case COLUMN_NAME:
-                    return "Name";
-                default:
-                    return QVariant();
+            case COLUMN_ADDRESS:
+                return "Address";
+            case COLUMN_NAME:
+                return "Name";
+            default:
+                return QVariant();
             }
         }
 
@@ -79,9 +77,9 @@ namespace HostsFileManager
         if (index.isValid() && role == Qt::EditRole) {
             int row = index.row();
 
-            Host* host = listHosts.value(row);
+            Host *host = listHosts.value(row);
 
-            switch(index.column()){
+            switch (index.column()) {
             case COLUMN_ADDRESS:
                 host->setAddress(value.toString());
                 break;
@@ -103,10 +101,10 @@ namespace HostsFileManager
     bool HostsTableModel::insertRows(int position, int rows, const QModelIndex &index)
     {
         Q_UNUSED(index);
-        beginInsertRows(QModelIndex(), position, position+rows-1);
+        beginInsertRows(QModelIndex(), position, position + rows - 1);
 
-        for (int row=0; row < rows; row++) {
-            Host* host = new Host();
+        for (int row = 0; row < rows; row++) {
+            Host *host = new Host();
             listHosts.insert(position, host);
         }
 
@@ -117,10 +115,10 @@ namespace HostsFileManager
     bool HostsTableModel::removeRows(int position, int rows, const QModelIndex &index)
     {
         Q_UNUSED(index);
-        beginRemoveRows(QModelIndex(), position, position+rows-1);
+        beginRemoveRows(QModelIndex(), position, position + rows - 1);
 
-        for (int row=0; row < rows; ++row) {
-            Host* host = listHosts.takeAt(position);
+        for (int row = 0; row < rows; ++row) {
+            Host *host = listHosts.takeAt(position);
             delete host;
         }
 
@@ -128,16 +126,13 @@ namespace HostsFileManager
         return true;
     }
 
-    void HostsTableModel::setList(QList<Host*> listHosts)
+    void HostsTableModel::setList(QList<Host *> listHosts)
     {
         listHosts = listHosts;
-        QModelIndex root = index(0,0);
-        emit(dataChanged(root, index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
+        QModelIndex root = index(0, 0);
+        emit(dataChanged(root,
+                         index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
     }
 
-    QList<Host*> HostsTableModel::getList()
-    {
-        return listHosts;
-    }
-
+    QList<Host *> HostsTableModel::getList() { return listHosts; }
 }

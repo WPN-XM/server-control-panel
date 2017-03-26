@@ -3,11 +3,11 @@
 
 #include "src/json.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QUrl>
 #include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QUrl>
 
 #include <QDir>
 #include <QFile>
@@ -16,26 +16,26 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include <QMessageBox>
 #include <QApplication>
+#include <QMessageBox>
 
 namespace SoftwareRegistry
 {
     class Manager
     {
-        public:
-            Manager();
-            QJsonObject getServerStackSoftwareRegistry();
-            //QJsonObject getPhpSoftwareRegistry();
-        private:
-            void download();
-            void downloadRegistry(QUrl url, QString file);
-            bool fileNotExistingOrOutdated(QString fileName);
-        protected:
-            QJsonDocument stackSoftwareRegistry;
-            //QJsonDocument phpSoftwareRegistry;
-    };
+    public:
+        Manager();
+        QJsonObject getServerStackSoftwareRegistry();
+        // QJsonObject getPhpSoftwareRegistry();
+    private:
+        void download();
+        void downloadRegistry(QUrl url, QString file);
+        bool fileNotExistingOrOutdated(QString fileName);
 
+    protected:
+        QJsonDocument stackSoftwareRegistry;
+        // QJsonDocument phpSoftwareRegistry;
+    };
 }
 
 #endif // REGISTRIESDOWNLOADER_H

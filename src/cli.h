@@ -5,20 +5,20 @@
 #include "version.h"
 #include "windows.h"
 
-#include <QCommandLineParser>
 #include <QCommandLineOption>
+#include <QCommandLineParser>
 #include <QDate>
 
 namespace ServerControlPanel
 {
     class CLI
     {
-        public:
-            void handleCommandLineArguments();
-            void printHelpText(QString errorMessage = QString());
-            void execServers(const QString &command, QCommandLineOption &clioption, QStringList args, QCommandLineParser &parser);
-            void colorTest();
-            void colorPrint(QString msg, QString colorName = "gray");
+    public:
+        void handleCommandLineArguments();
+        void printHelpText(QString errorMessage = QString());
+        void execServers(const QString &command, QCommandLineOption &clioption, QStringList args, QCommandLineParser &parser);
+        void colorTest();
+        void colorPrint(QString msg, QString colorName = "gray");
     };
 }
 

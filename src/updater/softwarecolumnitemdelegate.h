@@ -1,19 +1,19 @@
 #ifndef SOFTWARECOLUMNITEMDELEGATE_H
 #define SOFTWARECOLUMNITEMDELEGATE_H
 
-#include <QStyledItemDelegate>
-#include <QLabel>
-#include <QPainter>
-#include <QTextDocument>
 #include <QDesktopServices>
+#include <QLabel>
 #include <QMouseEvent>
+#include <QPainter>
+#include <QStyledItemDelegate>
+#include <QTextDocument>
 
 namespace Updater
 {
 
     class SoftwareColumnItemDelegate : public QStyledItemDelegate
     {
-         Q_OBJECT
+        Q_OBJECT
     public:
         explicit SoftwareColumnItemDelegate(QObject *parent = 0);
         ~SoftwareColumnItemDelegate();
@@ -27,7 +27,6 @@ namespace Updater
     public slots:
         void onClickedOpenURL(const QModelIndex &index);
     };
-
 }
 
 #endif // SOFTWARECOLUMNITEMDELEGATE_H

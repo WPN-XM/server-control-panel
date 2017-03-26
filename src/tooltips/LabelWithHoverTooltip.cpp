@@ -3,8 +3,7 @@
 
 #include <QDebug>
 
-LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget* parent)
-    : QLabel(parent)
+LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget *parent) : QLabel(parent)
 {
     this->setAttribute(Qt::WA_Hover, true);
 
@@ -14,8 +13,9 @@ LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget* parent)
 
 void LabelWithHoverTooltip::setText(const QString &value)
 {
-    if(objectName() == "label_PHP_Port") {
-        text() = "The following upstreams are running: \n \n bla \n blubb \n " + value;
+    if (objectName() == "label_PHP_Port") {
+        text() =
+            "The following upstreams are running: \n \n bla \n blubb \n " + value;
     } else {
         text() = value;
     }
@@ -29,21 +29,21 @@ void LabelWithHoverTooltip::openBalloonTipForPHP(const QString &message)
     balloonTip->show();
 }
 
-void LabelWithHoverTooltip::enterEvent(QEvent * event)
+void LabelWithHoverTooltip::enterEvent(QEvent *event)
 {
     qDebug() << Q_FUNC_INFO << objectName();
-    if(objectName() == "label_PHP_Port") {
+    if (objectName() == "label_PHP_Port") {
         qDebug() << text();
         openBalloonTipForPHP(text());
     }
     QWidget::enterEvent(event);
 }
 
-void LabelWithHoverTooltip::leaveEvent(QEvent * event)
+void LabelWithHoverTooltip::leaveEvent(QEvent *event)
 {
     qDebug() << Q_FUNC_INFO << objectName();
 
-    if(balloonTip != 0) {
+    if (balloonTip != 0) {
         balloonTip->close();
         delete balloonTip;
     }
