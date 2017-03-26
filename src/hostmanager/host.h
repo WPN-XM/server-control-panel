@@ -2,10 +2,10 @@
 #define HOST_H
 
 // Windows / C++
+#include <windows.h>
 #include <shellapi.h>
 #include <stdlib.h>
 #include <string>
-#include <windows.h>
 
 #include <QDir>
 #include <QFile>

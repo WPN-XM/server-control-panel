@@ -6,10 +6,10 @@
 #include <QIcon>
 #include <QObject>
 
+#include <windows.h>
 #include <TlHelp32.h>
 #include <psapi.h>
 #include <stdio.h>
-#include <windows.h>
 
 // Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
 #include <iphlpapi.h>
