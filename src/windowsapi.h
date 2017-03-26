@@ -1,8 +1,6 @@
 #ifndef WINDOWSAPI_H
 #define WINDOWSAPI_H
 
-#include <windows.h>
-
 // this is needed for "createShellLink"
 #include <objbase.h>
 #include <shlobj.h> // type defintion for IShellLink
