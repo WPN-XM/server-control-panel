@@ -38,7 +38,8 @@ BinPackParameters: false
 BreakBeforeBinaryOperators: false
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializersBeforeComma: false
-ColumnLimit: 0
+# 16:9 4k screen, but still argumenting for 80. headshot.
+ColumnLimit: 120
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
