@@ -3,7 +3,7 @@
 namespace Updater
 {
 
-    /**
+/**
  * @brief self_update::self_update
  *
  * Self_Update implements a self-update strategy for this executable.
@@ -35,20 +35,53 @@ namespace Updater
             return;
         }
 
-        // setup download folder
-        downloadFolder =
-            QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
-        if (!QDir(downloadFolder).exists()) {
-            QDir(downloadFolder).mkpath(".");
+        // check, if interval was set in INI
+        // if not set, the interval defaults to off
+        QString intervalString = settings->get("selfupdater/interval", QVariant(QString("off"))).toString();
+
+        qint64 lastTimeChecked =  settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime().currentMSecsSinceEpoch();
+
+        qint64 interval;
+        if(intervalString == "off") {
+            interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
+        }
+        if(intervalString == "daily") {
+            interval = QDateTime::currentDateTime().addDays(Interval::Daily).currentMSecsSinceEpoch();
+        }
+        if(intervalString == "weekly") {
+            interval = QDateTime::currentDateTime().addDays(Interval::Weekly).currentMSecsSinceEpoch();
+        }
+        if(intervalString == "monthly") {
+            interval = QDateTime::currentDateTime().addDays(Interval::Monthly).currentMSecsSinceEpoch();
         }
 
-        if (updateAvailable()) {
-            qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
+        qint64 now = QDateTime::currentDateTime().currentMSecsSinceEpoch();
 
-            emit notifyUpdateAvailable(versionInfo);
+        // run update in 3 cases
+        // 1. userRequestedUpdate = forced update run, regardless of interval
+        // 2. lastTimeCheck 0 = an update was never done before
+        // 3. based on the selected update interval = it's now time to update
+        if(userRequestedUpdate
+           || lastTimeChecked == 0
+           || now - interval > lastTimeChecked) {
+            // set the last time check flag
+             settings->get("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
 
-            if (settings->get("selfupdater/autoupdate").toBool()) {
-                doUpdate();
+            // setup download folder
+            downloadFolder =
+                QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
+            if (!QDir(downloadFolder).exists()) {
+                QDir(downloadFolder).mkpath(".");
+            }
+
+            if (updateAvailable()) {
+                qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
+
+                emit notifyUpdateAvailable(versionInfo);
+
+                if (settings->get("selfupdater/autoupdate").toBool()) {
+                    doUpdate();
+                }
             }
         }
     }

@@ -40,6 +40,14 @@ namespace Updater
 
         void askForRestart();
 
+        enum Interval
+        {
+            Off     = 0,
+            Daily   = 1,
+            Weekly  = 7,
+            Monthly = 30
+        };
+
     public slots:
         void extract();
         void askForUpdate();
