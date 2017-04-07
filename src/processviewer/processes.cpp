@@ -6,8 +6,7 @@
 
 // initialize static members
 Processes *Processes::theInstance = NULL;
-QList<Process> Processes::processesList;
-QList<PidAndPort> Processes::portsList;
+
 QList<Process> Processes::monitoredProcessesList;
 
 Processes *Processes::getInstance()
@@ -27,37 +26,13 @@ void Processes::release()
     theInstance = NULL;
 }
 
-Processes::Processes() { refresh(); }
-
-QList<Process> Processes::getProcessesList()
-{
-    getRunningProcesses();
-
-    return processesList;
-}
-QList<PidAndPort> Processes::getPortsList()
-{
-    getPorts();
-
-    return portsList;
-}
-QList<Process> Processes::getMonitoredProcessesList()
-{
-    refresh();
-
-    return monitoredProcessesList;
-}
-
-void Processes::refresh()
-{
-    portsList = getPorts();
-    processesList = getRunningProcesses();
-}
+Processes::Processes() { }
 
 Process Processes::findByName(const QString &name)
 {
+    QList<Process> processes = getRunningProcesses();
     Process p;
-    foreach (p, getProcessesList()) {
+    foreach (p, processes) {
         if (p.pid < 0) {
             continue; // if negative pid
         }
@@ -70,9 +45,10 @@ Process Processes::findByName(const QString &name)
 }
 
 Process Processes::findByPid(const QString &pid)
-{
+{    
+    QList<Process> processes = getRunningProcesses();
     Process p;
-    foreach (p, getProcessesList()) {
+    foreach (p, processes) {
         if (p.pid == pid) {
             return p;
         }
@@ -110,9 +86,13 @@ bool Processes::areThereAlreadyRunningProcesses()
     for (int i = 0; i < processesToSearch.size(); ++i) {
         qDebug() << "Searching for process: "
                  << processesToSearch.at(i).toLocal8Bit().constData();
-        foreach (Process process, getProcessesList()) {
-            if (process.name.contains(
-                    processesToSearch.at(i).toLatin1().constData())) {
+        foreach (Process process, getRunningProcesses())
+        {
+            if(isSystemProcess(process.name)) {
+                continue;
+            }
+
+            if (process.name.contains(processesToSearch.at(i).toLatin1().constData())) {
                 qDebug() << "Found: " << process.name;
                 monitoredProcessesList.append(process);
             }
@@ -120,6 +100,23 @@ bool Processes::areThereAlreadyRunningProcesses()
     }
 
     return (!monitoredProcessesList.isEmpty());
+}
+
+// static
+bool Processes::isSystemProcess(QString processName)
+{
+    if (processName == "[System Process]" ||
+        processName == "svchost.exe" ||
+        processName == "System" ||
+        processName == "wininit" ||
+        processName == "winlogon" ||
+        processName == "dllhost" ||
+        processName == "csrss")
+    {
+        return true;
+    }
+
+    return false;
 }
 
 // static
@@ -258,12 +255,11 @@ Processes::getProcessState(const QString &processName) const
 // static
 bool Processes::killProcess(qint64 pid)
 {
-    qDebug() << "going to kill process by pid:" << pid;
+    qDebug() << "going to kill process of pid:" << pid;
 
     HANDLE hProcess;
 
-    hProcess =
-        OpenProcess(PROCESS_ALL_ACCESS | PROCESS_TERMINATE, FALSE, DWORD(pid));
+    hProcess = OpenProcess(PROCESS_ALL_ACCESS | PROCESS_TERMINATE, FALSE, DWORD(pid));
 
     if (hProcess == NULL) {
         qDebug() << "OpenProcess() failed, ecode:" << GetLastError();
@@ -275,7 +271,7 @@ bool Processes::killProcess(qint64 pid)
     CloseHandle(hProcess);
 
     if (result == 0) {
-        // qDebug() << "Error. Could not TerminateProcess with pid:" << pid;
+        qDebug() << "Error. Could not TerminateProcess with PID:" << pid;
         return false;
     }
 
@@ -283,15 +279,63 @@ bool Processes::killProcess(qint64 pid)
 }
 
 // static
+bool Processes::killProcessTree(qint64 pid)
+{
+    qDebug() << "going to kill process tree of pid:" << pid;
+
+    PROCESSENTRY32 pe;
+    memset(&pe, 0, sizeof(PROCESSENTRY32));
+    pe.dwSize = sizeof(PROCESSENTRY32);
+
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+    if (Process32First(hSnap, &pe))
+    {
+        BOOL bContinue = TRUE;
+
+        // kill child processes
+        while (bContinue)
+        {
+            // only kill child processes
+            if (pe.th32ParentProcessID == pid)
+            {
+                HANDLE hChildProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID);
+
+                if (hChildProc) {
+                    TerminateProcess(hChildProc, 1);
+                    CloseHandle(hChildProc);
+                }
+            }
+
+            bContinue = Process32Next(hSnap, &pe);
+        }
+
+        // kill the main process
+        HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+
+        if (hProcess) {
+            TerminateProcess(hProcess, 1);
+            CloseHandle(hProcess);
+        }
+    }
+    return true;
+}
+
+// static
 bool Processes::killProcess(const QString &name)
 {
-    // qDebug() << "going to kill process by name:" << name;
     Process p = findByName(name);
-    if (p.pid < 0) {
-        return false;
-    }
-    qint64 pid = p.pid.toLong();
+
+    qint64 pid = (p.pid).toLong();
+
     return killProcess(pid);
+}
+
+bool Processes::killProcessTree(const QString &name)
+{
+    Process p = findByName(name);
+
+    return killProcessTree(p.pid.toLong());
 }
 
 // static

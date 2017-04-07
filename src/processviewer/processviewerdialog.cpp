@@ -53,20 +53,19 @@ void ProcessViewerDialog::setChecked_ShowOnlyWpnxmProcesses()
 void ProcessViewerDialog::refreshProcesses()
 {
     ui->treeWidget->clear();
-    processes->refresh();
     renderProcesses();
     ui->treeWidget->expandAll();
 }
 
 void ProcessViewerDialog::renderProcesses()
 {
-    foreach (Process process, processes->getProcessesList()) {
+    foreach (Process process, processes->getRunningProcesses()) {
         // find parentItem in the tree by looking for parentId recursivley
         QList<QTreeWidgetItem *> parentItem = ui->treeWidget->findItems(
             process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
 
         // lookup port for this pid and add it to the process struct
-        foreach (const PidAndPort &p, processes->getPortsList()) {
+        foreach (const PidAndPort &p, processes->getPorts()) {
             if (p.pid == process.pid) {
                 process.port = p.port;
                 break;

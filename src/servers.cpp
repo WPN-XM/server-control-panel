@@ -9,8 +9,7 @@ namespace Servers
     {
         QStringList installedServers = getListOfServerNamesInstalled();
 
-        qDebug() << "[Servers] Create Server objects and tray submenus for installed "
-                    "servers.";
+        qDebug() << "[Servers] Create Server objects and tray submenus for installed servers.";
 
         // build server objects
         foreach (QString serverName, installedServers) {
@@ -585,16 +584,14 @@ namespace Servers
    *
    */
 
-        while (processes->getProcessState("spawn.exe") ==
-               Processes::ProcessState::Running) {
-            processes->killProcess("spawn.exe");
-            processes->delay(50);
+        while (processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
+            processes->killProcessTree("spawn.exe");
+            processes->delay(100);
         }
 
-        while (processes->getProcessState("php-cgi.exe") ==
-               Processes::ProcessState::Running) {
-            processes->killProcess("php-cgi.exe");
-            processes->delay(50);
+        while (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running) {
+            processes->killProcessTree("php-cgi.exe");
+            processes->delay(100);
         }
 
         emit signalMainWindow_ServerStatusChange("PHP", false);

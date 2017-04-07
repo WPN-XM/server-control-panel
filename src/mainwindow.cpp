@@ -110,9 +110,12 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusIndicators()
     {
-        processes->refresh();
+        foreach (Process process, processes->getRunningProcesses())
+        {
+            if(processes->isSystemProcess(process.name)) {
+                continue;
+            }
 
-        foreach (Process process, processes->getMonitoredProcessesList()) {
             QString processName = process.name.section(".", 0, 0);
 
             QString serverName = servers->getCamelCasedServerName(processName);

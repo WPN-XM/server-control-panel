@@ -21,7 +21,7 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
     QGroupBox *groupBox = new QGroupBox(tr("Used Ports"));
     QVBoxLayout *vbox = new QVBoxLayout;
 
-    QList<PidAndPort> ports = Processes::getInstance()->getPortsList();
+    QList<PidAndPort> ports = Processes::getInstance()->getPorts();
 
     // iterate over ports list and draw a label for each
     foreach (PidAndPort p, ports) {

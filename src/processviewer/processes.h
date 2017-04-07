@@ -42,12 +42,15 @@ public:
     static void release();
     static Processes *theInstance;
 
-    static QList<Process> getProcessesList();
-    static QList<PidAndPort> getPortsList();
+    //static QList<Process> getProcessesList();
+    //static QList<PidAndPort> getPortsList();
     static QList<Process> getMonitoredProcessesList();
 
     static bool killProcess(qint64 pid);
     static bool killProcess(const QString &name);
+
+    static bool killProcessTree(const QString &name);    
+    static bool killProcessTree(qint64 pid);
 
     static Process findByName(const QString &name);
     static Process findByPid(const QString &pid);
@@ -57,7 +60,7 @@ public:
 
     static bool areThereAlreadyRunningProcesses();
 
-    static void refresh();
+    static bool isSystemProcess(QString processName);
 
     enum ProcessState
     {
@@ -85,8 +88,7 @@ public:
 private:
     // constructor is private, because singleton
     explicit Processes();
-    static QList<Process> processesList;
-    static QList<PidAndPort> portsList;
+
     static QList<Process> monitoredProcessesList;
 
     static QStringList getProcessDetails(DWORD processID);

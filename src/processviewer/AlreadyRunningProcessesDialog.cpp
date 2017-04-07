@@ -28,7 +28,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     QVBoxLayout *vbox = new QVBoxLayout;
 
     QList<Process> runningProcessesList =
-        Processes::getInstance()->getMonitoredProcessesList();
+        Processes::getInstance()->getRunningProcesses();
 
     // iterate over proccesFoundList and draw a "process shutdown" checkbox for
     // each one
@@ -116,9 +116,9 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
             delete cb;
         }
 
-        // refresh the internal list of processes
+        // delay, after process kills
         Processes::getInstance()->delay(250);
-        Processes::getInstance()->refresh();
+
         //}
 
         // if continue was clicked (reject), do update status indicators in
