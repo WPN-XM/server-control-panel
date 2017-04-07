@@ -197,6 +197,11 @@ void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process)
 void ProcessViewerDialog::on_pushButton_KillProcess_released()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
+
+    if(!item) { // do nothing, if no item selected
+        return;
+    }
+
     qint64 pid = item->text(1).toLong();
     if (Processes::killProcess(pid)) {
         QObject().thread()->usleep(1000 * 1000 * 0.5); // 0,5sec
