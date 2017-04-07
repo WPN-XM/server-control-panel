@@ -210,37 +210,37 @@
         <property name="title">
          <string>Filter</string>
         </property>
-        <widget class="QCheckBox" name="checkBox_filterExcludeWindowsProcesses">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+        <widget class="QWidget" name="verticalLayoutWidget">
          <property name="geometry">
           <rect>
-           <x>10</x>
-           <y>20</y>
-           <width>201</width>
-           <height>17</height>
+           <x>5</x>
+           <y>19</y>
+           <width>231</width>
+           <height>42</height>
           </rect>
          </property>
-         <property name="text">
-          <string>Exclude Windows system processes</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="checkBox_filterShowOnlyWpnxmProcesses">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>40</y>
-           <width>211</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Show only WPN-XM processes</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="checkBox_filterShowOnlyWpnxmProcesses">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Show only WPN-XM processes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_filterExcludeWindowsProcesses">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Exclude Windows system processes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>
