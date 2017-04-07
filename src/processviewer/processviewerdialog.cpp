@@ -223,12 +223,6 @@ void ProcessViewerDialog::
             QTreeWidgetItem *item = *iterator;
 
             if (item && !item->isHidden()) {
-                // remove PIDs below 1000
-                /*if(item->text(Columns::COLUMN_PID).toInt() < 1000) {
-            qDebug() << "removed windows item because PID under 1000:" <<
-        item->text(Columns::COLUMN_NAME);
-            item->setHidden(true);
-        }*/
 
                 // remove names with c:\windows
                 QString path =
