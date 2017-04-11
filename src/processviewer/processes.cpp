@@ -247,8 +247,9 @@ Processes::ProcessState
 Processes::getProcessState(const QString &processName) const
 {
     Process p = findByName(processName);
-    qDebug() << "[Processes] Getting Process State for " << processName
-             << ".\n[Processes] Found Process?\t" << p.name;
+
+    qDebug("[Processes::getProcessState] %s : %s", processName.toLatin1().constData(), p.name.toLatin1().constData());
+
     return (p.name == "process not found") ? ProcessState::NotRunning : ProcessState::Running;
 }
 
@@ -409,8 +410,6 @@ bool Processes::startDetached(const QString &program,
                                 0,
                                 0};
 
-    // qDebug() << program, arguments;
-
     QString cmd =
         "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
 
@@ -418,7 +417,7 @@ bool Processes::startDetached(const QString &program,
         cmd += QLatin1Char(' ') + arguments.at(i);
     }
 
-    qDebug() << "[startDetached] Running command:" << cmd;
+    qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
     success =
         CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
@@ -437,7 +436,8 @@ bool Processes::startDetached(const QString &program,
         }
 
     } else if (GetLastError() == errorElevationRequired) {
-        qDebug() << "[startDetached] errorElevationRequired";
+        // startDetachedUacPrompt
+        qDebug() << "[Process::startDetached] errorElevationRequired";
         success = false;
     }
 
@@ -471,15 +471,13 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
                                 0,
                                 0};
 
-    // qDebug() << program, arguments;
-
     QString cmd = program + QLatin1Char(' ');
 
     for (int i = 0; i < arguments.size(); ++i) {
         cmd += QLatin1Char(' ') + arguments.at(i);
     }
 
-    qDebug() << "[start] Running command:" << cmd;
+    qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
     success =
         CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
@@ -491,7 +489,7 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
         CloseHandle(pinfo.hProcess);
 
     } else if (GetLastError() == errorElevationRequired) {
-        qDebug() << "[start] errorElevationRequired";
+        qDebug() << "[Process::start] errorElevationRequired";
         success = false;
     }
 
