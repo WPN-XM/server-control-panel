@@ -97,6 +97,7 @@ namespace ServerControlPanel
 
         void enableToolsPushButtons(bool enabled);
         void updateTrayIconTooltip();
+        void updateToolsPushButtons();
 
         void quitApplication();
 

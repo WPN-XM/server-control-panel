@@ -57,10 +57,21 @@ namespace ServerControlPanel
 
         showPushButtonsOnlyForInstalledTools();
 
+        // Status Table - Column Status
+        // if process state of a server changes, then change the label status in
+        // UI::MainWindow too
+        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
+                this, SLOT(setLabelStatusActive(QString, bool)));
+
         connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this,
                 SLOT(updateVersion(QString)));
         connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this,
                 SLOT(updatePort(QString)));
+
+        // if process state of NGINX and PHP changes,
+        // then change the disabled/enabled state of pushButtons, too
+        connect(servers, SIGNAL(signalMainWindow_EnableToolsPushButtons(bool)), this,
+                SLOT(enableToolsPushButtons(bool)));
 
         // server autostart
         if (settings->get("global/autostartservers").toBool()) {
@@ -68,15 +79,8 @@ namespace ServerControlPanel
             autostartServers();
         };
 
-        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")
-                ->isEnabled() &&
-            ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
-            enableToolsPushButtons(true);
-        } else {
-            enableToolsPushButtons(false);
-        }
-
         updateTrayIconTooltip();
+        updateToolsPushButtons();
 
         if (settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
@@ -182,17 +186,6 @@ namespace ServerControlPanel
         // handle clicks on the tray icon
         connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
                 SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
-
-        // Status Table - Column Status
-        // if process state of a server changes, then change the label status in
-        // UI::MainWindow too
-        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
-                this, SLOT(setLabelStatusActive(QString, bool)));
-
-        // if process state of NGINX and PHP changes,
-        // then change the disabled/enabled state of pushButtons, too
-        connect(servers, SIGNAL(signalMainWindow_EnableToolsPushButtons(bool)), this,
-                SLOT(enableToolsPushButtons(bool)));
 
         tray->show();
     }
@@ -576,6 +569,10 @@ namespace ServerControlPanel
         }
 
         updateTrayIconTooltip();
+
+        if (label == "nginx" || label == "php") {
+            updateToolsPushButtons();
+        }
     }
 
     void MainWindow::updateTrayIconTooltip()
@@ -615,6 +612,16 @@ namespace ServerControlPanel
         }
 
         tray->setMessage(tip);
+    }
+
+    void MainWindow::updateToolsPushButtons()
+    {
+        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->isEnabled() &&
+            ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
+            enableToolsPushButtons(true);
+        } else {
+            enableToolsPushButtons(false);
+        }
     }
 
     void MainWindow::quitApplication()
