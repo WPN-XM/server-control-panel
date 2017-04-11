@@ -274,7 +274,14 @@ namespace Servers
 
         Processes::start(program, arguments, getServer("Nginx")->workingDirectory);
 
-        emit signalMainWindow_ServerStatusChange("Nginx", true);
+        Processes::delay(250);
+
+        Process p = Processes::findByName(program);
+        if(p.name != "process not found") {
+            emit signalMainWindow_ServerStatusChange("Nginx", true);
+        } else {
+            emit signalMainWindow_ServerStatusChange("Nginx", false);
+        }
     }
 
     void Servers::stopNginx()
