@@ -19,6 +19,8 @@ It's written in C++ using Qt 5.2+, free and open-source under GNU/GPL v3 license
 
 You find the usage documentation in the [WPN-XM User Manual](http://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel).
 
+Breaking changes, new features, deprecations and bug fixes are tracked in the [CHANGELOG](https://github.com/WPN-XM/server-control-panel/blob/master/CHANGELOG.md).
+
 ## Screenshots
 
 ![WPN-XM Server Control Panel v0.8.0](https://cloud.githubusercontent.com/assets/85608/4353472/9dfe4d10-4233-11e4-96bd-939f82b82869.jpg)
