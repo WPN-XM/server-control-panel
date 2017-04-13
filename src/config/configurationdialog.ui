@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>8</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1960,7 +1960,7 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="memcache">
+   <widget class="QWidget" name="memcached">
     <widget class="QLabel" name="label_memcached">
      <property name="geometry">
       <rect>
