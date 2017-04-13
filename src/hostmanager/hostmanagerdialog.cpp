@@ -12,8 +12,7 @@ namespace HostsFileManager
         toolbar->addAction("Edit", this, SLOT(editEntry()));
         toolbar->addAction("Delete", this, SLOT(removeEntry()));
 
-        QPushButton *btnOk = new QPushButton(
-            QApplication::style()->standardIcon(QStyle::SP_VistaShield), "OK", this);
+        QPushButton *btnOk = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_VistaShield), "OK", this);
         QPushButton *btnCancel = new QPushButton("Cancel", this);
 
         HostsTableModel *tableModel = new HostsTableModel(this);
@@ -74,14 +73,12 @@ namespace HostsFileManager
             if (!list.contains(&host)) {
                 model->insertRows(0, 1, QModelIndex());
 
-                QModelIndex index =
-                    model->index(0, HostsTableModel::COLUMN_NAME, QModelIndex());
+                QModelIndex index = model->index(0, HostsTableModel::COLUMN_NAME, QModelIndex());
                 model->setData(index, name, Qt::EditRole);
                 index = model->index(0, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
                 model->setData(index, address, Qt::EditRole);
             } else {
-                QMessageBox::information(this, tr("Duplicate Entry"),
-                                         tr("The host mapping already exists."));
+                QMessageBox::information(this, tr("Duplicate Entry"), tr("The host mapping already exists."));
             }
         }
     }
@@ -101,13 +98,11 @@ namespace HostsFileManager
             foreach (index, indexes) {
                 row = index.row();
 
-                QModelIndex indexName =
-                    model->index(row, HostsTableModel::COLUMN_NAME, QModelIndex());
+                QModelIndex indexName = model->index(row, HostsTableModel::COLUMN_NAME, QModelIndex());
                 QVariant varName = model->data(indexName, Qt::DisplayRole);
                 name = varName.toString();
 
-                QModelIndex indexAddress =
-                    model->index(row, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
+                QModelIndex indexAddress = model->index(row, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
                 QVariant varAddr = model->data(indexAddress, Qt::DisplayRole);
                 address = varAddr.toString();
             }
@@ -118,8 +113,7 @@ namespace HostsFileManager
             if (aDialog.exec()) {
                 QString newAddress = aDialog.address();
                 if (newAddress != address) {
-                    QModelIndex i =
-                        model->index(row, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
+                    QModelIndex i = model->index(row, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
                     model->setData(i, newAddress, Qt::EditRole);
                 }
             }

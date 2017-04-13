@@ -23,25 +23,19 @@ namespace Updater
     {
         painter->save();
 
-        QString softwareName =
-            index.model()
-                ->data(index.model()->index(
-                    index.row(), UpdaterDialog::Columns::SoftwareComponent))
-                .toString();
-        QString websiteURL = index.model()
-                                 ->data(index.model()->index(
-                                     index.row(), UpdaterDialog::Columns::WebsiteURL))
-                                 .toString();
+        QString softwareName = index.model()
+                                   ->data(index.model()->index(index.row(), UpdaterDialog::Columns::SoftwareComponent))
+                                   .toString();
+        QString websiteURL =
+            index.model()->data(index.model()->index(index.row(), UpdaterDialog::Columns::WebsiteURL)).toString();
 
-        QString link = "<img src=\":/home.png\"><a href=\"" + websiteURL + "\">" +
-                       softwareName + "</a>";
+        QString link = "<img src=\":/home.png\"><a href=\"" + websiteURL + "\">" + softwareName + "</a>";
 
         QTextDocument document;
 
         if (option.state & QStyle::State_MouseOver) {
             // draw stuff which appears on mouse over
-            document.setDefaultStyleSheet(
-                "a { text-decoration: none; color: darkblue; }");
+            document.setDefaultStyleSheet("a { text-decoration: none; color: darkblue; }");
         } else {
             // draw stuff that appears when mouse is not over control
             document.setDefaultStyleSheet("a { text-decoration: none; color: black; }");
@@ -69,8 +63,7 @@ namespace Updater
         Q_UNUSED(model);
         Q_UNUSED(option);
 
-        if (event->type() == QEvent::MouseButtonPress ||
-            event->type() == QEvent::MouseButtonDblClick) {
+        if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
             emit onClickedOpenURL(index);
         }
         return 0;
@@ -78,10 +71,8 @@ namespace Updater
 
     void SoftwareColumnItemDelegate::onClickedOpenURL(const QModelIndex &index)
     {
-        QString websiteURL = index.model()
-                                 ->data(index.model()->index(
-                                     index.row(), UpdaterDialog::Columns::WebsiteURL))
-                                 .toString();
+        QString websiteURL =
+            index.model()->data(index.model()->index(index.row(), UpdaterDialog::Columns::WebsiteURL)).toString();
         QDesktopServices::openUrl(QUrl(websiteURL));
     }
 }

@@ -3,8 +3,7 @@
 
 TrayToolTip::TrayToolTip(QWidget *parent) : QWidget(parent)
 {
-    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint |
-                   Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint);
 
     // to hide it from appearing in the task manager
     setAttribute(Qt::WA_ShowWithoutActivating);
@@ -15,8 +14,7 @@ TrayToolTip::TrayToolTip(QWidget *parent) : QWidget(parent)
 
     groupBox = new QGroupBox(this);
     groupBox->setGeometry(10, 10, tipSizeX - 20, tipSizeY - 10);
-    groupBox->setStyleSheet(
-        "border: 1px solid #ccc; background-color: #eee; border-radius: 2px;");
+    groupBox->setStyleSheet("border: 1px solid #ccc; background-color: #eee; border-radius: 2px;");
 
     labelGroupBoxTitle = new QLabel(groupBox);
     labelGroupBoxTitle->setText(APP_NAME_AND_VERSION);

@@ -3,22 +3,22 @@
 namespace Updater
 {
 
-/**
- * @brief self_update::self_update
- *
- * Self_Update implements a self-update strategy for this executable.
- *
- * 1. check, if new version available
- *    updateAvailable() -> getUpdateInfo()
- * 2. download new version (zip)
- * 3. remove .old file
- * 4. rename running "wpn-xm.exe" to "wpn-xm.exe.old"
- * 5. extract "wpn-xm.exe" (new version replaces old one)
- * 6. indicate need for a manual restart
- *    - if user selects "restart"
- *      - start new version as detached Process
- *      - exit this version
- */
+    /**
+     * @brief self_update::self_update
+     *
+     * Self_Update implements a self-update strategy for this executable.
+     *
+     * 1. check, if new version available
+     *    updateAvailable() -> getUpdateInfo()
+     * 2. download new version (zip)
+     * 3. remove .old file
+     * 4. rename running "wpn-xm.exe" to "wpn-xm.exe.old"
+     * 5. extract "wpn-xm.exe" (new version replaces old one)
+     * 6. indicate need for a manual restart
+     *    - if user selects "restart"
+     *      - start new version as detached Process
+     *      - exit this version
+     */
     SelfUpdater::SelfUpdater()
     {
         qDebug() << "[SelfUpdater] Started...";
@@ -39,19 +39,20 @@ namespace Updater
         // if not set, the interval defaults to off
         QString intervalString = settings->get("selfupdater/interval", QVariant(QString("off"))).toString();
 
-        qint64 lastTimeChecked =  settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime().currentMSecsSinceEpoch();
+        qint64 lastTimeChecked =
+            settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime().currentMSecsSinceEpoch();
 
         qint64 interval;
-        if(intervalString == "off") {
+        if (intervalString == "off") {
             interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
         }
-        if(intervalString == "daily") {
+        if (intervalString == "daily") {
             interval = QDateTime::currentDateTime().addDays(Interval::Daily).currentMSecsSinceEpoch();
         }
-        if(intervalString == "weekly") {
+        if (intervalString == "weekly") {
             interval = QDateTime::currentDateTime().addDays(Interval::Weekly).currentMSecsSinceEpoch();
         }
-        if(intervalString == "monthly") {
+        if (intervalString == "monthly") {
             interval = QDateTime::currentDateTime().addDays(Interval::Monthly).currentMSecsSinceEpoch();
         }
 
@@ -61,15 +62,12 @@ namespace Updater
         // 1. userRequestedUpdate = forced update run, regardless of interval
         // 2. lastTimeCheck 0 = an update was never done before
         // 3. based on the selected update interval = it's now time to update
-        if(userRequestedUpdate
-           || lastTimeChecked == 0
-           || now - interval > lastTimeChecked) {
+        if (userRequestedUpdate || lastTimeChecked == 0 || now - interval > lastTimeChecked) {
             // set the last time check flag
-             settings->get("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
+            settings->get("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
 
             // setup download folder
-            downloadFolder =
-                QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
+            downloadFolder = QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
             if (!QDir(downloadFolder).exists()) {
                 QDir(downloadFolder).mkpath(".");
             }
@@ -109,19 +107,15 @@ namespace Updater
         QNetworkRequest request(downloadURL);
 
         downloadManager.setDownloadFolder(downloadFolder);
-        downloadManager.setDownloadMode(
-            Downloader::DownloadItem::DownloadMode::SkipIfExists);
+        downloadManager.setDownloadMode(Downloader::DownloadItem::DownloadMode::SkipIfExists);
         downloadManager.setQueueMode(Downloader::DownloadManager::QueueMode::Serial);
         downloadManager.get(request);
 
-        Downloader::TransferItem *transfer =
-            downloadManager.findTransfer(downloadURL);
-        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem *)), this,
-                SLOT(extract()));
+        Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
+        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem *)), this, SLOT(extract()));
 
         // finally: invoke downloading
-        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone",
-                                  Qt::QueuedConnection);
+        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);
     }
 
     void SelfUpdater::extract()
@@ -130,17 +124,14 @@ namespace Updater
 
         QUrl url(versionInfo["url"].toString());
         QString fileToExtract = "wpn-xm.exe";
-        QString zipFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() +
-                                                 url.fileName()));
-        QString targetPath(
-            QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
+        QString zipFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() + url.fileName()));
+        QString targetPath(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
 
         if (!QFile(zipFile).exists()) {
             qDebug() << "[SelfUpdater] Zip File missing" << zipFile;
         }
 
-        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipFile
-                 << "to" << targetPath;
+        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipFile << "to" << targetPath;
 
         // WTF? extractFile() doesn't work ???
         // qDebug() << "[SelfUpdater] Filelist:" << JlCompress::getFileList(zipFile);
@@ -165,12 +156,10 @@ namespace Updater
     void SelfUpdater::renameExecutable()
     {
         QString dirPath = QCoreApplication::applicationDirPath();
-        QString exeFilePath =
-            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        QString exeFilePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
         QString exeName = QFileInfo(exeFilePath).fileName();
         QString oldExeName = exeName + ".old";
-        QString oldExeFilePath =
-            QDir::toNativeSeparators(dirPath + QDir::separator() + oldExeName);
+        QString oldExeFilePath = QDir::toNativeSeparators(dirPath + QDir::separator() + oldExeName);
 
         qDebug() << "[SelfUpdater] Renaming";
         qDebug() << exeFilePath;
@@ -178,13 +167,10 @@ namespace Updater
 
         // delete the destination file first (the old ".old" file)
         if (QFile().exists(oldExeFilePath)) {
-            qDebug() << "[SelfUpdater] delete target first:"
-                     << QFile::remove(oldExeFilePath);
+            qDebug() << "[SelfUpdater] delete target first:" << QFile::remove(oldExeFilePath);
         }
 
-        qDebug() << "[SelfUpdater] Move:"
-                 << QFile::rename(exeFilePath,
-                                  oldExeFilePath); // wpn-xm.exe -> wpn-xm.exe.old
+        qDebug() << "[SelfUpdater] Move:" << QFile::rename(exeFilePath, oldExeFilePath); // wpn-xm.exe -> wpn-xm.exe.old
     }
 
     void SelfUpdater::askForUpdate()
@@ -194,8 +180,7 @@ namespace Updater
             "<p><b><FONT COLOR='#a9a9a9' FONT SIZE = 4>"
             "%1 v%2."
             "</b></p></br>");
-        QString text = t.arg(versionInfo["software_name"].toString(),
-                             versionInfo["latest_version"].toString());
+        QString text = t.arg(versionInfo["software_name"].toString(), versionInfo["latest_version"].toString());
 
         QString infoText = "Do you want to update now?";
 
@@ -219,9 +204,7 @@ namespace Updater
     void SelfUpdater::askForRestart()
     {
         QString text = "The Server Control Panel was updated from ";
-        text.append(
-            QString("v%1 to v%2.")
-                .arg(APP_VERSION_SHORT, versionInfo["latest_version"].toString()));
+        text.append(QString("v%1 to v%2.").arg(APP_VERSION_SHORT, versionInfo["latest_version"].toString()));
 
         QString infoText =
             "The update was installed. "
@@ -267,8 +250,7 @@ namespace Updater
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop,
-                         SLOT(quit()));
+        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop, SLOT(quit()));
 
         // the HTTP request
         QNetworkRequest req(url);
@@ -288,8 +270,8 @@ namespace Updater
             // QNetworkReply::HostNotFoundError
             qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
-            QMessageBox::critical(QApplication::activeWindow(), "Request Failure",
-                                  updateCheckResponse->errorString(), QMessageBox::Ok);
+            QMessageBox::critical(QApplication::activeWindow(), "Request Failure", updateCheckResponse->errorString(),
+                                  QMessageBox::Ok);
         }
 
         // cleanup
@@ -316,8 +298,7 @@ namespace Updater
         if (version != "@APPVERSIONSHORT@") {
             url.append(version);
         } else {
-            url.append(
-                "0.8.4"); // hardcoded for local testing (formerly version_localdev.h)
+            url.append("0.8.4"); // hardcoded for local testing (formerly version_localdev.h)
         }
 
         return url;

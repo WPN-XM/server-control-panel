@@ -12,8 +12,7 @@ namespace HostsFileManager
             QString strLine;
             while (!(strLine = hostStream.readLine()).isNull()) {
                 strLine = strLine.trimmed();
-                QStringList list =
-                    strLine.split(QRegExp("[ \t]"), QString::SkipEmptyParts);
+                QStringList list = strLine.split(QRegExp("[ \t]"), QString::SkipEmptyParts);
 
                 // skip comment line
                 if (list.empty() || list.startsWith("#"))
@@ -44,8 +43,7 @@ namespace HostsFileManager
                 }
 
                 // It's a host line
-                QStringList lst =
-                    strLine.split(QRegExp("[ \t]"), QString::SkipEmptyParts);
+                QStringList lst = strLine.split(QRegExp("[ \t]"), QString::SkipEmptyParts);
 
                 Host hostFromFile(lst[1], lst[0]);
                 int index = listHosts.indexOf(&hostFromFile);
@@ -72,8 +70,7 @@ namespace HostsFileManager
         QString strHostFile = QDir::toNativeSeparators(hostFile.fileName());
         QString strTempFile = QDir::toNativeSeparators(tempFile.fileName());
 
-        QString strArguments =
-            "/c copy /y \"" + strTempFile + "\" \"" + strHostFile + "\"";
+        QString strArguments = "/c copy /y \"" + strTempFile + "\" \"" + strHostFile + "\"";
         std::wstring tmp = strArguments.toStdWString();
         LPCTSTR wcArguments = tmp.c_str();
 
@@ -128,8 +125,5 @@ namespace HostsFileManager
     //    return m_bIsEnable;
     //}
 
-    bool Host::operator==(const Host &host) const
-    {
-        return strName == host.strName && strAddress == host.strAddress;
-    }
+    bool Host::operator==(const Host &host) const { return strName == host.strName && strAddress == host.strAddress; }
 }

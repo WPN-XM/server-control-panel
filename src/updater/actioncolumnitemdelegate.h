@@ -23,7 +23,10 @@ namespace Updater
         ~ActionColumnItemDelegate();
 
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-        bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index);
+        bool editorEvent(QEvent *event,
+                         QAbstractItemModel *model,
+                         const QStyleOptionViewItem &option,
+                         const QModelIndex &index);
 
     signals:
         /**

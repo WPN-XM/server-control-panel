@@ -14,13 +14,7 @@ namespace Configuration
 
     NginxAddUpstreamDialog::~NginxAddUpstreamDialog() { delete ui; }
 
-    QString NginxAddUpstreamDialog::pool()
-    {
-        return ui->lineEdit_pool->text().trimmed();
-    }
+    QString NginxAddUpstreamDialog::pool() { return ui->lineEdit_pool->text().trimmed(); }
 
-    QString NginxAddUpstreamDialog::method()
-    {
-        return ui->lineEdit_method->text().trimmed();
-    }
+    QString NginxAddUpstreamDialog::method() { return ui->lineEdit_method->text().trimmed(); }
 }

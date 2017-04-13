@@ -2,8 +2,7 @@
 
 #include <QDebug>
 
-AlreadyRunningProcessesDialog::AlreadyRunningProcessesDialog(QWidget *parent)
-    : QDialog(parent) {}
+AlreadyRunningProcessesDialog::AlreadyRunningProcessesDialog(QWidget *parent) : QDialog(parent) {}
 
 /*
  * Check active processes and report, if processes are already running.
@@ -22,13 +21,11 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     // shutdown
     // if(processes->areThereAlreadyRunningProcesses())
     //{
-    QLabel *labelA =
-        new QLabel(tr("The following processes are already running:"));
+    QLabel *labelA = new QLabel(tr("The following processes are already running:"));
     QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
     QVBoxLayout *vbox = new QVBoxLayout;
 
-    QList<Process> runningProcessesList =
-        Processes::getInstance()->getRunningProcesses();
+    QList<Process> runningProcessesList = Processes::getInstance()->getRunningProcesses();
 
     // iterate over proccesFoundList and draw a "process shutdown" checkbox for
     // each one
@@ -43,11 +40,11 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
 
     groupBox->setLayout(vbox);
 
-    QLabel *labelB = new QLabel(
-        tr("Please select the processes you wish to shutdown.<br><br>"
-           "Click Shutdown to shut the selected processes down and continue "
-           "using the server control panel.<br>"
-           "To proceed without shutting processes down, click Continue.<br>"));
+    QLabel *labelB =
+        new QLabel(tr("Please select the processes you wish to shutdown.<br><br>"
+                      "Click Shutdown to shut the selected processes down and continue "
+                      "using the server control panel.<br>"
+                      "To proceed without shutting processes down, click Continue.<br>"));
 
     QPushButton *ShutdownButton = new QPushButton(tr("Shutdown"));
     QPushButton *ContinueButton = new QPushButton(tr("Continue"));
@@ -94,8 +91,8 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
 
                 // handle the PostgreSQL PID file deletion, too
                 if (cb->text() == "postgres") {
-                    QString file = QDir::toNativeSeparators(
-                        qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
+                    QString file =
+                        QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
                     if (QFile().exists(file)) {
                         QFile().remove(file);
                     }
@@ -106,12 +103,10 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
                 // process
                 // nginx and mariadb need a forced shutdown !
                 QProcess process;
-                process.start("cmd.exe", QStringList()
-                                             << "/c"
-                                             << "taskkill /f /t /im " + cb->text());
+                process.start("cmd.exe", QStringList() << "/c"
+                                                       << "taskkill /f /t /im " + cb->text());
                 process.waitForFinished();
-                qDebug() << "[Process Shutdown] Result:\n"
-                         << process.readAllStandardOutput();
+                qDebug() << "[Process Shutdown] Result:\n" << process.readAllStandardOutput();
             }
             delete cb;
         }

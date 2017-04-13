@@ -81,13 +81,9 @@ namespace File
         return result;
     }
 
-    QList<QStringList> CSV::parseFromString(const QString &string)
-    {
-        return parse(initString(string));
-    }
+    QList<QStringList> CSV::parseFromString(const QString &string) { return parse(initString(string)); }
 
-    QList<QStringList> CSV::parseFromFile(const QString &filename,
-                                          const QString &codec)
+    QList<QStringList> CSV::parseFromFile(const QString &filename, const QString &codec)
     {
         QString string;
         QFile file(filename);

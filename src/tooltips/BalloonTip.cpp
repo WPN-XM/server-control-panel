@@ -21,8 +21,7 @@ BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text,
     init();
 }
 
-BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget *parent)
-    : QWidget(parent)
+BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
@@ -32,8 +31,7 @@ BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, 
     init();
 }
 
-BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget *parent)
-    : QWidget(parent)
+BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title = title;
@@ -77,8 +75,7 @@ void BalloonTip::createRects()
     QFontMetrics metrics(font);
 
     // title rect
-    QRect rect = metrics.boundingRect(QRect(10, 10, 500, 500), Qt::TextSingleLine,
-                                      my_title);
+    QRect rect = metrics.boundingRect(QRect(10, 10, 500, 500), Qt::TextSingleLine, my_title);
     if (rect.width() < 100) {
         rect.setWidth(100);
     }
@@ -90,14 +87,12 @@ void BalloonTip::createRects()
     metrics = QFontMetrics(font);
 
     // text rect
-    my_textRect = metrics.boundingRect(QRect(10, 30, rect.width() + 90, 500),
-                                       Qt::TextWordWrap, my_text);
+    my_textRect = metrics.boundingRect(QRect(10, 30, rect.width() + 90, 500), Qt::TextWordWrap, my_text);
     if (my_textRect.width() < rect.width()) {
         my_textRect.setWidth(rect.width() + 90);
     }
 
-    my_popupRect =
-        QRect(0, 0, my_textRect.width() + 20, my_textRect.height() + 40);
+    my_popupRect = QRect(0, 0, my_textRect.width() + 20, my_textRect.height() + 40);
 }
 
 void BalloonTip::defineArrowPosition()
@@ -139,8 +134,7 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/)
 
     switch (my_arrowPos) {
     case BottomLeft:
-        arrowTriangle << QPoint(30, popupRect.height() + 60)
-                      << QPoint(60, popupRect.height() + 30)
+        arrowTriangle << QPoint(30, popupRect.height() + 60) << QPoint(60, popupRect.height() + 30)
                       << QPoint(90, popupRect.height() + 30);
         break;
     case TopLeft:
@@ -152,8 +146,7 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/)
                       << QPoint(popupRect.width() - 90, popupRect.height() + 30);
         break;
     case TopRight:
-        arrowTriangle << QPoint(popupRect.width() - 30, 0)
-                      << QPoint(popupRect.width() - 60, 30)
+        arrowTriangle << QPoint(popupRect.width() - 30, 0) << QPoint(popupRect.width() - 60, 30)
                       << QPoint(popupRect.width() - 90, 30);
         break;
     case LeftTop:

@@ -98,8 +98,7 @@ namespace Downloader
         QList<TransferItem *> transfers;
         QueueMode queueMode;
         QString downloadFolder;
-        DownloadItem::DownloadMode downloadMode =
-            DownloadItem::DownloadMode::SkipIfExists;
+        DownloadItem::DownloadMode downloadMode = DownloadItem::DownloadMode::SkipIfExists;
 
     public:
         int FilesDownloadedCounter;

@@ -94,8 +94,7 @@ namespace ServerControlPanel
 
             // check if server is whitelisted
             if (!servers->getListOfServerNames().contains(server)) {
-                printHelpText(QString("Error: \"%1\" is not a valid <server>.")
-                                  .arg(server.toLocal8Bit().constData()));
+                printHelpText(QString("Error: \"%1\" is not a valid <server>.").arg(server.toLocal8Bit().constData()));
             }
 
             if (command.isEmpty()) {
@@ -106,21 +105,18 @@ namespace ServerControlPanel
                                                           << "stop"
                                                           << "restart";
             if (!availableCommands.contains(command)) {
-                printHelpText(QString("Error: \"%1\" is not a valid <command>.")
-                                  .arg(command.toLocal8Bit().constData()));
+                printHelpText(
+                    QString("Error: \"%1\" is not a valid <command>.").arg(command.toLocal8Bit().constData()));
             }
 
             QString methodName = command + servers->getCamelCasedServerName(server);
 
-            if (QMetaObject::invokeMethod(servers,
-                                          methodName.toLocal8Bit().constData())) {
+            if (QMetaObject::invokeMethod(servers, methodName.toLocal8Bit().constData())) {
                 exit(0);
             }
 
-            printHelpText(
-                QString("Command not handled, yet! (server = %1) (command = %2) \n")
-                    .arg(server.toLocal8Bit().constData(),
-                         command.toLocal8Bit().constData()));
+            printHelpText(QString("Command not handled, yet! (server = %1) (command = %2) \n")
+                              .arg(server.toLocal8Bit().constData(), command.toLocal8Bit().constData()));
             exit(0);
         }
 
@@ -150,7 +146,10 @@ namespace ServerControlPanel
  * @param clioption
  * @param args
  */
-    void CLI::execServers(const QString &command, QCommandLineOption &clioption, QStringList args, QCommandLineParser &parser)
+    void CLI::execServers(const QString &command,
+                          QCommandLineOption &clioption,
+                          QStringList args,
+                          QCommandLineParser &parser)
     {
         // the value of the key "--start|--stop|--restart" is the first server
         QString server = parser.value(clioption);
@@ -175,8 +174,7 @@ namespace ServerControlPanel
 
             // check if whitelisted
             if (!servers->getListOfServerNames().contains(server)) {
-                printHelpText(QString("Error: \"%1\" is not a valid <server>.")
-                                  .arg(server.toLocal8Bit().constData()));
+                printHelpText(QString("Error: \"%1\" is not a valid <server>.").arg(server.toLocal8Bit().constData()));
             }
 
             QString methodName = command + servers->getCamelCasedServerName(server);
@@ -192,8 +190,7 @@ namespace ServerControlPanel
         colorPrint("WPN-XM Server Stack " APP_VERSION "\n", "brightwhite");
 
         QString year = QDate::currentDate().toString("yyyy");
-        colorPrint("Copyright (c) " + year +
-                   " Jens A. Koch. All rights reserved.\n\n");
+        colorPrint("Copyright (c) " + year + " Jens A. Koch. All rights reserved.\n\n");
 
         if (!errorMessage.isEmpty()) {
             colorPrint(errorMessage.append("\n\n").toLocal8Bit().constData(), "red");
@@ -223,11 +220,10 @@ namespace ServerControlPanel
         colorPrint(arguments);
 
         colorPrint("Examples: \n", "green");
-        QString example =
-            "  " + QCoreApplication::arguments().at(0) +
-            " --server nginx start \n"
-            "  " +
-            QCoreApplication::arguments().at(0) + " --start nginx php mariadb \n\n";
+        QString example = "  " + QCoreApplication::arguments().at(0) +
+                          " --server nginx start \n"
+                          "  " +
+                          QCoreApplication::arguments().at(0) + " --start nginx php mariadb \n\n";
         colorPrint(example);
 
         colorPrint("Info: \n", "green");

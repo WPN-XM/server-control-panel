@@ -17,8 +17,7 @@ namespace Downloader
         reply = nam.get(request);
 
         connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
-        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this,
-                SLOT(updateDownloadProgress(qint64, qint64)));
+        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateDownloadProgress(qint64, qint64)));
         connect(reply, SIGNAL(finished()), this, SLOT(finished()));
 
         timer.start();
@@ -27,15 +26,12 @@ namespace Downloader
     void TransferItem::finished() { emit transferFinished(this); }
 
     // SLOT
-    void TransferItem::updateDownloadProgress(qint64 bytesReceived,
-                                              qint64 bytesTotal)
+    void TransferItem::updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
     {
         progress["bytesReceived"] = QString::number(bytesReceived);
         progress["bytesTotal"] = QString::number(bytesTotal);
         progress["size"] = getSizeHumanReadable(outputFile->size());
-        progress["speed"] =
-            QString::number((double)outputFile->size() / timer.elapsed(), 'f', 0)
-                .append(" KB/s");
+        progress["speed"] = QString::number((double)outputFile->size() / timer.elapsed(), 'f', 0).append(" KB/s");
         // progress["time"]          =
         // QString::number((double)timer.elapsed()/1000,'f',2).append("s");
         // progress["eta"]           =
@@ -64,11 +60,8 @@ namespace Downloader
         return QString::fromLatin1("%1 %2").arg(num, 3, 'f', 1).arg(unit);
     }
 
-    DownloadItem::DownloadItem(const QNetworkRequest &r,
-                               QNetworkAccessManager &manager)
-        : TransferItem(r, manager),
-          downloadMode(DownloadItem::DownloadMode::SkipIfExists),
-          downloadFolder()
+    DownloadItem::DownloadItem(const QNetworkRequest &r, QNetworkAccessManager &manager)
+        : TransferItem(r, manager), downloadMode(DownloadItem::DownloadMode::SkipIfExists), downloadFolder()
     {
     }
 
@@ -100,13 +93,11 @@ namespace Downloader
                 downloadFolder.append(QDir::separator());
             }
 
-            QString downloadFilePath =
-                QDir::toNativeSeparators(downloadFolder.append(fileName));
+            QString downloadFilePath = QDir::toNativeSeparators(downloadFolder.append(fileName));
 
             outputFile->setFileName(downloadFilePath);
 
-            qDebug() << "[DownloadItem::readyRead] Download FullFilePath:"
-                     << downloadFilePath;
+            qDebug() << "[DownloadItem::readyRead] Download FullFilePath:" << downloadFilePath;
             qDebug() << "[DownloadItem::readyRead] DownloadMode" << downloadMode;
 
             if (downloadMode == DownloadMode::SkipIfExists) {
@@ -128,22 +119,18 @@ namespace Downloader
             } else if (downloadMode == DownloadMode::Enumerate) {
                 // if the file already exists, append a number, e.g. "file.zip.1"
                 for (int i = 1; i < 1000; i++) {
-                    if (!outputFile->exists() &&
-                        outputFile->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+                    if (!outputFile->exists() && outputFile->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
                         break;
                     }
-                    QString enumedFileName =
-                        QString(QLatin1String("%1.%2")).arg(fileName).arg(i);
-                    QString downloadFilePath =
-                        QDir::toNativeSeparators(downloadFolder.append(enumedFileName));
+                    QString enumedFileName = QString(QLatin1String("%1.%2")).arg(fileName).arg(i);
+                    QString downloadFilePath = QDir::toNativeSeparators(downloadFolder.append(enumedFileName));
                     outputFile->setFileName(downloadFilePath);
                 }
             }
 
             // if file still not open, abort
             if (!outputFile->isOpen()) {
-                qDebug() << "[DownloadItem::readyRead] couldn't open output file"
-                         << outputFile->fileName();
+                qDebug() << "[DownloadItem::readyRead] couldn't open output file" << outputFile->fileName();
                 reply->abort();
                 return;
             }
@@ -168,11 +155,9 @@ namespace Downloader
                 return;
             }
 
-            QUrl url =
-                reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+            QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
             url = reply->url().resolved(url);
-            qDebug() << "[DownloadItem] Finished, but " << reply->url()
-                     << "redirected to " << url;
+            qDebug() << "[DownloadItem] Finished, but " << reply->url() << "redirected to " << url;
             if (redirects.contains(url)) {
                 qDebug() << "[DownloadItem] Redirect Loop Detected";
             } else if (redirects.count() > 10) {
@@ -209,13 +194,7 @@ namespace Downloader
         emit transferFinished(this);
     }
 
-    void DownloadItem::setDownloadFolder(QString folder)
-    {
-        downloadFolder = folder;
-    }
+    void DownloadItem::setDownloadFolder(QString folder) { downloadFolder = folder; }
 
-    void DownloadItem::setDownloadMode(DownloadItem::DownloadMode mode)
-    {
-        downloadMode = mode;
-    }
+    void DownloadItem::setDownloadMode(DownloadItem::DownloadMode mode) { downloadMode = mode; }
 }

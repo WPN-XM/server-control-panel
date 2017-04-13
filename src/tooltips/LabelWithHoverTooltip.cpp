@@ -14,8 +14,7 @@ LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget *parent) : QLabel(parent)
 void LabelWithHoverTooltip::setText(const QString &value)
 {
     if (objectName() == "label_PHP_Port") {
-        text() =
-            "The following upstreams are running: \n \n bla \n blubb \n " + value;
+        text() = "The following upstreams are running: \n \n bla \n blubb \n " + value;
     } else {
         text() = value;
     }

@@ -16,7 +16,13 @@ namespace WindowsAPI
         Q_OBJECT
 
     public:
-        static IShellLink *CreateShellLink(QString target_app_path, QString app_args, QString description, QString icon_path, int icon_index, QString working_dir, QString linkShortcut);
+        static IShellLink *CreateShellLink(QString target_app_path,
+                                           QString app_args,
+                                           QString description,
+                                           QString icon_path,
+                                           int icon_index,
+                                           QString working_dir,
+                                           QString linkShortcut);
 
         static BOOL IsWow64();
         static bool running_on_64_bits_os();

@@ -14,33 +14,15 @@ namespace Configuration
 
     NginxAddServerDialog::~NginxAddServerDialog() { delete ui; }
 
-    QString NginxAddServerDialog::address()
-    {
-        return ui->lineEdit_IP->text().trimmed();
-    }
+    QString NginxAddServerDialog::address() { return ui->lineEdit_IP->text().trimmed(); }
 
-    QString NginxAddServerDialog::port()
-    {
-        return ui->lineEdit_Port->text().trimmed();
-    }
+    QString NginxAddServerDialog::port() { return ui->lineEdit_Port->text().trimmed(); }
 
-    QString NginxAddServerDialog::weight()
-    {
-        return ui->lineEdit_Weight->text().trimmed();
-    }
+    QString NginxAddServerDialog::weight() { return ui->lineEdit_Weight->text().trimmed(); }
 
-    QString NginxAddServerDialog::maxfails()
-    {
-        return ui->lineEdit_MaxFails->text().trimmed();
-    }
+    QString NginxAddServerDialog::maxfails() { return ui->lineEdit_MaxFails->text().trimmed(); }
 
-    QString NginxAddServerDialog::timeout()
-    {
-        return ui->lineEdit_Timeout->text().trimmed();
-    }
+    QString NginxAddServerDialog::timeout() { return ui->lineEdit_Timeout->text().trimmed(); }
 
-    QString NginxAddServerDialog::phpchildren()
-    {
-        return ui->lineEdit_PHPChildren->text().trimmed();
-    }
+    QString NginxAddServerDialog::phpchildren() { return ui->lineEdit_PHPChildren->text().trimmed(); }
 }

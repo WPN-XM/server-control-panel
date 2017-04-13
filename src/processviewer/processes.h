@@ -42,14 +42,14 @@ public:
     static void release();
     static Processes *theInstance;
 
-    //static QList<Process> getProcessesList();
-    //static QList<PidAndPort> getPortsList();
+    // static QList<Process> getProcessesList();
+    // static QList<PidAndPort> getPortsList();
     static QList<Process> getMonitoredProcessesList();
 
     static bool killProcess(qint64 pid);
     static bool killProcess(const QString &name);
 
-    static bool killProcessTree(const QString &name);    
+    static bool killProcessTree(const QString &name);
     static bool killProcessTree(qint64 pid);
 
     static Process findByName(const QString &name);
@@ -79,8 +79,7 @@ public:
     static bool startDetached(const QString &program,
                               const QStringList &arguments,
                               const QString &workingDir = QString());
-    static bool startDetached(const QString &program,
-                              const QStringList &arguments);
+    static bool startDetached(const QString &program, const QStringList &arguments);
     static bool startDetached(const QString &command);
 
     static void delay(int millisecondsToWait);
@@ -96,8 +95,7 @@ private:
 
     static QStringList getProcessNamesToSearchFor();
 
-    static QString qt_create_commandline(const QString &program,
-                                         const QStringList &arguments);
+    static QString qt_create_commandline(const QString &program, const QStringList &arguments);
 };
 
 #endif // PROCESSES_H

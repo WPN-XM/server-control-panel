@@ -4,8 +4,7 @@
 
 namespace Servers
 {
-    Servers::Servers(QObject *parent)
-        : QObject(parent), settings(new Settings::SettingsManager)
+    Servers::Servers(QObject *parent) : QObject(parent), settings(new Settings::SettingsManager)
     {
         QStringList installedServers = getListOfServerNamesInstalled();
 
@@ -26,10 +25,8 @@ namespace Servers
             menu->setObjectName(QString("menu").append(server->name));
             menu->setIcon(server->icon);
 
-            QAction *restartAction =
-                new QAction(QIcon(":/action_restart"), tr("Restart"), menu);
-            QAction *startAction =
-                new QAction(QIcon(":/action_run"), tr("Start"), menu);
+            QAction *restartAction = new QAction(QIcon(":/action_restart"), tr("Restart"), menu);
+            QAction *startAction = new QAction(QIcon(":/action_run"), tr("Start"), menu);
             QAction *stopAction = new QAction(QIcon(":/action_stop"), tr("Stop"), menu);
 
             restartAction->setObjectName(QString("restart").append(server->name));
@@ -42,8 +39,7 @@ namespace Servers
             menu->addAction(stopAction);
 
             // connect ONLY ONCE
-            connect(menu, SIGNAL(triggered(QAction *)), this,
-                    SLOT(mapAction(QAction *)), Qt::UniqueConnection);
+            connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(mapAction(QAction *)), Qt::UniqueConnection);
 
             server->trayMenu = menu;
 
@@ -55,8 +51,7 @@ namespace Servers
 
     void Servers::mapAction(QAction *action)
     {
-        QMetaObject::invokeMethod(this,
-                                  action->objectName().toLocal8Bit().constData());
+        QMetaObject::invokeMethod(this, action->objectName().toLocal8Bit().constData());
     }
 
     /**
@@ -185,8 +180,8 @@ namespace Servers
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are
             // not.
-            if (serverName == "nginx" || serverName == "php" ||
-                serverName == "mariadb" || QFile().exists(getExecutable(serverName))) {
+            if (serverName == "nginx" || serverName == "php" || serverName == "mariadb" ||
+                QFile().exists(getExecutable(serverName))) {
                 qDebug() << "Installed:\t" << serverName;
                 list << serverName;
             } else {
@@ -253,8 +248,7 @@ namespace Servers
     void Servers::startNginx()
     {
         // already running
-        if (processes->getProcessState(getServer("Nginx")->exe) ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState(getServer("Nginx")->exe) == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Nginx"), tr("Nginx already running."));
             return;
         }
@@ -276,7 +270,7 @@ namespace Servers
 
         Processes::delay(250);
         Process p = Processes::findByName("nginx.exe");
-        if(p.name != "process not found") {
+        if (p.name != "process not found") {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
         } else {
             emit signalMainWindow_ServerStatusChange("Nginx", false);
@@ -286,8 +280,7 @@ namespace Servers
     void Servers::stopNginx()
     {
         // if not running, skip
-        if (processes->getProcessState("nginx.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("nginx.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Nginx] Not running... Skipping stop command.";
             return;
         }
@@ -316,11 +309,9 @@ namespace Servers
         args << "-c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
         args << "-s reload";
 
-        qDebug() << "[Nginx] Reloading...\n"
-                 << reloadNginx;
+        qDebug() << "[Nginx] Reloading...\n" << reloadNginx;
 
-        Processes::startDetached(reloadNginx, args,
-                                 getServer("Nginx")->workingDirectory);
+        Processes::startDetached(reloadNginx, args, getServer("Nginx")->workingDirectory);
     }
 
     void Servers::restartNginx()
@@ -336,19 +327,16 @@ namespace Servers
     {
         // if not installed, skip
         if (!QFile().exists(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")) {
-            qDebug() << "Not found: " + QDir::currentPath() +
-                            "/bin/pgsql/bin/pg_ctl.exe";
+            qDebug() << "Not found: " + QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe";
             qDebug() << "[PostgreSQL] Is not installed. Skipping start command.";
             return;
         }
 
         // already running
-        if (processes->getProcessState("postgres.exe") ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState("postgres.exe") == Processes::ProcessState::Running) {
             // if(QFile().exists(QDir::currentPath() +
             // "/bin/pgsql/data/postmaster.pid")) {
-            QMessageBox::warning(0, tr("PostgreSQL"),
-                                 tr("PostgreSQL is already running."));
+            QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
             return;
         }
 
@@ -356,18 +344,14 @@ namespace Servers
         emit signalMainWindow_updateVersion("PostgreSQL");
         emit signalMainWindow_updatePort("PostgreSQL");
 
-        QString const startCmd = QDir::toNativeSeparators(
-            QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
+        QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
         QStringList args;
-        args << "--pgdata " +
-                    QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data");
-        args << "--log " + QDir::toNativeSeparators(QDir::currentPath() +
-                                                    "/logs/postgresql.log");
+        args << "--pgdata " + QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data");
+        args << "--log " + QDir::toNativeSeparators(QDir::currentPath() + "/logs/postgresql.log");
         args << "start";
 
-        qDebug() << "[PostgreSQL] Starting...\n"
-                 << startCmd;
+        qDebug() << "[PostgreSQL] Starting...\n" << startCmd;
 
         Processes::start(startCmd, args, getServer("PostgreSQL")->workingDirectory);
 
@@ -385,10 +369,8 @@ namespace Servers
         }
 
         // if not running, skip
-        QString file = QDir::toNativeSeparators(QDir::currentPath() +
-                                                "/bin/pgsql/data/postmaster.pid");
-        if (processes->getProcessState("postgres.exe") ==
-            Processes::ProcessState::NotRunning) {
+        QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
+        if (processes->getProcessState("postgres.exe") == Processes::ProcessState::NotRunning) {
             // if(!QFile().exists(file)) {
             qDebug() << "[PostgreSQL] Not running.. Skipping stop command.";
             server->trayMenu->setIcon(QIcon(":/status_stop"));
@@ -396,25 +378,20 @@ namespace Servers
             return;
         }
 
-        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() +
-                                                       "/bin/pgsql/bin/pg_ctl.exe");
+        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
         QStringList args;
         args << "stop";
-        args << "--pgdata " +
-                    QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data");
-        args << "--log " + QDir::toNativeSeparators(QDir::currentPath() +
-                                                    "/logs/postgresql.log");
+        args << "--pgdata " + QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data");
+        args << "--log " + QDir::toNativeSeparators(QDir::currentPath() + "/logs/postgresql.log");
         args << "--mode=fast";
         args << "-W";
 
         qDebug() << "[PostgreSQL] Stopping...";
 
-        Processes::start(stopCommand, args,
-                         getServer("PostgreSQL")->workingDirectory);
+        Processes::start(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
 
-        Processes::delay(
-            1250); // delay PID file check, PostgreSQL must shutdown first
+        Processes::delay(1250); // delay PID file check, PostgreSQL must shutdown first
 
         // do we have a failed shutdown? if so, delete PID file, to allow a restart
         if (QFile().exists(file)) {
@@ -440,10 +417,8 @@ namespace Servers
     void Servers::startPHP()
     {
         // already running
-        if (processes->getProcessState("php-cgi.exe") ==
-                Processes::ProcessState::Running ||
-            processes->getProcessState("spawn.exe") ==
-                Processes::ProcessState::Running) {
+        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running ||
+            processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("PHP"), tr("PHP is already running."));
             return;
         }
@@ -466,20 +441,17 @@ namespace Servers
         qDebug() << "[PHP] Version " << phpVersion;
 
         // check that the tool "php-cgi-spawner" is present
-        QString spawnUtilFile =
-            QDir::toNativeSeparators(QDir::currentPath() + "/bin/tools/spawn.exe");
+        QString spawnUtilFile = QDir::toNativeSeparators(QDir::currentPath() + "/bin/tools/spawn.exe");
         if (!QFile().exists(spawnUtilFile)) {
             qDebug() << "[PHP] Starting PHP failed. Tool \"spawn.exe\" missing.";
             return;
         }
 
         // if PHP version below 7.1, use "spawn.exe" to spawn multiple processes
-        QString startCmdWithPlaceholders(spawnUtilFile +
-                                         " ./bin/php/php-cgi.exe %1 %2");
+        QString startCmdWithPlaceholders(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
         // get the nginx upstream configuration and read the defined PHP pools
-        QMapIterator<QString, QString> PHPServersToStart(
-            getPHPServersFromNginxUpstreamConfig());
+        QMapIterator<QString, QString> PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
 
         while (PHPServersToStart.hasNext()) {
             PHPServersToStart.next();
@@ -493,15 +465,12 @@ namespace Servers
                 qDebug() << "[PHP] Set PHP_FCGI_CHILDREN " << phpchildren;
 
                 startCmdWithPlaceholders.clear();
-                startCmdWithPlaceholders.append(QDir::currentPath() +
-                                                "/bin/php/php-cgi.exe");
+                startCmdWithPlaceholders.append(QDir::currentPath() + "/bin/php/php-cgi.exe");
             }
 
-            QString startPHPCGI =
-                QString(startCmdWithPlaceholders).arg(port, phpchildren);
+            QString startPHPCGI = QString(startCmdWithPlaceholders).arg(port, phpchildren);
 
-            qDebug() << "[PHP] Starting...\n"
-                     << startPHPCGI;
+            qDebug() << "[PHP] Starting...\n" << startPHPCGI;
 
             QProcess *process = new QProcess;
             process->setEnvironment(env.toStringList());
@@ -522,14 +491,12 @@ namespace Servers
         }
 
         // load JSON
-        QJsonDocument jsonDoc =
-            File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
+        QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
         QJsonObject json = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools
-        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end();
-             ++iter) {
+        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end(); ++iter) {
             // get values for a "pool", we need the key "servers"
             QJsonObject jsonPool = iter.value().toObject();
             QJsonObject jsonServers = jsonPool["servers"].toObject();
@@ -542,13 +509,11 @@ namespace Servers
                 // we want to start local servers only.
                 // external servers are possible, but the user has to start (and take
                 // care) of them.
-                if ((s["address"].toString() == "localhost") ||
-                    (s["address"].toString() == "127.0.0.1")) {
+                if ((s["address"].toString() == "localhost") || (s["address"].toString() == "127.0.0.1")) {
 
                     // for starting local servers, we only need the Port and the number of
                     // PHP child processes to spawn
-                    serversToStart.insert(s["port"].toString(),
-                                          s["phpchildren"].toString());
+                    serversToStart.insert(s["port"].toString(), s["phpchildren"].toString());
                 }
             }
         }
@@ -571,8 +536,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("php-cgi.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[PHP] Not running... Skipping stop command.";
             return;
         }
@@ -615,8 +579,7 @@ namespace Servers
     void Servers::startMariaDb()
     {
         // if already running, skip
-        if (processes->getProcessState("mysqld.exe") ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("MariaDB"), tr("MariaDB already running."));
             return;
         }
@@ -628,8 +591,7 @@ namespace Servers
         QString const startMariaDb = getServer("MariaDb")->exe;
 
         QStringList args;
-        args << "--defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() +
-                                                              "/bin/mariadb/my.ini");
+        args << "--defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
         args << "--standalone"; // important! else maria is started as service and
         // won't detach
 
@@ -649,15 +611,13 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("mysqld.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[MariaDb] Not running... Skipping stop command.";
             return;
         }
 
         // shutdown of "mysqld" is done by using "mysqladmin" + shutdown command
-        QString stopCommand = QDir::toNativeSeparators(
-            QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe");
+        QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe");
 
         // check, if mysqladmin.exe is present
         if (!QFile().exists(stopCommand)) {
@@ -705,26 +665,22 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("mongod.exe") ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState("mongod.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("MongoDb"), tr("MongoDb already running."));
             return;
         }
 
         // MongoDb doesn't start, when data dir is missing...
         QString const mongoDbDataDir = QDir::currentPath() + "/bin/mongodb/data/db";
-        if (QDir().exists(QDir::currentPath() + "/bin/mongodb") &&
-            !QDir().exists(mongoDbDataDir)) {
-            qDebug() << "[MongoDb] Creating Directory for Mongo's Database...\n"
-                     << mongoDbDataDir;
+        if (QDir().exists(QDir::currentPath() + "/bin/mongodb") && !QDir().exists(mongoDbDataDir)) {
+            qDebug() << "[MongoDb] Creating Directory for Mongo's Database...\n" << mongoDbDataDir;
             QDir().mkpath(mongoDbDataDir);
         }
 
         // MongoDb doesn't start, when logfile is missing...
         QFile f(QDir::currentPath() + "/logs/mongodb.log");
         if (!f.exists()) {
-            qDebug() << "[MongoDb] Creating empty logfile...\n"
-                     << QDir::currentPath() + "/logs/mongodb.log";
+            qDebug() << "[MongoDb] Creating empty logfile...\n" << QDir::currentPath() + "/logs/mongodb.log";
             f.open(QIODevice::ReadWrite);
             f.close();
         } else {
@@ -741,14 +697,12 @@ namespace Servers
         args << "--config " + QDir::currentPath() + "/bin/mongodb/mongodb.conf";
         args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
         args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
-        args << "--storageEngine=" +
-                    settings->get("mongodb/storageengine", "wiredTiger").toString();
+        args << "--storageEngine=" + settings->get("mongodb/storageengine", "wiredTiger").toString();
         args << "--journal --httpinterface --rest";
 
         qDebug() << "[MongoDb] Starting...\n";
 
-        Processes::startDetached(mongoStartCommand, args,
-                                 getServer("MongoDb")->workingDirectory);
+        Processes::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", true);
     }
@@ -762,8 +716,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("mongod.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("mongod.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[MongoDb] Not running... Skipping stop command.";
             return;
         }
@@ -773,16 +726,14 @@ namespace Servers
    * mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
    */
 
-        QString const mongoStopCommand =
-            QDir::currentPath() + "/bin/mongodb/bin/mongo.exe";
+        QString const mongoStopCommand = QDir::currentPath() + "/bin/mongodb/bin/mongo.exe";
 
         QStringList args;
         args << "--eval \"db.getSiblingDB('admin').shutdownServer()\"";
 
         qDebug() << "[MongoDb] Stopping...\n";
 
-        Processes::start(mongoStopCommand, args,
-                         getServer("MongoDb")->workingDirectory);
+        Processes::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", false);
     }
@@ -817,8 +768,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("memcached.exe") ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState("memcached.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Memcached"), tr("Memcached already running."));
             return;
         }
@@ -828,8 +778,7 @@ namespace Servers
 
         qDebug() << "[Memcached] Starting...\n";
 
-        Processes::startDetached(memcachedStartCommand, args,
-                                 getServer("Memcached")->workingDirectory);
+        Processes::startDetached(memcachedStartCommand, args, getServer("Memcached")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Memcached", true);
     }
@@ -843,8 +792,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("memcached.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("memcached.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Memcached] Not running... Skipping stop command.";
             return;
         }
@@ -880,8 +828,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("redis.exe") ==
-            Processes::ProcessState::Running) {
+        if (processes->getProcessState("redis.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Redis"), tr("Redis already running."));
             return;
         }
@@ -890,11 +837,9 @@ namespace Servers
         emit signalMainWindow_updateVersion("Redis");
         emit signalMainWindow_updatePort("Redis");
 
-        qDebug() << "[Redis] Starting...\n"
-                 << redisStartCommand;
+        qDebug() << "[Redis] Starting...\n" << redisStartCommand;
 
-        Processes::startDetached(redisStartCommand, args,
-                                 getServer("Redis")->workingDirectory);
+        Processes::startDetached(redisStartCommand, args, getServer("Redis")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Redis", true);
     }
@@ -908,28 +853,23 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("redis-server.exe") ==
-            Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("redis-server.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Redis] Not running... Skipping stop command.";
             return;
         }
 
         // build redis stop command
         // Note: "-a password" is not supported, yet
-        QString const redisStopCommand =
-            QDir::currentPath() + "/bin/redis/redis-cli.exe";
+        QString const redisStopCommand = QDir::currentPath() + "/bin/redis/redis-cli.exe";
 
         QStringList args;
         args << "-h " + settings->get("redis/bind", QVariant("127.0.0.1")).toString();
-        args << "-p " +
-                    settings->get("redis/port")
-                        .toString(); // , QVariant(QString('6379')).toString()
+        args << "-p " + settings->get("redis/port").toString(); // , QVariant(QString('6379')).toString()
         args << "shutdown";
 
         qDebug() << "[Redis] Stopping...\n";
 
-        Processes::start(redisStopCommand, args,
-                         getServer("Redis")->workingDirectory);
+        Processes::start(redisStopCommand, args, getServer("Redis")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Redis", false);
     }

@@ -9,8 +9,7 @@ namespace File
     {
     public:
         static QList<QStringList> parseFromString(const QString &string);
-        static QList<QStringList> parseFromFile(const QString &filename,
-                                                const QString &codec = QString());
+        static QList<QStringList> parseFromFile(const QString &filename, const QString &codec = QString());
         static bool write(const QList<QStringList> data, const QString &filename, const QString &codec = QString());
 
     private:

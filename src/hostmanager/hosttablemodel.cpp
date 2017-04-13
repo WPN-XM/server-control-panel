@@ -2,8 +2,7 @@
 
 namespace HostsFileManager
 {
-    HostsTableModel::HostsTableModel(QObject *parent)
-        : QAbstractTableModel(parent) {}
+    HostsTableModel::HostsTableModel(QObject *parent) : QAbstractTableModel(parent) {}
 
     int HostsTableModel::rowCount(const QModelIndex &parent) const
     {
@@ -130,8 +129,7 @@ namespace HostsFileManager
     {
         listHosts = listHosts;
         QModelIndex root = index(0, 0);
-        emit(dataChanged(root,
-                         index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
+        emit(dataChanged(root, index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
     }
 
     QList<Host *> HostsTableModel::getList() { return listHosts; }

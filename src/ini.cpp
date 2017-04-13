@@ -103,8 +103,8 @@ namespace File
                     entry.value = trim(entry.value);
                     // insert
                     datas.push_back(entry);
-                    log("[INI] entry: section[%s]\t name[%s]\t value[%s]",
-                        entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
+                    log("[INI] entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
+                        entry.value.c_str());
                 }
                 i = 0;
             }
@@ -121,8 +121,8 @@ namespace File
             entry.value = trim(entry.value);
             // insert
             datas.push_back(entry);
-            log("[INI] last add entry: section[%s]\t name[%s]\t value[%s]",
-                entry.index.c_str(), entry.name.c_str(), entry.value.c_str());
+            log("[INI] last add entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
+                entry.value.c_str());
         }
         fStream.close();
     }
@@ -185,8 +185,7 @@ namespace File
                     isStart = false;
                     log("[INI] write section [%s]", entry.index.c_str());
                 } else {
-                    fStream << endl
-                            << '[' << entry.index << ']' << endl;
+                    fStream << endl << '[' << entry.index << ']' << endl;
                     log("[INI] write section [%s]", entry.index.c_str());
                 }
             }

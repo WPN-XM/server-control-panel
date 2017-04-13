@@ -11,14 +11,12 @@ QList<QHostAddress> NetworkUtils::getLocalHostIPs()
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
 
     foreach (QNetworkInterface iface, interfaces) {
-        if (iface.flags().testFlag(QNetworkInterface::IsUp) &&
-            iface.flags().testFlag(QNetworkInterface::IsRunning) &&
+        if (iface.flags().testFlag(QNetworkInterface::IsUp) && iface.flags().testFlag(QNetworkInterface::IsRunning) &&
             !iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
             foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
                 QHostAddress ip = entry.ip();
                 // ignore local host IPs
-                if (ip == QHostAddress::LocalHost ||
-                    ip == QHostAddress::LocalHostIPv6) {
+                if (ip == QHostAddress::LocalHost || ip == QHostAddress::LocalHostIPv6) {
                     continue;
                 }
                 if (ip.protocol() == QAbstractSocket::IPv4Protocol) {

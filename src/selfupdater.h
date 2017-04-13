@@ -42,9 +42,9 @@ namespace Updater
 
         enum Interval
         {
-            Off     = 0,
-            Daily   = 1,
-            Weekly  = 7,
+            Off = 0,
+            Daily = 1,
+            Weekly = 7,
             Monthly = 30
         };
 

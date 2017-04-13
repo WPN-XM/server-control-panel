@@ -4,8 +4,7 @@
 namespace Updater
 {
 
-    UpdaterDialog::UpdaterDialog(QWidget *parent)
-        : QDialog(parent), ui(new Updater::Ui::UpdaterDialog)
+    UpdaterDialog::UpdaterDialog(QWidget *parent) : QDialog(parent), ui(new Updater::Ui::UpdaterDialog)
     {
         ui->setupUi(this);
 
@@ -66,31 +65,26 @@ namespace Updater
             // Table Columns
 
             // Software Name
-            QStandardItem *softwareName =
-                new QStandardItem("      " + software["name"].toString());
+            QStandardItem *softwareName = new QStandardItem("      " + software["name"].toString());
             rowItems.append(softwareName);
 
             // Website Link
-            QStandardItem *websiteURL =
-                new QStandardItem(software["website"].toString());
+            QStandardItem *websiteURL = new QStandardItem(software["website"].toString());
             rowItems.append(websiteURL);
 
             // Installed Version (= Your current version)
-            QString installedVersionString =
-                "1.2.3"; // TODO: detect currently installed versions
+            QString installedVersionString = "1.2.3"; // TODO: detect currently installed versions
             QStandardItem *installedVersion = new QStandardItem(installedVersionString);
             installedVersion->setTextAlignment(Qt::AlignCenter);
             rowItems.append(installedVersion);
 
             // Latest Version
-            QStandardItem *latestVersion =
-                new QStandardItem(latestVersionMap["version"].toString());
+            QStandardItem *latestVersion = new QStandardItem(latestVersionMap["version"].toString());
             latestVersion->setTextAlignment(Qt::AlignCenter);
             rowItems.append(latestVersion);
 
             // Download URL for Latest Version
-            QStandardItem *latestVersionURL =
-                new QStandardItem(latestVersionMap["url"].toString());
+            QStandardItem *latestVersionURL = new QStandardItem(latestVersionMap["url"].toString());
             rowItems.append(latestVersionURL);
 
             // Action
@@ -124,8 +118,7 @@ namespace Updater
      * on the role.
      */
             QStandardItem *action = new QStandardItem("ActionCell");
-            action->setData(ActionColumnItemDelegate::DownloadPushButton,
-                            ActionColumnItemDelegate::WidgetRole);
+            action->setData(ActionColumnItemDelegate::DownloadPushButton, ActionColumnItemDelegate::WidgetRole);
             rowItems.append(action);
 
             model->appendRow(rowItems);
@@ -168,16 +161,13 @@ namespace Updater
    * Set Item Delegates for "SoftwareComponent" and "Action" Columns
    */
         softwareDelegate = new Updater::SoftwareColumnItemDelegate;
-        ui->tableView_1->setItemDelegateForColumn(Columns::SoftwareComponent,
-                                                  softwareDelegate);
+        ui->tableView_1->setItemDelegateForColumn(Columns::SoftwareComponent, softwareDelegate);
 
         actionDelegate = new Updater::ActionColumnItemDelegate;
         ui->tableView_1->setItemDelegateForColumn(Columns::Action, actionDelegate);
 
-        connect(actionDelegate, SIGNAL(downloadButtonClicked(QModelIndex)), this,
-                SLOT(doDownload(QModelIndex)));
-        connect(actionDelegate, SIGNAL(installButtonClicked(QModelIndex)), this,
-                SLOT(doInstall(QModelIndex)));
+        connect(actionDelegate, SIGNAL(downloadButtonClicked(QModelIndex)), this, SLOT(doDownload(QModelIndex)));
+        connect(actionDelegate, SIGNAL(installButtonClicked(QModelIndex)), this, SLOT(doInstall(QModelIndex)));
 
         /**
    * Configure view
@@ -185,12 +175,9 @@ namespace Updater
         // enable mouse tracking to be able to bind the mouseover/hover event
         ui->tableView_1->setMouseTracking(true);
         // disable resizing of the columns
-        ui->tableView_1->horizontalHeader()->setSectionResizeMode(
-            Columns::SoftwareComponent, QHeaderView::Stretch);
-        ui->tableView_1->horizontalHeader()->setSectionResizeMode(
-            Columns::LatestVersion, QHeaderView::Fixed);
-        ui->tableView_1->horizontalHeader()->setSectionResizeMode(
-            Columns::YourVersion, QHeaderView::Fixed);
+        ui->tableView_1->horizontalHeader()->setSectionResizeMode(Columns::SoftwareComponent, QHeaderView::Stretch);
+        ui->tableView_1->horizontalHeader()->setSectionResizeMode(Columns::LatestVersion, QHeaderView::Fixed);
+        ui->tableView_1->horizontalHeader()->setSectionResizeMode(Columns::YourVersion, QHeaderView::Fixed);
         // hide columns (1 and 3; both URLs)
         ui->tableView_1->setColumnHidden(Columns::WebsiteURL, true);
         ui->tableView_1->setColumnHidden(Columns::DownloadURL, true);
@@ -235,34 +222,29 @@ namespace Updater
         QNetworkRequest request(downloadURL);
 
         // setup download folder
-        QString downloadFolder(QCoreApplication::applicationDirPath() +
-                               QDir::separator() + "downloads");
+        QString downloadFolder(QCoreApplication::applicationDirPath() + QDir::separator() + "downloads");
         if (!QDir(downloadFolder).exists()) {
             QDir(downloadFolder).mkpath(".");
         }
         downloadManager.setDownloadFolder(downloadFolder);
-        downloadManager.setDownloadMode(
-            Downloader::DownloadItem::DownloadMode::SkipIfExists);
+        downloadManager.setDownloadMode(Downloader::DownloadItem::DownloadMode::SkipIfExists);
 
         // enqueue download request
         downloadManager.get(request);
 
         // setup progressbar
-        Downloader::TransferItem *transfer =
-            downloadManager.findTransfer(downloadURL);
+        Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
         ProgressBarUpdater *progressBar = new ProgressBarUpdater(this, index.row());
-        connect(transfer, SIGNAL(downloadProgress(QMap<QString, QVariant>)),
-                progressBar, SLOT(updateProgress(QMap<QString, QVariant>)));
-        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem * t)),
-                progressBar, SLOT(downloadFinished(Downloader::TransferItem * t)));
+        connect(transfer, SIGNAL(downloadProgress(QMap<QString, QVariant>)), progressBar,
+                SLOT(updateProgress(QMap<QString, QVariant>)));
+        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem * t)), progressBar,
+                SLOT(downloadFinished(Downloader::TransferItem * t)));
 
         // finally: invoke downloading
-        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone",
-                                  Qt::QueuedConnection);
+        QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);
     }
 
-    ProgressBarUpdater::ProgressBarUpdater(UpdaterDialog *parent, int indexRow)
-        : QObject(parent), currentRow(indexRow)
+    ProgressBarUpdater::ProgressBarUpdater(UpdaterDialog *parent, int indexRow) : QObject(parent), currentRow(indexRow)
     {
         // outside access to UpdaterDialog *ui - todo provide getModel()
         model = parent->ui->tableView_1->model();
@@ -284,15 +266,13 @@ namespace Updater
         // we reach 100%
         // the progress bar is needed for possible other redirects and the final
         // download indication
-        if (transfer->reply->attribute(QNetworkRequest::RedirectionTargetAttribute)
-                .isValid()) {
+        if (transfer->reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid()) {
             return;
         }
 
         // when we reach 100%, "hide" progressBar and "show" Install Button
         else if (progress["bytesReceived"] == progress["bytesTotal"]) {
-            model->setData(index, ActionColumnItemDelegate::InstallPushButton,
-                           ActionColumnItemDelegate::WidgetRole);
+            model->setData(index, ActionColumnItemDelegate::InstallPushButton, ActionColumnItemDelegate::WidgetRole);
         }
 
         model->dataChanged(index, index);
@@ -300,8 +280,7 @@ namespace Updater
 
     QUrl UpdaterDialog::getDownloadUrl(const QModelIndex &index)
     {
-        QModelIndex indexURL =
-            index.model()->index(index.row(), Columns::DownloadURL, QModelIndex());
+        QModelIndex indexURL = index.model()->index(index.row(), Columns::DownloadURL, QModelIndex());
         return QUrl(ui->tableView_1->model()->data(indexURL).toString());
     }
 
@@ -309,8 +288,7 @@ namespace Updater
 
     void UpdaterDialog::downloadsFinished()
     {
-        qDebug()
-            << "UpdaterDialog::downloadsFinished \n Triggering post-download tasks";
+        qDebug() << "UpdaterDialog::downloadsFinished \n Triggering post-download tasks";
     }
 
     void UpdaterDialog::on_searchLineEdit_textChanged(const QString &arg1)

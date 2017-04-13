@@ -4,8 +4,7 @@
 namespace ServerControlPanel
 {
 
-    MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent), ui(new ServerControlPanel::Ui::MainWindow)
+    MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new ServerControlPanel::Ui::MainWindow)
     {
         ui->setupUi(this);
 
@@ -26,13 +25,11 @@ namespace ServerControlPanel
         } else {
             // maximize and move window to the top
             setFocus();
-            setWindowState(windowState() & (~Qt::WindowMinimized | Qt::WindowActive |
-                                            Qt::WindowMaximized));
+            setWindowState(windowState() & (~Qt::WindowMinimized | Qt::WindowActive | Qt::WindowMaximized));
         }
 
         // disable Maximize button functionality
-        setWindowFlags((windowFlags() | Qt::CustomizeWindowHint) &
-                       ~Qt::WindowMaximizeButtonHint);
+        setWindowFlags((windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
 
         // set window size fixed
         setFixedSize(width(), height());
@@ -60,13 +57,11 @@ namespace ServerControlPanel
         // Status Table - Column Status
         // if process state of a server changes, then change the label status in
         // UI::MainWindow too
-        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
-                this, SLOT(setLabelStatusActive(QString, bool)));
+        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)), this,
+                SLOT(setLabelStatusActive(QString, bool)));
 
-        connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this,
-                SLOT(updateVersion(QString)));
-        connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this,
-                SLOT(updatePort(QString)));
+        connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
+        connect(servers, SIGNAL(signalMainWindow_updatePort(QString)), this, SLOT(updatePort(QString)));
 
         // if process state of NGINX and PHP changes,
         // then change the disabled/enabled state of pushButtons, too
@@ -105,18 +100,14 @@ namespace ServerControlPanel
 
     MainWindow *MainWindow::getMainWindow() { return this; }
 
-    void MainWindow::setProcessesInstance(Processes *oProcesses)
-    {
-        processes = oProcesses;
-    }
+    void MainWindow::setProcessesInstance(Processes *oProcesses) { processes = oProcesses; }
 
     Processes *MainWindow::getProcessesObject() { return processes; }
 
     void MainWindow::updateServerStatusIndicators()
     {
-        foreach (Process process, processes->getRunningProcesses())
-        {
-            if(processes->isSystemProcess(process.name)) {
+        foreach (Process process, processes->getRunningProcesses()) {
+            if (processes->isSystemProcess(process.name)) {
                 continue;
             }
 
@@ -126,8 +117,8 @@ namespace ServerControlPanel
 
             Servers::Server *server = servers->getServer(serverName);
 
-            qDebug() << "[Processes Running][updateServerStatusIndicators] The process"
-                     << processName << "has the Server" << server->name;
+            qDebug() << "[Processes Running][updateServerStatusIndicators] The process" << processName
+                     << "has the Server" << server->name;
 
             // set indicators on main window and tray menu
             if (server->name != "Not Installed") {
@@ -161,8 +152,7 @@ namespace ServerControlPanel
         }
 
         QString softwareNameAndLatestVersion =
-            QString("%1 v%2").arg(versionInfo["software_name"].toString(),
-                                  versionInfo["latest_version"].toString());
+            QString("%1 v%2").arg(versionInfo["software_name"].toString(), versionInfo["latest_version"].toString());
         QString title("Update available:\n");
         QString msg(softwareNameAndLatestVersion);
 
@@ -171,8 +161,7 @@ namespace ServerControlPanel
 
     // TODO move to Notification Class
     // if "selfupdater/autorestart" is on, just show a tray info
-    void MainWindow::show_SelfUpdater_RestartNeededNotification(
-        QJsonObject versionInfo)
+    void MainWindow::show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo)
     {
         QString title("Update successful! Restarting...\n");
         QString msg("Version v" + versionInfo["latest_version"].toString());
@@ -207,155 +196,115 @@ namespace ServerControlPanel
         connect(quitAction, SIGNAL(triggered()), this, SLOT(quitApplication()));
 
         // Connect Actions for Status Table - Column Action (Start)
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Nginx"),
-                SIGNAL(clicked()), servers, SLOT(startNginx()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_PHP"),
-                SIGNAL(clicked()), servers, SLOT(startPHP()));
-        connect(
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"),
-            SIGNAL(clicked()), servers, SLOT(startMariaDb()));
-        QPushButton *buttonStartMongoDb =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Nginx"), SIGNAL(clicked()), servers,
+                SLOT(startNginx()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_PHP"), SIGNAL(clicked()), servers,
+                SLOT(startPHP()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
+                SLOT(startMariaDb()));
+        QPushButton *buttonStartMongoDb = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
         if (buttonStartMongoDb != 0) {
-            connect(buttonStartMongoDb, SIGNAL(clicked()), servers,
-                    SLOT(startMongoDb()));
+            connect(buttonStartMongoDb, SIGNAL(clicked()), servers, SLOT(startMongoDb()));
         }
-        QPushButton *buttonStartMemcached =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
+        QPushButton *buttonStartMemcached = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
         if (buttonStartMemcached != 0) {
-            connect(buttonStartMemcached, SIGNAL(clicked()), servers,
-                    SLOT(startMemcached()));
+            connect(buttonStartMemcached, SIGNAL(clicked()), servers, SLOT(startMemcached()));
         }
-        QPushButton *buttonStartPostgreSQL =
-            ui->centralWidget->findChild<QPushButton *>(
-                "pushButton_Start_PostgreSQL");
+        QPushButton *buttonStartPostgreSQL = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
         if (buttonStartPostgreSQL != 0) {
-            connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers,
-                    SLOT(startPostgreSQL()));
+            connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers, SLOT(startPostgreSQL()));
         }
-        QPushButton *buttonStartRedis =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Redis");
+        QPushButton *buttonStartRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Redis");
         if (buttonStartRedis != 0) {
             connect(buttonStartRedis, SIGNAL(clicked()), servers, SLOT(startRedis()));
         }
 
         // Connect Actions for Status Table - Column Action (Stop)
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"),
-                SIGNAL(clicked()), servers, SLOT(stopNginx()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PHP"),
-                SIGNAL(clicked()), servers, SLOT(stopPHP()));
-        connect(
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"),
-            SIGNAL(clicked()), servers, SLOT(stopMariaDb()));
-        QPushButton *buttonStopMongoDb =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), SIGNAL(clicked()), servers,
+                SLOT(stopNginx()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers,
+                SLOT(stopPHP()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
+                SLOT(stopMariaDb()));
+        QPushButton *buttonStopMongoDb = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
         if (buttonStopMongoDb != 0) {
             connect(buttonStopMongoDb, SIGNAL(clicked()), servers, SLOT(stopMongoDb()));
         }
-        QPushButton *buttonStopMemcached =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
+        QPushButton *buttonStopMemcached = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
         if (buttonStopMemcached != 0) {
-            connect(buttonStopMemcached, SIGNAL(clicked()), servers,
-                    SLOT(stopMemcached()));
+            connect(buttonStopMemcached, SIGNAL(clicked()), servers, SLOT(stopMemcached()));
         }
-        QPushButton *buttonStopPostgreSQL =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
+        QPushButton *buttonStopPostgreSQL = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
         if (buttonStopPostgreSQL != 0) {
-            connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers,
-                    SLOT(stopPostgreSQL()));
+            connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers, SLOT(stopPostgreSQL()));
         }
-        QPushButton *buttonStopRedis =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
+        QPushButton *buttonStopRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
         if (buttonStopRedis != 0) {
             connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis()));
         }
 
         // Connect Actions for Status Table - AllServers Start, Stop
-        connect(ui->pushButton_AllServers_Start, SIGNAL(clicked()), this,
-                SLOT(startAllServers()));
-        connect(ui->pushButton_AllServers_Stop, SIGNAL(clicked()), this,
-                SLOT(stopAllServers()));
+        connect(ui->pushButton_AllServers_Start, SIGNAL(clicked()), this, SLOT(startAllServers()));
+        connect(ui->pushButton_AllServers_Stop, SIGNAL(clicked()), this, SLOT(stopAllServers()));
 
         // PushButtons:: Website, Forum, Help, About, ReportBug, Donate
         connect(ui->pushButton_Website, SIGNAL(clicked()), this, SLOT(goToWebsite()));
         connect(ui->pushButton_Forum, SIGNAL(clicked()), this, SLOT(goToForum()));
         connect(ui->pushButton_Help, SIGNAL(clicked()), this, SLOT(openHelpDialog()));
-        connect(ui->pushButton_About, SIGNAL(clicked()), this,
-                SLOT(openAboutDialog()));
-        connect(ui->pushButton_ReportBug, SIGNAL(clicked()), this,
-                SLOT(goToReportIssue()));
+        connect(ui->pushButton_About, SIGNAL(clicked()), this, SLOT(openAboutDialog()));
+        connect(ui->pushButton_ReportBug, SIGNAL(clicked()), this, SLOT(goToReportIssue()));
         connect(ui->pushButton_Donate, SIGNAL(clicked()), this, SLOT(goToDonate()));
 
         // PushButtons: Configuration, Help, About, Close
         connect(ui->pushButton_Console, SIGNAL(clicked()), this, SLOT(openConsole()));
-        connect(ui->pushButton_Configuration, SIGNAL(clicked()), this,
-                SLOT(openConfigurationDialog()));
-        connect(ui->pushButton_Processes, SIGNAL(clicked()), this,
-                SLOT(openProcessViewerDialog()));
+        connect(ui->pushButton_Configuration, SIGNAL(clicked()), this, SLOT(openConfigurationDialog()));
+        connect(ui->pushButton_Processes, SIGNAL(clicked()), this, SLOT(openProcessViewerDialog()));
 
         // clicking Close, does not quit, but closes the window to tray
         connect(ui->pushButton_Close, SIGNAL(clicked()), this, SLOT(hide()));
 
         // Actions - Tools
-        connect(ui->pushButton_tools_phpinfo, SIGNAL(clicked()), this,
-                SLOT(openToolPHPInfo()));
-        connect(ui->pushButton_tools_phpmyadmin, SIGNAL(clicked()), this,
-                SLOT(openToolPHPMyAdmin()));
-        connect(ui->pushButton_tools_webgrind, SIGNAL(clicked()), this,
-                SLOT(openToolWebgrind()));
-        connect(ui->pushButton_tools_adminer, SIGNAL(clicked()), this,
-                SLOT(openToolAdminer()));
-        connect(ui->pushButton_tools_robomongo, SIGNAL(clicked()), this,
-                SLOT(openToolRobomongo()));
+        connect(ui->pushButton_tools_phpinfo, SIGNAL(clicked()), this, SLOT(openToolPHPInfo()));
+        connect(ui->pushButton_tools_phpmyadmin, SIGNAL(clicked()), this, SLOT(openToolPHPMyAdmin()));
+        connect(ui->pushButton_tools_webgrind, SIGNAL(clicked()), this, SLOT(openToolWebgrind()));
+        connect(ui->pushButton_tools_adminer, SIGNAL(clicked()), this, SLOT(openToolAdminer()));
+        connect(ui->pushButton_tools_robomongo, SIGNAL(clicked()), this, SLOT(openToolRobomongo()));
 
         // Actions - Open Projects Folder
-        connect(ui->pushButton_OpenProjects_Browser, SIGNAL(clicked()), this,
-                SLOT(openProjectFolderInBrowser()));
-        connect(ui->pushButton_OpenProjects_Explorer, SIGNAL(clicked()), this,
-                SLOT(openProjectFolderInExplorer()));
+        connect(ui->pushButton_OpenProjects_Browser, SIGNAL(clicked()), this, SLOT(openProjectFolderInBrowser()));
+        connect(ui->pushButton_OpenProjects_Explorer, SIGNAL(clicked()), this, SLOT(openProjectFolderInExplorer()));
 
         // Actions - Status Table
 
         // Configuration via Webinterface
-        connect(
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"),
-            SIGNAL(clicked()), this, SLOT(openConfigurationDialogNginx()));
-        connect(
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_PHP"),
-            SIGNAL(clicked()), this, SLOT(openConfigurationDialogPHP()));
-        connect(ui->centralWidget->findChild<QPushButton *>(
-                    "pushButton_Configure_MariaDb"),
-                SIGNAL(clicked()), this, SLOT(openConfigurationDialogMariaDb()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"), SIGNAL(clicked()), this,
+                SLOT(openConfigurationDialogNginx()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_PHP"), SIGNAL(clicked()), this,
+                SLOT(openConfigurationDialogPHP()));
+        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), SIGNAL(clicked()), this,
+                SLOT(openConfigurationDialogMariaDb()));
 
         QPushButton *buttonConfigureMongoDb =
-            ui->centralWidget->findChild<QPushButton *>(
-                "pushButton_Configure_MongoDb");
+            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
         if (buttonConfigureMongoDb != 0) {
-            connect(buttonConfigureMongoDb, SIGNAL(clicked()), this,
-                    SLOT(openConfigurationDialogMongoDb()));
+            connect(buttonConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
         }
 
         QPushButton *buttonConfigurePostgresql =
-            ui->centralWidget->findChild<QPushButton *>(
-                "pushButton_Configure_PostgreSQL");
+            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
         if (buttonConfigurePostgresql != 0) {
-            connect(buttonConfigurePostgresql, SIGNAL(clicked()), this,
-                    SLOT(openConfigurationDialogPostgresql()));
+            connect(buttonConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
         }
 
-        QPushButton *buttonConfigureRedis =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
+        QPushButton *buttonConfigureRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
         if (buttonConfigureRedis != 0) {
-            connect(buttonConfigureRedis, SIGNAL(clicked()), this,
-                    SLOT(openConfigurationDialogRedis()));
+            connect(buttonConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
 
         QPushButton *buttonConfigureMemcached =
-            ui->centralWidget->findChild<QPushButton *>(
-                "pushButton_Configure_Memcached");
+            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
         if (buttonConfigureMemcached != 0) {
-            connect(buttonConfigureMemcached, SIGNAL(clicked()), this,
-                    SLOT(openConfigurationDialogMemcached()));
+            connect(buttonConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
         }
     }
 
@@ -387,22 +336,20 @@ namespace ServerControlPanel
 
         // Set enabled/disabled state for all "pushButton_ShowLog_*" buttons
         QList<QPushButton *> allShowLogPushButtons =
-            ui->centralWidget->findChildren<QPushButton *>(
-                QRegExp("pushButton_ShowLog_\\w"));
+            ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowLog_\\w"));
 
         for (int i = 0; i < allShowLogPushButtons.size(); ++i) {
-            allShowLogPushButtons[i]->setEnabled(QFile().exists(
-                this->getLogfile(allShowLogPushButtons[i]->objectName())));
+            allShowLogPushButtons[i]->setEnabled(
+                QFile().exists(this->getLogfile(allShowLogPushButtons[i]->objectName())));
         }
 
         // Set enabled/disabled state for all "pushButton_ShowErrorLog_*" buttons
         QList<QPushButton *> allShowErrorLogPushButtons =
-            ui->centralWidget->findChildren<QPushButton *>(
-                QRegExp("pushButton_ShowErrorLog_\\w"));
+            ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowErrorLog_\\w"));
 
         for (int i = 0; i < allShowErrorLogPushButtons.size(); ++i) {
-            allShowErrorLogPushButtons[i]->setEnabled(QFile().exists(
-                this->getLogfile(allShowErrorLogPushButtons[i]->objectName())));
+            allShowErrorLogPushButtons[i]->setEnabled(
+                QFile().exists(this->getLogfile(allShowErrorLogPushButtons[i]->objectName())));
         }
     }
 
@@ -416,26 +363,23 @@ namespace ServerControlPanel
     {
         if (tray->isVisible()) {
 
-            bool doNotAskAgainCloseToTray =
-                settings->get("global/donotaskagainclosetotray").toBool();
+            bool doNotAskAgainCloseToTray = settings->get("global/donotaskagainclosetotray").toBool();
 
             if (!doNotAskAgainCloseToTray) {
-                QCheckBox *checkbox =
-                    new QCheckBox(tr("Do not show this message again."), this);
+                QCheckBox *checkbox = new QCheckBox(tr("Do not show this message again."), this);
                 checkbox->setChecked(doNotAskAgainCloseToTray);
 
                 QMessageBox msgbox(this);
                 msgbox.setWindowTitle(qApp->applicationName());
                 msgbox.setIconPixmap(QMessageBox::standardIcon(QMessageBox::Information));
-                msgbox.setText(tr(
-                    "This program will keep running in the system tray.<br>"
-                    "To terminate the program, choose <b>Quit</b> in the "
-                    "context menu of the system tray."));
+                msgbox.setText(
+                    tr("This program will keep running in the system tray.<br>"
+                       "To terminate the program, choose <b>Quit</b> in the "
+                       "context menu of the system tray."));
                 msgbox.setCheckBox(checkbox);
                 msgbox.exec();
 
-                settings->set("global/donotaskagainclosetotray",
-                              int(msgbox.checkBox()->isChecked()));
+                settings->set("global/donotaskagainclosetotray", int(msgbox.checkBox()->isChecked()));
             }
 
             // hide mainwindow
@@ -467,8 +411,7 @@ namespace ServerControlPanel
                 // window
                 show();
                 setFocus();
-                setWindowState(windowState() & (~Qt::WindowMinimized | Qt::WindowActive |
-                                                Qt::WindowMaximized));
+                setWindowState(windowState() & (~Qt::WindowMinimized | Qt::WindowActive | Qt::WindowMaximized));
                 activateWindow();
             }
             break;
@@ -485,8 +428,7 @@ namespace ServerControlPanel
     void MainWindow::enableToolsPushButtons(bool enabled)
     {
         // get all PushButtons from the Tools GroupBox of MainWindow::UI
-        QList<QPushButton *> allPushButtonsButtons =
-            ui->ToolsGroupBox->findChildren<QPushButton *>();
+        QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons enabled/disabled
         for (int i = 0; i < allPushButtonsButtons.size(); ++i) {
@@ -509,8 +451,7 @@ namespace ServerControlPanel
     void MainWindow::showPushButtonsOnlyForInstalledTools()
     {
         // get all PushButtons from the Tools GroupBox of MainWindow::UI
-        QList<QPushButton *> allPushButtonsButtons =
-            ui->ToolsGroupBox->findChildren<QPushButton *>();
+        QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons invisible
         for (int i = 0; i < allPushButtonsButtons.size(); ++i) {
@@ -540,32 +481,25 @@ namespace ServerControlPanel
     {
         label = label.toLower();
         if (label == "nginx") {
-            ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->setEnabled(enabled);
         }
         if (label == "php" || label == "php-cgi") {
-            ui->centralWidget->findChild<QLabel *>("label_PHP_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->setEnabled(enabled);
         }
         if (label == "mariadb" || label == "mysqld") {
-            ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")->setEnabled(enabled);
         }
         if (label == "mongodb") {
-            ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")->setEnabled(enabled);
         }
         if (label == "memcached") {
-            ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")->setEnabled(enabled);
         }
         if (label == "postgresql" || label == "postgres") {
-            ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")->setEnabled(enabled);
         }
         if (label == "redis" || label == "redis-server") {
-            ui->centralWidget->findChild<QLabel *>("label_Redis_Status")
-                ->setEnabled(enabled);
+            ui->centralWidget->findChild<QLabel *>("label_Redis_Status")->setEnabled(enabled);
         }
 
         updateTrayIconTooltip();
@@ -579,35 +513,29 @@ namespace ServerControlPanel
     {
         QString tip = "";
 
-        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")
-                ->isEnabled()) {
+        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->isEnabled()) {
             tip.append("Nginx: running\n");
         }
         if (ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
             tip.append("PHP: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")
-                ->isEnabled()) {
+        if (ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")->isEnabled()) {
             tip.append("MariaDb: running\n");
         }
         if (ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")
-                ->isEnabled()) {
+            ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")->isEnabled()) {
             tip.append("MongoDb: running\n");
         }
         if (ui->centralWidget->findChild<QLabel *>("label_Memcached_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")
-                ->isEnabled()) {
+            ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")->isEnabled()) {
             tip.append("Memcached: running\n");
         }
         if (ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")
-                ->isEnabled()) {
+            ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")->isEnabled()) {
             tip.append("PostgreSQL: running\n");
         }
         if (ui->centralWidget->findChild<QLabel *>("label_Redis_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_Redis_Status")
-                ->isEnabled()) {
+            ui->centralWidget->findChild<QLabel *>("label_Redis_Status")->isEnabled()) {
             tip.append("Redis: running\n");
         }
 
@@ -654,8 +582,7 @@ namespace ServerControlPanel
         // string for regexp testing
         // QString p_stdout = "nginx version: nginx/1.2.1";
 
-        qDebug() << "[Nginx] Version: \n"
-                 << p_stdout;
+        qDebug() << "[Nginx] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout);
     }
@@ -663,8 +590,7 @@ namespace ServerControlPanel
     QString MainWindow::getMariaVersion()
     {
         // this happens only during testing
-        if (!QFile().exists("./bin/mariadb/bin/mysqld.exe") ||
-            !QFile().exists("./bin/mariadb/bin/mysqlcheck.exe")) {
+        if (!QFile().exists("./bin/mariadb/bin/mysqld.exe") || !QFile().exists("./bin/mariadb/bin/mysqlcheck.exe")) {
             return "0.0.0";
         }
 
@@ -685,8 +611,7 @@ namespace ServerControlPanel
         // QString p_stdout = ".\\bin\\mariadb\\bin\\mysqlcheck.exe  Ver 2.7.4-MariaDB
         // Distrib 10.1.6-MariaDB, for Win64 (AMD64)\r\n";
 
-        qDebug() << "[MariaDb] Version: \n"
-                 << p_stdout;
+        qDebug() << "[MariaDb] Version: \n" << p_stdout;
 
         // scrape second version number
         return parseVersionNumber(p_stdout.mid(p_stdout.lastIndexOf("Distrib "), 15));
@@ -714,8 +639,7 @@ namespace ServerControlPanel
         // QString p_stdout = "PHP 5.4.3 (cli) (built: Feb 29 2012 19:06:50)";
         // QString p_stdout = "PHP 7.0.0alpha2 (cli)  (non semantic version)";
 
-        qDebug() << "[PHP] Version: \n"
-                 << p_stdout;
+        qDebug() << "[PHP] Version: \n" << p_stdout;
 
         // - grab inside "PHP x (cli)"
         // - "\\d.\\d.\\d." = grab "1.2.3"
@@ -738,8 +662,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        qDebug() << "[MongoDb] Version: \n"
-                 << p_stdout;
+        qDebug() << "[MongoDb] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(3)); // 21
     }
@@ -756,8 +679,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readAll();
 
-        qDebug() << "[PostgreSQL] Version: \n"
-                 << p_stdout;
+        qDebug() << "[PostgreSQL] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(2)); // 10
     }
@@ -774,8 +696,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        qDebug() << "[Memcached] Version: \n"
-                 << p_stdout;
+        qDebug() << "[Memcached] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(2)); // 10
     }
@@ -792,8 +713,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        qDebug() << "[Redis] Version: \n"
-                 << p_stdout;
+        qDebug() << "[Redis] Version: \n" << p_stdout;
 
         // Redis server v=2.8.21 sha
         return parseVersionNumber(p_stdout);
@@ -857,40 +777,19 @@ namespace ServerControlPanel
         servers->stopRedis();
     }
 
-    void MainWindow::goToWebsite()
-    {
-        QDesktopServices::openUrl(QUrl("http://wpn-xm.org/"));
-    }
+    void MainWindow::goToWebsite() { QDesktopServices::openUrl(QUrl("http://wpn-xm.org/")); }
 
-    void MainWindow::goToForum()
-    {
-        QDesktopServices::openUrl(QUrl("http://forum.wpn-xm.org/"));
-    }
+    void MainWindow::goToForum() { QDesktopServices::openUrl(QUrl("http://forum.wpn-xm.org/")); }
 
-    void MainWindow::goToReportIssue()
-    {
-        QDesktopServices::openUrl(QUrl("https://github.com/WPN-XM/WPN-XM/issues/"));
-    }
+    void MainWindow::goToReportIssue() { QDesktopServices::openUrl(QUrl("https://github.com/WPN-XM/WPN-XM/issues/")); }
 
-    void MainWindow::goToDonate()
-    {
-        QDesktopServices::openUrl(QUrl("http://wpn-xm.org/#donate"));
-    }
+    void MainWindow::goToDonate() { QDesktopServices::openUrl(QUrl("http://wpn-xm.org/#donate")); }
 
-    void MainWindow::openToolPHPInfo()
-    {
-        QDesktopServices::openUrl(QUrl("http://wpn.xm/index.php?page=phpinfo"));
-    }
+    void MainWindow::openToolPHPInfo() { QDesktopServices::openUrl(QUrl("http://wpn.xm/index.php?page=phpinfo")); }
 
-    void MainWindow::openToolPHPMyAdmin()
-    {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/phpmyadmin/"));
-    }
+    void MainWindow::openToolPHPMyAdmin() { QDesktopServices::openUrl(QUrl("http://localhost/tools/phpmyadmin/")); }
 
-    void MainWindow::openToolWebgrind()
-    {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webgrind/"));
-    }
+    void MainWindow::openToolWebgrind() { QDesktopServices::openUrl(QUrl("http://localhost/tools/webgrind/")); }
 
     void MainWindow::openToolAdminer()
     {
@@ -908,10 +807,7 @@ namespace ServerControlPanel
         QProcess::startDetached(command);
     }
 
-    void MainWindow::openWebinterface()
-    {
-        QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/"));
-    }
+    void MainWindow::openWebinterface() { QDesktopServices::openUrl(QUrl("http://localhost/tools/webinterface/")); }
 
     void MainWindow::openProjectFolderInBrowser()
     {
@@ -931,11 +827,9 @@ namespace ServerControlPanel
     {
         if (QDir(getProjectFolder()).exists()) {
             // exec explorer with path to projects
-            QDesktopServices::openUrl(
-                QUrl("file:///" + getProjectFolder(), QUrl::TolerantMode));
+            QDesktopServices::openUrl(QUrl("file:///" + getProjectFolder(), QUrl::TolerantMode));
         } else {
-            QMessageBox::warning(this, tr("Warning"),
-                                 tr("The projects folder was not found."));
+            QMessageBox::warning(this, tr("Warning"), tr("The projects folder was not found."));
         }
     }
 
@@ -959,10 +853,7 @@ namespace ServerControlPanel
         QProcess::startDetached(cmd);
     }
 
-    QString MainWindow::getProjectFolder() const
-    {
-        return QDir::toNativeSeparators(QDir::currentPath() + "/www");
-    }
+    QString MainWindow::getProjectFolder() const { return QDir::toNativeSeparators(QDir::currentPath() + "/www"); }
 
     void MainWindow::openConfigurationDialog()
     {
@@ -1029,24 +920,18 @@ namespace ServerControlPanel
 
     QString MainWindow::getServerNameFromPushButton(QPushButton *button)
     {
-        return button->objectName()
-            .split("_")
-            .last(); // "pushButton_FooBar_Nginx" => "Nginx"
+        return button->objectName().split("_").last(); // "pushButton_FooBar_Nginx" => "Nginx"
     }
 
     void MainWindow::openConfigurationInEditor()
     {
-        QString serverName =
-            this->getServerNameFromPushButton((QPushButton *)sender());
+        QString serverName = this->getServerNameFromPushButton((QPushButton *)sender());
 
         // fetch config file for server from the ini
-        QString cfgFile =
-            QDir(settings->get(serverName + "/config").toString()).absolutePath();
+        QString cfgFile = QDir(settings->get(serverName + "/config").toString()).absolutePath();
 
         if (!QFile().exists(cfgFile)) {
-            QMessageBox::warning(this, tr("Warning"),
-                                 tr("Config file not found: \n") + cfgFile,
-                                 QMessageBox::Yes);
+            QMessageBox::warning(this, tr("Warning"), tr("Config file not found: \n") + cfgFile, QMessageBox::Yes);
         } else {
             QDesktopServices::setUrlHandler("file", this, "execEditor");
             // if no UrlHandler is set, this executes the OS-dependend scheme handler
@@ -1094,9 +979,7 @@ namespace ServerControlPanel
         QString logfile = this->getLogfile(button->objectName());
 
         if (!QFile().exists(logfile)) {
-            QMessageBox::warning(this, tr("Warning"),
-                                 tr("Log file not found: \n") + logfile,
-                                 QMessageBox::Yes);
+            QMessageBox::warning(this, tr("Warning"), tr("Log file not found: \n") + logfile, QMessageBox::Yes);
         } else {
             QDesktopServices::setUrlHandler("file", this, "execEditor");
             // if no UrlHandler is set, this executes the OS-dependend scheme handler
@@ -1115,9 +998,9 @@ namespace ServerControlPanel
 
     void MainWindow::openHelpDialog()
     {
-        QDesktopServices::openUrl(QUrl(
-            "http://wpn-xm.github.io/docs/user-manual/en/"
-            "#_the_server_control_panel"));
+        QDesktopServices::openUrl(
+            QUrl("http://wpn-xm.github.io/docs/user-manual/en/"
+                 "#_the_server_control_panel"));
     }
 
     void MainWindow::openAboutDialog()
@@ -1126,55 +1009,53 @@ namespace ServerControlPanel
 
         QMessageBox about(this);
         about.setWindowTitle(tr("About"));
-        about.setText(
-            tr("<table border=0>"
-               "<tr><td colspan=2><img "
-               "src=\":/wpnxm-logo-dark-transparent\"></img>&nbsp;"
-               "<span style=\"display: inline-block; vertical-align: super; top: "
-               "-20px; font-weight: bold; font-size: 16px;\">v" APP_VERSION "</span>"
-               "</td></tr>"
-               "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
-               "<tr><td align=center><b>Website</b></td><td><a "
-               "href=\"http://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
-               "<tr><td align=center><b>Author(s)</b></td><td>Jens A. Koch (c) 2011 "
-               "- ")
-                .append(year)
-                .append(
-                    ", <br>Yann Le Moigne (c) 2010.<br></td></tr>"
-                    "<tr><td align=center><b>Github</b></td><td>WPN-XM is developed "
-                    "on Github.<br><a "
-                    "href=\"https://github.com/WPN-XM/WPN-XM/\">https://github.com/"
-                    "WPN-XM/WPN-XM/</a><br></td></tr>"
-                    "<tr><td align=center><b>Icons</b></td><td>We are using Yusukue "
-                    "Kamiyamane's Fugue Icon Set.<br><a "
-                    "href=\"http://p.yusukekamiyamane.com/\">http://"
-                    "p.yusukekamiyamane.com/</a><br></td></tr>"
-                    "<tr><td align=center><b>+1?</b></td><td>If you like using "
-                    "WPN-XM, consider supporting it:<br><a "
-                    "href=\"http://wpn-xm.org/#donate\">http://wpn-xm.org/#donate</"
-                    "a><br></td></tr>"
-                    "<tr><td align=center><b>License</b></td><td>GNU/GPL version 3, "
-                    "or any later version.<br></td></tr>"
-                    "<tr><td align=center><b>Disclaimer</b></td><td>&nbsp;</td></tr>"
-                    "</td></tr></table>"
-                    "<br><br>This software is provided by the development team 'as "
-                    "is' and any expressed or implied warranties, including, but not "
-                    "limited to,"
-                    " the implied warranties of merchantability  and fitness for a "
-                    "particular purpose are disclaimed. In no event shall the "
-                    "development team or its"
-                    " contributors be liable for any direct, indirect, incidental, "
-                    "special, exemplary, or consequential damages"
-                    " (including, but not limited to, procurement of substitute "
-                    "goods or services; loss of use, data, or profits; or business "
-                    "interruption)"
-                    " however caused and on any theory of liability, whether in "
-                    "contract, strict liability, or tort (including negligence or "
-                    "otherwise) arising"
-                    " in any way out of the use of this software, even if advised of "
-                    "the possibility of such damage.<br>"
+        about.setText(tr("<table border=0>"
+                         "<tr><td colspan=2><img "
+                         "src=\":/wpnxm-logo-dark-transparent\"></img>&nbsp;"
+                         "<span style=\"display: inline-block; vertical-align: super; top: "
+                         "-20px; font-weight: bold; font-size: 16px;\">v" APP_VERSION "</span>"
+                         "</td></tr>"
+                         "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
+                         "<tr><td align=center><b>Website</b></td><td><a "
+                         "href=\"http://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
+                         "<tr><td align=center><b>Author(s)</b></td><td>Jens A. Koch (c) 2011 "
+                         "- ")
+                          .append(year)
+                          .append(", <br>Yann Le Moigne (c) 2010.<br></td></tr>"
+                                  "<tr><td align=center><b>Github</b></td><td>WPN-XM is developed "
+                                  "on Github.<br><a "
+                                  "href=\"https://github.com/WPN-XM/WPN-XM/\">https://github.com/"
+                                  "WPN-XM/WPN-XM/</a><br></td></tr>"
+                                  "<tr><td align=center><b>Icons</b></td><td>We are using Yusukue "
+                                  "Kamiyamane's Fugue Icon Set.<br><a "
+                                  "href=\"http://p.yusukekamiyamane.com/\">http://"
+                                  "p.yusukekamiyamane.com/</a><br></td></tr>"
+                                  "<tr><td align=center><b>+1?</b></td><td>If you like using "
+                                  "WPN-XM, consider supporting it:<br><a "
+                                  "href=\"http://wpn-xm.org/#donate\">http://wpn-xm.org/#donate</"
+                                  "a><br></td></tr>"
+                                  "<tr><td align=center><b>License</b></td><td>GNU/GPL version 3, "
+                                  "or any later version.<br></td></tr>"
+                                  "<tr><td align=center><b>Disclaimer</b></td><td>&nbsp;</td></tr>"
+                                  "</td></tr></table>"
+                                  "<br><br>This software is provided by the development team 'as "
+                                  "is' and any expressed or implied warranties, including, but not "
+                                  "limited to,"
+                                  " the implied warranties of merchantability  and fitness for a "
+                                  "particular purpose are disclaimed. In no event shall the "
+                                  "development team or its"
+                                  " contributors be liable for any direct, indirect, incidental, "
+                                  "special, exemplary, or consequential damages"
+                                  " (including, but not limited to, procurement of substitute "
+                                  "goods or services; loss of use, data, or profits; or business "
+                                  "interruption)"
+                                  " however caused and on any theory of liability, whether in "
+                                  "contract, strict liability, or tort (including negligence or "
+                                  "otherwise) arising"
+                                  " in any way out of the use of this software, even if advised of "
+                                  "the possibility of such damage.<br>"
 
-                    ));
+                                  ));
         about.setParent(this);
         about.setAutoFillBackground(true);
         about.exec();
@@ -1283,8 +1164,7 @@ namespace ServerControlPanel
         ServerStatusGroupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
         ServerStatusGroupBox->setMinimumSize(QSize(471, 121)); // 3 server rows added
         ServerStatusGroupBox->setBaseSize(QSize(471, 121));
-        ServerStatusGroupBox->setAlignment(Qt::AlignLeading | Qt::AlignLeft |
-                                           Qt::AlignTop);
+        ServerStatusGroupBox->setAlignment(Qt::AlignLeading | Qt::AlignLeft | Qt::AlignTop);
         ServerStatusGroupBox->setFlat(false);
 
         QGridLayout *ServersGridLayout = new QGridLayout(ServerStatusGroupBox);
@@ -1331,16 +1211,14 @@ namespace ServerControlPanel
         label_Config->setAlignment(Qt::AlignCenter);
         label_Config->setFont(font1);
         label_Config->setEnabled(false);
-        ServersGridLayout->addWidget(label_Config, 1, 4, 1,
-                                     2); // two columns (gear and gear-pencil)
+        ServersGridLayout->addWidget(label_Config, 1, 4, 1, 2); // two columns (gear and gear-pencil)
 
         QLabel *label_Logs = new QLabel();
         label_Logs->setText(QApplication::translate("MainWindow", "Logs", 0));
         label_Logs->setAlignment(Qt::AlignCenter);
         label_Logs->setFont(font1);
         label_Logs->setEnabled(false);
-        ServersGridLayout->addWidget(label_Logs, 1, 6, 1,
-                                     2); // two columns (log and log-warning)
+        ServersGridLayout->addWidget(label_Logs, 1, 6, 1, 2); // two columns (log and log-warning)
 
         QLabel *label_Actions = new QLabel();
         label_Actions->setText(QApplication::translate("MainWindow", "Actions", 0));
@@ -1354,28 +1232,22 @@ namespace ServerControlPanel
    */
 
         QIcon iconConfig;
-        iconConfig.addFile(QStringLiteral(":/gear.png"), QSize(), QIcon::Normal,
-                           QIcon::Off);
+        iconConfig.addFile(QStringLiteral(":/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
 
         QIcon iconConfigEdit;
-        iconConfigEdit.addFile(QStringLiteral(":/gear--pencil.png"), QSize(),
-                               QIcon::Normal, QIcon::Off);
+        iconConfigEdit.addFile(QStringLiteral(":/gear--pencil.png"), QSize(), QIcon::Normal, QIcon::Off);
 
         QIcon iconLog;
-        iconLog.addFile(QStringLiteral(":/report.png"), QSize(), QIcon::Normal,
-                        QIcon::Off);
+        iconLog.addFile(QStringLiteral(":/report.png"), QSize(), QIcon::Normal, QIcon::Off);
 
         QIcon iconErrorLog;
-        iconErrorLog.addFile(QStringLiteral(":/report--exclamation.png"), QSize(),
-                             QIcon::Normal, QIcon::Off);
+        iconErrorLog.addFile(QStringLiteral(":/report--exclamation.png"), QSize(), QIcon::Normal, QIcon::Off);
 
         QIcon iconStop;
-        iconStop.addFile(QStringLiteral(":/action_stop"), QSize(), QIcon::Normal,
-                         QIcon::Off);
+        iconStop.addFile(QStringLiteral(":/action_stop"), QSize(), QIcon::Normal, QIcon::Off);
 
         QIcon iconStart;
-        iconStart.addFile(QStringLiteral(":/action_run"), QSize(), QIcon::Normal,
-                          QIcon::Off);
+        iconStart.addFile(QStringLiteral(":/action_run"), QSize(), QIcon::Normal, QIcon::Off);
 
         int rowCounter = 2;
 
@@ -1406,12 +1278,11 @@ namespace ServerControlPanel
             QLabel *labelServer = new QLabel();
             labelServer->setObjectName(QString("label_" + server->name + "_Name"));
             labelServer->setAlignment(Qt::AlignCenter);
-            labelServer->setText(QApplication::translate(
-                "MainWindow",
-                "<span style=\" font-family:'MS Shell Dlg 2'; font-size: "
-                "14px; font-weight: bold;\">" +
-                    server->name.toLocal8Bit() + "</span><",
-                0));
+            labelServer->setText(QApplication::translate("MainWindow",
+                                                         "<span style=\" font-family:'MS Shell Dlg 2'; font-size: "
+                                                         "14px; font-weight: bold;\">" +
+                                                             server->name.toLocal8Bit() + "</span><",
+                                                         0));
             ServersGridLayout->addWidget(labelServer, rowCounter, 2);
 
             // Version
@@ -1426,30 +1297,25 @@ namespace ServerControlPanel
 
             // Configuration via Webinterface
             QPushButton *pushButton_Configure = new QPushButton();
-            pushButton_Configure->setObjectName(
-                QString("pushButton_Configure_" + server->name + ""));
+            pushButton_Configure->setObjectName(QString("pushButton_Configure_" + server->name + ""));
             pushButton_Configure->setIcon(iconConfig);
             pushButton_Configure->setFlat(true);
             pushButton_Configure->setToolTip(QApplication::translate(
-                "MainWindow",
-                "Open Configuration Tab for " + server->name.toLocal8Bit() + " ", 0));
+                "MainWindow", "Open Configuration Tab for " + server->name.toLocal8Bit() + " ", 0));
             ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
             if (server->name != "Memcached") { // memcached doesn't have a config file
 
                 // Configuration via Editor
                 QPushButton *pushButton_ConfigureEdit = new QPushButton();
-                pushButton_ConfigureEdit->setObjectName(
-                    QString("pushButton_ConfigurationEditor_" + server->name + ""));
+                pushButton_ConfigureEdit->setObjectName(QString("pushButton_ConfigurationEditor_" + server->name + ""));
                 pushButton_ConfigureEdit->setIcon(iconConfigEdit);
                 pushButton_ConfigureEdit->setFlat(true);
-                pushButton_ConfigureEdit->setToolTip(QApplication::translate(
-                    "MainWindow", "Edit " + server->name.toLocal8Bit() + " config file",
-                    0));
+                pushButton_ConfigureEdit->setToolTip(
+                    QApplication::translate("MainWindow", "Edit " + server->name.toLocal8Bit() + " config file", 0));
                 ServersGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
 
-                connect(pushButton_ConfigureEdit, SIGNAL(clicked()), this,
-                        SLOT(openConfigurationInEditor()));
+                connect(pushButton_ConfigureEdit, SIGNAL(clicked()), this, SLOT(openConfigurationInEditor()));
             }
 
             // Logs
@@ -1458,12 +1324,11 @@ namespace ServerControlPanel
                     // normal log
                     if (!logfile.contains("error")) {
                         QPushButton *pushButton_ShowLog = new QPushButton();
-                        pushButton_ShowLog->setObjectName(
-                            QString("pushButton_ShowLog_" + server->name + ""));
+                        pushButton_ShowLog->setObjectName(QString("pushButton_ShowLog_" + server->name + ""));
                         pushButton_ShowLog->setIcon(iconLog);
                         pushButton_ShowLog->setFlat(true);
-                        pushButton_ShowLog->setToolTip(QApplication::translate(
-                            "MainWindow", "Open " + server->name.toLocal8Bit() + " Log", 0));
+                        pushButton_ShowLog->setToolTip(
+                            QApplication::translate("MainWindow", "Open " + server->name.toLocal8Bit() + " Log", 0));
                         ServersGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
 
                         connect(pushButton_ShowLog, SIGNAL(clicked()), this, SLOT(openLog()));
@@ -1472,39 +1337,34 @@ namespace ServerControlPanel
                     // error log
                     if (logfile.contains("error")) {
                         QPushButton *pushButton_ShowErrorLog = new QPushButton();
-                        pushButton_ShowErrorLog->setObjectName(
-                            QString("pushButton_ShowErrorLog_" + server->name + ""));
+                        pushButton_ShowErrorLog->setObjectName(QString("pushButton_ShowErrorLog_" + server->name + ""));
                         pushButton_ShowErrorLog->setIcon(iconErrorLog);
                         pushButton_ShowErrorLog->setFlat(true);
                         pushButton_ShowErrorLog->setToolTip(QApplication::translate(
-                            "MainWindow", "Open " + server->name.toLocal8Bit() + " Error Log",
-                            0));
+                            "MainWindow", "Open " + server->name.toLocal8Bit() + " Error Log", 0));
                         ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
-                        connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this,
-                                SLOT(openLog()));
+                        connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));
                     }
                 }
             }
 
             // Actions
             QPushButton *pushButton_Stop = new QPushButton();
-            pushButton_Stop->setObjectName(
-                QString("pushButton_Stop_" + server->name + ""));
+            pushButton_Stop->setObjectName(QString("pushButton_Stop_" + server->name + ""));
 
             pushButton_Stop->setIcon(iconStop);
             pushButton_Stop->setFlat(true);
-            pushButton_Stop->setToolTip(QApplication::translate(
-                "MainWindow", "Stop " + server->name.toLocal8Bit() + "", 0));
+            pushButton_Stop->setToolTip(
+                QApplication::translate("MainWindow", "Stop " + server->name.toLocal8Bit() + "", 0));
             ServersGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
 
             QPushButton *pushButton_Start = new QPushButton();
-            pushButton_Start->setObjectName(
-                QString("pushButton_Start_" + server->name + ""));
+            pushButton_Start->setObjectName(QString("pushButton_Start_" + server->name + ""));
             pushButton_Start->setIcon(iconStart);
             pushButton_Start->setFlat(true);
-            pushButton_Start->setToolTip(QApplication::translate(
-                "MainWindow", "Start " + server->name.toLocal8Bit() + "", 0));
+            pushButton_Start->setToolTip(
+                QApplication::translate("MainWindow", "Start " + server->name.toLocal8Bit() + "", 0));
             ServersGridLayout->addWidget(pushButton_Start, rowCounter, 9);
 
             rowCounter++;
@@ -1575,8 +1435,7 @@ namespace ServerControlPanel
             return getRedisVersion();
         }
 
-        qDebug() << "The function for fetching the version for " + s +
-                        " is not implemented, yet.";
+        qDebug() << "The function for fetching the version for " + s + " is not implemented, yet.";
 
         return ":(";
     }
@@ -1584,8 +1443,7 @@ namespace ServerControlPanel
     void MainWindow::updateVersion(QString server)
     {
         QString version = getVersion(server);
-        QLabel *label =
-            qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
+        QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != 0) {
             label->setText(version);
         }
@@ -1616,8 +1474,7 @@ namespace ServerControlPanel
             return getRedisPort();
         }
 
-        qDebug() << "The function for fetching the port for " + s +
-                        " is not implemented, yet.";
+        qDebug() << "The function for fetching the port for " + s + " is not implemented, yet.";
 
         return ":(";
     }
@@ -1625,44 +1482,25 @@ namespace ServerControlPanel
     void MainWindow::updatePort(QString server)
     {
         QString port = getPort(server);
-        QLabel *label =
-            qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Port");
+        QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Port");
         if (label != 0) {
             label->setText(port);
         }
     }
 
-    QString MainWindow::getNginxPort()
-    {
-        return settings->get("nginx/port").toString();
-    }
+    QString MainWindow::getNginxPort() { return settings->get("nginx/port").toString(); }
 
-    QString MainWindow::getMemcachedPort()
-    {
-        return settings->get("memcached/tcpport").toString();
-    }
+    QString MainWindow::getMemcachedPort() { return settings->get("memcached/tcpport").toString(); }
 
-    QString MainWindow::getMongoPort()
-    {
-        return settings->get("mongodb/port").toString();
-    }
+    QString MainWindow::getMongoPort() { return settings->get("mongodb/port").toString(); }
 
-    QString MainWindow::getMariaPort()
-    {
-        return settings->get("mariadb/port").toString();
-    }
+    QString MainWindow::getMariaPort() { return settings->get("mariadb/port").toString(); }
 
     QString MainWindow::getPHPPort() { return "Pool"; }
 
-    QString MainWindow::getPostgresqlPort()
-    {
-        return settings->get("postgresql/port").toString();
-    }
+    QString MainWindow::getPostgresqlPort() { return settings->get("postgresql/port").toString(); }
 
-    QString MainWindow::getRedisPort()
-    {
-        return settings->get("redis/port").toString();
-    }
+    QString MainWindow::getRedisPort() { return settings->get("redis/port").toString(); }
 
     void MainWindow::on_pushButton_Updater_clicked() { this->openUpdaterDialog(); }
 

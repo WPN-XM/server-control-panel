@@ -43,21 +43,20 @@ namespace Updater
         }
     }
 
-    void ActionColumnItemDelegate::drawDownloadPushButton(
-        QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+    void ActionColumnItemDelegate::drawDownloadPushButton(QPainter *painter,
+                                                          const QStyleOptionViewItem &option,
+                                                          const QModelIndex &index) const
     {
         QStyleOptionButton opt;
         opt.initFrom(btn);
         opt.rect = option.rect.adjusted(2, 2, -2, -2);
         opt.text = "Download";
         opt.features |= QStyleOptionButton::DefaultButton;
-        opt.state =
-            QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
+        opt.state = QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
 
         // change style of button, when clicked. based on currentRow set in
         // editorEvent().
-        opt.state |=
-            (currentRow == index.row()) ? QStyle::State_Sunken : QStyle::State_Raised;
+        opt.state |= (currentRow == index.row()) ? QStyle::State_Sunken : QStyle::State_Raised;
 
         // hover on MouseOver
         if (option.state & QStyle::State_MouseOver) {
@@ -67,8 +66,9 @@ namespace Updater
         btn->style()->drawControl(QStyle::CE_PushButton, &opt, painter, btn);
     }
 
-    void ActionColumnItemDelegate::drawInstallPushButton(
-        QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+    void ActionColumnItemDelegate::drawInstallPushButton(QPainter *painter,
+                                                         const QStyleOptionViewItem &option,
+                                                         const QModelIndex &index) const
     {
         QStyleOptionButton opt;
         opt.initFrom(btn);
@@ -79,8 +79,7 @@ namespace Updater
 
         // change style of button, when clicked. based on currentRow set in
         // editorEvent().
-        opt.state |=
-            (currentRow == index.row()) ? QStyle::State_Sunken : QStyle::State_Raised;
+        opt.state |= (currentRow == index.row()) ? QStyle::State_Sunken : QStyle::State_Raised;
 
         // hover on MouseOver
         if (option.state & QStyle::State_MouseOver) {
@@ -90,8 +89,9 @@ namespace Updater
         btn->style()->drawControl(QStyle::CE_PushButton, &opt, painter, btn);
     }
 
-    void ActionColumnItemDelegate::drawDownloadProgressBar(
-        QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+    void ActionColumnItemDelegate::drawDownloadProgressBar(QPainter *painter,
+                                                           const QStyleOptionViewItem &option,
+                                                           const QModelIndex &index) const
     {
         QStyleOptionProgressBarV2 opt;
         opt.initFrom(bar);
@@ -99,8 +99,7 @@ namespace Updater
         opt.rect.adjust(3, 3, -3, -3);
         opt.textVisible = true;
         opt.textAlignment = Qt::AlignCenter;
-        opt.state =
-            QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
+        opt.state = QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
 
         // get progress
         QMap<QString, QVariant> progress = index.model()->data(index).toMap();
@@ -166,8 +165,7 @@ namespace Updater
 
         currentRow = -1;
 
-        if (event->type() != QEvent::MouseButtonRelease &&
-            event->type() != QEvent::MouseButtonPress) {
+        if (event->type() != QEvent::MouseButtonRelease && event->type() != QEvent::MouseButtonPress) {
             return false;
         }
 

@@ -8,8 +8,7 @@
 
 namespace Configuration
 {
-    ConfigurationDialog::ConfigurationDialog(QWidget *parent)
-        : QDialog(parent), ui(new Ui::ConfigurationDialog)
+    ConfigurationDialog::ConfigurationDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ConfigurationDialog)
     {
         ui->setupUi(this);
 
@@ -30,8 +29,7 @@ namespace Configuration
         // load initial data for pages
         loadNginxUpstreams();
 
-        connect(ui->buttonBox, SIGNAL(accepted()), this,
-                SLOT(onClickedButtonBoxOk()));
+        connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
 
         ui->configMenuTreeWidget->expandAll();
     }
@@ -45,14 +43,12 @@ namespace Configuration
  * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
  * @param query
  */
-    void ConfigurationDialog::on_configMenuSearchLineEdit_textChanged(
-        const QString &query)
+    void ConfigurationDialog::on_configMenuSearchLineEdit_textChanged(const QString &query)
     {
         ui->configMenuTreeWidget->expandAll();
 
         // Iterate over all child items : filter items with "contains" query
-        QTreeWidgetItemIterator iterator(ui->configMenuTreeWidget,
-                                         QTreeWidgetItemIterator::All);
+        QTreeWidgetItemIterator iterator(ui->configMenuTreeWidget, QTreeWidgetItemIterator::All);
         while (*iterator) {
             QTreeWidgetItem *item = *iterator;
             if (item && item->text(0).contains(query, Qt::CaseInsensitive)) {
@@ -72,8 +68,7 @@ namespace Configuration
 
         // Iterate over items with childs : hide, if they do not have a matching
         // (visible) child (see above).
-        QTreeWidgetItemIterator parentIterator(ui->configMenuTreeWidget,
-                                               QTreeWidgetItemIterator::HasChildren);
+        QTreeWidgetItemIterator parentIterator(ui->configMenuTreeWidget, QTreeWidgetItemIterator::HasChildren);
         while (*parentIterator) {
             QTreeWidgetItem *item = *parentIterator;
             // count the number of hidden childs
@@ -92,159 +87,111 @@ namespace Configuration
         }
     }
 
-    void ConfigurationDialog::setServers(Servers::Servers *servers)
-    {
-        this->servers = servers;
-    }
+    void ConfigurationDialog::setServers(Servers::Servers *servers) { this->servers = servers; }
 
     void ConfigurationDialog::readSettings()
     {
         // read settings from INI and prefill config dialog items with default values
 
-        ui->checkbox_runOnStartUp->setChecked(
-            settings->get("global/runonstartup", false).toBool());
-        ui->checkbox_autostartServers->setChecked(
-            settings->get("global/autostartservers", false).toBool());
-        ui->checkbox_startMinimized->setChecked(
-            settings->get("global/startminimized", false).toBool());
+        ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
+        ui->checkbox_autostartServers->setChecked(settings->get("global/autostartservers", false).toBool());
+        ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
 
-        ui->checkbox_autostart_PHP->setChecked(
-            settings->get("autostart/php", true).toBool());
-        ui->checkbox_autostart_Nginx->setChecked(
-            settings->get("autostart/nginx", true).toBool());
-        ui->checkbox_autostart_MariaDb->setChecked(
-            settings->get("autostart/mariadb", true).toBool());
-        ui->checkbox_autostart_MongoDb->setChecked(
-            settings->get("autostart/mongodb", false).toBool());
-        ui->checkbox_autostart_Memcached->setChecked(
-            settings->get("autostart/memcached", false).toBool());
-        ui->checkbox_autostart_Postgresql->setChecked(
-            settings->get("autostart/postgresql", false).toBool());
-        ui->checkbox_autostart_Redis->setChecked(
-            settings->get("autostart/redis", false).toBool());
+        ui->checkbox_autostart_PHP->setChecked(settings->get("autostart/php", true).toBool());
+        ui->checkbox_autostart_Nginx->setChecked(settings->get("autostart/nginx", true).toBool());
+        ui->checkbox_autostart_MariaDb->setChecked(settings->get("autostart/mariadb", true).toBool());
+        ui->checkbox_autostart_MongoDb->setChecked(settings->get("autostart/mongodb", false).toBool());
+        ui->checkbox_autostart_Memcached->setChecked(settings->get("autostart/memcached", false).toBool());
+        ui->checkbox_autostart_Postgresql->setChecked(settings->get("autostart/postgresql", false).toBool());
+        ui->checkbox_autostart_Redis->setChecked(settings->get("autostart/redis", false).toBool());
 
-        ui->checkbox_clearLogsOnStart->setChecked(
-            settings->get("global/clearlogsonstart", false).toBool());
-        ui->checkbox_stopServersOnQuit->setChecked(
-            settings->get("global/stopServersonquit", false).toBool());
+        ui->checkbox_clearLogsOnStart->setChecked(settings->get("global/clearlogsonstart", false).toBool());
+        ui->checkbox_stopServersOnQuit->setChecked(settings->get("global/stopServersonquit", false).toBool());
 
-        ui->checkbox_onStartAllMinimize->setChecked(
-            settings->get("global/onstartallminimize", false).toBool());
+        ui->checkbox_onStartAllMinimize->setChecked(settings->get("global/onstartallminimize", false).toBool());
         ui->checkbox_onStartAllOpenWebinterface->setChecked(
             settings->get("global/onstartallopenwebinterface", false).toBool());
 
         ui->lineEdit_SelectedEditor->setText(
-            settings->get("global/editor", QVariant(QString("notepad.exe")))
-                .toString());
+            settings->get("global/editor", QVariant(QString("notepad.exe"))).toString());
 
         /**
    * Configuration > Updater > Self Updater
    */
 
-        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(
-            settings->get("selfupdater/runonstartup", false).toBool());
-        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(
-            settings->get("selfupdater/autoupdate", false).toBool());
-        ui->checkBox_SelfUpdater_AutoRestart->setChecked(
-            settings->get("selfupdater/autorestart", false).toBool());
+        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->get("selfupdater/runonstartup", false).toBool());
+        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
+        ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
 
         /**
    * Configuration > Components > Xdebug
    */
 
         // remote
-        ui->checkBox_xdebug_remote_enable->setChecked(
-            settings->get("xdebug/remote_enable", true).toBool());
+        ui->checkBox_xdebug_remote_enable->setChecked(settings->get("xdebug/remote_enable", true).toBool());
         ui->lineEdit_xdebug_remote_host->setText(
-            settings->get("xdebug/remote_host", QVariant(QString("127.0.0.1")))
-                .toString());
+            settings->get("xdebug/remote_host", QVariant(QString("127.0.0.1"))).toString());
         ui->lineEdit_xdebug_remote_port->setText(
-            settings->get("xdebug/remote_port", QVariant(QString("9100")))
-                .toString());
-        ui->checkBox_xdebug_remote_autostart->setChecked(
-            settings->get("xdebug/remote_autostart", true).toBool());
+            settings->get("xdebug/remote_port", QVariant(QString("9100"))).toString());
+        ui->checkBox_xdebug_remote_autostart->setChecked(settings->get("xdebug/remote_autostart", true).toBool());
         ui->lineEdit_xdebug_remote_handler->setText(
-            settings->get("xdebug/remote_handler", QVariant(QString("dbgp")))
-                .toString());
+            settings->get("xdebug/remote_handler", QVariant(QString("dbgp"))).toString());
         ui->comboBox_xdebug_remote_mode->setCurrentText(
             settings->get("xdebug/remote_mode", QVariant(QString("req"))).toString());
         // profiler
-        ui->checkBox_xdebug_enable_profiler->setChecked(
-            settings->get("xdebug/enable_profiler", true).toBool());
-        ui->checkBox_xdebug_remove_old_logs->setChecked(
-            settings->get("xdebug/remove_old_logs", true).toBool());
+        ui->checkBox_xdebug_enable_profiler->setChecked(settings->get("xdebug/enable_profiler", true).toBool());
+        ui->checkBox_xdebug_remove_old_logs->setChecked(settings->get("xdebug/remove_old_logs", true).toBool());
 
         ui->lineEdit_xdebug_idekey->setText(
-            settings->get("xdebug/idekey", QVariant(QString("netbeans-xdebug")))
-                .toString());
+            settings->get("xdebug/idekey", QVariant(QString("netbeans-xdebug"))).toString());
 
         /**
    * Configuration > Components > MariaDB
    */
 
-        ui->lineEdit_mariadb_port->setText(
-            settings->get("mariadb/port", QVariant(QString("3306"))).toString());
+        ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString());
 
         /**
    * Configuration > Components > MongoDB
    */
 
         ui->lineEdit_mongodb_bindip->setText(
-            settings->get("mongodb/bind_ip", QVariant(QString("127.0.0.1")))
-                .toString());
-        ui->lineEdit_mongodb_port->setText(
-            settings->get("mongodb/port", QVariant(QString("27017"))).toString());
-        ui->comboBox_mongodb_storageengine->setCurrentIndex(
-            ui->comboBox_mongodb_storageengine->findText(
-                settings
-                    ->get("mongodb/storageengine", QVariant(QString("wiredTiger")))
-                    .toString()));
-        ui->checkBox_mongodb_fork->setChecked(
-            settings->get("mongodb/fork", true).toBool());
-        ui->checkBox_mongodb_rest->setChecked(
-            settings->get("mongodb/rest", true).toBool());
-        ui->checkBox_mongodb_verbose->setChecked(
-            settings->get("mongodb/verbose", true).toBool());
-        ui->checkBox_mongodb_noauth->setChecked(
-            settings->get("mongodb/noauth", true).toBool());
+            settings->get("mongodb/bind_ip", QVariant(QString("127.0.0.1"))).toString());
+        ui->lineEdit_mongodb_port->setText(settings->get("mongodb/port", QVariant(QString("27017"))).toString());
+        ui->comboBox_mongodb_storageengine->setCurrentIndex(ui->comboBox_mongodb_storageengine->findText(
+            settings->get("mongodb/storageengine", QVariant(QString("wiredTiger"))).toString()));
+        ui->checkBox_mongodb_fork->setChecked(settings->get("mongodb/fork", true).toBool());
+        ui->checkBox_mongodb_rest->setChecked(settings->get("mongodb/rest", true).toBool());
+        ui->checkBox_mongodb_verbose->setChecked(settings->get("mongodb/verbose", true).toBool());
+        ui->checkBox_mongodb_noauth->setChecked(settings->get("mongodb/noauth", true).toBool());
         ui->lineEdit_mongodb_dbpath->setText(
-            settings
-                ->get("mongodb/dbpath",
-                      QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db")))
+            settings->get("mongodb/dbpath", QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db")))
                 .toString());
 
         /**
    * Configuration > Components > PostgreSQL
    */
 
-        ui->lineEdit_postgresql_port->setText(
-            settings->get("postgresql/port", QVariant(QString("3306"))).toString());
+        ui->lineEdit_postgresql_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString());
 
         /**
    * Configuration > Components > Memcached
    */
 
         ui->lineEdit_memcached_tcpport->setText(
-            settings->get("memcached/tcpport", QVariant(QString("11211")))
-                .toString());
-        ui->lineEdit_memcached_udpport->setText(
-            settings->get("memcached/udpport", QVariant(QString("0"))).toString());
-        ui->lineEdit_memcached_threads->setText(
-            settings->get("memcached/threads", QVariant(QString("2"))).toString());
+            settings->get("memcached/tcpport", QVariant(QString("11211"))).toString());
+        ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString());
+        ui->lineEdit_memcached_threads->setText(settings->get("memcached/threads", QVariant(QString("2"))).toString());
         ui->lineEdit_memcached_maxconnections->setText(
-            settings->get("memcached/maxconnections", QVariant(QString("2048")))
-                .toString());
+            settings->get("memcached/maxconnections", QVariant(QString("2048"))).toString());
         ui->lineEdit_memcached_maxmemory->setText(
-            settings->get("memcached/maxmemory", QVariant(QString("2048")))
-                .toString());
+            settings->get("memcached/maxmemory", QVariant(QString("2048"))).toString());
 
         /**
    * Configuration > Components > Redis
    */
-        ui->lineEdit_redis_bind->setText(
-            settings->get("redis/bind", QVariant(QString("127.0.0.1"))).toString());
-        ui->lineEdit_redis_port->setText(
-            settings->get("redis/port", QVariant(QString("6379"))).toString());
+        ui->lineEdit_redis_bind->setText(settings->get("redis/bind", QVariant(QString("127.0.0.1"))).toString());
+        ui->lineEdit_redis_port->setText(settings->get("redis/port", QVariant(QString("6379"))).toString());
     }
 
     void ConfigurationDialog::writeSettings()
@@ -256,22 +203,15 @@ namespace Configuration
    * Page "Server Control Panel" - Tab "Configuration"
    */
 
-        settings->set("global/runonstartup",
-                      int(ui->checkbox_runOnStartUp->isChecked()));
-        settings->set("global/startminimized",
-                      int(ui->checkbox_startMinimized->isChecked()));
-        settings->set("global/autostartservers",
-                      int(ui->checkbox_autostartServers->isChecked()));
+        settings->set("global/runonstartup", int(ui->checkbox_runOnStartUp->isChecked()));
+        settings->set("global/startminimized", int(ui->checkbox_startMinimized->isChecked()));
+        settings->set("global/autostartservers", int(ui->checkbox_autostartServers->isChecked()));
 
-        settings->set("global/clearlogsonstart",
-                      int(ui->checkbox_clearLogsOnStart->isChecked()));
-        settings->set("global/stopserversonquit",
-                      int(ui->checkbox_stopServersOnQuit->isChecked()));
+        settings->set("global/clearlogsonstart", int(ui->checkbox_clearLogsOnStart->isChecked()));
+        settings->set("global/stopserversonquit", int(ui->checkbox_stopServersOnQuit->isChecked()));
 
-        settings->set("global/onstartallminimize",
-                      int(ui->checkbox_onStartAllMinimize->isChecked()));
-        settings->set("global/onstartallopenwebinterface",
-                      int(ui->checkbox_onStartAllOpenWebinterface->isChecked()));
+        settings->set("global/onstartallminimize", int(ui->checkbox_onStartAllMinimize->isChecked()));
+        settings->set("global/onstartallopenwebinterface", int(ui->checkbox_onStartAllOpenWebinterface->isChecked()));
 
         settings->set("global/editor", QString(ui->lineEdit_SelectedEditor->text()));
 
@@ -279,30 +219,21 @@ namespace Configuration
    * Configuration > Updater > Self Updater
    */
 
-        settings->set("selfupdater/runonstartup",
-                      int(ui->checkBox_SelfUpdater_RunOnStartUp->isChecked()));
-        settings->set("selfupdater/autoupdate",
-                      int(ui->checkBox_SelfUpdater_AutoUpdate->isChecked()));
-        settings->set("selfupdater/autorestart",
-                      int(ui->checkBox_SelfUpdater_AutoRestart->isChecked()));
+        settings->set("selfupdater/runonstartup", int(ui->checkBox_SelfUpdater_RunOnStartUp->isChecked()));
+        settings->set("selfupdater/autoupdate", int(ui->checkBox_SelfUpdater_AutoUpdate->isChecked()));
+        settings->set("selfupdater/autorestart", int(ui->checkBox_SelfUpdater_AutoRestart->isChecked()));
 
         /**
    * Autostart Servers with the Server Control Panel
    */
 
-        settings->set("autostart/nginx",
-                      int(ui->checkbox_autostart_Nginx->isChecked()));
+        settings->set("autostart/nginx", int(ui->checkbox_autostart_Nginx->isChecked()));
         settings->set("autostart/php", int(ui->checkbox_autostart_PHP->isChecked()));
-        settings->set("autostart/mariadb",
-                      int(ui->checkbox_autostart_MariaDb->isChecked()));
-        settings->set("autostart/mongodb",
-                      int(ui->checkbox_autostart_MongoDb->isChecked()));
-        settings->set("autostart/memcached",
-                      int(ui->checkbox_autostart_Memcached->isChecked()));
-        settings->set("autostart/postgresql",
-                      int(ui->checkbox_autostart_Postgresql->isChecked()));
-        settings->set("autostart/redis",
-                      int(ui->checkbox_autostart_Redis->isChecked()));
+        settings->set("autostart/mariadb", int(ui->checkbox_autostart_MariaDb->isChecked()));
+        settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
+        settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
+        settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
+        settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
 
         /**
    * Configuration > Components > PHP
@@ -316,18 +247,12 @@ namespace Configuration
    * Configuration > Components > XDebug
    */
 
-        settings->set("xdebug/remote_enable",
-                      QString(ui->checkBox_xdebug_remote_enable->isChecked()));
-        settings->set("xdebug/remote_host",
-                      QString(ui->lineEdit_xdebug_remote_host->text()));
-        settings->set("xdebug/remote_port",
-                      QString(ui->lineEdit_xdebug_remote_port->text()));
-        settings->set("xdebug/remote_autostart",
-                      QString(ui->checkBox_xdebug_remote_autostart->isChecked()));
-        settings->set("xdebug/remote_handler",
-                      QString(ui->lineEdit_xdebug_remote_handler->text()));
-        settings->set("xdebug/remote_mode",
-                      QString(ui->comboBox_xdebug_remote_mode->currentText()));
+        settings->set("xdebug/remote_enable", QString(ui->checkBox_xdebug_remote_enable->isChecked()));
+        settings->set("xdebug/remote_host", QString(ui->lineEdit_xdebug_remote_host->text()));
+        settings->set("xdebug/remote_port", QString(ui->lineEdit_xdebug_remote_port->text()));
+        settings->set("xdebug/remote_autostart", QString(ui->checkBox_xdebug_remote_autostart->isChecked()));
+        settings->set("xdebug/remote_handler", QString(ui->lineEdit_xdebug_remote_handler->text()));
+        settings->set("xdebug/remote_mode", QString(ui->comboBox_xdebug_remote_mode->currentText()));
 
         settings->set("xdebug/idekey", QString(ui->lineEdit_xdebug_idekey->text()));
 
@@ -341,26 +266,19 @@ namespace Configuration
    * Configuration > Components > MongoDB
    */
 
-        settings->set("mongodb/bind_ip",
-                      QString(ui->lineEdit_mongodb_bindip->text()));
+        settings->set("mongodb/bind_ip", QString(ui->lineEdit_mongodb_bindip->text()));
         settings->set("mongodb/port", QString(ui->lineEdit_mongodb_port->text()));
-        settings->set("mongodb/storageengine",
-                      QString(ui->comboBox_mongodb_storageengine->currentText()));
-        settings->set("mongodb/fork",
-                      QString(ui->checkBox_mongodb_fork->isChecked()));
-        settings->set("mongodb/noauth",
-                      QString(ui->checkBox_mongodb_noauth->isChecked()));
-        settings->set("mongodb/rest",
-                      QString(ui->checkBox_mongodb_rest->isChecked()));
-        settings->set("mongodb/verbose",
-                      QString(ui->checkBox_mongodb_verbose->isChecked()));
+        settings->set("mongodb/storageengine", QString(ui->comboBox_mongodb_storageengine->currentText()));
+        settings->set("mongodb/fork", QString(ui->checkBox_mongodb_fork->isChecked()));
+        settings->set("mongodb/noauth", QString(ui->checkBox_mongodb_noauth->isChecked()));
+        settings->set("mongodb/rest", QString(ui->checkBox_mongodb_rest->isChecked()));
+        settings->set("mongodb/verbose", QString(ui->checkBox_mongodb_verbose->isChecked()));
         settings->set("mongodb/dbpath", QString(ui->lineEdit_mongodb_dbpath->text()));
 
         /**
    * Configuration > Components > PostgreSQL
    */
-        settings->set("postgresql/port",
-                      QString(ui->lineEdit_postgresql_port->text()));
+        settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
 
         /**
    * Configuration > Components > Redis
@@ -372,16 +290,11 @@ namespace Configuration
    * Configuration > Components > Memcached
    */
 
-        settings->set("memcached/tcpport",
-                      QString(ui->lineEdit_memcached_tcpport->text()));
-        settings->set("memcached/udpport",
-                      QString(ui->lineEdit_memcached_udpport->text()));
-        settings->set("memcached/threads",
-                      QString(ui->lineEdit_memcached_threads->text()));
-        settings->set("memcached/maxconnections",
-                      QString(ui->lineEdit_memcached_maxconnections->text()));
-        settings->set("memcached/maxmemory",
-                      QString(ui->lineEdit_memcached_maxmemory->text()));
+        settings->set("memcached/tcpport", QString(ui->lineEdit_memcached_tcpport->text()));
+        settings->set("memcached/udpport", QString(ui->lineEdit_memcached_udpport->text()));
+        settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
+        settings->set("memcached/maxconnections", QString(ui->lineEdit_memcached_maxconnections->text()));
+        settings->set("memcached/maxmemory", QString(ui->lineEdit_memcached_maxmemory->text()));
 
         /**
    * Tab "Upstream" > Page "Nginx"
@@ -413,8 +326,7 @@ namespace Configuration
 
         File::INI *ini = new File::INI(file.toLatin1());
 
-        ini->setStringValue("postgresql", "port",
-                            ui->lineEdit_postgresql_port->text().toLatin1());
+        ini->setStringValue("postgresql", "port", ui->lineEdit_postgresql_port->text().toLatin1());
 
         ini->writeConfigFile();
     }
@@ -488,26 +400,16 @@ namespace Configuration
         File::INI *ini = new File::INI(file.toLatin1());
 
         // remote
-        ini->setBoolValue("xdebug", "remote_enable",
-                          ui->checkBox_xdebug_remote_enable->isChecked());
-        ini->setStringValue("xdebug", "remote_host",
-                            ui->lineEdit_xdebug_remote_host->text().toLatin1());
-        ini->setStringValue("xdebug", "remote_port",
-                            ui->lineEdit_xdebug_remote_port->text().toLatin1());
-        ini->setBoolValue("xdebug", "remote_autostart",
-                          ui->checkBox_xdebug_remote_autostart->isChecked());
-        ini->setStringValue("xdebug", "remote_handler",
-                            ui->lineEdit_xdebug_remote_handler->text().toLatin1());
-        ini->setStringValue(
-            "xdebug", "remote_mode",
-            ui->comboBox_xdebug_remote_mode->currentText().toLatin1());
+        ini->setBoolValue("xdebug", "remote_enable", ui->checkBox_xdebug_remote_enable->isChecked());
+        ini->setStringValue("xdebug", "remote_host", ui->lineEdit_xdebug_remote_host->text().toLatin1());
+        ini->setStringValue("xdebug", "remote_port", ui->lineEdit_xdebug_remote_port->text().toLatin1());
+        ini->setBoolValue("xdebug", "remote_autostart", ui->checkBox_xdebug_remote_autostart->isChecked());
+        ini->setStringValue("xdebug", "remote_handler", ui->lineEdit_xdebug_remote_handler->text().toLatin1());
+        ini->setStringValue("xdebug", "remote_mode", ui->comboBox_xdebug_remote_mode->currentText().toLatin1());
         // profiler
-        ini->setBoolValue("xdebug", "enable_profiler",
-                          ui->checkBox_xdebug_enable_profiler->isChecked());
-        ini->setBoolValue("xdebug", "remove_old_logs",
-                          ui->checkBox_xdebug_remove_old_logs->isChecked());
-        ini->setStringValue("xdebug", "idekey",
-                            ui->lineEdit_xdebug_idekey->text().toLatin1());
+        ini->setBoolValue("xdebug", "enable_profiler", ui->checkBox_xdebug_enable_profiler->isChecked());
+        ini->setBoolValue("xdebug", "remove_old_logs", ui->checkBox_xdebug_remove_old_logs->isChecked());
+        ini->setStringValue("xdebug", "idekey", ui->lineEdit_xdebug_idekey->text().toLatin1());
 
         ini->writeConfigFile();
     }
@@ -521,10 +423,8 @@ namespace Configuration
 
         File::INI *ini = new File::INI(file.toLatin1());
         // set port to "[client] port" and "[mysqld] port"
-        ini->setStringValue("client", "port",
-                            ui->lineEdit_mariadb_port->text().toLatin1());
-        ini->setStringValue("mysqld", "port",
-                            ui->lineEdit_mariadb_port->text().toLatin1());
+        ini->setStringValue("client", "port", ui->lineEdit_mariadb_port->text().toLatin1());
+        ini->setStringValue("mysqld", "port", ui->lineEdit_mariadb_port->text().toLatin1());
         ini->writeConfigFile();
     }
 
@@ -542,21 +442,14 @@ namespace Configuration
 
         File::INI *ini = new File::INI(file.toLatin1());
 
-        ini->setStringValue("mongodb", "bind_ip",
-                            ui->lineEdit_mongodb_bindip->text().toLatin1());
-        ini->setStringValue("mongodb", "port",
-                            ui->lineEdit_mongodb_port->text().toLatin1());
-        ini->setStringValue(
-            "mongodb", "storageengine",
-            ui->comboBox_mongodb_storageengine->currentText().toLatin1());
+        ini->setStringValue("mongodb", "bind_ip", ui->lineEdit_mongodb_bindip->text().toLatin1());
+        ini->setStringValue("mongodb", "port", ui->lineEdit_mongodb_port->text().toLatin1());
+        ini->setStringValue("mongodb", "storageengine", ui->comboBox_mongodb_storageengine->currentText().toLatin1());
         ini->setBoolValue("mongodb", "fork", ui->checkBox_mongodb_fork->isChecked());
         ini->setBoolValue("mongodb", "rest", ui->checkBox_mongodb_rest->isChecked());
-        ini->setBoolValue("mongodb", "verbose",
-                          ui->checkBox_mongodb_verbose->isChecked());
-        ini->setBoolValue("mongodb", "noauth",
-                          ui->checkBox_mongodb_noauth->isChecked());
-        ini->setStringValue("mongodb", "dbpath",
-                            ui->lineEdit_mongodb_dbpath->text().toLatin1());
+        ini->setBoolValue("mongodb", "verbose", ui->checkBox_mongodb_verbose->isChecked());
+        ini->setBoolValue("mongodb", "noauth", ui->checkBox_mongodb_noauth->isChecked());
+        ini->setStringValue("mongodb", "dbpath", ui->lineEdit_mongodb_dbpath->text().toLatin1());
 
         ini->writeConfigFile();
     }
@@ -564,8 +457,7 @@ namespace Configuration
     void ConfigurationDialog::saveSettings_Nginx_Upstream()
     {
         QJsonObject upstreams;
-        upstreams.insert("pools", serialize_toJSON_Nginx_Upstream_PoolsTable(
-                                      ui->tableWidget_Nginx_Upstreams));
+        upstreams.insert("pools", serialize_toJSON_Nginx_Upstream_PoolsTable(ui->tableWidget_Nginx_Upstreams));
 
         // write JSON file
         QJsonDocument jsonDoc;
@@ -586,8 +478,7 @@ namespace Configuration
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools (key)
-        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end();
-             ++iter) {
+        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end(); ++iter) {
             // the "value" object has the key/value pairs of a pool
             QJsonObject jsonPool = iter.value().toObject();
 
@@ -605,11 +496,9 @@ namespace Configuration
                 QJsonObject s = jsonServers.value(QString::number(i)).toObject();
 
                 // use values to build server string
-                QString server =
-                    QString("    server %1:%2 weight=%3 max_fails=%4 fail_timeout=%5;\n")
-                        .arg(s["address"].toString(), s["port"].toString(),
-                             s["weight"].toString(), s["maxfails"].toString(),
-                             s["failtimeout"].toString());
+                QString server = QString("    server %1:%2 weight=%3 max_fails=%4 fail_timeout=%5;\n")
+                                     .arg(s["address"].toString(), s["port"].toString(), s["weight"].toString(),
+                                          s["maxfails"].toString(), s["failtimeout"].toString());
 
                 servers.append(server);
             }
@@ -642,8 +531,7 @@ namespace Configuration
         }
     }
 
-    void ConfigurationDialog::
-        createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs()
+    void ConfigurationDialog::createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs()
     {
         QDir dir("./bin/nginx/conf/upstreams");
 
@@ -660,8 +548,7 @@ namespace Configuration
         }
     }
 
-    QJsonValue ConfigurationDialog::serialize_toJSON_Nginx_Upstream_PoolsTable(
-        QTableWidget *pools)
+    QJsonValue ConfigurationDialog::serialize_toJSON_Nginx_Upstream_PoolsTable(QTableWidget *pools)
     {
         QJsonObject jsonPools; // 1..n jsonPool's
         QJsonObject jsonPool; // pool key/value pairs
@@ -670,25 +557,19 @@ namespace Configuration
 
         for (int i = 0; i < rows; ++i) {
 
-            QString poolName =
-                pools->item(i, NginxAddUpstreamDialog::Column::Pool)->text();
-            QString method =
-                pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
+            QString poolName = pools->item(i, NginxAddUpstreamDialog::Column::Pool)->text();
+            QString method = pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
 
             jsonPool.insert("name", poolName);
             jsonPool.insert("method", method);
 
             // serialize the currently displayed server table
-            if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") ==
-                poolName) {
+            if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == poolName) {
                 qDebug() << "Serializing the currently displayed";
-                qDebug() << "Servers Table of Pool"
-                         << ui->tableWidget_Nginx_Servers->property(
-                                "servers_of_pool_name")
+                qDebug() << "Servers Table of Pool" << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name")
                          << poolName;
 
-                jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(
-                                               ui->tableWidget_Nginx_Servers));
+                jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(ui->tableWidget_Nginx_Servers));
             } else {
                 qDebug() << "Loading table data from file -- Servers of Pool" << poolName;
 
@@ -703,8 +584,7 @@ namespace Configuration
         return QJsonValue(jsonPools);
     }
 
-    QJsonValue ConfigurationDialog::serialize_toJSON_Nginx_Upstream_ServerTable(
-        QTableWidget *servers)
+    QJsonValue ConfigurationDialog::serialize_toJSON_Nginx_Upstream_ServerTable(QTableWidget *servers)
     {
         QJsonObject jsonServers; // 1..n jsonServer's
         QJsonObject jsonServer; // server key/value pairs
@@ -713,26 +593,12 @@ namespace Configuration
 
         for (int i = 0; i < rows; ++i) {
 
-            jsonServer.insert(
-                "address",
-                servers->item(i, 0 /*NginxAddServerDialog::Column::Address*/)->text());
-            jsonServer.insert(
-                "port",
-                servers->item(i, 1 /*NginxAddServerDialog::Column::Port*/)->text());
-            jsonServer.insert(
-                "weight",
-                servers->item(i, 2 /*NginxAddServerDialog::Column::Weight*/)->text());
-            jsonServer.insert(
-                "maxfails",
-                servers->item(i, 3 /*NginxAddServerDialog::Column::MaxFails*/)->text());
-            jsonServer.insert(
-                "failtimeout",
-                servers->item(i, 4 /*NginxAddServerDialog::Column::FailTimeout*/)
-                    ->text());
-            jsonServer.insert(
-                "phpchildren",
-                servers->item(i, 5 /*NginxAddServerDialog::Column::PHPChildren*/)
-                    ->text());
+            jsonServer.insert("address", servers->item(i, 0 /*NginxAddServerDialog::Column::Address*/)->text());
+            jsonServer.insert("port", servers->item(i, 1 /*NginxAddServerDialog::Column::Port*/)->text());
+            jsonServer.insert("weight", servers->item(i, 2 /*NginxAddServerDialog::Column::Weight*/)->text());
+            jsonServer.insert("maxfails", servers->item(i, 3 /*NginxAddServerDialog::Column::MaxFails*/)->text());
+            jsonServer.insert("failtimeout", servers->item(i, 4 /*NginxAddServerDialog::Column::FailTimeout*/)->text());
+            jsonServer.insert("phpchildren", servers->item(i, 5 /*NginxAddServerDialog::Column::PHPChildren*/)->text());
 
             jsonServers.insert(QString::number(i), QJsonValue(jsonServer));
         }
@@ -746,25 +612,16 @@ namespace Configuration
         toggleRunOnStartup();
     }
 
-    bool ConfigurationDialog::runOnStartUp() const
-    {
-        return (ui->checkbox_runOnStartUp->checkState() == Qt::Checked);
-    }
+    bool ConfigurationDialog::runOnStartUp() const { return (ui->checkbox_runOnStartUp->checkState() == Qt::Checked); }
 
-    void ConfigurationDialog::setRunOnStartUp(bool run)
-    {
-        ui->checkbox_runOnStartUp->setChecked(run);
-    }
+    void ConfigurationDialog::setRunOnStartUp(bool run) { ui->checkbox_runOnStartUp->setChecked(run); }
 
     bool ConfigurationDialog::runAutostartServers() const
     {
         return (ui->checkbox_autostartServers->checkState() == Qt::Checked);
     }
 
-    void ConfigurationDialog::setAutostartServers(bool run)
-    {
-        ui->checkbox_autostartServers->setChecked(run);
-    }
+    void ConfigurationDialog::setAutostartServers(bool run) { ui->checkbox_autostartServers->setChecked(run); }
 
     void ConfigurationDialog::toggleAutostartServerCheckboxes(bool run)
     {
@@ -786,8 +643,7 @@ namespace Configuration
     {
         QStringList installed = this->servers->getListOfServerNamesInstalled();
 
-        QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(
-            QRegExp("checkbox_autostart_\\w"));
+        QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(QRegExp("checkbox_autostart_\\w"));
 
         for (int i = 0; i < boxes.size(); ++i) {
             QCheckBox *box = boxes.at(i);
@@ -814,38 +670,29 @@ namespace Configuration
         return (ui->checkbox_clearLogsOnStart->checkState() == Qt::Checked);
     }
 
-    void ConfigurationDialog::setClearLogsOnStart(bool run)
-    {
-        ui->checkbox_clearLogsOnStart->setChecked(run);
-    }
+    void ConfigurationDialog::setClearLogsOnStart(bool run) { ui->checkbox_clearLogsOnStart->setChecked(run); }
 
     bool ConfigurationDialog::stopServersOnQuit() const
     {
         return (ui->checkbox_stopServersOnQuit->checkState() == Qt::Checked);
     }
 
-    void ConfigurationDialog::setStopServersOnQuit(bool run)
-    {
-        ui->checkbox_stopServersOnQuit->setChecked(run);
-    }
+    void ConfigurationDialog::setStopServersOnQuit(bool run) { ui->checkbox_stopServersOnQuit->setChecked(run); }
 
     void ConfigurationDialog::toggleRunOnStartup()
     {
         // Windows %APPDATA% = Roaming ... Programs\Startup
-        QString startupDir =
-            QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) +
-            "\\Startup";
+        QString startupDir = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "\\Startup";
 
         if (runOnStartUp()) {
             // Add WPN-XM SCP shortcut to the Windows Autostart folder.
             // In Windows terminology "shortcuts" are "shell links".
-            WindowsAPI::QtWin::CreateShellLink(
-                qApp->applicationFilePath(), "",
-                "WPN-XM Server Control Panel", // app, args, desc
-                qApp->applicationFilePath(), 0, // icon path and idx
-                qApp->applicationDirPath(), // working dir
-                startupDir + "\\WPN-XM Server Control Panel.lnk" // filepath of shortcut
-                );
+            WindowsAPI::QtWin::CreateShellLink(qApp->applicationFilePath(), "",
+                                               "WPN-XM Server Control Panel", // app, args, desc
+                                               qApp->applicationFilePath(), 0, // icon path and idx
+                                               qApp->applicationDirPath(), // working dir
+                                               startupDir + "\\WPN-XM Server Control Panel.lnk" // filepath of shortcut
+                                               );
         } else {
             // remove link
             QFile::remove(startupDir + "\\WPN-XM Server Control Panel.lnk");
@@ -854,19 +701,15 @@ namespace Configuration
 
     void ConfigurationDialog::fileOpen()
     {
-        QString file = QFileDialog::getOpenFileName(
-            this, tr("Select Editor..."), getenv("PROGRAMFILES"),
-            tr("Executables (*.exe);;All Files (*)"));
+        QString file = QFileDialog::getOpenFileName(this, tr("Select Editor..."), getenv("PROGRAMFILES"),
+                                                    tr("Executables (*.exe);;All Files (*)"));
 
         file = QDir::toNativeSeparators(file);
 
         ui->lineEdit_SelectedEditor->setText(file);
     }
 
-    void ConfigurationDialog::on_toolButton_SelectEditor_clicked()
-    {
-        ConfigurationDialog::fileOpen();
-    }
+    void ConfigurationDialog::on_toolButton_SelectEditor_clicked() { ConfigurationDialog::fileOpen(); }
 
     void ConfigurationDialog::on_toolButton_ResetEditor_clicked()
     {
@@ -877,18 +720,15 @@ namespace Configuration
     {
         // reset table content
         ui->tableWidget_Nginx_Upstreams->clearContents();
-        ui->tableWidget_Nginx_Upstreams->model()->removeRows(
-            0, ui->tableWidget_Nginx_Upstreams->rowCount());
+        ui->tableWidget_Nginx_Upstreams->model()->removeRows(0, ui->tableWidget_Nginx_Upstreams->rowCount());
 
         // insert default data: "php_upstream_pool hash $request_uri consistent;"
         int row = ui->tableWidget_Nginx_Upstreams->rowCount();
         ui->tableWidget_Nginx_Upstreams->insertRow(row);
-        ui->tableWidget_Nginx_Upstreams->setItem(
-            row, NginxAddUpstreamDialog::Column::Pool,
-            new QTableWidgetItem("php_upstream_pool"));
-        ui->tableWidget_Nginx_Upstreams->setItem(
-            row, NginxAddUpstreamDialog::Column::Method,
-            new QTableWidgetItem("hash $request_uri consistent"));
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,
+                                                 new QTableWidgetItem("php_upstream_pool"));
+        ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method,
+                                                 new QTableWidgetItem("hash $request_uri consistent"));
         ui->tableWidget_Nginx_Upstreams->resizeColumnToContents(0);
     }
 
@@ -896,37 +736,25 @@ namespace Configuration
     {
         // reset table content
         ui->tableWidget_Nginx_Servers->clearContents();
-        ui->tableWidget_Nginx_Servers->model()->removeRows(
-            0, ui->tableWidget_Nginx_Servers->rowCount());
+        ui->tableWidget_Nginx_Servers->model()->removeRows(0, ui->tableWidget_Nginx_Servers->rowCount());
 
         int row = ui->tableWidget_Nginx_Servers->rowCount();
         ui->tableWidget_Nginx_Servers->insertRow(row);
-        ui->tableWidget_Nginx_Servers->setItem(row,
-                                               NginxAddServerDialog::Column::Address,
-                                               new QTableWidgetItem("127.0.0.1"));
         ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::Port, new QTableWidgetItem("9000"));
-        ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::Weight, new QTableWidgetItem("1"));
-        ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::MaxFails, new QTableWidgetItem("1"));
-        ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::Timeout, new QTableWidgetItem("1s"));
-        ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::PHPChildren,
-            new QTableWidgetItem("5"));
+            row, NginxAddServerDialog::Column::Address, new QTableWidgetItem("127.0.0.1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port, new QTableWidgetItem("9000"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight, new QTableWidgetItem("1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails, new QTableWidgetItem("1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout, new QTableWidgetItem("1s"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren,
+                                               new QTableWidgetItem("5"));
     }
 
-    void ConfigurationDialog::on_configMenuTreeWidget_clicked(
-        const QModelIndex &index)
+    void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
     {
         // a click on a menu item returns the name of the item
         // switches to the matching page in the stacked widget
-        QString menuitem = ui->configMenuTreeWidget->model()
-                               ->data(index)
-                               .toString()
-                               .toLower()
-                               .remove(" ");
+        QString menuitem = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
         setCurrentStackWidget(menuitem);
     }
 
@@ -936,8 +764,7 @@ namespace Configuration
         if (w != 0)
             ui->stackedWidget->setCurrentWidget(w);
         else
-            qDebug() << "[Config Menu] There is no page " << widgetname
-                     << " in the stack widget.";
+            qDebug() << "[Config Menu] There is no page " << widgetname << " in the stack widget.";
     }
 
     void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddUpstream_clicked()
@@ -955,12 +782,10 @@ namespace Configuration
         if (result == QDialog::Accepted) {
             int row = ui->tableWidget_Nginx_Upstreams->rowCount();
             ui->tableWidget_Nginx_Upstreams->insertRow(row);
-            ui->tableWidget_Nginx_Upstreams->setItem(
-                row, NginxAddUpstreamDialog::Column::Pool,
-                new QTableWidgetItem(dialog->pool()));
-            ui->tableWidget_Nginx_Upstreams->setItem(
-                row, NginxAddUpstreamDialog::Column::Method,
-                new QTableWidgetItem(dialog->method()));
+            ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,
+                                                     new QTableWidgetItem(dialog->pool()));
+            ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Method,
+                                                     new QTableWidgetItem(dialog->method()));
         }
 
         delete dialog;
@@ -973,34 +798,26 @@ namespace Configuration
         NginxAddServerDialog *dialog = new NginxAddServerDialog();
         dialog->setWindowTitle("Nginx - Add Server");
 
-        ui->tableWidget_Nginx_Servers->setSelectionBehavior(
-            QAbstractItemView::SelectRows);
-        ui->tableWidget_Nginx_Servers->setSelectionMode(
-            QAbstractItemView::SingleSelection);
+        ui->tableWidget_Nginx_Servers->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->tableWidget_Nginx_Servers->setSelectionMode(QAbstractItemView::SingleSelection);
 
         result = dialog->exec();
 
         if (result == QDialog::Accepted) {
             int row = ui->tableWidget_Nginx_Servers->rowCount();
             ui->tableWidget_Nginx_Servers->insertRow(row);
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::Address,
-                new QTableWidgetItem(dialog->address()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::Port,
-                new QTableWidgetItem(dialog->port()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::Weight,
-                new QTableWidgetItem(dialog->weight()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::MaxFails,
-                new QTableWidgetItem(dialog->maxfails()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::Timeout,
-                new QTableWidgetItem(dialog->timeout()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                row, NginxAddServerDialog::Column::PHPChildren,
-                new QTableWidgetItem(dialog->phpchildren()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address,
+                                                   new QTableWidgetItem(dialog->address()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port,
+                                                   new QTableWidgetItem(dialog->port()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight,
+                                                   new QTableWidgetItem(dialog->weight()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails,
+                                                   new QTableWidgetItem(dialog->maxfails()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout,
+                                                   new QTableWidgetItem(dialog->timeout()));
+            ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren,
+                                                   new QTableWidgetItem(dialog->phpchildren()));
         }
 
         delete dialog;
@@ -1013,14 +830,12 @@ namespace Configuration
         ui->tableWidget_Nginx_Servers->setRowCount(0);
 
         // load JSON
-        QJsonDocument jsonDoc =
-            File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
+        QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
         QJsonObject json = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools
-        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end();
-             ++iter) {
+        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end(); ++iter) {
             // The "value" are the key/value pairs of a pool
             QJsonObject jsonPool = iter.value().toObject();
 
@@ -1031,12 +846,10 @@ namespace Configuration
             ui->tableWidget_Nginx_Upstreams->insertRow(insertRow);
 
             // insert column values
-            ui->tableWidget_Nginx_Upstreams->setItem(
-                insertRow, NginxAddUpstreamDialog::Column::Pool,
-                new QTableWidgetItem(jsonPool["name"].toString()));
-            ui->tableWidget_Nginx_Upstreams->setItem(
-                insertRow, NginxAddUpstreamDialog::Column::Method,
-                new QTableWidgetItem(jsonPool["method"].toString()));
+            ui->tableWidget_Nginx_Upstreams->setItem(insertRow, NginxAddUpstreamDialog::Column::Pool,
+                                                     new QTableWidgetItem(jsonPool["name"].toString()));
+            ui->tableWidget_Nginx_Upstreams->setItem(insertRow, NginxAddUpstreamDialog::Column::Method,
+                                                     new QTableWidgetItem(jsonPool["method"].toString()));
         }
 
         // --- Fill Servers Table ---
@@ -1050,24 +863,17 @@ namespace Configuration
     void ConfigurationDialog::on_tableWidget_Upstream_itemSelectionChanged()
     {
         // there is a selection, but its not a row selection
-        if (ui->tableWidget_Nginx_Upstreams->selectionModel()
-                ->selectedRows(0)
-                .size() <= 0) {
+        if (ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows(0).size() <= 0) {
             return;
         }
 
         // get "pool" from selection
         QString selectedUpstreamName =
-            ui->tableWidget_Nginx_Upstreams->selectionModel()
-                ->selectedRows()
-                .first()
-                .data()
-                .toString();
+            ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows().first().data().toString();
 
         // there is a selection, but the selection is already the currently displayed
         // table view
-        if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") ==
-            selectedUpstreamName) {
+        if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == selectedUpstreamName) {
             return;
         }
 
@@ -1082,8 +888,7 @@ namespace Configuration
         ui->tableWidget_Nginx_Servers->setRowCount(0);
 
         // set new "pool name" as table property (table view identifier)
-        ui->tableWidget_Nginx_Servers->setProperty("servers_of_pool_name",
-                                                   jsonPool["name"].toString());
+        ui->tableWidget_Nginx_Servers->setProperty("servers_of_pool_name", jsonPool["name"].toString());
 
         // key "servers"
         QJsonObject jsonServers = jsonPool["servers"].toObject();
@@ -1098,39 +903,30 @@ namespace Configuration
             ui->tableWidget_Nginx_Servers->insertRow(insertRow);
 
             // insert column values
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 0 /*NginxAddServerDialog::Column::Address*/,
-                new QTableWidgetItem(values["address"].toString()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 1 /*NginxAddServerDialog::Column::Port*/,
-                new QTableWidgetItem(values["port"].toString()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 2 /*NginxAddServerDialog::Column::Weight*/,
-                new QTableWidgetItem(values["weight"].toString()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 3 /*NginxAddServerDialog::Column::MaxFails*/,
-                new QTableWidgetItem(values["maxfails"].toString()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 4 /*NginxAddServerDialog::Column::FailTimeout*/,
-                new QTableWidgetItem(values["failtimeout"].toString()));
-            ui->tableWidget_Nginx_Servers->setItem(
-                insertRow, 5 /*NginxAddServerDialog::Column::PHPChildren*/,
-                new QTableWidgetItem(values["phpchildren"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 0 /*NginxAddServerDialog::Column::Address*/,
+                                                   new QTableWidgetItem(values["address"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 1 /*NginxAddServerDialog::Column::Port*/,
+                                                   new QTableWidgetItem(values["port"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 2 /*NginxAddServerDialog::Column::Weight*/,
+                                                   new QTableWidgetItem(values["weight"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 3 /*NginxAddServerDialog::Column::MaxFails*/,
+                                                   new QTableWidgetItem(values["maxfails"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 4 /*NginxAddServerDialog::Column::FailTimeout*/,
+                                                   new QTableWidgetItem(values["failtimeout"].toString()));
+            ui->tableWidget_Nginx_Servers->setItem(insertRow, 5 /*NginxAddServerDialog::Column::PHPChildren*/,
+                                                   new QTableWidgetItem(values["phpchildren"].toString()));
         }
     }
 
-    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(
-        QString requestedUpstreamPoolName)
+    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(QString requestedUpstreamPoolName)
     {
         // load JSON
-        QJsonDocument jsonDoc =
-            File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
+        QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
         QJsonObject json = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools
-        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end();
-             ++iter) {
+        for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end(); ++iter) {
             // "value" is key/value pairs of a pool
             QJsonObject jsonPool = iter.value().toObject();
 

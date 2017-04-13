@@ -3,8 +3,7 @@
 
 #include <QDebug>
 
-ProcessViewerDialog::ProcessViewerDialog(QWidget *parent)
-    : QDialog(parent), ui(new Ui::ProcessViewerDialog)
+ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ProcessViewerDialog)
 {
     ui->setupUi(this);
 
@@ -14,19 +13,15 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // center dialog
-    this->move(QApplication::desktop()->screen()->rect().center() -
-               this->rect().center());
+    this->move(QApplication::desktop()->screen()->rect().center() - this->rect().center());
 
     ui->treeWidget->setColumnCount(4);
     ui->treeWidget->setSortingEnabled(true);
 
     // resize columns to contents
-    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_NAME,
-                                                   QHeaderView::ResizeToContents);
-    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PID,
-                                                   QHeaderView::ResizeToContents);
-    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PORT,
-                                                   QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_NAME, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PID, QHeaderView::ResizeToContents);
+    ui->treeWidget->header()->setSectionResizeMode(Columns::COLUMN_PORT, QHeaderView::ResizeToContents);
 
     // set text alignment for columns
     // ui->treeWidget->setText()
@@ -61,8 +56,8 @@ void ProcessViewerDialog::renderProcesses()
 {
     foreach (Process process, processes->getRunningProcesses()) {
         // find parentItem in the tree by looking for parentId recursivley
-        QList<QTreeWidgetItem *> parentItem = ui->treeWidget->findItems(
-            process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
+        QList<QTreeWidgetItem *> parentItem =
+            ui->treeWidget->findItems(process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
 
         // lookup port for this pid and add it to the process struct
         foreach (const PidAndPort &p, processes->getPorts()) {
@@ -82,28 +77,13 @@ void ProcessViewerDialog::renderProcesses()
     }
 }
 
-void ProcessViewerDialog::on_pushButton_Refresh_released()
-{
-    refreshProcesses();
-}
+void ProcessViewerDialog::on_pushButton_Refresh_released() { refreshProcesses(); }
 
-void ProcessViewerDialog::on_lineEdit_searchProcessByName_textChanged(
-    const QString &query)
-{
-    filter("byName", query);
-}
+void ProcessViewerDialog::on_lineEdit_searchProcessByName_textChanged(const QString &query) { filter("byName", query); }
 
-void ProcessViewerDialog::on_lineEdit_searchProcessByPid_textChanged(
-    const QString &query)
-{
-    filter("byPid", query);
-}
+void ProcessViewerDialog::on_lineEdit_searchProcessByPid_textChanged(const QString &query) { filter("byPid", query); }
 
-void ProcessViewerDialog::on_lineEdit_searchProcessByPort_textChanged(
-    const QString &query)
-{
-    filter("byPort", query);
-}
+void ProcessViewerDialog::on_lineEdit_searchProcessByPort_textChanged(const QString &query) { filter("byPort", query); }
 
 /**
  * Search for items in the Progess TreeWidget by using type-ahead search
@@ -125,12 +105,10 @@ void ProcessViewerDialog::filter(QString filterByItem, const QString &query)
     ui->treeWidget->expandAll();
 
     // Iterate over all child items : filter items with "contains" query
-    QTreeWidgetItemIterator iterator(ui->treeWidget,
-                                     QTreeWidgetItemIterator::All);
+    QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
     while (*iterator) {
         QTreeWidgetItem *item = *iterator;
-        if (item &&
-            item->text(searchInColumn).contains(query, Qt::CaseInsensitive)) {
+        if (item && item->text(searchInColumn).contains(query, Qt::CaseInsensitive)) {
             item->setHidden(false);
         } else {
             // Problem: the matched child is visibile, but parent is hidden, because
@@ -147,8 +125,7 @@ void ProcessViewerDialog::filter(QString filterByItem, const QString &query)
 
     // Iterate over items with childs : hide, if they do not have a matching
     // (visible) child (see above).
-    QTreeWidgetItemIterator parentIterator(ui->treeWidget,
-                                           QTreeWidgetItemIterator::HasChildren);
+    QTreeWidgetItemIterator parentIterator(ui->treeWidget, QTreeWidgetItemIterator::HasChildren);
     while (*parentIterator) {
         QTreeWidgetItem *item = *parentIterator;
         // count the number of hidden childs
@@ -198,7 +175,7 @@ void ProcessViewerDialog::on_pushButton_KillProcess_released()
 {
     QTreeWidgetItem *item = ui->treeWidget->currentItem();
 
-    if(!item) { // do nothing, if no item selected
+    if (!item) { // do nothing, if no item selected
         return;
     }
 
@@ -209,15 +186,13 @@ void ProcessViewerDialog::on_pushButton_KillProcess_released()
     }
 }
 
-void ProcessViewerDialog::
-    on_checkBox_filterExcludeWindowsProcesses_stateChanged(int state)
+void ProcessViewerDialog::on_checkBox_filterExcludeWindowsProcesses_stateChanged(int state)
 {
     if (state == Qt::Checked) {
 
         qDebug() << "exclude all windows system processes";
 
-        QTreeWidgetItemIterator iterator(ui->treeWidget,
-                                         QTreeWidgetItemIterator::All);
+        QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
 
         while (*iterator) {
             QTreeWidgetItem *item = *iterator;
@@ -225,9 +200,7 @@ void ProcessViewerDialog::
             if (item && !item->isHidden()) {
 
                 // remove names with c:\windows
-                QString path =
-                    item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole)
-                        .toString();
+                QString path = item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole).toString();
                 if (path.contains("C:\\Windows", Qt::CaseInsensitive)) {
                     qDebug() << "removed windows item" << path;
                     item->setHidden(true);
@@ -238,8 +211,7 @@ void ProcessViewerDialog::
                     item->text(Columns::COLUMN_NAME).contains("fontdrvhost.exe") ||
                     item->text(Columns::COLUMN_NAME).contains("dwm.exe") ||
                     item->text(Columns::COLUMN_NAME).contains("upeksvr.exe")) {
-                    qDebug() << "removed windows item because name:"
-                             << item->text(Columns::COLUMN_NAME);
+                    qDebug() << "removed windows item because name:" << item->text(Columns::COLUMN_NAME);
                     item->setHidden(true);
                 }
             }
@@ -252,25 +224,20 @@ void ProcessViewerDialog::
     }
 }
 
-void ProcessViewerDialog::on_checkBox_filterShowOnlyWpnxmProcesses_stateChanged(
-    int state)
+void ProcessViewerDialog::on_checkBox_filterShowOnlyWpnxmProcesses_stateChanged(int state)
 {
     if (state == Qt::Checked) {
 
         qDebug() << "show only processes from our folder structure";
 
-        QTreeWidgetItemIterator iterator(ui->treeWidget,
-                                         QTreeWidgetItemIterator::All);
+        QTreeWidgetItemIterator iterator(ui->treeWidget, QTreeWidgetItemIterator::All);
 
         while (*iterator) {
             QTreeWidgetItem *item = *iterator;
 
-            if (item && !item->isHidden() &&
-                !item->text(Columns::COLUMN_NAME).contains("wpn-xm")) {
+            if (item && !item->isHidden() && !item->text(Columns::COLUMN_NAME).contains("wpn-xm")) {
                 // remove all names without the install location of the server stack
-                QString path =
-                    item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole)
-                        .toString();
+                QString path = item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole).toString();
                 if (!path.contains(qApp->applicationDirPath(), Qt::CaseInsensitive)) {
                     qDebug() << "removed app dir " << path << qApp->applicationDirPath();
                     item->setHidden(true);

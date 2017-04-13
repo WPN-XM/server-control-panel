@@ -124,7 +124,6 @@ int main(int argc, char *argv[])
     }
     app.processEvents();
 
-
     //#ifndef QT_DEBUG
     splash.setProgress(50);
     QObject().thread()->usleep(1000 * 1000 * 1);

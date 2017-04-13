@@ -10,8 +10,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-AlreadyUsedPortsDialog::AlreadyUsedPortsDialog(QWidget *parent)
-    : QDialog(parent) {}
+AlreadyUsedPortsDialog::AlreadyUsedPortsDialog(QWidget *parent) : QDialog(parent) {}
 
 void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
 {
@@ -30,12 +29,10 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
         Process proc = Processes::getInstance()->findByPid(p.pid);
 
         // create label
-        QLabel *label = new QLabel("Port " + p.port + " used by " + proc.name +
-                                   " (PID " + p.pid + ")");
+        QLabel *label = new QLabel("Port " + p.port + " used by " + proc.name + " (PID " + p.pid + ")");
 
         // filter: skip ports used by chrome
-        if (proc.name == "chrome.exe" || proc.name == "[System Process]" ||
-            proc.name == "svchost.exe") {
+        if (proc.name == "chrome.exe" || proc.name == "[System Process]" || proc.name == "svchost.exe") {
             continue;
         }
 
@@ -64,14 +61,14 @@ void AlreadyUsedPortsDialog::checkAlreadyUsedPorts()
 
     groupBox->setLayout(vbox);
 
-    QLabel *labelB = new QLabel(
-        tr("Please configure your servers to avoid port collisions.<br><br>"
-           "Items colored green are running servers from WPN-XM.<br>"
-           "Items colored red are possible port collisions.<br>"
-           "Items colored black are used ports.<br><br>"
-           "The list excludes ports used by some system processes, svchost.exe, "
-           "pid 4, chrome.exe.<br><br>"
-           "To proceed click Continue.<br>"));
+    QLabel *labelB =
+        new QLabel(tr("Please configure your servers to avoid port collisions.<br><br>"
+                      "Items colored green are running servers from WPN-XM.<br>"
+                      "Items colored red are possible port collisions.<br>"
+                      "Items colored black are used ports.<br><br>"
+                      "The list excludes ports used by some system processes, svchost.exe, "
+                      "pid 4, chrome.exe.<br><br>"
+                      "To proceed click Continue.<br>"));
 
     // QPushButton *ShutdownButton = new QPushButton(tr("Shutdown"));
     QPushButton *ContinueButton = new QPushButton(tr("Continue"));

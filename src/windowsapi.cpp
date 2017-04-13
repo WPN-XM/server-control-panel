@@ -11,12 +11,17 @@ namespace WindowsAPI
     /*
  * http://msdn.microsoft.com/en-us/library/windows/desktop/bb776891%28v=vs.85%29.aspx
  */
-    IShellLink *QtWin::CreateShellLink(QString target_app_path, QString app_args, QString description, QString icon_path, int icon_index, QString working_dir, QString linkShortcut)
+    IShellLink *QtWin::CreateShellLink(QString target_app_path,
+                                       QString app_args,
+                                       QString description,
+                                       QString icon_path,
+                                       int icon_index,
+                                       QString working_dir,
+                                       QString linkShortcut)
     {
         IShellLink *shell_link = NULL;
 
-        HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                                        IID_IShellLink,
+        HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink,
                                         reinterpret_cast<void **>(&(shell_link)));
 
         if (SUCCEEDED(hres)) {
@@ -31,14 +36,12 @@ namespace WindowsAPI
 
             // Query IShellLink for the IPersistFile interface,
             // used for saving the shortcut in persistent storage.
-            hres = shell_link->QueryInterface(
-                IID_IPersistFile, reinterpret_cast<void **>(&(persistFile)));
+            hres = shell_link->QueryInterface(IID_IPersistFile, reinterpret_cast<void **>(&(persistFile)));
 
             if (SUCCEEDED(hres)) {
 
                 // Save the link by calling IPersistFile::Save.
-                hres = persistFile->Save((LPCOLESTR)linkShortcut.toStdWString().c_str(),
-                                         STGM_WRITE);
+                hres = persistFile->Save((LPCOLESTR)linkShortcut.toStdWString().c_str(), STGM_WRITE);
 
                 // Release the pointer to the IPersistFile interface.
                 persistFile->Release();
@@ -58,8 +61,7 @@ namespace WindowsAPI
         BOOL bIsWow64 = FALSE;
         LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;
 
-        fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(
-            GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
+        fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
         if (NULL != fnIsWow64Process) {
             if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64)) {

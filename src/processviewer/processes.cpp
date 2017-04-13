@@ -26,7 +26,7 @@ void Processes::release()
     theInstance = NULL;
 }
 
-Processes::Processes() { }
+Processes::Processes() {}
 
 Process Processes::findByName(const QString &name)
 {
@@ -45,7 +45,7 @@ Process Processes::findByName(const QString &name)
 }
 
 Process Processes::findByPid(const QString &pid)
-{    
+{
     QList<Process> processes = getRunningProcesses();
     Process p;
     foreach (p, processes) {
@@ -84,11 +84,9 @@ bool Processes::areThereAlreadyRunningProcesses()
 
     // foreach processesToSearch take a look in the runningProcessesList
     for (int i = 0; i < processesToSearch.size(); ++i) {
-        qDebug() << "Searching for process: "
-                 << processesToSearch.at(i).toLocal8Bit().constData();
-        foreach (Process process, getRunningProcesses())
-        {
-            if(isSystemProcess(process.name)) {
+        qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
+        foreach (Process process, getRunningProcesses()) {
+            if (isSystemProcess(process.name)) {
                 continue;
             }
 
@@ -105,14 +103,8 @@ bool Processes::areThereAlreadyRunningProcesses()
 // static
 bool Processes::isSystemProcess(QString processName)
 {
-    if (processName == "[System Process]" ||
-        processName == "svchost.exe" ||
-        processName == "System" ||
-        processName == "wininit" ||
-        processName == "winlogon" ||
-        processName == "dllhost" ||
-        processName == "csrss")
-    {
+    if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
+        processName == "wininit" || processName == "winlogon" || processName == "dllhost" || processName == "csrss") {
         return true;
     }
 
@@ -172,8 +164,7 @@ QStringList Processes::getProcessDetails(DWORD processID)
     QStringList processInfos;
 
     // init: get a handle to the process
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-                                  FALSE, processID);
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, processID);
 
     // we will inevitable run into processes that don't let us peek at them,
     // because we don't have enough rights. including the "System" process,
@@ -212,11 +203,9 @@ QList<PidAndPort> Processes::getPorts()
     DWORD size;
     DWORD result;
 
-    result = GetExtendedTcpTable(NULL, &size, false, AF_INET,
-                                 TCP_TABLE_OWNER_PID_ALL, 0);
+    result = GetExtendedTcpTable(NULL, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
     pTCPInfo = (MIB_TCPTABLE_OWNER_PID *)malloc(size);
-    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET,
-                                 TCP_TABLE_OWNER_PID_ALL, 0);
+    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
     if (result != NO_ERROR) {
         // qDebug() << "Couldn't get our IP table";
@@ -243,8 +232,7 @@ QList<PidAndPort> Processes::getPorts()
     return ports;
 }
 
-Processes::ProcessState
-Processes::getProcessState(const QString &processName) const
+Processes::ProcessState Processes::getProcessState(const QString &processName) const
 {
     Process p = findByName(processName);
 
@@ -290,16 +278,13 @@ bool Processes::killProcessTree(qint64 pid)
 
     HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
-    if (Process32First(hSnap, &pe))
-    {
+    if (Process32First(hSnap, &pe)) {
         BOOL bContinue = TRUE;
 
         // kill child processes
-        while (bContinue)
-        {
+        while (bContinue) {
             // only kill child processes
-            if (pe.th32ParentProcessID == pid)
-            {
+            if (pe.th32ParentProcessID == pid) {
                 HANDLE hChildProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe.th32ProcessID);
 
                 if (hChildProc) {
@@ -359,8 +344,7 @@ QString Processes::getSizeHumanReadable(float bytes)
 // needed for Processes::startDetached.
 // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
 // whenever that happens.
-QString Processes::qt_create_commandline(const QString &program,
-                                         const QStringList &arguments)
+QString Processes::qt_create_commandline(const QString &program, const QStringList &arguments)
 {
     QString cmd;
 
@@ -374,9 +358,7 @@ QString Processes::qt_create_commandline(const QString &program,
 }
 
 // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
-bool Processes::startDetached(const QString &program,
-                              const QStringList &arguments,
-                              const QString &workingDir)
+bool Processes::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
 {
     bool success = false;
     static const DWORD errorElevationRequired = 740;
@@ -389,8 +371,7 @@ bool Processes::startDetached(const QString &program,
     // changed to parent-> runs cmd.exe with no window -> runs child -> parent
     // kills cmd.exe (child gets parentless)
 
-    DWORD dwCreationFlags =
-        CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
                                 0,
                                 0,
@@ -410,8 +391,7 @@ bool Processes::startDetached(const QString &program,
                                 0,
                                 0};
 
-    QString cmd =
-        "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
+    QString cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
 
     for (int i = 0; i < arguments.size(); ++i) {
         cmd += QLatin1Char(' ') + arguments.at(i);
@@ -419,10 +399,8 @@ bool Processes::startDetached(const QString &program,
 
     qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
-    success =
-        CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
-                      workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(),
-                      &startupInfo, &pinfo);
+    success = CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
+                            workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
     if (success) {
         CloseHandle(pinfo.hThread);
@@ -450,8 +428,7 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
 
     static const DWORD errorElevationRequired = 740;
     PROCESS_INFORMATION pinfo;
-    DWORD dwCreationFlags =
-        CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
                                 0,
                                 0,
@@ -479,10 +456,8 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
 
     qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
-    success =
-        CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
-                      workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(),
-                      &startupInfo, &pinfo);
+    success = CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
+                            workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
     if (success) {
         CloseHandle(pinfo.hThread);

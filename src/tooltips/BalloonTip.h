@@ -75,8 +75,7 @@ public:
 class BalloonTip : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(
-        ArrowPosition my_arrowPos READ arrowPosition WRITE setArrowPosition)
+    Q_PROPERTY(ArrowPosition my_arrowPos READ arrowPosition WRITE setArrowPosition)
 
 public:
     /* This enum determines in which corner will be displayed the arrow */
@@ -119,7 +118,8 @@ protected:
 public:
     explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = 0);
     explicit BalloonTip(QPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
-    explicit BalloonTip(QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
+    explicit BalloonTip(
+        QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
 
     ~BalloonTip();
     ArrowPosition arrowPosition();

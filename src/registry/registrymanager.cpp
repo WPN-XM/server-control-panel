@@ -22,12 +22,10 @@ namespace SoftwareRegistry
         /**
    * Server Stack Software Registry
    */
-        QString stackRegistryFile =
-            QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
+        QString stackRegistryFile = QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
 
         if (fileNotExistingOrOutdated(stackRegistryFile)) {
-            downloadRegistry(QUrl("http://wpn-xm.org/updatecheck.php?s=all"),
-                             stackRegistryFile);
+            downloadRegistry(QUrl("http://wpn-xm.org/updatecheck.php?s=all"), stackRegistryFile);
         } else {
             qDebug() << "[Loading from Cache] Server Stack Software Registry";
             stackSoftwareRegistry = File::JSON::load(stackRegistryFile);
@@ -57,8 +55,7 @@ namespace SoftwareRegistry
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop,
-                         SLOT(quit()));
+        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop, SLOT(quit()));
 
         // the HTTP request
         QNetworkRequest req(url);
@@ -79,8 +76,8 @@ namespace SoftwareRegistry
             // QNetworkReply::HostNotFoundError
             qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
-            QMessageBox::critical(QApplication::activeWindow(), "Request Failure",
-                                  updateCheckResponse->errorString(), QMessageBox::Ok);
+            QMessageBox::critical(QApplication::activeWindow(), "Request Failure", updateCheckResponse->errorString(),
+                                  QMessageBox::Ok);
         }
 
         // cleanup pointer
@@ -106,10 +103,7 @@ namespace SoftwareRegistry
         return false;
     }
 
-    QJsonObject Manager::getServerStackSoftwareRegistry()
-    {
-        return stackSoftwareRegistry.object();
-    }
+    QJsonObject Manager::getServerStackSoftwareRegistry() { return stackSoftwareRegistry.object(); }
 
     /*
 QJsonObject RegistriesDownloader::getPhpSoftwareRegistry()
