@@ -5,7 +5,7 @@ WPN-XM Server Control Panel
 [![Twitter Follow](https://img.shields.io/twitter/follow/wpnxm.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/wpnxm)
 
 The WPN-XM Server Control Panel enables you to control and configure servers on Windows easily.
-The main window of the control panel provides start and stop, next to quick access buttons for logs and config files and indicates the process state and the used port for each server. The control panel provides a tight integration with additionally installed tools, a self-updater, updater for the installed software, a configuration dialog and a process viewer.
+The main window of the control panel provides start and stop, next to quick access buttons for logs and config files and indicates the process state, the used port and the software version for each server. The control panel provides a tight integration with additionally installed tools, a self-updater, updater for the installed software, a configuration dialog and a process viewer.
 The following servers are supported: PHP, Nginx, MariaDb, MongoDb, Redis, Memcached, PostgreSQL.
 It's written in C++ using Qt 5.2+, free and open-source under GNU/GPL v3 license.
 
