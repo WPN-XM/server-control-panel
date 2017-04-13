@@ -104,17 +104,17 @@ int main(int argc, char *argv[])
     QObject().thread()->usleep(1000 * 1000 * 1);
     app.processEvents();
 
-    splash.setMessage("Getting System Processes ..", 25);
+    splash.setMessage("Getting System Processes ..", 30);
     Processes *processes = Processes::getInstance();
     mainWindow.setProcessesInstance(processes);
     app.processEvents();
 
-    splash.setMessage("Searching for already running processes ..", 35);
+    splash.setMessage("Searching for already running processes and blocked ports ..", 40);
     if (processes->areThereAlreadyRunningProcesses()) {
         splash.hide();
         // displayShutdownAlreadyRunningProcessesOrContinueDialog
-        AlreadyRunningProcessesDialog *arpd = new AlreadyRunningProcessesDialog();
-        arpd->checkAlreadyRunningServers();
+        /*AlreadyRunningProcessesDialog *arpd = new AlreadyRunningProcessesDialog();
+        arpd->checkAlreadyRunningServers();*/
         /*ProcessViewerDialog *pvd = new ProcessViewerDialog();
         pvd->setWindowTitle("Process Viewer - Already Running Processes");
         pvd->setChecked_ShowOnlyWpnxmProcesses();
@@ -124,12 +124,6 @@ int main(int argc, char *argv[])
     }
     app.processEvents();
 
-    splash.setMessage("Searching for blocked ports ..", 45);
-    splash.hide();
-    AlreadyUsedPortsDialog *aupd = new AlreadyUsedPortsDialog();
-    aupd->checkAlreadyUsedPorts();
-    splash.show();
-    app.processEvents();
 
     //#ifndef QT_DEBUG
     splash.setProgress(50);
