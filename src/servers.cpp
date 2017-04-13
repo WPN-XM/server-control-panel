@@ -655,14 +655,29 @@ namespace Servers
             return;
         }
 
+        // shutdown of "mysqld" is done by using "mysqladmin" + shutdown command
         QString stopCommand = QDir::toNativeSeparators(
             QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe");
 
+        // check, if mysqladmin.exe is present
+        if (!QFile().exists(stopCommand)) {
+            qDebug() << "[MariaDb] Can not stop. Missing mysqladmin.exe.";
+            return;
+        }
+
+        // "mysqladmin" needs the password from the config file "my.ini"
+        QString configFile = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
+
+        // read the password from "my.ini"
+        File::INI *ini = new File::INI(configFile.toLatin1());
+        QString password = ini->getStringValue("client", "password");
+
+        // finally, build arguments for a "mysqladmin" shutdown run
         QStringList args;
-        // args << "--defaults-file=" + QDir::toNativeSeparators(QDir::currentPath() +
-        // "/bin/mariadb/my.ini");
-        // args << "-u root -h 127.0.0.1 --protocol=tcp";
-        args << "-u root shutdown";
+        args << "--defaults-file=" + configFile;
+        args << "-u root";
+        args << "-p" + password;
+        args << "shutdown";
 
         qDebug() << "[MariaDB] Stopping...";
 

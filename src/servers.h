@@ -14,6 +14,7 @@
 
 #include "filehandling.h"
 #include "json.h"
+#include "ini.h"
 #include "settings.h"
 #include "src/processviewer/processes.h"
 
