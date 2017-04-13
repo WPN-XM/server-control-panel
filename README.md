@@ -4,7 +4,10 @@ WPN-XM Server Control Panel
 [![Build status](https://ci.appveyor.com/api/projects/status/sil30bww9uj6x7id/branch/master?svg=true)](https://ci.appveyor.com/project/jakoch/server-control-panel/branch/master)
 [![Twitter Follow](https://img.shields.io/twitter/follow/wpnxm.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/wpnxm)
 
-The WPN-XM Server Control Panel is written in Qt v5.2+.
+The WPN-XM Server Control Panel enables you to control and configure servers on Windows easily.
+The main window of the control panel provides start and stop, next to quick access buttons for logs and config files and indicates the process state and the used port for each server. The control panel provides a tight integration with additionally installed tools, a self-updater, updater for the installed software, a configuration dialog and a process viewer.
+The following servers are supported: PHP, Nginx, MariaDb, MongoDb, Redis, Memcached, PostgreSQL.
+It's written in C++ using Qt 5.2+, free and open-source under GNU/GPL v3 license.
 
 ![WPN-XM Server Control Panel v0.8.0](https://cloud.githubusercontent.com/assets/85608/4353472/9dfe4d10-4233-11e4-96bd-939f82b82869.jpg)
 
@@ -15,25 +18,48 @@ The WPN-XM Server Control Panel is written in Qt v5.2+.
 - hybrid Windows application (uh, like, is this possible? YES, apparently)
   - CLI mode
   - GUI mode with MainWindow and TrayMenu
+- Startup Checks
+  - check for already running processes 
+    - with the option to "indicate the processes as running" or "select the processes to shutdown"
+  - check for used/blocked ports
+    - with the option to "ignore port block" or "shut the processes using the port down"
 - Server Control 
-  - PHP        - start, stop, restart
   - Nginx      - start, stop, restart, reload
+  - PHP        - start, stop, restart
   - MariaDB    - start, stop, restart
-  - PostgreSQL - start, stop, restart
-  - Redis      - start, stop, restart
-  - Memcached  - start, stop, restart
   - MongoDB    - start, stop, restart
+  - PostgreSQL - start, stop, restart
+  - Memcached  - start, stop, restart
+  - Redis      - start, stop, restart
 - Log File Access
   - one-click "Open Log File"
   - automatically clear log file on start of a server (do not append to existing log file)
 - Configuration File Access
   - one-click "Edit Config"
   - select "Editor"
-- Server Process Monitoring
+- Server Process Monitoring 
+  - indicates the process state and the used port(s)
+- Configuration
+- Self-Updater
+  - the SCP is able to check for a new version and update itself 
+- Updater
+  - the Updater uses our software registry to "download and install new software" or "update already installed software"
+- ProcessViewer
+  - lists running processes with icon, name, path, port, pid, ppid
+  - allows to search a process by name, pid, port
+  - allows to kill a process or process tree
 - Supported Configuration File formats:
   - CSV
   - INI
   - JSON  
+- Developed on Github
+- Continously Integrated using Travis-CI
+- Released to Github Releases
+  - releases to Github Releases, when pushing a new "git tag"
+- Published Build Artifacts
+  - one-file Qt application (Engima packaged)
+  - multi-file Qt application
+  - dependencies
 
 ## Build Dependencies
 
