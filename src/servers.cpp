@@ -671,6 +671,7 @@ namespace Servers
         // read the password from "my.ini"
         File::INI *ini = new File::INI(configFile.toLatin1());
         QString password = ini->getStringValue("client", "password");
+        delete ini;
 
         // finally, build arguments for a "mysqladmin" shutdown run
         QStringList args;
