@@ -272,11 +272,10 @@ namespace Servers
 
         qDebug() << "[Nginx] Starting...\n";
 
-        Processes::start(program, arguments, getServer("Nginx")->workingDirectory);
+        Processes::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
 
         Processes::delay(250);
-
-        Process p = Processes::findByName(program);
+        Process p = Processes::findByName("nginx.exe");
         if(p.name != "process not found") {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
         } else {
@@ -287,7 +286,7 @@ namespace Servers
     void Servers::stopNginx()
     {
         // if not running, skip
-        if (processes->getProcessState(getServer("Nginx")->exe) ==
+        if (processes->getProcessState("nginx.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[Nginx] Not running... Skipping stop command.";
             return;
@@ -572,7 +571,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState(getServer("PHP")->exe) ==
+        if (processes->getProcessState("php-cgi.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[PHP] Not running... Skipping stop command.";
             return;
@@ -616,7 +615,7 @@ namespace Servers
     void Servers::startMariaDb()
     {
         // if already running, skip
-        if (processes->getProcessState(getServer("MariaDb")->exe) ==
+        if (processes->getProcessState("mysqld.exe") ==
             Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("MariaDB"), tr("MariaDB already running."));
             return;
@@ -636,8 +635,7 @@ namespace Servers
 
         qDebug() << "[MariaDB] Starting...\n";
 
-        Processes::startDetached(startMariaDb, args,
-                                 getServer("MariaDb")->workingDirectory);
+        Processes::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MariaDb", true);
     }
@@ -651,7 +649,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState(getServer("MariaDb")->exe) ==
+        if (processes->getProcessState("mysqld.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[MariaDb] Not running... Skipping stop command.";
             return;
@@ -668,7 +666,7 @@ namespace Servers
 
         qDebug() << "[MariaDB] Stopping...";
 
-        Processes::start(stopCommand, args, getServer("MongoDb")->workingDirectory);
+        Processes::start(stopCommand, args, getServer("MariaDb")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("MariaDb", false);
     }
@@ -691,7 +689,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState(getServer("MongoDb")->exe) ==
+        if (processes->getProcessState("mongod.exe") ==
             Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("MongoDb"), tr("MongoDb already running."));
             return;
@@ -748,7 +746,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState(getServer("MongoDb")->exe) ==
+        if (processes->getProcessState("mongod.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[MongoDb] Not running... Skipping stop command.";
             return;
@@ -803,7 +801,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState(getServer("Memcached")->exe) ==
+        if (processes->getProcessState("memcached.exe") ==
             Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Memcached"), tr("Memcached already running."));
             return;
@@ -829,7 +827,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState(getServer("Memcached")->exe) ==
+        if (processes->getProcessState("memcached.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[Memcached] Not running... Skipping stop command.";
             return;
@@ -837,11 +835,11 @@ namespace Servers
 
         // Memcached is a fucked up application.
         // It doesn't provide a shutdown command.
-        // And needs to be process killed...
+        // And needs to be process killed... WTF.
 
         qDebug() << "[Memcached] Stopping...\n";
 
-        Processes::killProcess("memcached");
+        Processes::killProcess("memcached.exe");
 
         emit signalMainWindow_ServerStatusChange("Memcached", false);
     }
@@ -866,7 +864,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState(getServer("Redis")->exe) ==
+        if (processes->getProcessState("redis.exe") ==
             Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Redis"), tr("Redis already running."));
             return;
@@ -894,7 +892,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState(getServer("Redis")->exe) ==
+        if (processes->getProcessState("redis-server.exe") ==
             Processes::ProcessState::NotRunning) {
             qDebug() << "[Redis] Not running... Skipping stop command.";
             return;
