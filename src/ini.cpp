@@ -11,7 +11,8 @@
 namespace File
 {
 
-#define log qDebug
+//#define log qDebug
+#define log
 
     INI::INI(const char *fileNameWithPath, bool _autoCreate)
         : data(NULL), fStream(NULL), autoSave(false), autoCreate(_autoCreate)
