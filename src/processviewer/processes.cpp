@@ -36,7 +36,7 @@ Process Processes::findByName(const QString &name)
         if (p.pid < 0) {
             continue; // if negative pid
         }
-        if (name.contains(p.name)) { // || name == p.name || name + ".exe" == p.name
+        if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
             return p; // if executable name matches
         }
     }
