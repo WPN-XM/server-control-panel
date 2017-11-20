@@ -1,5 +1,5 @@
 Enigma Virtual Box 
-Copyright (C) 2004-2014 The Enigma Protector Developers Team
+Copyright (C) 2004-2017 The Enigma Protector Developers Team
 All Rights Reserved
 Web:		http://www.enigmaprotector.com/
 E-mail:		vbox@enigmaprotector.com

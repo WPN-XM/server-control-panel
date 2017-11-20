@@ -1,3 +1,9 @@
+Enigma Virtual Box v7.80 Build 20170713
+- Fixed issue with registering of some ActiveX components
+- Fixed issue with overwriting the file if "Write to Disk if not Exist" option used
+- Added .evb file association
+- Minor fixes
+
 Enigma Virtual Box v7.70 Build 20160914
 - Added support of FileNormalizedNameInformation class for ZwQueryInformationFile
 
