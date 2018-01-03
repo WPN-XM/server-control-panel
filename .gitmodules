@@ -4,3 +4,6 @@
 [submodule "third-party/quazip"]
 	path = third-party/quazip
 	url = https://github.com/binaryking/quazip
+[submodule "third-party/yaml-cpp"]
+	path = third-party/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
