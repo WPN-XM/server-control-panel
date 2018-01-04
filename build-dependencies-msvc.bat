@@ -60,9 +60,9 @@ rm -rf build
 :: 1) configure
 mkdir build 
 cd build
-cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DBUILD_SHARED_LIBS=ON
+cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
 :: 2) make
-msbuild yaml-cpp.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
+msbuild yaml-cpp.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs %MSBUILD_FLAGS%
 popd
 echo Done.
 echo.
