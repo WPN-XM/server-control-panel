@@ -95,7 +95,7 @@ namespace File
                 } else {
                     // key value pair
                     entry.index = index.substr(1, index.length() - 2);
-                    int fIndex = str.find_first_of('=');
+                    int fIndex = static_cast<int>(str.find_first_of('='));
                     entry.name = str.substr(0, fIndex);
                     entry.value = str.substr(fIndex + 1, str.length() - fIndex - 1);
                     // trim spaces
@@ -113,7 +113,7 @@ namespace File
         if (i != 0) {
             INIEntry entry;
             entry.index = str;
-            int fIndex = str.find_first_of('=');
+            int fIndex =  static_cast<int>(str.find_first_of('='));
             entry.name = str.substr(0, fIndex);
             entry.value = str.substr(fIndex + 1, str.length() - fIndex - 1);
             // trim spaces
