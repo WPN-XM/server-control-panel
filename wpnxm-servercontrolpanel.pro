@@ -54,99 +54,104 @@ release {
     unix:LIBS  += -L$$PWD/libs/quazip/lib -lquazip
 }
 
+# YAML-CPP
+INCLUDEPATH += $$PWD/libs/yaml-cpp/include
+DEPENDPATH += $$PWD/libs/yaml-cpp/include
+release {
+   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
+    unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppm
+}
+
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 
 HEADERS += \
-    src/version.h \
     src/app/main.h \
-    src/processviewer/AlreadyRunningProcessesDialog.h \
-    src/tooltips/TrayTooltip.h \
-    src/tooltips/BalloonTip.h \
-    src/tray.h \
-    src/tooltips/LabelWithHoverTooltip.h \
-    src/mainwindow.h \
-    src/hostmanager/host.h \
-    src/hostmanager/hosttablemodel.h \
-    src/hostmanager/adddialog.h \
-    src/hostmanager/hostmanagerdialog.h \
-    src/config/configurationdialog.h \
-    src/config/nginxaddupstreamdialog.h \
-    src/config/nginxaddserverdialog.h \
-    src/settings.h \
-    src/splashscreen.h \
-    src/windowsapi.h \
-    src/servers.h \
     src/cli.h \
-    src/json.h \
-    src/selfupdater.h \
-    src/filehandling.h \
-    src/registry/registrymanager.h \
-    src/updater/updaterdialog.h \
-    src/updater/actioncolumnitemdelegate.h \
-    src/updater/softwarecolumnitemdelegate.h \
-    src/updater/downloadmanager.h \
-    src/updater/package.h \
-    src/services.h \
-    src/networkutils.h \
+    src/config/configurationdialog.h \
+    src/config/nginxaddserverdialog.h \
+    src/config/nginxaddupstreamdialog.h \
+    src/file/filehandling.h \
+    src/file/csv.h \
+    src/file/ini.h \
+    src/file/json.h \
+    src/file/yamlyaml.h \
+    src/hostmanager/adddialog.h \
+    src/hostmanager/host.h \
+    src/hostmanager/hostmanagerdialog.h \
+    src/hostmanager/hosttablemodel.h \
     src/jobscheduler.h \
-    src/csv.h \
-    src/ini.h \
+    src/mainwindow.h \
+    src/networkutils.h \
+    src/processviewer/AlreadyRunningProcessesDialog.h \
     src/processviewer/processes.h \
     src/processviewer/processviewerdialog.h \
-    src/processviewer/alreadyusedportsdialog.h
-
+    src/registry/registrymanager.h \
+    src/selfupdater.h \
+    src/servers.h \
+    src/services.h \
+    src/settings.h \
+    src/splashscreen.h \
+    src/tooltips/BalloonTip.h \
+    src/tooltips/LabelWithHoverTooltip.h \
+    src/tooltips/TrayTooltip.h \
+    src/tray.h \
+    src/updater/actioncolumnitemdelegate.h \
+    src/updater/downloadmanager.h \
+    src/updater/package.h \
+    src/updater/softwarecolumnitemdelegate.h \
+    src/updater/updaterdialog.h \
+    src/version.h \
+    src/windowsapi.h
 
 SOURCES += \
     src/app/main.cpp \
-    src/processviewer/AlreadyRunningProcessesDialog.cpp \
-    src/tooltips/TrayTooltip.cpp \
-    src/tooltips/BalloonTip.cpp \
-    src/tray.cpp \
-    src/tooltips/LabelWithHoverTooltip.cpp \
-    src/mainwindow.cpp \
-    src/hostmanager/host.cpp \
-    src/hostmanager/hosttablemodel.cpp \
-    src/hostmanager/adddialog.cpp \
-    src/hostmanager/hostmanagerdialog.cpp \
+    src/cli.cpp \   
     src/config/configurationdialog.cpp \
     src/config/nginxaddserverdialog.cpp \
     src/config/nginxaddupstreamdialog.cpp \
-    src/settings.cpp \
-    src/splashscreen.cpp \
-    src/windowsapi.cpp \
-    src/servers.cpp \
-    src/cli.cpp \   
-    src/json.cpp \
-    src/selfupdater.cpp \
-    src/filehandling.cpp \
-    src/updater/updaterdialog.cpp \
-    src/updater/actioncolumnitemdelegate.cpp \
-    src/updater/softwarecolumnitemdelegate.cpp \
-    src/registry/registrymanager.cpp \
-    src/updater/downloadmanager.cpp \
-    src/updater/transferitem.cpp \
-    src/updater/package.cpp \
-    src/services.cpp \
-    src/networkutils.cpp \
+    src/file/csv.cpp \    
+    src/file/filehandling.cpp \
+    src/file/ini.cpp \
+    src/file/json.cpp \
+    src/hostmanager/adddialog.cpp \
+    src/hostmanager/host.cpp \
+    src/hostmanager/hostmanagerdialog.cpp \
+    src/hostmanager/hosttablemodel.cpp \
     src/jobscheduler.cpp \
-    src/csv.cpp \    
-    src/ini.cpp \
+    src/mainwindow.cpp \
+    src/networkutils.cpp \
+    src/processviewer/AlreadyRunningProcessesDialog.cpp \
     src/processviewer/processes.cpp \
     src/processviewer/processviewerdialog.cpp \
-    src/processviewer/alreadyusedportsdialog.cpp
-
-
+    src/registry/registrymanager.cpp \
+    src/selfupdater.cpp \
+    src/servers.cpp \
+    src/services.cpp \
+    src/settings.cpp \
+    src/splashscreen.cpp \
+    src/tooltips/BalloonTip.cpp \
+    src/tooltips/LabelWithHoverTooltip.cpp \
+    src/tooltips/TrayTooltip.cpp \
+    src/tray.cpp \
+    src/updater/actioncolumnitemdelegate.cpp \
+    src/updater/downloadmanager.cpp \
+    src/updater/package.cpp \
+    src/updater/softwarecolumnitemdelegate.cpp \
+    src/updater/transferitem.cpp \
+    src/updater/updaterdialog.cpp \
+    src/windowsapi.cpp \ 
+    src/file/yamlyaml.cpp
 
 RESOURCES += \
     src/resources/resources.qrc
 
 FORMS += \
-    src/mainwindow.ui \
     src/config/configurationdialog.ui \
-    src/config/nginxaddupstreamdialog.ui \
     src/config/nginxaddserverdialog.ui \
-    src/updater/updaterdialog.ui \
-    src/processviewer/processviewerdialog.ui    
+    src/config/nginxaddupstreamdialog.ui \
+    src/mainwindow.ui \
+    src/processviewer/processviewerdialog.ui \   
+    src/updater/updaterdialog.ui
 
 # WINDOWS RC-FILE (sets the executable attributes)
 exists(C:\Windows\System32\cmd.exe) {
