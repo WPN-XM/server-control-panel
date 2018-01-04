@@ -107,6 +107,8 @@ namespace ServerControlPanel
     void MainWindow::updateServerStatusIndicators()
     {
         foreach (Process process, processes->getRunningProcesses()) {
+
+            // exclude "some known" system processes
             if (processes->isSystemProcess(process.name)) {
                 continue;
             }
@@ -721,8 +723,6 @@ namespace ServerControlPanel
 
     QString MainWindow::parseVersionNumber(QString stringWithVersion)
     {
-        qDebug() << stringWithVersion;
-
         // This RegExp matches version numbers: (\d+\.)?(\d+\.)?(\d+\.)?(\*|\d+)
         // This is the same, but escaped:
         QRegExp regex("(\\d+\\.)?(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)");
