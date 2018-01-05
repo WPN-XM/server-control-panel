@@ -74,7 +74,7 @@ HEADERS += \
     src/file/csv.h \
     src/file/ini.h \
     src/file/json.h \
-    src/file/yamlyaml.h \
+#    src/file/yamlyaml.h \
     src/hostmanager/adddialog.h \
     src/hostmanager/host.h \
     src/hostmanager/hostmanagerdialog.h \
@@ -140,7 +140,7 @@ SOURCES += \
     src/updater/transferitem.cpp \
     src/updater/updaterdialog.cpp \
     src/windowsapi.cpp \ 
-    src/file/yamlyaml.cpp
+#    src/file/yamlyaml.cpp
 
 RESOURCES += \
     src/resources/resources.qrc
