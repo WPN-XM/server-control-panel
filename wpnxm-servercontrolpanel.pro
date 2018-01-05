@@ -58,8 +58,8 @@ release {
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
 DEPENDPATH += $$PWD/libs/yaml-cpp/include
 release {
-   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
-    unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppm
+   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
+    unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
 }
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
