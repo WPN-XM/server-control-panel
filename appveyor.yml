@@ -97,6 +97,14 @@ before_build:
   - if %platform%==amd64_x86 call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x86" quazip.sln
   - if %platform%==amd64     call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x64" quazip.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
+  # yaml-cpp
+  - cd %APPVEYOR_BUILD_FOLDER%\third-party\yaml-cpp
+  - mkdir build
+  - cd build
+  - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ./
+  - if %platform%==amd64_x86 call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x86" yaml-cpp.sln
+  - if %platform%==amd64     call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x64" yaml-cpp.sln 
+  - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
 
 build_script:
   #- if "%APPVEYOR_REPO_TAG%"=="true" (set CONFIGURATION=Release) else (set CONFIGURATION=Debug)
