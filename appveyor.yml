@@ -101,7 +101,7 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\yaml-cpp
   - mkdir build
   - cd build
-  - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ../ -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
+  - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ../ -DBUILD_SHARED_LIBS=ON -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
   - if %platform%==amd64_x86 call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x86" yaml-cpp.sln
   - if %platform%==amd64     call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x64" yaml-cpp.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
