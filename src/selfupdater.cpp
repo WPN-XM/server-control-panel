@@ -230,7 +230,7 @@ namespace Updater
             // cross fingers and hope and pray, that starting the new process is slow
             // and we are not running into the single application check.. ;)
 
-            QProcess p;
+            QProcess p;            
             p.startDetached(QApplication::applicationFilePath());
 
             QApplication::exit();
@@ -282,7 +282,7 @@ namespace Updater
 
     QString SelfUpdater::getUpdateCheckURL()
     {
-        QString url("http://wpn-xm.org/updatecheck.php");
+        QString url("https://wpn-xm.org/updatecheck.php");
 
         // software
         url.append("?s=");

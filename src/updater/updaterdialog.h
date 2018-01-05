@@ -14,7 +14,7 @@
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 
-#include "src/json.h"
+#include "src/file/json.h"
 #include "src/registry/registrymanager.h"
 
 #include "src/updater/downloadmanager.h"

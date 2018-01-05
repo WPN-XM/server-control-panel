@@ -28,6 +28,8 @@ namespace ServerControlPanel
 
     void Tray::createTrayMenu()
     {
+        qDebug() << "[Tray] Create Tray and add Server menus.\t";
+
         QMenu *trayMenu = contextMenu();
 
         if (trayMenu) {

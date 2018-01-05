@@ -485,7 +485,7 @@ namespace Servers
     {
         QMap<QString, QString> serversToStart;
 
-        QFile upstreamConfigFile = "./bin/wpnxm-scp/nginx-upstreams.json";
+        QFile upstreamConfigFile("./bin/wpnxm-scp/nginx-upstreams.json");
         if (!upstreamConfigFile.exists()) {
             qDebug() << "[PHP] Nginx Upstream Configuration file not found.\n";
         }

@@ -10,15 +10,23 @@ QList<QHostAddress> NetworkUtils::getLocalHostIPs()
     QList<QHostAddress> ips;
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
 
-    foreach (QNetworkInterface iface, interfaces) {
-        if (iface.flags().testFlag(QNetworkInterface::IsUp) && iface.flags().testFlag(QNetworkInterface::IsRunning) &&
-            !iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+    foreach (QNetworkInterface iface, interfaces) {        
+
+        // interface must be up and running and not a loopback device
+        if (iface.flags().testFlag(QNetworkInterface::IsUp)
+                && iface.flags().testFlag(QNetworkInterface::IsRunning)
+                && !iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+
             foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
+
                 QHostAddress ip = entry.ip();
+
                 // ignore local host IPs
                 if (ip == QHostAddress::LocalHost || ip == QHostAddress::LocalHostIPv6) {
                     continue;
                 }
+
+                // add IPv4 IPs
                 if (ip.protocol() == QAbstractSocket::IPv4Protocol) {
                     ips.append(ip);
                 }
