@@ -12,9 +12,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include "filehandling.h"
-#include "json.h"
-#include "ini.h"
+#include "src/file/filehandling.h"
+#include "src/file/json.h"
+#include "src/file/ini.h"
 #include "settings.h"
 #include "src/processviewer/processes.h"
 
