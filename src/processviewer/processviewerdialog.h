@@ -1,7 +1,7 @@
 #ifndef PROCESSVIEWERDIALOG_H
 #define PROCESSVIEWERDIALOG_H
 
-#include "src/csv.h"
+#include "src/file/csv.h"
 #include "src/processviewer/processes.h"
 
 #include <QDesktopWidget>
@@ -20,7 +20,7 @@ class ProcessViewerDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ProcessViewerDialog(QWidget *parent = false);
+    explicit ProcessViewerDialog(QWidget *parent);
     ~ProcessViewerDialog();
 
     QTreeWidgetItem *addRoot(Process process);

@@ -1,10 +1,10 @@
 #include "configurationdialog.h"
 #include "ui_configurationdialog.h"
 
-#include "../json.h"
+#include "src/file/ini.h"
+#include "src/file/json.h"
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
-#include "src/ini.h"
 
 namespace Configuration
 {

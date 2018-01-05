@@ -57,6 +57,7 @@ Process Processes::findByPid(const QString &pid)
     return p;
 }
 
+// process whitelist
 QStringList Processes::getProcessNamesToSearchFor()
 {
     QStringList processesToSearch;
@@ -100,11 +101,18 @@ bool Processes::areThereAlreadyRunningProcesses()
     return (!monitoredProcessesList.isEmpty());
 }
 
-// static
+// static, process blacklist
 bool Processes::isSystemProcess(QString processName)
 {
-    if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
-        processName == "wininit" || processName == "winlogon" || processName == "dllhost" || processName == "csrss") {
+    if (processName == "[System Process]"
+            || processName == "svchost.exe"
+            || processName == "System"
+            || processName == "wininit"
+            || processName == "winlogon"
+            || processName == "dllhost"
+            || processName == "csrss"
+            || processName == "conhost"
+            || processName == "wpn-xm") {
         return true;
     }
 
