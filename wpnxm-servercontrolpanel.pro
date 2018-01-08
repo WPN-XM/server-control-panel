@@ -56,7 +56,6 @@ release {
 
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
-DEPENDPATH += $$PWD/libs/yaml-cpp/include
 release {
    win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
     unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
@@ -74,7 +73,7 @@ HEADERS += \
     src/file/csv.h \
     src/file/ini.h \
     src/file/json.h \
-#    src/file/yamlyaml.h \
+    src/file/yamlyaml.h \
     src/hostmanager/adddialog.h \
     src/hostmanager/host.h \
     src/hostmanager/hostmanagerdialog.h \
@@ -140,7 +139,7 @@ SOURCES += \
     src/updater/transferitem.cpp \
     src/updater/updaterdialog.cpp \
     src/windowsapi.cpp \ 
-#    src/file/yamlyaml.cpp
+    src/file/yamlyaml.cpp
 
 RESOURCES += \
     src/resources/resources.qrc
@@ -221,27 +220,26 @@ win32-msvc* {
     QMAKE_CFLAGS += -msse2
 }
 
-# Deployment - Automatically Copy Dependencies to Build Folder
+# Deployment - Automatically Determine AND Copy Dependencies to Build Folder
 
 win32 {
-    isEmpty(TARGET_EXT) {
-        TARGET_CUSTOM_EXT = .exe
-    } else {
-        TARGET_CUSTOM_EXT = $${TARGET_EXT}
-    }
-
     DEPLOY_COMMAND = $$shell_quote($$shell_path($$[QT_INSTALL_BINS]/windeployqt))
+
+    DEPLOY_OPTIONS = "--no-svg --no-system-d3d-compiler --no-angle --no-opengl-sw"
 
     CONFIG(debug, debug|release) {
         DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}.exe))
+        DEPLOY_OPTIONS += "--debug"
+
     } else {
         DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/release/$${TARGET}.exe))
+        DEPLOY_OPTIONS += "--release"
     }
 
     # Uncomment the following line to help debug the deploy command when running qmake
-    warning($${DEPLOY_COMMAND} $${DEPLOY_TARGET})
+    warning($${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET})
 
-    QMAKE_POST_LINK = $${DEPLOY_COMMAND} $${DEPLOY_TARGET}
+    QMAKE_POST_LINK = $${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET}
 }
 
 # Deployment - Copy Dependencies to Build Folder
