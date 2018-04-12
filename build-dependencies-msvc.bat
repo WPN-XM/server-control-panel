@@ -31,6 +31,8 @@ cmake -G "Visual Studio 14 2015 Win64" CMakeLists.txt -B./build -DCMAKE_INSTALL_
 :: 2) make
 msbuild .\build\zlib.vcxproj /p:Configuration=Release %MSBUILD_FLAGS%
 msbuild .\build\zlibstatic.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
+:: 3) install 
+msbuild .\build\INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
 echo Done.
 echo.
@@ -47,6 +49,8 @@ cd build
 cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DLIB_DESTINATION=../../../libs/quazip/bin -DZLIB_INCLUDE_DIRS=../../../libs/zlib/include -DZLIB_LIBRARIES=../../../libs/zdll.lib
 :: 2) make
 msbuild ..\quazip.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
+:: 3) install 
+msbuild ..\INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
 echo Done.
 echo.
@@ -63,6 +67,8 @@ cd build
 cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
 :: 2) make
 msbuild yaml-cpp.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs %MSBUILD_FLAGS%
+:: 3) install 
+msbuild INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
 echo Done.
 echo.
