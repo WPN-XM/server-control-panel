@@ -119,13 +119,13 @@ namespace ServerControlPanel
 
             Servers::Server *server = servers->getServer(serverName);
 
-            qDebug() << "[Processes Running][updateServerStatusIndicators] The process" << processName
-                     << "has the Server" << server->name;
-
             // set indicators on main window and tray menu
             if (server->name != "Not Installed") {
                 setLabelStatusActive(serverName, true);
                 server->trayMenu->setIcon(QIcon(":/status_run"));
+
+                qDebug() << "[Processes Running][updateServerStatusIndicators]"""
+                         << "The process" << processName << "has the Server" << server->name;
             }
         }
     }
