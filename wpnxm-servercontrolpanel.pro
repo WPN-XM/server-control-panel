@@ -27,13 +27,19 @@ VERSION                  = 0.870
 QMAKE_TARGET_COMPANY     = Koch Softwaresystemtechnik
 QMAKE_TARGET_PRODUCT     = WPN-XM Server Control Panel
 QMAKE_TARGET_DESCRIPTION = WPN-XM Server Control Panel
-QMAKE_TARGET_COPYRIGHT   = Copyright 2010-2016 Jens A. Koch
+QMAKE_TARGET_COPYRIGHT   = Copyright 2010-2018 Jens A. Koch
 
 DEPLOYMENT.display_name = WPN-XM Server Control Panel
 
 CONFIG += qt console c++11 #warn-on static
 
 QT += core network widgets
+
+# The following define makes your compiler emit warnings if you use
+# any feature of Qt which as been marked as deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
+DEFINES += QT_DEPRECATED_WARNINGS
 
 # needed for "createShellLink", see ConfigurationDialog
 LIBS += -luuid -lole32 -lshell32
@@ -73,7 +79,7 @@ HEADERS += \
     src/file/csv.h \
     src/file/ini.h \
     src/file/json.h \
-    src/file/yamlyaml.h \
+    src/file/yml.h \
     src/hostmanager/adddialog.h \
     src/hostmanager/host.h \
     src/hostmanager/hostmanagerdialog.h \
@@ -112,6 +118,7 @@ SOURCES += \
     src/file/filehandling.cpp \
     src/file/ini.cpp \
     src/file/json.cpp \
+    src/file/yml.cpp \
     src/hostmanager/adddialog.cpp \
     src/hostmanager/host.cpp \
     src/hostmanager/hostmanagerdialog.cpp \
@@ -138,8 +145,7 @@ SOURCES += \
     src/updater/softwarecolumnitemdelegate.cpp \
     src/updater/transferitem.cpp \
     src/updater/updaterdialog.cpp \
-    src/windowsapi.cpp \ 
-    src/file/yamlyaml.cpp
+    src/windowsapi.cpp
 
 RESOURCES += \
     src/resources/resources.qrc
