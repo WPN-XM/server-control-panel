@@ -320,8 +320,9 @@ namespace Configuration
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
     {
         QString file = settings->get("postgresql/config").toString();
+
         if (!QFile(file).exists()) {
-            qDebug() << "[Error]" << file << "not found";
+            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -341,8 +342,9 @@ namespace Configuration
     {
         // get redis configuration file path
         QString file = settings->get("redis/config").toString();
+
         if (!QFile(file).exists()) {
-            qDebug() << "[Error]" << file << "not found";
+            qDebug() <<  "[Error][" << Q_FUNC_INFO << "] redis/config not found";
         }
 
         // read file
@@ -393,8 +395,9 @@ namespace Configuration
         // get xdebug configuration file path
         // xdebug configuration directives are set in php.ini
         QString file = settings->get("php/config").toString();
+
         if (!QFile(file).exists()) {
-            qDebug() << "[Error]" << file << "not found";
+            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -417,8 +420,9 @@ namespace Configuration
     void ConfigurationDialog::saveSettings_MariaDB_Configuration()
     {
         QString file = settings->get("mariadb/config").toString();
+
         if (!QFile(file).exists()) {
-            qDebug() << "[Error]" << file << "not found";
+            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
