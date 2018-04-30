@@ -91,14 +91,13 @@ You should be able to find everything at http://www.qt.io/download-open-source/
 
   http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
 
-* Qt 5.7.x - MSVC 2015
+* Qt 5.10.x
 
-  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-msvc2015-5.7.0.exe
-  http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-windows-x86-msvc2015_64-5.7.0.exe
+  http://download.qt.io/official_releases/qt/5.10/5.10.1/qt-opensource-windows-x86-5.10.1.exe
 
 * Qt Creator
 
-  http://download.qt.io/official_releases/qtcreator/4.1/4.1.0/qt-creator-opensource-windows-x86-4.1.0.exe
+  http://download.qt.io/official_releases/qtcreator/4.6/4.6.0/qt-creator-opensource-windows-x86_64-4.6.0.exe
 
 ### Installation Steps and Requirements for Qt
 
