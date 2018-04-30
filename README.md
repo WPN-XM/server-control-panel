@@ -85,7 +85,7 @@ Breaking changes, new features, deprecations and bug fixes are tracked in the [C
 
 Install Qt binaries from either the Qt SDK or standalone binary package or just use the Qt Online Installer.
 
-You should be able to find everything at http://www.qt.io/download-open-source/
+You should be able to find everything at http://download.qt.io/official_releases/
 
 * Qt Online Installer
 
