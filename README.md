@@ -13,7 +13,7 @@ The control panel provides a tight integration with additionally installed tools
 
 The following servers are supported: PHP, Nginx, MariaDb, MongoDb, Redis, Memcached, PostgreSQL.
 
-It's written in C++ using Qt 5.2+, free and open-source under GNU/GPL v3 license.
+It's written in C++ using Qt. It's free and open-source under GNU/GPL v3 license.
 
 ## Documentation
 
