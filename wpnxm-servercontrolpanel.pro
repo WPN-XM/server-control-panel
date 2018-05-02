@@ -34,6 +34,7 @@ DEPLOYMENT.display_name = WPN-XM Server Control Panel
 CONFIG += qt console c++11 #warn-on static
 
 QT += core network widgets
+QT -= opengl
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
@@ -231,7 +232,7 @@ win32-msvc* {
 win32 {
     DEPLOY_COMMAND = $$shell_quote($$shell_path($$[QT_INSTALL_BINS]/windeployqt))
 
-    DEPLOY_OPTIONS = "--no-svg --no-system-d3d-compiler --no-angle --no-opengl-sw"
+    DEPLOY_OPTIONS = "--no-svg --no-system-d3d-compiler --no-opengl --no-angle --no-opengl-sw"
 
     CONFIG(debug, debug|release) {
         DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}.exe))
@@ -248,22 +249,16 @@ win32 {
     QMAKE_POST_LINK = $${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET}
 }
 
-# Deployment - Copy Dependencies to Build Folder
+# Deployment - Copy Dependencies
 
-#dlls.path  =  $${DESTDIR}
-#dlls.files += $$[QT_INSTALL_BINS]/icudt51.dll
-#dlls.files += $$[QT_INSTALL_BINS]/icuin51.dll
-#dlls.files += $$[QT_INSTALL_BINS]/icuuc51.dll
-#dlls.files += $$[QT_INSTALL_BINS]/libgcc_s_dw2-1.dll
-#dlls.files += $$[QT_INSTALL_BINS]/libstdc++-6.dll
-#dlls.files += $$[QT_INSTALL_BINS]/libwinpthread-1.dll
-#dlls.files += $$[QT_INSTALL_BINS]/Qt5Core.dll
-#dlls.files += $$[QT_INSTALL_BINS]/Qt5Network.dll
-#dlls.files += $$[QT_INSTALL_BINS]/Qt5Gui.dll
-#dlls.files += $$[QT_INSTALL_BINS]/Qt5Widgets.dll
-#dllA.path   += $${DESTDIR}/platforms
-#dllA.files  += $$[QT_INSTALL_PLUGINS]/platforms/qwindows.dll
-#dllB.path   += $${DESTDIR}/plugins/imageformats/
-#dllB.files  += $$[QT_INSTALL_PLUGINS]/imageformats/qico.dll
-#dllB.files  += $$[QT_INSTALL_PLUGINS]/imageformats/qwbmp.dll
-#INSTALLS   += dlls dllA dllB
+win32 {
+    CONFIG(debug, debug|release): OUTDIR = debug
+    else: OUTDIR = release
+}
+libs.path = $$OUT_PWD/$$OUTDIR
+
+libs.files += libs/quazip/bin/quazip.dll
+libs.files += libs/zlib/bin/zlib.dll
+libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
+
+INSTALLS += libs
