@@ -89,7 +89,10 @@ before_build:
   - if %platform%==amd64_x86 call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x86" zlib.sln
   - if %platform%==amd64     call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x64" zlib.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
-  # quazip
+  # apply CMakeList patch for quazip
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - copy third-party\patches\quazip\CMakeLists.txt third-party\quazip /Y
+  # quazip  
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
   - cd build
