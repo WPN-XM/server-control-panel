@@ -65,6 +65,7 @@ install:
   - git submodule update --init --recursive
 
 before_build:
+  - dir qt
   # init mingw paths
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
   - if %platform%==mingw set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
