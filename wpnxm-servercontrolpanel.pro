@@ -34,7 +34,6 @@ DEPLOYMENT.display_name = WPN-XM Server Control Panel
 CONFIG += qt console c++11 #warn-on static
 
 QT += core network widgets
-QT -= opengl
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
