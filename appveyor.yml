@@ -65,14 +65,12 @@ install:
   - git submodule update --init --recursive
 
 before_build:  
-  - dir C:\Qt
-  - dir "C:\Qt\%qt%"
   # init mingw paths
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-  - if %platform%==mingw set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
+  - if %platform%==mingw set PATH=C:\Qt\Tools\mingw53_32\bin;%PATH%  
+  # set QT path and env variables
   - set PATH=C:\Qt\%qt%\bin;C:\Qt\%qt%;%PATH%
   - set QTDIR=C:\Qt\%qt%
-  # set QT path and env variables
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
   # Set more... if Microsoft Visual Studio
   - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
