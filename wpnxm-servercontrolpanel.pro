@@ -251,11 +251,7 @@ win32 {
 
 # Deployment - Copy Dependencies
 
-win32 {
-    CONFIG(debug, debug|release): OUTDIR = debug
-    else: OUTDIR = release
-}
-libs.path = $$OUT_PWD/$$OUTDIR
+libs.path = $$OUT_PWD/$$DESTDIR
 
 libs.files += libs/quazip/bin/quazip.dll
 libs.files += libs/zlib/bin/zlib.dll
