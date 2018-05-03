@@ -96,7 +96,7 @@ before_build:
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
   - cd build
-  - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIRS="%APPVEYOR_BUILD_FOLDER%\libs\zlib\include;%APPVEYOR_BUILD_FOLDER%\third-party\zlib" -DZLIB_LIBRARIES="%APPVEYOR_BUILD_FOLDER%\libs\zlib\lib\zlib.lib" ../
+  - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIR="%APPVEYOR_BUILD_FOLDER%\libs\zlib\include;%APPVEYOR_BUILD_FOLDER%\third-party\zlib" -DZLIB_LIBRARY="%APPVEYOR_BUILD_FOLDER%\libs\zlib\lib\zlib.lib" ../
   - if %platform%==amd64_x86 call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x86" quazip.sln
   - if %platform%==amd64     call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="x64" quazip.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
