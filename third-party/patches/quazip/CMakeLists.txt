@@ -4,10 +4,6 @@ cmake_minimum_required(VERSION 2.8)
 # CMP0042: Explicitly acknowledge MACOSX_RPATH
 cmake_policy(SET CMP0042 NEW)
 
-if(POLICY CMP0022)
-  cmake_policy(SET CMP0022 OLD)
-endif()
-
 find_package(Qt5Core)
 find_package(ZLIB)
 
