@@ -27,7 +27,7 @@ environment:
     - arch:       win32
       bitsize:    x64
       platform:   amd64
-      qt:         5.10.1\5.10.1\msvc2015_64
+      qt:         5.10.1\msvc2015_64
       suffix:     msvc2015
       generator:  "Visual Studio 15 2017 Win64"
 
