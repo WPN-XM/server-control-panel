@@ -21,7 +21,7 @@ environment:
       platform:   amd64_x86
       qt:         5.10.1\msvc2015
       suffix:     msvc2015
-      generator:  "Visual Studio 15 2017"
+      generator:  "Visual Studio 14 2015"
 
     # MSVC x64
     - arch:       win32
@@ -29,7 +29,7 @@ environment:
       platform:   amd64
       qt:         5.10.1\msvc2015_64
       suffix:     msvc2015
-      generator:  "Visual Studio 15 2017 Win64"
+      generator:  "Visual Studio 14 2015 Win64"
 
     # MinGW
     #- arch:       win32
