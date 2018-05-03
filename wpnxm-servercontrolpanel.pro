@@ -50,7 +50,7 @@ LIBS += -luuid -lole32 -lshell32
 INCLUDEPATH += $$PWD/libs/zlib/include
 release {
     win32:LIBS += -L$$PWD/libs/zlib/lib -lzlib
-    unix:LIBS  += -L$$PWD/libs/zlib/lib -lz
+     unix:LIBS += -L$$PWD/libs/zlib/lib -lz
 }
 
 # QuaZIP
