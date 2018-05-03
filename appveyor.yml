@@ -66,6 +66,7 @@ install:
 
 before_build:  
   - dir C:\Qt
+  - dir "C:\Qt\%qt%"
   # init mingw paths
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
   - if %platform%==mingw set PATH=C:\Qt\Tools\mingw492_32\bin;%PATH%
