@@ -92,6 +92,7 @@ before_build:
   # apply CMakeList patch for quazip
   - cd %APPVEYOR_BUILD_FOLDER%
   - copy third-party\patches\quazip\CMakeLists.txt third-party\quazip /Y
+  - del %APPVEYOR_BUILD_FOLDER%\third-party\quazip\quazip.sln
   # quazip  
   - cd %APPVEYOR_BUILD_FOLDER%\third-party\quazip
   - mkdir build
