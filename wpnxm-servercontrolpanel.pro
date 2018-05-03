@@ -41,8 +41,6 @@ QT += core network widgets
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEFINES += QUAZIP_STATIC
-
 # needed for "createShellLink", see ConfigurationDialog
 LIBS += -luuid -lole32 -lshell32
 # needed for process and port detection, see ProcessViewerDialog
