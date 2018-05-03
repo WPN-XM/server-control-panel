@@ -14,20 +14,21 @@ configuration:
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
   matrix: 
+    # https://www.appveyor.com/docs/build-environment/#qt
     # MSVC x86
-    #- arch:       win32
-    #  bitsize:    x86
-    #  platform:   amd64_x86
-    #  qt:         5.10.1\msvc2015
-    #  suffix:     msvc2015
-    #  generator:  "Visual Studio 15 2017"
+    - arch:       win32
+      bitsize:    x86
+      platform:   amd64_x86
+      qt:         5.10.1\msvc2015
+      suffix:     msvc2015
+      generator:  "Visual Studio 15 2017"
 
     # MSVC x64
     - arch:       win32
       bitsize:    x64
       platform:   amd64
-      qt:         5.10.1\msvc2017_64
-      suffix:     msvc2017
+      qt:         5.10.1\5.10.1\msvc2015_64
+      suffix:     msvc2015
       generator:  "Visual Studio 15 2017 Win64"
 
     # MinGW
