@@ -216,7 +216,7 @@ win32-g++ {
 
 win32-msvc* {
     message("using win32 msvc")
-    QMAKE_CXXFLAGS += /wd4251 /wd4275 /MP
+    QMAKE_CXXFLAGS += /MP
 }
 
 *-g++-32 {
