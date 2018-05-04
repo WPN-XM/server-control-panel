@@ -7,8 +7,9 @@ cmake_policy(SET CMP0042 NEW)
 find_package(Qt5Core)
 
 set(CMAKE_CXX_STANDARD 11)
+
 set(QTCORE_LIBRARIES ${Qt5Core_LIBRARIES})
-set(QUAZIP_LIB_VERSION_SUFFIX 5)
+
 # if there is no QT_ROOT, try to deduce it from Qt QtCore include
 if("${QT_ROOT}" STREQUAL "")
     set(QT_ROOT ${QT_QTCORE_INCLUDE_DIR}/../..)
@@ -27,9 +28,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
 set(LIB_DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Library directory name" FORCE)
 
-set(QUAZIP_LIB_TARGET_NAME quazip${QUAZIP_LIB_VERSION_SUFFIX} CACHE
+set(QUAZIP_LIB_TARGET_NAME quazip CACHE
     INTERNAL "Target name of libquazip" FORCE)
 
 add_subdirectory(quazip)
 
-install(FILES FindQuaZip.cmake RENAME FindQuaZip${QUAZIP_LIB_VERSION_SUFFIX}.cmake DESTINATION ${CMAKE_ROOT}/Modules)
+install(FILES FindQuaZip.cmake RENAME FindQuaZip.cmake DESTINATION ${CMAKE_ROOT}/Modules)
