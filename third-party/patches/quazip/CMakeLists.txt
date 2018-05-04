@@ -5,9 +5,21 @@ cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0042 NEW)
 
 find_package(Qt5Core)
-find_package(ZLIB)
 
+set(CMAKE_CXX_STANDARD 11)
+set(QTCORE_LIBRARIES ${Qt5Core_LIBRARIES})
+set(QUAZIP_LIB_VERSION_SUFFIX 5)
+# if there is no QT_ROOT, try to deduce it from Qt QtCore include
+if("${QT_ROOT}" STREQUAL "")
+    set(QT_ROOT ${QT_QTCORE_INCLUDE_DIR}/../..)
+endif()
 include_directories(${Qt5Core_INCLUDE_DIRS})
+
+macro(qt_wrap_cpp)
+    qt5_wrap_cpp(${ARGN})
+endmacro()
+
+find_package(ZLIB)
 
 # All build libraries are moved to this directory
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
