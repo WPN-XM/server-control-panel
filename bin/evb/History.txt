@@ -1,3 +1,16 @@
+Enigma Virtual Box v8.10 Build 20180301
+- Improved compatibility with some files
+
+Enigma Virtual Box v8.00 Build 20180201
+- Added support for TLS callbacks
+- Improved processing speed for x64 files
+
+Enigma Virtual Box v7.90 Build 20171208
+- Improved compatibility with Windows 10 Insider
+- Improved compatibility running specific virtual executable files
+- Fixed some problems on Windows 8-10, packed software crashed accessing virtual file
+- Fixed incompatibility with some antivirus softwares
+
 Enigma Virtual Box v7.80 Build 20170713
 - Fixed issue with registering of some ActiveX components
 - Fixed issue with overwriting the file if "Write to Disk if not Exist" option used
