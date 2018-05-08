@@ -36,14 +36,12 @@ namespace Updater
         }
 
         // check, if interval was set in INI
-        // if not set, the interval defaults to off
-        QString intervalString = settings->get("selfupdater/interval", QVariant(QString("off"))).toString();
+        // if not set, the interval defaults to "notset"
+        QString intervalString = settings->get("selfupdater/interval", QVariant(QString("notset"))).toString();
 
-        qint64 lastTimeChecked =
-            settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime().currentMSecsSinceEpoch();
-
+        qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
         qint64 interval;
-        if (intervalString == "off") {
+        if (intervalString == "notset") {
             interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
         }
         if (intervalString == "daily") {
@@ -58,13 +56,24 @@ namespace Updater
 
         qint64 now = QDateTime::currentDateTime().currentMSecsSinceEpoch();
 
+        bool timeForUpdateCheck = false;
+        if(now - interval > lastTimeChecked) {
+            timeForUpdateCheck = true;
+        }
+
+        qDebug() << "[SelfUpdater] IsUserRequestedUpdate: " << userRequestedUpdate;
+        qDebug() << "[SelfUpdater] LastTimeChecked: " << QVariant(lastTimeChecked).toDateTime().toString(Qt::ISODate);
+        qDebug() << "[SelfUpdater] TimeForUpdateChecked: " << timeForUpdateCheck;
+
+
         // run update in 3 cases
         // 1. userRequestedUpdate = forced update run, regardless of interval
         // 2. lastTimeCheck 0 = an update was never done before
-        // 3. based on the selected update interval = it's now time to update
-        if (userRequestedUpdate || lastTimeChecked == 0 || now - interval > lastTimeChecked) {
+        // 3. based on the selected update interval = it's now time to check for updates
+        if (userRequestedUpdate || lastTimeChecked == 0 || timeForUpdateCheck == true) {
+
             // set the last time check flag
-            settings->get("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
+            settings->set("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
 
             // setup download folder
             downloadFolder = QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
@@ -73,7 +82,7 @@ namespace Updater
             }
 
             if (updateAvailable()) {
-                qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
+                //qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
 
                 emit notifyUpdateAvailable(versionInfo);
 
@@ -95,6 +104,9 @@ namespace Updater
     bool SelfUpdater::updateAvailable()
     {
         versionInfo = getVersionInfo();
+
+        //qDebug() << versionInfo;
+
         return versionInfo["update_available"].toBool();
     }
 
@@ -177,9 +189,10 @@ namespace Updater
     {
         QString t(
             "A new version of the Server Control Panel is available:"
-            "<p><b><FONT COLOR='#a9a9a9' FONT SIZE = 4>"
+            "<p align='center'><b><FONT COLOR='#a9a9a9' FONT SIZE = 5>"
             "%1 v%2."
             "</b></p></br>");
+
         QString text = t.arg(versionInfo["software_name"].toString(), versionInfo["latest_version"].toString());
 
         QString infoText = "Do you want to update now?";
@@ -230,7 +243,7 @@ namespace Updater
             // cross fingers and hope and pray, that starting the new process is slow
             // and we are not running into the single application check.. ;)
 
-            QProcess p;            
+            QProcess p;
             p.startDetached(QApplication::applicationFilePath());
 
             QApplication::exit();
@@ -242,6 +255,8 @@ namespace Updater
     QJsonObject SelfUpdater::getVersionInfo()
     {
         QString url = getUpdateCheckURL();
+
+        //qDebug() << "[SelfUpdater] UpdateCheckURL: " << url;
 
         // QNAM is non-blocking / non-synchronous, but we want to wait until reply has
         // been received
@@ -256,7 +271,7 @@ namespace Updater
         QNetworkRequest req(url);
         QNetworkReply *updateCheckResponse = network.get(req);
 
-        // run event loop, which blocks the stack, until "finished()" has been called
+        // run event loop, which blocks the stack, until "exit()" has been called
         eventLoop.exec();
 
         QJsonDocument jsonResponse;
@@ -266,13 +281,18 @@ namespace Updater
             // read response and parse JSON
             QString strReply = (QString)updateCheckResponse->readAll();
             jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+
+            //qDebug() << "RawResponse: " << strReply;
+            //qDebug() << "JsonResponse: " << jsonResponse;
         } else {
             // QNetworkReply::HostNotFoundError
-            qDebug() << "Request Failure: " << updateCheckResponse->errorString();
+            //qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
             QMessageBox::critical(QApplication::activeWindow(), "Request Failure", updateCheckResponse->errorString(),
                                   QMessageBox::Ok);
         }
+
+        eventLoop.exit();
 
         // cleanup
         delete updateCheckResponse;
@@ -287,9 +307,9 @@ namespace Updater
         // software
         url.append("?s=");
         if (WindowsAPI::QtWin::running_on_64_bits_os()) {
-            url.append("wpnxmscp-x64");
+            url.append("wpnxm-scp-x64");
         } else {
-            url.append("wpnxmscp");
+            url.append("wpnxm-scp");
         }
 
         // version
@@ -298,7 +318,7 @@ namespace Updater
         if (version != "@APPVERSIONSHORT@") {
             url.append(version);
         } else {
-            url.append("0.8.4"); // hardcoded for local testing (formerly version_localdev.h)
+            url.append("0.8.4"); // hardcoded for testing
         }
 
         return url;
