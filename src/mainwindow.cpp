@@ -625,8 +625,7 @@ namespace ServerControlPanel
         if (!QFile().exists("./bin/php/php.exe")) {
             return "0.0.0";
         }
-
-        QProcess process;
+         QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
         process.start("./bin/php/php.exe -v");
 
@@ -1017,11 +1016,11 @@ namespace ServerControlPanel
                          "</td></tr>"
                          "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
                          "<tr><td align=center><b>Website</b></td><td><a "
-                         "href=\"http://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
-                         "<tr><td align=center><b>Author(s)</b></td><td>Jens A. Koch (c) 2011 "
+                         "href=\"https://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
+                         "<tr><td align=center><b>Author</b></td><td>Jens A. Koch (c) 2011 "
                          "- ")
                           .append(year)
-                          .append(", <br>Yann Le Moigne (c) 2010.<br></td></tr>"
+                          .append(".<br></td></tr>"
                                   "<tr><td align=center><b>Github</b></td><td>WPN-XM is developed "
                                   "on Github.<br><a "
                                   "href=\"https://github.com/WPN-XM/WPN-XM/\">https://github.com/"
@@ -1139,9 +1138,10 @@ namespace ServerControlPanel
             settings->set("redis/port", 6379);
 
             settings->set("selfupdater/runonstartup", 1);
-
-            // settings->set("updater/mode",         "manual");
-            // settings->set("updater/interval",     "1w");
+            settings->set("selfupdater/autoupdate", 0);
+            settings->set("selfupdater/autorestart", 0);
+            settings->set("selfupdater/interval", 7);
+            settings->set("selfupdater/last_time_checked", 0);
 
             qDebug() << "[Settings] Loaded Defaults...\n";
         }
