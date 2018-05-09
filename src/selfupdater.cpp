@@ -190,7 +190,7 @@ namespace Updater
         QString t(
             "A new version of the Server Control Panel is available:"
             "<p align='center'><b><FONT COLOR='#a9a9a9' FONT SIZE = 5>"
-            "%1 v%2."
+            "%1 v%2"
             "</b></p></br>");
 
         QString text = t.arg(versionInfo["software_name"].toString(), versionInfo["latest_version"].toString());
