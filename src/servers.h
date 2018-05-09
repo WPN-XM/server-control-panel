@@ -52,6 +52,7 @@ namespace Servers
         QString getCamelCasedServerName(QString &serverName) const;
         Server *getServer(const QString &serverName) const;
         QString getExecutable(QString &serverName) const;
+        QString getServerBinPath(QString &serverName) const;
 
         QStringList getLogFiles(QString &serverName) const;
 

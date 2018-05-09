@@ -18,7 +18,7 @@ namespace Servers
             server->name = getCamelCasedServerName(serverName);
             server->icon = QIcon(":/status_stop");
             server->logFiles = getLogFiles(serverName);
-            server->workingDirectory = settings->get("paths/" + serverName).toString();
+            server->workingDirectory = getServerBinPath(serverName);
             server->exe = getExecutable(server->name);
 
             QMenu *menu = new QMenu(server->name);
@@ -149,11 +149,38 @@ namespace Servers
             exe = "redis-server.exe";
         }
 
-        QDir path(settings->get("paths/" + serverName).toString() + "/");
-
-        QString filepath = path.absolutePath() + "/" + exe;
+        QString filepath = getServerBinPath(s) + exe;
 
         return QDir::toNativeSeparators(filepath);
+    }
+
+    QString Servers::getServerBinPath(QString &serverName) const
+    {
+        QString s = serverName.toLower();
+        QString path;
+        if (s == "nginx") {
+            path = QDir::currentPath() + "/bin/nginx/";
+        }
+        if (s == "memcached") {
+            path = QDir::currentPath() + "/bin/memcached/";
+        }
+        if (s == "mongodb") {
+            path = QDir::currentPath() + "/bin/mongodb/bin/";
+        }
+        if (s == "mariadb") {
+            path = QDir::currentPath() + "/bin/mariadb/bin/";
+        }
+        if (s == "php") {
+            path = QDir::currentPath() + "/bin/php/";
+        }
+        if (s == "postgresql") {
+            path = QDir::currentPath() + "/bin/pgsql/bin/";
+        }
+        if (s == "redis") {
+            path = QDir::currentPath() + "/bin/redis/";
+        }
+
+        return QDir::toNativeSeparators(path);
     }
 
     QStringList Servers::getListOfServerNames() const
@@ -440,9 +467,9 @@ namespace Servers
 
         // get the PHP version
         QProcess process;
-        process.start(QDir::currentPath() + "./bin/php/php.exe -r \"echo PHP_VERSION_ID;\"");
+        process.start(QDir::currentPath() + "./bin/php/php.exe -n -r \"echo PHP_VERSION_ID;\"");
         process.waitForFinished();
-        int phpVersion = process.readAllStandardOutput().toInt();
+        int phpVersion = process.readLine().toInt();
         qDebug() << "[PHP] Version " << phpVersion;
 
         // check that the tool "php-cgi-spawner" is present
