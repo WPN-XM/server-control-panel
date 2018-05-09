@@ -98,6 +98,7 @@ namespace ServerControlPanel
         void enableToolsPushButtons(bool enabled);
         void updateTrayIconTooltip();
         void updateToolsPushButtons();
+        void updateServerStatusOnTray(QString serverName, bool enabled);
 
         void quitApplication();
 

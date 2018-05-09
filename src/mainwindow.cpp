@@ -34,7 +34,10 @@ namespace ServerControlPanel
         // set window size fixed
         setFixedSize(width(), height());
 
+        // TODO unhide scheduler - feature not ready yet. hide button for now
         ui->pushButton_Scheduler->hide();
+
+        // TODO unhide updater - feature not ready yet. hide button for now
         ui->pushButton_Updater->hide();
 
         connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
@@ -509,6 +512,28 @@ namespace ServerControlPanel
         if (label == "nginx" || label == "php") {
             updateToolsPushButtons();
         }
+
+        updateServerStatusOnTray(label, enabled);
+    }
+
+    void MainWindow::updateServerStatusOnTray(QString serverName, bool enabled)
+    {
+        QIcon icon;
+        if(enabled) {
+            icon = QIcon(":/status_run");
+        } else {
+            icon = QIcon(":/status_stop");
+        }
+
+        QList<QAction *> actions = tray->contextMenu()->actions();
+
+        const int listSize = actions.size();
+        for (int i = 0; i < listSize; ++i) {
+            QAction *action = actions.at(i);
+            if(action->iconText().toLower() == serverName) {
+                action->setIcon(icon);
+            }
+        }
     }
 
     void MainWindow::updateTrayIconTooltip()
@@ -541,7 +566,7 @@ namespace ServerControlPanel
             tip.append("Redis: running\n");
         }
 
-        tray->setMessage(tip);
+        tray->setMessage(tip);        
     }
 
     void MainWindow::updateToolsPushButtons()
