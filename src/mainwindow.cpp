@@ -1099,13 +1099,6 @@ namespace ServerControlPanel
             settings->set("global/editor", "notepad.exe");
 
             settings->set("paths/logs", "./logs");
-            settings->set("paths/php", "./bin/php");
-            settings->set("paths/nginx", "./bin/nginx");
-            settings->set("paths/mariadb", "./bin/mariadb/bin");
-            settings->set("paths/mongodb", "./bin/mongodb/bin");
-            settings->set("paths/memcached", "./bin/memcached");
-            settings->set("paths/postgresql", "./bin/pgsql/bin");
-            settings->set("paths/redis", "./bin/redis");
 
             settings->set("autostart/nginx", 1);
             settings->set("autostart/php", 1);
