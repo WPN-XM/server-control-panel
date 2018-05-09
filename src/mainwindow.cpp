@@ -634,19 +634,22 @@ namespace ServerControlPanel
             return "";
         }
 
-        QByteArray p_stdout = process.readAll();
+        QByteArray p_stdout = process.readLine();
 
         // string for regexp testing
         // QString p_stdout = "PHP 5.4.3 (cli) (built: Feb 29 2012 19:06:50)";
         // QString p_stdout = "PHP 7.0.0alpha2 (cli)  (non semantic version)";
+        // QString p_stdout = "PHP 7.1.1 (cli) (built: Jan 18 2017 18:50:48)";
 
         qDebug() << "[PHP] Version: \n" << p_stdout;
 
         // - grab inside "PHP x (cli)"
         // - "\\d.\\d.\\d." = grab "1.2.3"
         // - "(\\w+\\d+)?" = grab optional "alpha2" version
-        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)\\s\\(cli\\)");
+        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)");
         regex.indexIn(p_stdout);
+
+        //qDebug() << regex.capturedTexts();
 
         return regex.cap(1);
     }
