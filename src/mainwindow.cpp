@@ -625,7 +625,8 @@ namespace ServerControlPanel
         if (!QFile().exists("./bin/php/php.exe")) {
             return "0.0.0";
         }
-         QProcess process;
+
+        QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
         process.start("./bin/php/php.exe -v");
 
@@ -708,7 +709,7 @@ namespace ServerControlPanel
     QString MainWindow::getRedisVersion()
     {
         QProcess process;
-        process.start("./bin/redis/redis-server.exe -v");
+        process.start("./bin/redis/redis-server.exe", QStringList() << "--version");
 
         if (!process.waitForFinished()) {
             qDebug() << "[Redis] Version failed:" << process.errorString();
