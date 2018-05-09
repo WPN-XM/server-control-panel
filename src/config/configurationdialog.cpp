@@ -89,10 +89,13 @@ namespace Configuration
 
     void ConfigurationDialog::setServers(Servers::Servers *servers) { this->servers = servers; }
 
+    /**
+     * @brief ConfigurationDialog::readSettings
+     *
+     * Reads settings from INI and prefills config dialog items with default values.
+     */
     void ConfigurationDialog::readSettings()
     {
-        // read settings from INI and prefill config dialog items with default values
-
         ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
         ui->checkbox_autostartServers->setChecked(settings->get("global/autostartservers", false).toBool());
         ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
@@ -122,6 +125,9 @@ namespace Configuration
         ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->get("selfupdater/runonstartup", false).toBool());
         ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
         ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
+
+        ui->comboBox_SelfUpdater_Interval->setCurrentText(settings->get("selfupdater/interval", QVariant(QString("1"))).toString());
+        ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
         /**
    * Configuration > Components > Xdebug
@@ -198,6 +204,7 @@ namespace Configuration
     {
         // we convert the type "boolean" from isChecked() to "int".
         // because i like having a simple 0/1 in the INI file, instead of true/false.
+        // if boolean is saved as string to ini, you'll get "\x1" as value for true.
 
         /**
    * Page "Server Control Panel" - Tab "Configuration"
@@ -223,6 +230,9 @@ namespace Configuration
         settings->set("selfupdater/autoupdate", int(ui->checkBox_SelfUpdater_AutoUpdate->isChecked()));
         settings->set("selfupdater/autorestart", int(ui->checkBox_SelfUpdater_AutoRestart->isChecked()));
 
+        settings->set("selfupdater/interval", QString("1"));
+        //settings->set("selfupdater/last_time_checked", QVariant(0)).toDateTime());
+
         /**
    * Autostart Servers with the Server Control Panel
    */
@@ -247,10 +257,10 @@ namespace Configuration
    * Configuration > Components > XDebug
    */
 
-        settings->set("xdebug/remote_enable", QString(ui->checkBox_xdebug_remote_enable->isChecked()));
+        settings->set("xdebug/remote_enable", int(ui->checkBox_xdebug_remote_enable->isChecked()));
         settings->set("xdebug/remote_host", QString(ui->lineEdit_xdebug_remote_host->text()));
         settings->set("xdebug/remote_port", QString(ui->lineEdit_xdebug_remote_port->text()));
-        settings->set("xdebug/remote_autostart", QString(ui->checkBox_xdebug_remote_autostart->isChecked()));
+        settings->set("xdebug/remote_autostart", int(ui->checkBox_xdebug_remote_autostart->isChecked()));
         settings->set("xdebug/remote_handler", QString(ui->lineEdit_xdebug_remote_handler->text()));
         settings->set("xdebug/remote_mode", QString(ui->comboBox_xdebug_remote_mode->currentText()));
 
@@ -269,10 +279,10 @@ namespace Configuration
         settings->set("mongodb/bind_ip", QString(ui->lineEdit_mongodb_bindip->text()));
         settings->set("mongodb/port", QString(ui->lineEdit_mongodb_port->text()));
         settings->set("mongodb/storageengine", QString(ui->comboBox_mongodb_storageengine->currentText()));
-        settings->set("mongodb/fork", QString(ui->checkBox_mongodb_fork->isChecked()));
-        settings->set("mongodb/noauth", QString(ui->checkBox_mongodb_noauth->isChecked()));
-        settings->set("mongodb/rest", QString(ui->checkBox_mongodb_rest->isChecked()));
-        settings->set("mongodb/verbose", QString(ui->checkBox_mongodb_verbose->isChecked()));
+        settings->set("mongodb/fork", int(ui->checkBox_mongodb_fork->isChecked()));
+        settings->set("mongodb/noauth", int(ui->checkBox_mongodb_noauth->isChecked()));
+        settings->set("mongodb/rest", int(ui->checkBox_mongodb_rest->isChecked()));
+        settings->set("mongodb/verbose", int(ui->checkBox_mongodb_verbose->isChecked()));
         settings->set("mongodb/dbpath", QString(ui->lineEdit_mongodb_dbpath->text()));
 
         /**

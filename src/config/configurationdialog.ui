@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>8</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -638,7 +638,7 @@
         </layout>
        </widget>
       </widget>
-      <widget class="QLabel" name="label_9">
+      <widget class="QLabel" name="SelfUpdater_BigIcon">
        <property name="geometry">
         <rect>
          <x>380</x>
@@ -678,27 +678,22 @@
           <x>10</x>
           <y>20</y>
           <width>336</width>
-          <height>31</height>
+          <height>65</height>
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_8">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_SelfUpdater_Interval">
            <property name="text">
             <string>Update Check Interval</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="comboBox_2">
+         <item row="1" column="1">
+          <widget class="QComboBox" name="comboBox_SelfUpdater_Interval">
            <property name="enabled">
             <bool>true</bool>
            </property>
-           <item>
-            <property name="text">
-             <string>- off -</string>
-            </property>
-           </item>
            <item>
             <property name="text">
              <string>daily</string>
@@ -719,6 +714,41 @@
              <string>monthly</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Last Update Check</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDateTimeEdit" name="dateTimeEdit_SelfUpdater_Last_Time_Checked">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="wrapping">
+            <bool>false</bool>
+           </property>
+           <property name="frame">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="buttonSymbols">
+            <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="showGroupSeparator" stdset="0">
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
         </layout>
