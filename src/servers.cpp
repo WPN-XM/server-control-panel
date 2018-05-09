@@ -416,10 +416,15 @@ namespace Servers
  */
     void Servers::startPHP()
     {
-        // already running
-        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running ||
-            processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
+        // already running: PHP
+        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("PHP"), tr("PHP is already running."));
+            return;
+        }
+
+        // already running: Spawner
+        if (processes->getProcessState("spawn.exe") == Processes::ProcessState::Running) {
+            QMessageBox::warning(0, tr("PHP"), tr("Process Spawner for PHP is already running."));
             return;
         }
 
@@ -435,7 +440,7 @@ namespace Servers
 
         // get the PHP version
         QProcess process;
-        process.start("./bin/php/php.exe -r \"echo PHP_VERSION_ID;\"");
+        process.start(QDir::currentPath() + "./bin/php/php.exe -r \"echo PHP_VERSION_ID;\"");
         process.waitForFinished();
         int phpVersion = process.readAllStandardOutput().toInt();
         qDebug() << "[PHP] Version " << phpVersion;
