@@ -141,10 +141,16 @@ after_build:
   - copy %APPVEYOR_BUILD_FOLDER%\third-party\quazip\build\%CONFIGURATION%\quazip.exp %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.exp
   # 3) openssl
   - mkdir %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin
-  - copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
-  - copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll
-  - copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll
-  - copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll
+  # - C:\OpenSSL-Win32\bin
+  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
+  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll
+  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll
+  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll
+  # - C:\OpenSSL-Win64\bin
+  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
+  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll
+  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll
+  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll
   # cleanups
   - del *.obj
   - del *.o
