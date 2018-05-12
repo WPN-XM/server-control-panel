@@ -297,7 +297,7 @@ namespace Servers
 
         Processes::delay(250);
         Process p = Processes::findByName("nginx.exe");
-        if (p.name != "process not found") {
+        if (p.name == "nginx.exe") {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
         } else {
             emit signalMainWindow_ServerStatusChange("Nginx", false);
@@ -312,17 +312,44 @@ namespace Servers
             return;
         }
 
-        // http://wiki.nginx.org/CommandLine - stop nginx
-        const QString stopNginx = getServer("Nginx")->exe;
+        qDebug() << "[Nginx] Stopping...\n";
 
+        // The native stop command doesn't work on Windows.
+        // http://wiki.nginx.org/CommandLine "-s stop"
+        //
+        // It fails with "nginx: [error] CreateFile()"
+        // We could catch that string and force a process kill.
+        // The bug is known since years - no fix incomming.
+        //
+        // I've given up on this shit.
+        // Let's just do a  process multi kill.
+        // Fuck off. Seriously.
+        //
+
+        /*QString serverName = "nginx";
+        const QString stopNginx = getExecutable(serverName);
         QStringList args;
         args << "-p " + QDir::currentPath();
         args << "-c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
-        args << "-s stop";
-
-        qDebug() << "[Nginx] Stopping...\n";
-
+        args << "-s stop";        
         Processes::start(stopNginx, args, getServer("Nginx")->workingDirectory);
+
+        /*QProcess process;
+        process.start(stopNginx, args);
+        process.waitForFinished();
+
+        // because stopping might fail with "nginx: [error] CreateFile()"
+        // we need to catch it and force the shutdown with a process kill
+        QByteArray p_stdout = process.readLine();
+        qDebug() << p_stdout;
+        if(p_stdout.contains("nginx: [error] CreateFile()") == true) {*/
+
+        // you know what: process multi kill. fuck off.
+        while (processes->getProcessState("nginx.exe") == Processes::ProcessState::Running) {
+            qDebug() << "[Nginx] Stopped using process kill!";
+            processes->killProcessTree("nginx.exe");
+            processes->delay(100);
+        }
 
         emit signalMainWindow_ServerStatusChange("Nginx", false);
     }
