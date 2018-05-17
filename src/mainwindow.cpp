@@ -51,7 +51,7 @@ namespace ServerControlPanel
 
         renderServerStatusPanel();
 
-        updateServerStatusIndicators();
+        updateServerStatusIndicatorsForAlreadyRunningServers();
 
         createActions();
 
@@ -60,15 +60,15 @@ namespace ServerControlPanel
         // Status Table - Column Status
         // if process state of a server changes, then change the label status in
         // UI::MainWindow too
-        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)), this,
-                SLOT(setLabelStatusActive(QString, bool)));
+        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
+                this, SLOT(updateServerStatusIndicators(QString, bool)));
 
-        connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
+        //connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
 
         // if process state of NGINX and PHP changes,
         // then change the disabled/enabled state of pushButtons, too
-        connect(servers, SIGNAL(signalMainWindow_EnableToolsPushButtons(bool)), this,
-                SLOT(enableToolsPushButtons(bool)));
+        //connect(servers, SIGNAL(signalMainWindow_EnableToolsPushButtons(bool)), this,
+          //      SLOT(enableToolsPushButtons(bool)));
 
         // server autostart
         if (settings->get("global/autostartservers").toBool()) {
@@ -106,10 +106,12 @@ namespace ServerControlPanel
 
     Processes *MainWindow::getProcessesObject() { return processes; }
 
-    void MainWindow::updateServerStatusIndicators()
+    void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
-        foreach (Process process, processes->getRunningProcesses()) {
-
+        // TODO use whitelist of known processes
+        // instead of blacklisting+filtering on all processes
+        foreach (Process process, processes->getRunningProcesses())
+        {
             // exclude "some known" system processes
             if (processes->isSystemProcess(process.name)) {
                 continue;
@@ -121,10 +123,8 @@ namespace ServerControlPanel
 
             Servers::Server *server = servers->getServer(serverName);
 
-            // set indicators on main window and tray menu
             if (server->name != "Not Installed") {
-                setLabelStatusActive(serverName, true);
-                server->trayMenu->setIcon(QIcon(":/status_run"));
+                updateLabelStatus(serverName, true);
 
                 qDebug() << "[Processes Running][updateServerStatusIndicators]"""
                          << "The process" << processName << "has the Server" << server->name;
@@ -429,6 +429,23 @@ namespace ServerControlPanel
         }
     }
 
+    void MainWindow::updateServerStatusIndicators(QString server, bool enabled)
+    {
+        server = server.toLower();
+
+        updateLabelStatus(server, enabled);
+
+        // updateTrayIconTooltip();
+
+        if (server == "nginx" || server == "php") {
+            updateToolsPushButtons();
+        }
+
+        updateServerStatusOnTray(server, enabled);
+
+        updatePort(server, enabled);
+    }
+
     void MainWindow::enableToolsPushButtons(bool enabled)
     {
         // get all PushButtons from the Tools GroupBox of MainWindow::UI
@@ -481,40 +498,29 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::setLabelStatusActive(QString label, bool enabled)
-    {
-        label = label.toLower();
-        if (label == "nginx") {
+    void MainWindow::updateLabelStatus(QString server, bool enabled)
+    {        
+        if (server == "nginx") {
             ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->setEnabled(enabled);
         }
-        if (label == "php" || label == "php-cgi") {
+        if (server == "php" || server == "php-cgi") {
             ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->setEnabled(enabled);
         }
-        if (label == "mariadb" || label == "mysqld") {
+        if (server == "mariadb" || server == "mysqld") {
             ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")->setEnabled(enabled);
         }
-        if (label == "mongodb") {
+        if (server == "mongodb") {
             ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")->setEnabled(enabled);
         }
-        if (label == "memcached") {
+        if (server == "memcached") {
             ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")->setEnabled(enabled);
         }
-        if (label == "postgresql" || label == "postgres") {
+        if (server == "postgresql" || server == "postgres") {
             ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")->setEnabled(enabled);
         }
-        if (label == "redis" || label == "redis-server") {
+        if (server == "redis" || server == "redis-server") {
             ui->centralWidget->findChild<QLabel *>("label_Redis_Status")->setEnabled(enabled);
         }
-
-        updateTrayIconTooltip();
-
-        if (label == "nginx" || label == "php") {
-            updateToolsPushButtons();
-        }
-
-        updateServerStatusOnTray(label, enabled);
-
-        updatePort(label, enabled);
     }
 
     void MainWindow::updateServerStatusOnTray(QString serverName, bool enabled)
@@ -1295,13 +1301,13 @@ namespace ServerControlPanel
             if(server->name == "PHP") {
                 LabelWithHoverTooltip *labelPort = new LabelWithHoverTooltip();
                 labelPort->setObjectName(QString("label_" + server->name + "_Port"));
-                labelPort->setTooltipText(getPort(server->lowercaseName));
+                //labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
             } else {
                 QLabel *labelPort = new QLabel();
                 labelPort->setObjectName(QString("label_" + server->name + "_Port"));
-                labelPort->setText(getPort(server->lowercaseName));
+                //labelPort->setText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
             }

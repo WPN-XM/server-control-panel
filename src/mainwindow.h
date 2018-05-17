@@ -91,9 +91,11 @@ namespace ServerControlPanel
         void openLog();
         void openConfigurationInEditor();
 
-        void setLabelStatusActive(QString label, bool enabled);
+        void updateServerStatusIndicators(QString server, bool enabled);
+
+        void updateLabelStatus(QString server, bool enabled);
         void updateVersion(QString server);
-        void updatePort(QString port, bool enabled);
+        void updatePort(QString server, bool enabled);
 
         void enableToolsPushButtons(bool enabled);
         void updateTrayIconTooltip();
@@ -157,7 +159,7 @@ namespace ServerControlPanel
         void show_SelfUpdater_UpdateNotification(QJsonObject versionInfo);
         void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);
 
-        void updateServerStatusIndicators();
+        void updateServerStatusIndicatorsForAlreadyRunningServers();
 
     protected:
         void closeEvent(QCloseEvent *event);
