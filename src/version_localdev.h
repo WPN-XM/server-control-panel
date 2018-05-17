@@ -21,7 +21,7 @@
 #define VER_PRODUCTVERSION_STR VER_FILEVERSION_STR
 
 #define VER_COMPANYNAME_STR "Koch Softwaresystemtechnik"
-#define VER_COMPANYDOMAIN_STR "http://wpn-xm.org"
+#define VER_COMPANYDOMAIN_STR "https://wpn-xm.org"
 #define VER_FILEDESCRIPTION_STR "WPN-XM Server Control Panel"
 #define VER_INTERNALNAME_STR "WPN-XM SCP"
 #define VER_LEGALCOPYRIGHT_STR "Copyright (c) 2015 Koch Softwaresystemtechnik"

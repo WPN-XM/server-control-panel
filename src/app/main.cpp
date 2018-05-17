@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     app.setApplicationName(APP_NAME);
     app.setApplicationVersion(APP_VERSION);
     app.setOrganizationName("Jens-André Koch");
-    app.setOrganizationDomain("http://wpn-xm.org/");
+    app.setOrganizationDomain("https://wpn-xm.org/");
     app.setWindowIcon(QIcon(":/wpnxm.ico"));
 
     // do not leave application, until Quit is clicked in the tray menu

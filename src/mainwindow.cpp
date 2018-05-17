@@ -812,15 +812,15 @@ namespace ServerControlPanel
         servers->stopRedis();
     }
 
-    void MainWindow::goToWebsite() { QDesktopServices::openUrl(QUrl("http://wpn-xm.org/")); }
+    void MainWindow::goToWebsite() { QDesktopServices::openUrl(QUrl("https://wpn-xm.org/")); }
 
-    void MainWindow::goToForum() { QDesktopServices::openUrl(QUrl("http://forum.wpn-xm.org/")); }
+    void MainWindow::goToForum() { QDesktopServices::openUrl(QUrl("https://forum.wpn-xm.org/")); }
 
     void MainWindow::goToReportIssue() { QDesktopServices::openUrl(QUrl("https://github.com/WPN-XM/WPN-XM/issues/")); }
 
-    void MainWindow::goToDonate() { QDesktopServices::openUrl(QUrl("http://wpn-xm.org/#donate")); }
+    void MainWindow::goToDonate() { QDesktopServices::openUrl(QUrl("https://wpn-xm.org/#donate")); }
 
-    void MainWindow::openToolPHPInfo() { QDesktopServices::openUrl(QUrl("http://wpn.xm/index.php?page=phpinfo")); }
+    void MainWindow::openToolPHPInfo() { QDesktopServices::openUrl(QUrl("https://wpn.xm/index.php?page=phpinfo")); }
 
     void MainWindow::openToolPHPMyAdmin() { QDesktopServices::openUrl(QUrl("http://localhost/tools/phpmyadmin/")); }
 
@@ -1052,7 +1052,7 @@ namespace ServerControlPanel
                          "</td></tr>"
                          "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
                          "<tr><td align=center><b>Website</b></td><td><a "
-                         "href=\"https://wpn-xm.org/\">http://wpn-xm.org/</a><br></td></tr>"
+                         "href=\"https://wpn-xm.org/\">https://wpn-xm.org/</a><br></td></tr>"
                          "<tr><td align=center><b>Author</b></td><td>Jens A. Koch (c) 2011 "
                          "- ")
                           .append(year)
@@ -1063,11 +1063,11 @@ namespace ServerControlPanel
                                   "WPN-XM/WPN-XM/</a><br></td></tr>"
                                   "<tr><td align=center><b>Icons</b></td><td>We are using Yusukue "
                                   "Kamiyamane's Fugue Icon Set.<br><a "
-                                  "href=\"http://p.yusukekamiyamane.com/\">http://"
+                                  "href=\"https://p.yusukekamiyamane.com/\">http://"
                                   "p.yusukekamiyamane.com/</a><br></td></tr>"
                                   "<tr><td align=center><b>+1?</b></td><td>If you like using "
                                   "WPN-XM, consider supporting it:<br><a "
-                                  "href=\"http://wpn-xm.org/#donate\">http://wpn-xm.org/#donate</"
+                                  "href=\"https://wpn-xm.org/#donate\">https://wpn-xm.org/#donate</"
                                   "a><br></td></tr>"
                                   "<tr><td align=center><b>License</b></td><td>GNU/GPL version 3, "
                                   "or any later version.<br></td></tr>"
