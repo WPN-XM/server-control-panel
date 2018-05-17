@@ -58,6 +58,8 @@ namespace Servers
 
         void clearLogFile(const QString &serverName) const;
 
+        QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
+
     public slots:
 
         // Status Action Slots
@@ -106,12 +108,11 @@ namespace Servers
         void signalMainWindow_ServerStatusChange(QString label, bool enabled);
         void signalMainWindow_EnableToolsPushButtons(bool enabled);
         void signalMainWindow_updateVersion(QString server);
-        void signalMainWindow_updatePort(QString server);
+        void signalMainWindow_updatePort(QString server, bool enabled = true);
 
     private:
         QList<Server *> serverList;
 
-        QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
     };
 }
 #endif // SERVERS_H

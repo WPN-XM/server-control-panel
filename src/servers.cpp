@@ -282,7 +282,6 @@ namespace Servers
 
         clearLogFile("Nginx");
         emit signalMainWindow_updateVersion("Nginx");
-        emit signalMainWindow_updatePort("Nginx");
 
         // http://wiki.nginx.org/CommandLine - start Nginx
         QString program = getServer("Nginx")->exe;
@@ -296,6 +295,8 @@ namespace Servers
         Processes::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
 
         Processes::delay(250);
+
+        // catch startup failures
         Process p = Processes::findByName("nginx.exe");
         if (p.name == "nginx.exe") {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
@@ -351,7 +352,7 @@ namespace Servers
             processes->delay(100);
         }
 
-        emit signalMainWindow_ServerStatusChange("Nginx", false);
+        emit signalMainWindow_ServerStatusChange("Nginx", false);        
     }
 
     void Servers::reloadNginx()
@@ -396,7 +397,6 @@ namespace Servers
 
         clearLogFile("PostgreSQL");
         emit signalMainWindow_updateVersion("PostgreSQL");
-        emit signalMainWindow_updatePort("PostgreSQL");
 
         QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
@@ -484,13 +484,12 @@ namespace Servers
 
         clearLogFile("PHP");
         emit signalMainWindow_updateVersion("PHP");
-        // emit signalMainWindow_updatePort("PHP");
 
         // disable PHP_FCGI_MAX_REQUESTS to go beyond the default request limit of 500
         // requests
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("PHP_FCGI_MAX_REQUESTS", "0");
-        qDebug() << "[PHP] Set PHP_FCGI_MAX_REQUESTS \"0\" (disabled).";
+        qDebug() << "[PHP] Set ENV:PHP_FCGI_MAX_REQUESTS \"0\" (disabled).";
 
         // get the PHP version
         QProcess process;
@@ -507,27 +506,28 @@ namespace Servers
         }
 
         // if PHP version below 7.1, use "spawn.exe" to spawn multiple processes
-        QString startCmdWithPlaceholders(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
+        QString startCmdStringTemplate(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
         // get the nginx upstream configuration and read the defined PHP pools
-        QMapIterator<QString, QString> PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
+        QMap<QString, QString> PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
 
-        while (PHPServersToStart.hasNext()) {
-            PHPServersToStart.next();
-            QString port = PHPServersToStart.key();
-            QString phpchildren = PHPServersToStart.value();
+        auto end = PHPServersToStart.cend();
+        for (auto item = PHPServersToStart.cbegin(); item != end; ++item)
+        {
+            QString port = item.key();
+            QString phpchildren = item.value();
 
             // if PHP version 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP
             // spawning childs
             if (phpVersion >= 71000) {
                 env.insert("PHP_FCGI_CHILDREN", phpchildren);
-                qDebug() << "[PHP] Set PHP_FCGI_CHILDREN " << phpchildren;
+                qDebug() << "[PHP] Set ENV:PHP_FCGI_CHILDREN " << phpchildren;
 
-                startCmdWithPlaceholders.clear();
-                startCmdWithPlaceholders.append(QDir::currentPath() + "/bin/php/php-cgi.exe");
+                startCmdStringTemplate.clear();
+                startCmdStringTemplate.append(QDir::currentPath() + "/bin/php/php-cgi.exe");
             }
 
-            QString startPHPCGI = QString(startCmdWithPlaceholders).arg(port, phpchildren);
+            QString startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
 
             qDebug() << "[PHP] Starting...\n" << startPHPCGI;
 
@@ -645,7 +645,6 @@ namespace Servers
 
         clearLogFile("MariaDb");
         emit signalMainWindow_updateVersion("MariaDb");
-        emit signalMainWindow_updatePort("MariaDb");
 
         QString const startMariaDb = getServer("MariaDb")->exe;
 
@@ -747,7 +746,6 @@ namespace Servers
         }
 
         emit signalMainWindow_updateVersion("MongoDb");
-        emit signalMainWindow_updatePort("MongoDb");
 
         // build mongo start command
         QString const mongoStartCommand = getServer("MongoDb")->exe;
@@ -833,7 +831,6 @@ namespace Servers
         }
 
         emit signalMainWindow_updateVersion("Memcached");
-        emit signalMainWindow_updatePort("Memcached");
 
         qDebug() << "[Memcached] Starting...\n";
 
@@ -894,7 +891,6 @@ namespace Servers
 
         clearLogFile("Redis");
         emit signalMainWindow_updateVersion("Redis");
-        emit signalMainWindow_updatePort("Redis");
 
         qDebug() << "[Redis] Starting...\n" << redisStartCommand;
 

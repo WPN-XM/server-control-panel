@@ -11,12 +11,14 @@ class LabelWithHoverTooltip : public QLabel
 
 public:
     explicit LabelWithHoverTooltip(QWidget *parent = 0);
-    void enableToolTip(bool value = true);
-    void setText(const QString &value);
+    void enableToolTip(bool enabled);
+    void setTooltipText(const QString &value);
 
 private:
     void openBalloonTipForPHP(const QString &message);
     BalloonTip *balloonTip = nullptr;
+    QString myText;
+    bool tooltipEnabled;
 
 protected:
     void enterEvent(QEvent *event);

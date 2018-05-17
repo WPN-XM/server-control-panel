@@ -93,7 +93,7 @@ namespace ServerControlPanel
 
         void setLabelStatusActive(QString label, bool enabled);
         void updateVersion(QString server);
-        void updatePort(QString port);
+        void updatePort(QString port, bool enabled);
 
         void enableToolsPushButtons(bool enabled);
         void updateTrayIconTooltip();
@@ -134,6 +134,7 @@ namespace ServerControlPanel
 
         void renderServerStatusPanel();
 
+        QString getRootFolder() const;
         QString getProjectFolder() const;
         void showPushButtonsOnlyForInstalledTools();
 

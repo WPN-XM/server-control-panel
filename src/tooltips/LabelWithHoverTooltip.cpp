@@ -11,13 +11,14 @@ LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget *parent) : QLabel(parent)
     setTextFormat(Qt::PlainText);
 }
 
-void LabelWithHoverTooltip::setText(const QString &value)
+void LabelWithHoverTooltip::enableToolTip(bool enabled)
 {
-    if (objectName() == "label_PHP_Port") {
-        text() = "The following upstreams are running: \n \n bla \n blubb \n " + value;
-    } else {
-        text() = value;
-    }
+    tooltipEnabled = enabled;
+}
+
+void LabelWithHoverTooltip::setTooltipText(const QString &value)
+{
+    myText = value;
 }
 
 void LabelWithHoverTooltip::openBalloonTipForPHP(const QString &message)
@@ -25,23 +26,25 @@ void LabelWithHoverTooltip::openBalloonTipForPHP(const QString &message)
     balloonTip = new BalloonTip("PHP Upstreams", message, 1000, this);
     balloonTip->setArrowPosition(BalloonTip::LeftTop);
     balloonTip->move(QCursor::pos());
-    balloonTip->show();
+    balloonTip->show();    
 }
 
 void LabelWithHoverTooltip::enterEvent(QEvent *event)
 {
-    qDebug() << Q_FUNC_INFO << objectName();
+    if(!tooltipEnabled) {
+        return;
+    }
     if (objectName() == "label_PHP_Port") {
-        qDebug() << text();
-        openBalloonTipForPHP(text());
+        openBalloonTipForPHP(myText);
     }
     QWidget::enterEvent(event);
 }
 
 void LabelWithHoverTooltip::leaveEvent(QEvent *event)
 {
-    qDebug() << Q_FUNC_INFO << objectName();
-
+    if(!tooltipEnabled) {
+        return;
+    }
     if (balloonTip != 0) {
         balloonTip->close();
         delete balloonTip;
