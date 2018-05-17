@@ -671,6 +671,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[MariaDb] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("MariaDb", false);
             return;
         }
 
@@ -702,7 +703,15 @@ namespace Servers
 
         Processes::start(stopCommand, args, getServer("MariaDb")->workingDirectory);
 
-        emit signalMainWindow_ServerStatusChange("MariaDb", false);
+        Processes::delay(250);
+
+        // catch shutdown failures
+        Process p = Processes::findByName("mysqld.exe");
+        if (p.name == "nginx.exe") {
+            emit signalMainWindow_ServerStatusChange("MariaDb", true);
+        } else {
+            emit signalMainWindow_ServerStatusChange("MariaDb", false);
+        }
     }
 
     void Servers::restartMariaDb()

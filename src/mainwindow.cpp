@@ -803,9 +803,9 @@ namespace ServerControlPanel
 
     void MainWindow::stopAllServers()
     {
-        servers->stopMariaDb();
-        servers->stopPHP();
         servers->stopNginx();
+        servers->stopPHP();
+        servers->stopMariaDb();
         servers->stopMongoDb();
         servers->stopMemcached();
         servers->stopPostgreSQL();
