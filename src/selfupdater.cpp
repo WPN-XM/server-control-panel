@@ -65,7 +65,6 @@ namespace Updater
         qDebug() << "[SelfUpdater] LastTimeChecked: " << QVariant(lastTimeChecked).toDateTime().toString(Qt::ISODate);
         qDebug() << "[SelfUpdater] TimeForUpdateChecked: " << timeForUpdateCheck;
 
-
         // run update in 3 cases
         // 1. userRequestedUpdate = forced update run, regardless of interval
         // 2. lastTimeCheck 0 = an update was never done before
