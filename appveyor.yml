@@ -139,7 +139,10 @@ after_build:
   - copy %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.dll %APPVEYOR_BUILD_FOLDER%\libs\quazip\bin\quazip.dll
   - copy %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\quazip.dll
   - copy %APPVEYOR_BUILD_FOLDER%\third-party\quazip\build\%CONFIGURATION%\quazip.exp %APPVEYOR_BUILD_FOLDER%\libs\quazip\lib\quazip.exp
-  # 3) openssl
+  # 3) yaml-cpp
+  - copy %APPVEYOR_BUILD_FOLDER%\libs\yaml-cpp\bin\yaml-cpp.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\yaml-cpp.dll
+  # - no exports for yaml-cpp?
+  # 4) openssl
   - mkdir %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin
   # - C:\OpenSSL-Win32\bin
   - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
