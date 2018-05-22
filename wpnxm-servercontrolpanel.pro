@@ -63,7 +63,8 @@ release {
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
 release {
-   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
+   # yaml-cpp => libyaml-cppmd - this is so stupid
+   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
     unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
 }
 
