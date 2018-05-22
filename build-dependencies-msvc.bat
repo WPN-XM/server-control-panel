@@ -3,16 +3,18 @@
 echo.
 echo Building dependencies using MSVC
 echo. 
-echo Using CMake Generator: Visual Studio 14 2015 Win64 =  (x86_amd64)
+echo Using CMake Generator: Visual Studio 14 2015 Win64 = (x86_amd64)
 echo.
 
 echo -- Set Qt folder
 echo.
-SET "QTVERSION=5.9.2\msvc2017_64"
-SET QTDIR=C:\Qt\%QTVERSION%
-rem SET PATH=%QTDIR%\bin;%QTDIR%;%PATH%
+SET "QTVERSION=Qt5.10.1\5.10.1\msvc2017_64"
+SET QTDIR=D:\Qt\%QTVERSION%
+SET PATH=%QTDIR%\bin;%QTDIR%;%PATH%
 echo %QTDIR%\bin
 call %QTDIR%\bin\qtenv2.bat
+qmake -v
+echo.
 
 SET "platform=amd64"
 SET "MSBUILD_FLAGS=/verbosity:minimal /maxcpucount /nologo"
@@ -40,7 +42,7 @@ echo.
 echo -- Building QuaZip
 echo.
 pushd "%~dp0"
-cd third-party\quazip\quazip
+cd third-party\quazip
 :: 0) cleanup
 rm -rf build
 :: 1) configure
@@ -72,3 +74,5 @@ msbuild INSTALL.vcxproj %MSBUILD_FLAGS%
 popd
 echo Done.
 echo.
+
+pause

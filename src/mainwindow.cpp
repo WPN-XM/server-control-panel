@@ -1157,7 +1157,7 @@ namespace ServerControlPanel
             settings->set("memcached/maxconnections", "2048");
             settings->set("memcached/maxmemory", "2048");
 
-            settings->set("mongodb/config", "./bin/mongodb/mongodb.conf");
+            settings->set("mongodb/config", "./bin/mongodb/mongod.conf");
             settings->set("mongodb/port", 27015);
 
             settings->set("postgresql/config", "./bin/pgsql/data/postgresql.conf");

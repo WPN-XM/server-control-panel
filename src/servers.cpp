@@ -760,17 +760,21 @@ namespace Servers
         QString const mongoStartCommand = getServer("MongoDb")->exe;
 
         QStringList args;
-        args << "--config " + QDir::currentPath() + "/bin/mongodb/mongodb.conf";
+        args << "--config " + QDir::currentPath() + "/bin/mongodb/mongod.conf";
         args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
         args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
-        args << "--storageEngine=" + settings->get("mongodb/storageengine", "wiredTiger").toString();
-        args << "--journal --httpinterface --rest";
 
         qDebug() << "[MongoDb] Starting...\n";
 
         Processes::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
 
-        emit signalMainWindow_ServerStatusChange("MongoDb", true);
+        // catch startup failures
+        Process p = Processes::findByName("mongod.exe");
+        if (p.name == "mongod.exe") {
+            emit signalMainWindow_ServerStatusChange("MongoDb", true);
+        } else {
+            emit signalMainWindow_ServerStatusChange("MongoDb", false);
+        }
     }
 
     void Servers::stopMongoDb()
@@ -801,7 +805,15 @@ namespace Servers
 
         Processes::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
-        emit signalMainWindow_ServerStatusChange("MongoDb", false);
+        Processes::delay(250);
+
+        // catch shutdown failures
+        Process p = Processes::findByName("mongod.exe");
+        if (p.name == "nginx.exe") {
+            emit signalMainWindow_ServerStatusChange("MongoDb", true);
+        } else {
+            emit signalMainWindow_ServerStatusChange("MongoDb", false);
+        }
     }
 
     void Servers::restartMongoDb()

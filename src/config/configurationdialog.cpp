@@ -3,6 +3,8 @@
 
 #include "src/file/ini.h"
 #include "src/file/json.h"
+#include "src/file/yml.h"
+#include <yaml-cpp/yaml.h>
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
 
@@ -163,16 +165,13 @@ namespace Configuration
 
         ui->lineEdit_mongodb_bindip->setText(
             settings->get("mongodb/bind_ip", QVariant(QString("127.0.0.1"))).toString());
-        ui->lineEdit_mongodb_port->setText(settings->get("mongodb/port", QVariant(QString("27017"))).toString());
-        ui->comboBox_mongodb_storageengine->setCurrentIndex(ui->comboBox_mongodb_storageengine->findText(
-            settings->get("mongodb/storageengine", QVariant(QString("wiredTiger"))).toString()));
-        ui->checkBox_mongodb_fork->setChecked(settings->get("mongodb/fork", true).toBool());
-        ui->checkBox_mongodb_rest->setChecked(settings->get("mongodb/rest", true).toBool());
-        ui->checkBox_mongodb_verbose->setChecked(settings->get("mongodb/verbose", true).toBool());
-        ui->checkBox_mongodb_noauth->setChecked(settings->get("mongodb/noauth", true).toBool());
+
+        ui->lineEdit_mongodb_port->setText(
+            settings->get("mongodb/port", QVariant(QString("27017"))).toString());
+
         ui->lineEdit_mongodb_dbpath->setText(
-            settings->get("mongodb/dbpath", QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db")))
-                .toString());
+            settings->get("mongodb/dbpath",
+                          QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db"))).toString());
 
         /**
    * Configuration > Components > PostgreSQL
@@ -278,11 +277,6 @@ namespace Configuration
 
         settings->set("mongodb/bind_ip", QString(ui->lineEdit_mongodb_bindip->text()));
         settings->set("mongodb/port", QString(ui->lineEdit_mongodb_port->text()));
-        settings->set("mongodb/storageengine", QString(ui->comboBox_mongodb_storageengine->currentText()));
-        settings->set("mongodb/fork", int(ui->checkBox_mongodb_fork->isChecked()));
-        settings->set("mongodb/noauth", int(ui->checkBox_mongodb_noauth->isChecked()));
-        settings->set("mongodb/rest", int(ui->checkBox_mongodb_rest->isChecked()));
-        settings->set("mongodb/verbose", int(ui->checkBox_mongodb_verbose->isChecked()));
         settings->set("mongodb/dbpath", QString(ui->lineEdit_mongodb_dbpath->text()));
 
         /**
@@ -309,22 +303,22 @@ namespace Configuration
         /**
    * Tab "Upstream" > Page "Nginx"
    */
-        saveSettings_Nginx_Upstream();
+//saveSettings_Nginx_Upstream();
 
         /**
    * Tab "Configuration" > Page "MariaDB"
    */
-        saveSettings_MariaDB_Configuration();
+        //saveSettings_MariaDB_Configuration();
 
         /**
    * Tab "Configuration" > Page "Regis"
    */
-        saveSettings_Redis_Configuration();
+        //saveSettings_Redis_Configuration();
 
         /**
    *Tab "Configuration" > Page "MongoDB"
    */
-        // saveSettings_MongoDB_Configuration();
+        saveSettings_MongoDB_Configuration();
     }
 
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
@@ -444,6 +438,8 @@ namespace Configuration
 
     void ConfigurationDialog::saveSettings_MongoDB_Configuration()
     {
+        qDebug() << Q_FUNC_INFO;
+
         // TODO fix crash: QWaitCondition: Destroyed while threads are still waiting
 
         QString file = settings->get("mongodb/config").toString();
@@ -454,7 +450,7 @@ namespace Configuration
         // TODO switch to YAML (because the newer Mongodb versions use YAML as config
         // format)
 
-        File::INI *ini = new File::INI(file.toLatin1());
+        /*File::INI *ini = new File::INI(file.toLatin1());
 
         ini->setStringValue("mongodb", "bind_ip", ui->lineEdit_mongodb_bindip->text().toLatin1());
         ini->setStringValue("mongodb", "port", ui->lineEdit_mongodb_port->text().toLatin1());
@@ -465,7 +461,15 @@ namespace Configuration
         ini->setBoolValue("mongodb", "noauth", ui->checkBox_mongodb_noauth->isChecked());
         ini->setStringValue("mongodb", "dbpath", ui->lineEdit_mongodb_dbpath->text().toLatin1());
 
-        ini->writeConfigFile();
+        ini->writeConfigFile();*/
+
+        File::Yml o = File::Yml();
+        YAML::Node config = o.load(file);
+        qDebug() << config;
+        for (YAML::const_iterator it = config.begin(); it != config.end(); ++it){
+            std::cout << "First: " << it->first.as<std::string>() << "\n";
+            // it->second.as<std::string>(); // can't do this until it's type is checked!!
+        }
     }
 
     void ConfigurationDialog::saveSettings_Nginx_Upstream()

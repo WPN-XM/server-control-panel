@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>6</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1862,66 +1862,14 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QLabel" name="label_mongodb_storageengine">
-          <property name="text">
-           <string>Storage Engine</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QComboBox" name="comboBox_mongodb_storageengine">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <item>
-           <property name="text">
-            <string>wiredTiger</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>mmapv1</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QCheckBox" name="checkBox_mongodb_fork">
-          <property name="text">
-           <string>Fork</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QCheckBox" name="checkBox_mongodb_rest">
-          <property name="text">
-           <string>Rest</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QCheckBox" name="checkBox_mongodb_verbose">
-          <property name="text">
-           <string>Verbose</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QCheckBox" name="checkBox_mongodb_noauth">
-          <property name="text">
-           <string>NoAuth</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1">
-         <widget class="QLineEdit" name="lineEdit_mongodb_dbpath"/>
-        </item>
-        <item row="7" column="0">
          <widget class="QLabel" name="label_mongodb_dbpath">
           <property name="text">
            <string>DB Path</string>
           </property>
          </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit_mongodb_dbpath"/>
         </item>
        </layout>
       </widget>
