@@ -707,7 +707,7 @@ namespace Servers
 
         // catch shutdown failures
         Process p = Processes::findByName("mysqld.exe");
-        if (p.name == "nginx.exe") {
+        if (p.name == "mysqld.exe") {
             emit signalMainWindow_ServerStatusChange("MariaDb", true);
         } else {
             emit signalMainWindow_ServerStatusChange("MariaDb", false);
