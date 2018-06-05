@@ -60,39 +60,37 @@ Process Processes::findByPid(const QString &pid)
 // process whitelist
 QStringList Processes::getProcessNamesToSearchFor()
 {
-    QStringList processesToSearch;
+    QStringList p;
 
-    processesToSearch << "nginx"
-                      << "apache"
-                      << "memcached"
-                      << "mysqld"
-                      << "spawn"
-                      << "php-cgi-spawner"
-                      << "php-cgi"
-                      << "mongod"
-                      << "postgres"
-                      << "redis-server";
+    p << "nginx"
+      << "apache"
+      << "memcached"
+      << "mysqld"
+      << "php-cgi-spawner"
+      << "php-cgi"
+      << "mongod"
+      << "postgres"
+      << "redis-server";
 
-    return processesToSearch;
+    return p;
 }
 
 bool Processes::areThereAlreadyRunningProcesses()
 {
-    qDebug() << "[Processes]"
-             << "Check for already running processes.";
+    qDebug() << "[Processes] Check for already running processes.";
 
     QStringList processesToSearch = getProcessNamesToSearchFor();
 
     // foreach processesToSearch take a look in the runningProcessesList
     for (int i = 0; i < processesToSearch.size(); ++i) {
-        qDebug() << "Searching for process: " << processesToSearch.at(i).toLocal8Bit().constData();
+        qDebug() << "Searching for process:" << processesToSearch.at(i).toLocal8Bit().constData();
         foreach (Process process, getRunningProcesses()) {
             if (isSystemProcess(process.name)) {
                 continue;
             }
 
             if (process.name.contains(processesToSearch.at(i).toLatin1().constData())) {
-                qDebug() << "Found: " << process.name;
+                qDebug() << "Found:" << process.name;
                 monitoredProcessesList.append(process);
             }
         }
@@ -240,11 +238,11 @@ QList<PidAndPort> Processes::getPorts()
     return ports;
 }
 
-Processes::ProcessState Processes::getProcessState(const QString &processName) const
+Processes::ProcessState Processes::getProcessState(const QString &name) const
 {
-    Process p = findByName(processName);
+    Process p = findByName(name);
 
-    qDebug("[Processes::getProcessState] %s : %s", processName.toLatin1().constData(), p.name.toLatin1().constData());
+    // qDebug("[Processes::getProcessState] Name %s | ProcessName %s", name.toLatin1().constData(), p.name.toLatin1().constData());
 
     return (p.name == "process not found") ? ProcessState::NotRunning : ProcessState::Running;
 }
@@ -252,7 +250,7 @@ Processes::ProcessState Processes::getProcessState(const QString &processName) c
 // static
 bool Processes::killProcess(qint64 pid)
 {
-    qDebug() << "going to kill process of pid:" << pid;
+    // qDebug() << "going to kill process of pid:" << pid;
 
     HANDLE hProcess;
 
@@ -278,7 +276,7 @@ bool Processes::killProcess(qint64 pid)
 // static
 bool Processes::killProcessTree(qint64 pid)
 {
-    qDebug() << "going to kill process tree of pid:" << pid;
+    // qDebug() << "going to kill process tree of pid:" << pid;
 
     PROCESSENTRY32 pe;
     memset(&pe, 0, sizeof(PROCESSENTRY32));

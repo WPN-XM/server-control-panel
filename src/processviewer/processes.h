@@ -42,9 +42,10 @@ public:
     static void release();
     static Processes *theInstance;
 
-    // static QList<Process> getProcessesList();
-    // static QList<PidAndPort> getPortsList();
     static QList<Process> getMonitoredProcessesList();
+    static QList<Process> getRunningProcesses();
+
+    static QList<PidAndPort> getPorts();
 
     static bool killProcess(qint64 pid);
     static bool killProcess(const QString &name);
@@ -54,9 +55,6 @@ public:
 
     static Process findByName(const QString &name);
     static Process findByPid(const QString &pid);
-
-    static QList<Process> getRunningProcesses();
-    static QList<PidAndPort> getPorts();
 
     static bool areThereAlreadyRunningProcesses();
 
@@ -70,7 +68,7 @@ public:
     };
     Q_ENUM(ProcessState)
 
-    ProcessState getProcessState(const QString &processName) const;
+    ProcessState getProcessState(const QString &name) const;
 
     static bool start(const QString &program, const QStringList &arguments, const QString &workingDir = QString());
     static bool start(const QString &program, const QStringList &arguments);
@@ -84,16 +82,14 @@ public:
 
     static void delay(int millisecondsToWait);
 
+    static QList<Process> monitoredProcessesList;
+    static QStringList getProcessNamesToSearchFor();
 private:
     // constructor is private, because singleton
     explicit Processes();
 
-    static QList<Process> monitoredProcessesList;
-
     static QStringList getProcessDetails(DWORD processID);
     static QString getSizeHumanReadable(float bytes);
-
-    static QStringList getProcessNamesToSearchFor();
 
     static QString qt_create_commandline(const QString &program, const QStringList &arguments);
 };
