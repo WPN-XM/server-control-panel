@@ -111,6 +111,7 @@ int main(int argc, char *argv[])
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
     if (processes->areThereAlreadyRunningProcesses()) {
+        // this fills monitoredProcessesList
         splash.hide();
         // displayShutdownAlreadyRunningProcessesOrContinueDialog
         /*AlreadyRunningProcessesDialog *arpd = new AlreadyRunningProcessesDialog();

@@ -63,13 +63,6 @@ namespace ServerControlPanel
         connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
                 this, SLOT(updateServerStatusIndicators(QString, bool)));
 
-        //connect(servers, SIGNAL(signalMainWindow_updateVersion(QString)), this, SLOT(updateVersion(QString)));
-
-        // if process state of NGINX and PHP changes,
-        // then change the disabled/enabled state of pushButtons, too
-        //connect(servers, SIGNAL(signalMainWindow_EnableToolsPushButtons(bool)), this,
-          //      SLOT(enableToolsPushButtons(bool)));
-
         // server autostart
         if (settings->get("global/autostartservers").toBool()) {
             qDebug() << "[Servers] Autostart enabled";
@@ -78,12 +71,12 @@ namespace ServerControlPanel
 
         updateTrayIconTooltip();
         updateToolsPushButtons();
-
+#ifdef QT_DEBUG
         if (settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
         }
 
-#ifdef QT_DEBUG
+
         ui->pushButton_Updater->setEnabled(true);
 #endif
     }
@@ -108,26 +101,21 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
-        // TODO use whitelist of known processes
-        // instead of blacklisting+filtering on all processes
-        foreach (Process process, processes->getRunningProcesses())
+        Processes *oProcesses = getProcessesObject();
+
+        QStringList installedServers = servers->getInstalledServerNames();
+        installedServers << "php-cgi";
+
+        foreach (Process process, oProcesses->monitoredProcessesList)
         {
-            // exclude "some known" system processes
-            if (processes->isSystemProcess(process.name)) {
-                continue;
-            }
-
             QString processName = process.name.section(".", 0, 0);
+            //qDebug() << Q_FUNC_INFO << processName;
 
-            QString serverName = servers->getCamelCasedServerName(processName);
-
-            Servers::Server *server = servers->getServer(serverName);
-
-            if (server->name != "Not Installed") {
-                updateLabelStatus(serverName, true);
-
+            if(installedServers.contains(processName)) {
                 qDebug() << "[Processes Running][updateServerStatusIndicators]"""
-                         << "The process" << processName << "has the Server" << server->name;
+                         << "for Process" << processName;
+
+                updateServerStatusIndicators(processName, true);
             }
         }
     }
@@ -435,9 +423,9 @@ namespace ServerControlPanel
 
         updateLabelStatus(server, enabled);
 
-        // updateTrayIconTooltip();
+        updateTrayIconTooltip();
 
-        if (server == "nginx" || server == "php") {
+        if (server == "nginx" || server == "php" || server == "php-cgi") {
             updateToolsPushButtons();
         }
 
@@ -1479,10 +1467,10 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updateVersion(QString server)
-    {
-        QString version = getVersion(server);
+    {       
         QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != 0) {
+            QString version = getVersion(server);
             label->setText(version);
         }
     }
@@ -1502,7 +1490,7 @@ namespace ServerControlPanel
         if (s == "mariadb") {
             return getMariaPort();
         }
-        if (s == "php") {
+        if (s == "php" || s == "php-cgi") {
             return getPHPPort();
         }
         if (s == "postgresql") {
@@ -1518,31 +1506,38 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updatePort(QString server, bool enabled)
-    {
-        QString srvname = servers->getCamelCasedServerName(server);
-
-        if(srvname == "PHP") {
-            if(enabled) {
-                QString port = getPort(server);
-                // show Label to indicate that a HoverTooltip is available
-                QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_PHP_Port");
-                label->setText("Pool*");
-                // Tooltip
-                LabelWithHoverTooltip *tip = qApp->activeWindow()->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                tip->enableToolTip(true);
-                tip->setTooltipText(port);
+    {        
+        if(server == "php") {
+            if(enabled == true) {
+                // show Label Text to indicate that a HoverTooltip is available
+                QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
+                if(label != 0) {
+                    label->setText("Pool*");
+                }
+                // enable hover tooltip + show PHP ports and childs text
+                LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                if(tip != 0) {
+                    tip->enableToolTip(true);
+                    tip->setTooltipText(getPHPPort());
+                }
             } else {
-                // show Label to indicate that a HoverTooltip is available
-                QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_PHP_Port");
-                label->setText("");
-                // Tooltip
-                LabelWithHoverTooltip *tip = qApp->activeWindow()->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                tip->enableToolTip(false);
-                tip->setTooltipText("");
+                // clear label
+                QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
+                if(label != 0) {
+                    label->setText("");
+                }
+                // deactivate hover tooltip
+                LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                    if(tip != 0) {
+                    tip->enableToolTip(false);
+                    tip->setTooltipText("");
+                }
 
             }
         } else {
-            QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + srvname + "_Port");
+            qDebug() << server << enabled;
+            QString srvname = servers->getCamelCasedServerName(server);
+            QLabel *label = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
             if(label != 0) {
                 if(enabled) {
                     QString port = getPort(server);
@@ -1567,7 +1562,7 @@ namespace ServerControlPanel
         QMap<QString, QString> PHPServers = servers->getPHPServersFromNginxUpstreamConfig();
 
         // string template used during iteration
-        QString portStringTemplate("  Port: %1 Childs: %2 \n");
+        const QString portStringTemplate("  Port: %1 (%2 Childs) \n");
 
         QString result;
 

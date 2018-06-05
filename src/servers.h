@@ -48,13 +48,14 @@ namespace Servers
 
         QList<Server *> servers() const;
         QStringList getListOfServerNames() const;
-        QStringList getListOfServerNamesInstalled();
+        QStringList getInstalledServerNames();
         QString getCamelCasedServerName(QString &serverName) const;
         Server *getServer(const QString &serverName) const;
         QString getExecutable(QString &serverName) const;
+        QString getExecutablePath(QString &serverName) const;
         QString getServerBinPath(QString &serverName) const;
 
-        QStringList getLogFiles(QString &serverName) const;
+        QStringList getLogFiles(const QString &serverName) const;
 
         void clearLogFile(const QString &serverName) const;
 
