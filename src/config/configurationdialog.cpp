@@ -4,9 +4,12 @@
 #include "src/file/ini.h"
 #include "src/file/json.h"
 #include "src/file/yml.h"
-#include <yaml-cpp/yaml.h>
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
+
+//#include <QTextStream>
+
+#include "third-party/qyaml/qyaml/qyaml.h"
 
 namespace Configuration
 {
@@ -323,7 +326,7 @@ namespace Configuration
 
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
     {
-        QString file = settings->get("postgresql/config").toString();
+        QString file = QDir(settings->get("postgresql/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
             qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
@@ -345,7 +348,8 @@ namespace Configuration
     void ConfigurationDialog::saveSettings_Redis_Configuration()
     {
         // get redis configuration file path
-        QString file = settings->get("redis/config").toString();
+        QString file = QDir(settings->get("redis/config").toString()).absolutePath();
+
 
         if (!QFile(file).exists()) {
             qDebug() <<  "[Error][" << Q_FUNC_INFO << "] redis/config not found";
@@ -398,7 +402,7 @@ namespace Configuration
     {
         // get xdebug configuration file path
         // xdebug configuration directives are set in php.ini
-        QString file = settings->get("php/config").toString();
+        QString file = QDir(settings->get("php/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
             qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
@@ -423,7 +427,7 @@ namespace Configuration
 
     void ConfigurationDialog::saveSettings_MariaDB_Configuration()
     {
-        QString file = settings->get("mariadb/config").toString();
+        QString file = QDir(settings->get("mariadb/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
             qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
@@ -436,13 +440,17 @@ namespace Configuration
         ini->writeConfigFile();
     }
 
+    QString toString(std::string s)
+    {
+        return QString( s.c_str() );
+    }
+
     void ConfigurationDialog::saveSettings_MongoDB_Configuration()
     {
         qDebug() << Q_FUNC_INFO;
 
-        // TODO fix crash: QWaitCondition: Destroyed while threads are still waiting
+        QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
 
-        QString file = settings->get("mongodb/config").toString();
         if (!QFile(file).exists()) {
             qDebug() << "[Error]" << file << "not found";
         }
@@ -463,13 +471,23 @@ namespace Configuration
 
         ini->writeConfigFile();*/
 
-        File::Yml o = File::Yml();
-        YAML::Node config = o.load(file);
-        qDebug() << config;
-        for (YAML::const_iterator it = config.begin(); it != config.end(); ++it){
-            std::cout << "First: " << it->first.as<std::string>() << "\n";
-            // it->second.as<std::string>(); // can't do this until it's type is checked!!
+        File::Yml *o = new File::Yml();
+        YAML::Node config = o->load(file);
+        const YAML::Node& storage = config["storage"]["dbpath"];
+
+        for (YAML::const_iterator it = storage.begin(); it != storage.end(); ++it){
+            qDebug() << "Key: " << toString(it->first.as<std::string>());
+            /*switch (it.Type()) {
+              case Null: // ...
+              case Scalar: // ...
+              case Sequence: // ...
+              case Map: // ...
+              case Undefined: // ...
+            }*/
+            qDebug() << toString(it->second.as<std::string>());
+            //qDebug() << "Val: " << toString(it->second.as<std::string>()) << "\n";
         }
+
     }
 
     void ConfigurationDialog::saveSettings_Nginx_Upstream()
@@ -659,7 +677,7 @@ namespace Configuration
 
     void ConfigurationDialog::hideAutostartCheckboxesOfNotInstalledServers()
     {
-        QStringList installed = this->servers->getListOfServerNamesInstalled();
+        QStringList installed = this->servers->getInstalledServerNames();
 
         QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(QRegExp("checkbox_autostart_\\w"));
 
@@ -700,7 +718,7 @@ namespace Configuration
     void ConfigurationDialog::toggleRunOnStartup()
     {
         // Windows %APPDATA% = Roaming ... Programs\Startup
-        QString startupDir = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "\\Startup";
+        const QString startupDir = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "\\Startup";
 
         if (runOnStartUp()) {
             // Add WPN-XM SCP shortcut to the Windows Autostart folder.

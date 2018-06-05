@@ -24,4 +24,4 @@ namespace File
 
        return true;
    }
-}
+} // end NS FILE
