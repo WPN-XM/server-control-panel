@@ -291,6 +291,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("nginx.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Nginx] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("Nginx", false);
             return;
         }
 
@@ -408,6 +409,7 @@ namespace Servers
         if (processes->getProcessState("postgres.exe") == Processes::ProcessState::NotRunning) {
             // if(!QFile().exists(file)) {
             qDebug() << "[PostgreSQL] Not running.. Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("PostgreSQL", false);
             return;
         }
 
@@ -574,6 +576,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[PHP] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("PHP", false);
             return;
         }
 
@@ -635,7 +638,7 @@ namespace Servers
         Processes::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
 
         // wait for process started
-        Processes::delay(2000);
+        Processes::delay(500);
 
         // check for startup failure (immediate shutdown)
         if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::Running) {
@@ -656,6 +659,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[MariaDb] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("MariaDb", false);
             return;
         }
 
@@ -689,12 +693,7 @@ namespace Servers
 
         Processes::delay(1000);
 
-        // catch shutdown failures
-        if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::Running) {
-            emit signalMainWindow_ServerStatusChange("MariaDb", true);
-        } else {
-            emit signalMainWindow_ServerStatusChange("MariaDb", false);
-        }
+        emit signalMainWindow_ServerStatusChange("MariaDb", false);
     }
 
     void Servers::restartMariaDb()
@@ -770,6 +769,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("mongod.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[MongoDb] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("MongoDb", false);
             return;
         }
 
@@ -789,12 +789,7 @@ namespace Servers
 
         Processes::delay(250);
 
-        // catch shutdown failures
-        if (processes->getProcessState("mongod.exe") == Processes::ProcessState::Running) {
-            emit signalMainWindow_ServerStatusChange("MongoDb", true);
-        } else {
-            emit signalMainWindow_ServerStatusChange("MongoDb", false);
-        }
+        emit signalMainWindow_ServerStatusChange("MongoDb", false);
     }
 
     void Servers::restartMongoDb()
@@ -852,6 +847,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("memcached.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Memcached] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("Memcached", false);
             return;
         }
 
@@ -886,7 +882,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("redis.exe") == Processes::ProcessState::Running) {
+        if (processes->getProcessState("redis-server.exe") == Processes::ProcessState::Running) {
             QMessageBox::warning(0, tr("Redis"), tr("Redis already running."));
             return;
         }
@@ -912,6 +908,7 @@ namespace Servers
         // if not running, skip
         if (processes->getProcessState("redis-server.exe") == Processes::ProcessState::NotRunning) {
             qDebug() << "[Redis] Not running... Skipping stop command.";
+            emit signalMainWindow_ServerStatusChange("Redis", false);
             return;
         }
 
