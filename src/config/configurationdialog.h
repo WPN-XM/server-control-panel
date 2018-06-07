@@ -118,8 +118,13 @@ namespace Configuration
         void loadNginxUpstreams();
 
         bool getSettingBool(const QString &key, const QVariant &defaultValue);
+        bool getSettingBool(const QString &key, const bool &defaultValue);
+
         int getSettingInt(const QString &key, const QVariant &defaultValue);
+        int ConfigurationDialog::getSettingInt(const QString &key, const int &defaultValue);
+
         QString getSettingString(const QString &key, const QVariant &defaultValue);
+        QString getSettingString(const QString &key, const QString &defaultValue);
 
     };
 }
