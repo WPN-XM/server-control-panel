@@ -30,12 +30,4 @@ namespace Settings
         settings.beginGroup(groupPrefix);
         return settings.allKeys();
     }
-
-    void SettingsManager::sync() {
-        settings->sync();
-    }
-
-    SettingsManager::~SettingsManager() {
-        delete settings;
-    }
 }

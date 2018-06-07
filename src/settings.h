@@ -2,7 +2,6 @@
 #define SETTINGS_H
 
 #include <QCoreApplication>
-//#include <QVariant>
 #include <QDir>
 #include <QSettings>
 
@@ -18,16 +17,12 @@ namespace Settings
 
     public:
         SettingsManager(QObject *parent = 0);
-        SettingsManager::~SettingsManager();
 
         QVariant get(const QString &key, const QVariant &defaultValue = QVariant()) const;
         QStringList getKeys(const QString &groupPrefix) const;
         QString file() const;
         void set(const QString &key, const QVariant &value);
-        void sync();
 
-    private:
-        QSettings *settings;
     };
 }
 
