@@ -52,6 +52,8 @@ namespace ServerControlPanel
 
         QString parseVersionNumber(QString stringWithVersion);
 
+        Settings::SettingsManager *settings;
+
     public slots:
 
         // General Action Slots of the MainWindow
@@ -118,7 +120,6 @@ namespace ServerControlPanel
         Ui::MainWindow *ui;
 
         ServerControlPanel::Tray *tray;
-        Settings::SettingsManager *settings;
         Servers::Servers *servers;
         Updater::SelfUpdater *selfUpdater;
         Processes *processes;

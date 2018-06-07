@@ -130,7 +130,10 @@ int main(int argc, char *argv[])
     mainWindow.setup();
 
     // Finally, show the MainWindow
-    mainWindow.show();
+    if(!mainWindow.settings->get("global/startminimized").toBool()) {
+        mainWindow.show();
+    }
+
 
     //#ifndef QT_DEBUG
     splash.setMessage("", 100);

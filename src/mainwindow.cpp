@@ -77,7 +77,7 @@ namespace ServerControlPanel
         }
 
 
-        ui->pushButton_Updater->setEnabled(true);
+        //ui->pushButton_Updater->setEnabled(true);
 #endif
     }
 
@@ -306,8 +306,9 @@ namespace ServerControlPanel
             switch (event->type()) {
             case QEvent::WindowStateChange: {
                 // minimize to tray (do not minimize to taskbar)
-                if (this->windowState() & Qt::WindowMinimized) {
-                    QTimer::singleShot(0, this, SLOT(hide()));
+                if ((this->windowState() & Qt::WindowMinimized)
+                     && !this->isHidden()) {
+                        this->hide();
                 }
 
                 break;

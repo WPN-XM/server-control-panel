@@ -13,7 +13,7 @@ namespace Settings
     }
 
     QVariant SettingsManager::get(const QString &key, const QVariant &defaultValue) const
-    {
+    {        
         QSettings settings(file(), QSettings::IniFormat);
         return settings.value(key, defaultValue);
     }
