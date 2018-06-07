@@ -187,50 +187,52 @@ namespace ServerControlPanel
         quitAction = new QAction(tr("&Quit"), this);
         connect(quitAction, SIGNAL(triggered()), this, SLOT(quitApplication()));
 
+        QWidget *cWidget = ui->centralWidget;
+
         // Connect Actions for Status Table - Column Action (Start)
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Nginx"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_Nginx"), SIGNAL(clicked()), servers,
                 SLOT(startNginx()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_PHP"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_PHP"), SIGNAL(clicked()), servers,
                 SLOT(startPHP()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(startMariaDb()));
-        QPushButton *buttonStartMongoDb = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
+        QPushButton *buttonStartMongoDb = cWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
         if (buttonStartMongoDb != 0) {
             connect(buttonStartMongoDb, SIGNAL(clicked()), servers, SLOT(startMongoDb()));
         }
-        QPushButton *buttonStartMemcached = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
+        QPushButton *buttonStartMemcached = cWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
         if (buttonStartMemcached != 0) {
             connect(buttonStartMemcached, SIGNAL(clicked()), servers, SLOT(startMemcached()));
         }
-        QPushButton *buttonStartPostgreSQL = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
+        QPushButton *buttonStartPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
         if (buttonStartPostgreSQL != 0) {
             connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers, SLOT(startPostgreSQL()));
         }
-        QPushButton *buttonStartRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Start_Redis");
+        QPushButton *buttonStartRedis = cWidget->findChild<QPushButton *>("pushButton_Start_Redis");
         if (buttonStartRedis != 0) {
             connect(buttonStartRedis, SIGNAL(clicked()), servers, SLOT(startRedis()));
         }
 
         // Connect Actions for Status Table - Column Action (Stop)
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), SIGNAL(clicked()), servers,
                 SLOT(stopNginx()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers,
                 SLOT(stopPHP()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(stopMariaDb()));
-        QPushButton *buttonStopMongoDb = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
+        QPushButton *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
         if (buttonStopMongoDb != 0) {
             connect(buttonStopMongoDb, SIGNAL(clicked()), servers, SLOT(stopMongoDb()));
         }
-        QPushButton *buttonStopMemcached = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
+        QPushButton *buttonStopMemcached = cWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
         if (buttonStopMemcached != 0) {
             connect(buttonStopMemcached, SIGNAL(clicked()), servers, SLOT(stopMemcached()));
         }
-        QPushButton *buttonStopPostgreSQL = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
+        QPushButton *buttonStopPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
         if (buttonStopPostgreSQL != 0) {
             connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers, SLOT(stopPostgreSQL()));
         }
-        QPushButton *buttonStopRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
+        QPushButton *buttonStopRedis = cWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
         if (buttonStopRedis != 0) {
             connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis()));
         }
@@ -239,7 +241,7 @@ namespace ServerControlPanel
         connect(ui->pushButton_AllServers_Start, SIGNAL(clicked()), this, SLOT(startAllServers()));
         connect(ui->pushButton_AllServers_Stop, SIGNAL(clicked()), this, SLOT(stopAllServers()));
 
-        // PushButtons:: Website, Forum, Help, About, ReportBug, Donate
+        // PushButtons: Website, Forum, Help, About, ReportBug, Donate
         connect(ui->pushButton_Website, SIGNAL(clicked()), this, SLOT(goToWebsite()));
         connect(ui->pushButton_Forum, SIGNAL(clicked()), this, SLOT(goToForum()));
         connect(ui->pushButton_Help, SIGNAL(clicked()), this, SLOT(openHelpDialog()));
@@ -268,35 +270,33 @@ namespace ServerControlPanel
 
         // Actions - Status Table
 
-        // Configuration via Webinterface
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"), SIGNAL(clicked()), this,
+        // Connect Configure Buttons
+        // clicking the configure icon opens the config tab of this server
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"), SIGNAL(clicked()), this,
                 SLOT(openConfigurationDialogNginx()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_PHP"), SIGNAL(clicked()), this,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_PHP"), SIGNAL(clicked()), this,
                 SLOT(openConfigurationDialogPHP()));
-        connect(ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), SIGNAL(clicked()), this,
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), SIGNAL(clicked()), this,
                 SLOT(openConfigurationDialogMariaDb()));
 
-        QPushButton *buttonConfigureMongoDb =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
-        if (buttonConfigureMongoDb != 0) {
-            connect(buttonConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
+        QPushButton *btnConfigureMongoDb = cWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
+        if (btnConfigureMongoDb != 0) {
+            connect(btnConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
         }
 
-        QPushButton *buttonConfigurePostgresql =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
-        if (buttonConfigurePostgresql != 0) {
-            connect(buttonConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
+        QPushButton *btnConfigureMemcached = cWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
+        if (btnConfigureMemcached != 0) {
+            connect(btnConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
         }
 
-        QPushButton *buttonConfigureRedis = ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
-        if (buttonConfigureRedis != 0) {
-            connect(buttonConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
+        QPushButton *btnConfigurePostgresql = cWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
+        if (btnConfigurePostgresql != 0) {
+            connect(btnConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
         }
 
-        QPushButton *buttonConfigureMemcached =
-            ui->centralWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
-        if (buttonConfigureMemcached != 0) {
-            connect(buttonConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
+        QPushButton *btnConfigureRedis = cWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
+        if (btnConfigureRedis != 0) {
+            connect(btnConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
     }
 
@@ -487,7 +487,7 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updateLabelStatus(QString server, bool enabled)
-    {        
+    {
         if (server == "nginx") {
             ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->setEnabled(enabled);
         }
@@ -534,40 +534,43 @@ namespace ServerControlPanel
     void MainWindow::updateTrayIconTooltip()
     {
         QString tip = "";
+        QWidget *widget = ui->centralWidget;
 
-        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_Nginx_Status")->isEnabled()) {
             tip.append("Nginx: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
             tip.append("PHP: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_MariaDb_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_MariaDb_Status")->isEnabled()) {
             tip.append("MariaDb: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_MongoDb_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_MongoDb_Status") &&
+            widget->findChild<QLabel *>("label_MongoDb_Status")->isEnabled()) {
             tip.append("MongoDb: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_Memcached_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_Memcached_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_Memcached_Status") &&
+            widget->findChild<QLabel *>("label_Memcached_Status")->isEnabled()) {
             tip.append("Memcached: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_PostgreSQL_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_PostgreSQL_Status") &&
+            widget->findChild<QLabel *>("label_PostgreSQL_Status")->isEnabled()) {
             tip.append("PostgreSQL: running\n");
         }
-        if (ui->centralWidget->findChild<QLabel *>("label_Redis_Status") &&
-            ui->centralWidget->findChild<QLabel *>("label_Redis_Status")->isEnabled()) {
+        if (widget->findChild<QLabel *>("label_Redis_Status") &&
+            widget->findChild<QLabel *>("label_Redis_Status")->isEnabled()) {
             tip.append("Redis: running\n");
         }
 
-        tray->setMessage(tip);        
+        tray->setMessage(tip);
     }
 
     void MainWindow::updateToolsPushButtons()
     {
-        if (ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->isEnabled() &&
-            ui->centralWidget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
+        QWidget *widget = ui->centralWidget;
+
+        if (widget->findChild<QLabel *>("label_Nginx_Status")->isEnabled() &&
+            widget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
             enableToolsPushButtons(true);
         } else {
             enableToolsPushButtons(false);
@@ -1506,7 +1509,7 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updatePort(QString server, bool enabled)
-    {        
+    {
         if(server == "php") {
             if(enabled == true) {
                 // show Label Text to indicate that a HoverTooltip is available
