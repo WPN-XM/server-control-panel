@@ -165,7 +165,7 @@ namespace Configuration
           QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
         );
 
-        /**
+   /**
    * Configuration > Components > PostgreSQL
    */
 
@@ -184,7 +184,7 @@ namespace Configuration
         /**
    * Configuration > Components > Redis
    */
-        ui->lineEdit_redis_bind->setText(getSettingString("redis/bind", QString("127.0.0.1"));
+        ui->lineEdit_redis_bind->setText(getSettingString("redis/bind", QString("127.0.0.1")));
         ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
     }
 
