@@ -83,6 +83,8 @@ namespace Configuration
         void on_pushButton_Nginx_Reset_Upstreams_clicked();
         void on_pushButton_Nginx_Reset_Servers_clicked();
 
+        void on_pushButton_MongoDb_Reset_Port_clicked();
+
         void on_configMenuSearchLineEdit_textChanged(const QString &string);
 
         void on_tableWidget_Upstream_itemSelectionChanged();

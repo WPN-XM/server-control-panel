@@ -165,16 +165,12 @@ namespace Configuration
         /**
    * Configuration > Components > MongoDB
    */
-
-        ui->lineEdit_mongodb_bindip->setText(
-            settings->get("mongodb/bind_ip", QVariant(QString("127.0.0.1"))).toString());
-
         ui->lineEdit_mongodb_port->setText(
             settings->get("mongodb/port", QVariant(QString("27017"))).toString());
 
         ui->lineEdit_mongodb_dbpath->setText(
             settings->get("mongodb/dbpath",
-                          QVariant(QString(QDir::currentPath() + "/bin/mongodb/data/db"))).toString());
+                          QVariant(QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))).toString());
 
         /**
    * Configuration > Components > PostgreSQL
@@ -278,9 +274,8 @@ namespace Configuration
    * Configuration > Components > MongoDB
    */
 
-        settings->set("mongodb/bind_ip", QString(ui->lineEdit_mongodb_bindip->text()));
         settings->set("mongodb/port", QString(ui->lineEdit_mongodb_port->text()));
-        settings->set("mongodb/dbpath", QString(ui->lineEdit_mongodb_dbpath->text()));
+        settings->set("mongodb/dbpath", QString(QDir::toNativeSeparators(ui->lineEdit_mongodb_dbpath->text())));
 
         /**
    * Configuration > Components > PostgreSQL
@@ -750,6 +745,11 @@ namespace Configuration
     void ConfigurationDialog::on_toolButton_ResetEditor_clicked()
     {
         ui->lineEdit_SelectedEditor->setText("notepad.exe");
+    }
+
+    void ConfigurationDialog::on_pushButton_MongoDb_Reset_Port_clicked()
+    {
+        ui->lineEdit_mongodb_port->setText("27017");
     }
 
     void ConfigurationDialog::on_pushButton_Nginx_Reset_Upstreams_clicked()
