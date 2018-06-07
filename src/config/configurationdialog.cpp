@@ -101,37 +101,35 @@ namespace Configuration
      */
     void ConfigurationDialog::readSettings()
     {
-        ui->checkbox_runOnStartUp->setChecked(settings->get("global/runonstartup", false).toBool());
-        ui->checkbox_autostartServers->setChecked(settings->get("global/autostartservers", false).toBool());
-        ui->checkbox_startMinimized->setChecked(settings->get("global/startminimized", false).toBool());
+        ui->checkbox_runOnStartUp->setChecked(getSettingBool("global/runonstartup", false));
+        ui->checkbox_autostartServers->setChecked(getSettingBool("global/autostartservers", false));
+        ui->checkbox_startMinimized->setChecked(getSettingBool("global/startminimized", false));
 
-        ui->checkbox_autostart_PHP->setChecked(settings->get("autostart/php", true).toBool());
-        ui->checkbox_autostart_Nginx->setChecked(settings->get("autostart/nginx", true).toBool());
-        ui->checkbox_autostart_MariaDb->setChecked(settings->get("autostart/mariadb", true).toBool());
-        ui->checkbox_autostart_MongoDb->setChecked(settings->get("autostart/mongodb", false).toBool());
-        ui->checkbox_autostart_Memcached->setChecked(settings->get("autostart/memcached", false).toBool());
-        ui->checkbox_autostart_Postgresql->setChecked(settings->get("autostart/postgresql", false).toBool());
-        ui->checkbox_autostart_Redis->setChecked(settings->get("autostart/redis", false).toBool());
+        ui->checkbox_autostart_PHP->setChecked(getSettingBool("autostart/php", true));
+        ui->checkbox_autostart_Nginx->setChecked(getSettingBool("autostart/nginx", true));
+        ui->checkbox_autostart_MariaDb->setChecked(getSettingBool("autostart/mariadb", true));
+        ui->checkbox_autostart_MongoDb->setChecked(getSettingBool("autostart/mongodb", false));
+        ui->checkbox_autostart_Memcached->setChecked(getSettingBool("autostart/memcached", false));
+        ui->checkbox_autostart_Postgresql->setChecked(getSettingBool("autostart/postgresql", false));
+        ui->checkbox_autostart_Redis->setChecked(getSettingBool("autostart/redis", false));
 
-        ui->checkbox_clearLogsOnStart->setChecked(settings->get("global/clearlogsonstart", false).toBool());
-        ui->checkbox_stopServersOnQuit->setChecked(settings->get("global/stopServersonquit", false).toBool());
+        ui->checkbox_clearLogsOnStart->setChecked(getSettingBool("global/clearlogsonstart", false));
+        ui->checkbox_stopServersOnQuit->setChecked(getSettingBool("global/stopServersonquit", false));
 
-        ui->checkbox_onStartAllMinimize->setChecked(settings->get("global/onstartallminimize", false).toBool());
-        ui->checkbox_onStartAllOpenWebinterface->setChecked(
-            settings->get("global/onstartallopenwebinterface", false).toBool());
+        ui->checkbox_onStartAllMinimize->setChecked(getSettingBool("global/onstartallminimize", false));
+        ui->checkbox_onStartAllOpenWebinterface->setChecked(getSettingBool("global/onstartallopenwebinterface", false));
 
-        ui->lineEdit_SelectedEditor->setText(
-            settings->get("global/editor", QVariant(QString("notepad.exe"))).toString());
+        ui->lineEdit_SelectedEditor->setText(getSettingString("global/editor", QVariant(QString("notepad.exe"))));
 
         /**
    * Configuration > Updater > Self Updater
    */
 
-        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->get("selfupdater/runonstartup", false).toBool());
-        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->get("selfupdater/autoupdate", false).toBool());
-        ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->get("selfupdater/autorestart", false).toBool());
+        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(getSettingBool("selfupdater/runonstartup", false));
+        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(getSettingBool("selfupdater/autoupdate", false));
+        ui->checkBox_SelfUpdater_AutoRestart->setChecked(getSettingBool("selfupdater/autorestart", false));
 
-        ui->comboBox_SelfUpdater_Interval->setCurrentText(settings->get("selfupdater/interval", QVariant(QString("1"))).toString());
+        ui->comboBox_SelfUpdater_Interval->setCurrentText(getSettingString("selfupdater/interval", QVariant(QString("1"))));
         ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
         /**
@@ -139,63 +137,55 @@ namespace Configuration
    */
 
         // remote
-        ui->checkBox_xdebug_remote_enable->setChecked(settings->get("xdebug/remote_enable", true).toBool());
-        ui->lineEdit_xdebug_remote_host->setText(
-            settings->get("xdebug/remote_host", QVariant(QString("127.0.0.1"))).toString());
-        ui->lineEdit_xdebug_remote_port->setText(
-            settings->get("xdebug/remote_port", QVariant(QString("9100"))).toString());
-        ui->checkBox_xdebug_remote_autostart->setChecked(settings->get("xdebug/remote_autostart", true).toBool());
-        ui->lineEdit_xdebug_remote_handler->setText(
-            settings->get("xdebug/remote_handler", QVariant(QString("dbgp"))).toString());
-        ui->comboBox_xdebug_remote_mode->setCurrentText(
-            settings->get("xdebug/remote_mode", QVariant(QString("req"))).toString());
+        ui->checkBox_xdebug_remote_enable->setChecked(getSettingBool("xdebug/remote_enable", true));
+        ui->lineEdit_xdebug_remote_host->setText(getSettingString("xdebug/remote_host", QVariant(QString("127.0.0.1"))));
+        ui->lineEdit_xdebug_remote_port->setText(getSettingString("xdebug/remote_port", QVariant(QString("9100"))));
+        ui->checkBox_xdebug_remote_autostart->setChecked(getSettingBool("xdebug/remote_autostart", true));
+        ui->lineEdit_xdebug_remote_handler->setText(getSettingString("xdebug/remote_handler", QVariant(QString("dbgp"))));
+        ui->comboBox_xdebug_remote_mode->setCurrentText(getSettingString("xdebug/remote_mode", QVariant(QString("req"))));
         // profiler
-        ui->checkBox_xdebug_enable_profiler->setChecked(settings->get("xdebug/enable_profiler", true).toBool());
-        ui->checkBox_xdebug_remove_old_logs->setChecked(settings->get("xdebug/remove_old_logs", true).toBool());
+        ui->checkBox_xdebug_enable_profiler->setChecked(getSettingBool("xdebug/enable_profiler", true));
+        ui->checkBox_xdebug_remove_old_logs->setChecked(getSettingBool("xdebug/remove_old_logs", true));
 
-        ui->lineEdit_xdebug_idekey->setText(
-            settings->get("xdebug/idekey", QVariant(QString("netbeans-xdebug"))).toString());
+        ui->lineEdit_xdebug_idekey->setText(getSettingString("xdebug/idekey", QVariant(QString("netbeans-xdebug"))));
 
         /**
    * Configuration > Components > MariaDB
    */
 
-        ui->lineEdit_mariadb_port->setText(settings->get("mariadb/port", QVariant(QString("3306"))).toString());
+        ui->lineEdit_mariadb_port->setText(getSettingString("mariadb/port", QVariant(QString("3306"))));
 
         /**
    * Configuration > Components > MongoDB
    */
         ui->lineEdit_mongodb_port->setText(
-            settings->get("mongodb/port", QVariant(QString("27017"))).toString());
+            getSettingString("mongodb/port", QVariant(QString("27017"))));
 
-        ui->lineEdit_mongodb_dbpath->setText(
-            settings->get("mongodb/dbpath",
-                          QVariant(QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))).toString());
+        ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
+          QVariant(QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")))
+        );
 
         /**
    * Configuration > Components > PostgreSQL
    */
 
-        ui->lineEdit_postgresql_port->setText(settings->get("postgresql/port", QVariant(QString("3306"))).toString());
+        ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QVariant(QString("3306"))));
 
         /**
    * Configuration > Components > Memcached
    */
 
-        ui->lineEdit_memcached_tcpport->setText(
-            settings->get("memcached/tcpport", QVariant(QString("11211"))).toString());
-        ui->lineEdit_memcached_udpport->setText(settings->get("memcached/udpport", QVariant(QString("0"))).toString());
-        ui->lineEdit_memcached_threads->setText(settings->get("memcached/threads", QVariant(QString("2"))).toString());
-        ui->lineEdit_memcached_maxconnections->setText(
-            settings->get("memcached/maxconnections", QVariant(QString("2048"))).toString());
-        ui->lineEdit_memcached_maxmemory->setText(
-            settings->get("memcached/maxmemory", QVariant(QString("2048"))).toString());
+        ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QVariant(QString("11211"))));
+        ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QVariant(QString("0"))));
+        ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QVariant(QString("2"))));
+        ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QVariant(QString("2048"))));
+        ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QVariant(QString("2048"))));
 
         /**
    * Configuration > Components > Redis
    */
-        ui->lineEdit_redis_bind->setText(settings->get("redis/bind", QVariant(QString("127.0.0.1"))).toString());
-        ui->lineEdit_redis_port->setText(settings->get("redis/port", QVariant(QString("6379"))).toString());
+        ui->lineEdit_redis_bind->setText(getSettingString("redis/bind", QVariant(QString("127.0.0.1"))));
+        ui->lineEdit_redis_port->setText(getSettingString("redis/port", QVariant(QString("6379"))));
     }
 
     void ConfigurationDialog::writeSettings()
@@ -973,5 +963,20 @@ namespace Configuration
         }
 
         return QJsonObject();
+    }
+
+    bool ConfigurationDialog::getSettingBool(const QString &key, const QVariant &defaultValue)
+    {
+        return settings->get(key, defaultValue).toBool();
+    }
+
+    int ConfigurationDialog::getSettingInt(const QString &key, const QVariant &defaultValue)
+    {
+        return settings->get(key, defaultValue).toInt();
+    }
+
+    QString ConfigurationDialog::getSettingString(const QString &key, const QVariant &defaultValue)
+    {
+        return settings->get(key, defaultValue).toString();
     }
 }

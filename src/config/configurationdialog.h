@@ -116,6 +116,11 @@ namespace Configuration
         void toggleRunOnStartup();
 
         void loadNginxUpstreams();
+
+        bool getSettingBool(const QString &key, const QVariant &defaultValue);
+        int getSettingInt(const QString &key, const QVariant &defaultValue);
+        QString getSettingString(const QString &key, const QVariant &defaultValue);
+
     };
 }
 
