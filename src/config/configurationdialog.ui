@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>6</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1761,16 +1761,23 @@
       <attribute name="title">
        <string>Configuration</string>
       </attribute>
-      <widget class="QWidget" name="formLayoutWidget_6">
+      <widget class="QWidget" name="gridLayoutWidget_2">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>160</width>
-         <height>80</height>
+         <y>10</y>
+         <width>191</width>
+         <height>41</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout_4">
+       <layout class="QGridLayout" name="gridLayout_12">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_MariaDb_Reset_Port">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="1">
          <widget class="QLineEdit" name="lineEdit_mariadb_port"/>
         </item>
@@ -1919,16 +1926,16 @@
       <attribute name="title">
        <string>Configuration</string>
       </attribute>
-      <widget class="QWidget" name="formLayoutWidget_8">
+      <widget class="QWidget" name="gridLayoutWidget_3">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>160</width>
-         <height>80</height>
+         <y>10</y>
+         <width>191</width>
+         <height>31</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout_6">
+       <layout class="QGridLayout" name="gridLayout_14">
         <item row="0" column="1">
          <widget class="QLineEdit" name="lineEdit_postgresql_port"/>
         </item>
@@ -1936,6 +1943,13 @@
          <widget class="QLabel" name="label_postgresql_port">
           <property name="text">
            <string>Port</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_PostgreSql_Reset_Port">
+          <property name="text">
+           <string>Reset</string>
           </property>
          </widget>
         </item>
@@ -1981,34 +1995,34 @@
       <attribute name="title">
        <string>Configuration</string>
       </attribute>
-      <widget class="QWidget" name="formLayoutWidget_3">
+      <widget class="QWidget" name="gridLayoutWidget_4">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>19</y>
-         <width>221</width>
-         <height>131</height>
+         <y>10</y>
+         <width>249</width>
+         <height>141</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_memcached_tcpport">
+       <layout class="QGridLayout" name="gridLayout_15">
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lineEdit_memcached_maxmemory">
           <property name="text">
-           <string>11211</string>
+           <string>2048</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_memcached_udpport">
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_memcached_maxconnections">
           <property name="text">
-           <string>0</string>
+           <string>Maximum Connections</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit_memcached_threads">
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lineEdit_memcached_maxconnections">
           <property name="text">
-           <string>2</string>
+           <string>2048</string>
           </property>
          </widget>
         </item>
@@ -2026,10 +2040,24 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit_memcached_udpport">
+          <property name="text">
+           <string>0</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_memcached_threads">
           <property name="text">
            <string>Number of Threads</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_memcached_tcpport">
+          <property name="text">
+           <string>11211</string>
           </property>
          </widget>
         </item>
@@ -2040,24 +2068,17 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="lineEdit_memcached_maxmemory">
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lineEdit_memcached_threads">
           <property name="text">
-           <string>2048</string>
+           <string>2</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="1">
-         <widget class="QLineEdit" name="lineEdit_memcached_maxconnections">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_Memcached_Reset_Port">
           <property name="text">
-           <string>2048</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_memcached_maxconnections">
-          <property name="text">
-           <string>Maximum Connections</string>
+           <string>Reset</string>
           </property>
          </widget>
         </item>
@@ -2103,35 +2124,32 @@
       <attribute name="title">
        <string>Configuration</string>
       </attribute>
-      <widget class="QWidget" name="formLayoutWidget_9">
+      <widget class="QWidget" name="gridLayoutWidget_5">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>20</y>
-         <width>160</width>
-         <height>80</height>
+         <y>10</y>
+         <width>181</width>
+         <height>31</height>
         </rect>
        </property>
-       <layout class="QFormLayout" name="redis_formLayout">
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit_redis_port"/>
+       <layout class="QGridLayout" name="gridLayout_16">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_Redis_Reset_Port">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
         </item>
-        <item row="1" column="0">
+        <item row="0" column="0">
          <widget class="QLabel" name="label_redis_port">
           <property name="text">
            <string>Port</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_redis_bind">
-          <property name="text">
-           <string>Bind</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_redis_bind"/>
+         <widget class="QLineEdit" name="lineEdit_redis_port"/>
         </item>
        </layout>
       </widget>

@@ -77,17 +77,22 @@ namespace Configuration
 
         void on_configMenuTreeWidget_clicked(const QModelIndex &index);
 
+        // bind PushButtons of Nginx Config Tab
         void on_pushButton_Nginx_Upstream_AddUpstream_clicked();
         void on_pushButton_Nginx_Upstream_AddServer_clicked();
-
         void on_pushButton_Nginx_Reset_Upstreams_clicked();
         void on_pushButton_Nginx_Reset_Servers_clicked();
+        void on_tableWidget_Upstream_itemSelectionChanged();
 
+        // bind PushButtons for resetting ports
+        void on_pushButton_MariaDb_Reset_Port_clicked();
         void on_pushButton_MongoDb_Reset_Port_clicked();
+        void on_pushButton_Memcached_Reset_Port_clicked();
+        void on_pushButton_PostgreSql_Reset_Port_clicked();
+        void on_pushButton_Redis_Reset_Port_clicked();
 
         void on_configMenuSearchLineEdit_textChanged(const QString &string);
 
-        void on_tableWidget_Upstream_itemSelectionChanged();
 
     private:
         Ui::ConfigurationDialog *ui;

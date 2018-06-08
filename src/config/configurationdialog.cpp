@@ -184,8 +184,7 @@ namespace Configuration
         /**
    * Configuration > Components > Redis
    */
-        ui->lineEdit_redis_bind->setText(getSettingString("redis/bind", QString("127.0.0.1")));
-        ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
+         ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
     }
 
     void ConfigurationDialog::writeSettings()
@@ -275,7 +274,6 @@ namespace Configuration
         /**
    * Configuration > Components > Redis
    */
-        settings->set("redis/bind", QString(ui->lineEdit_redis_bind->text()));
         settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
 
         /**
@@ -350,7 +348,7 @@ namespace Configuration
         configContent.clear();
 
         // prepare line(s) to replace
-        QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
+        //QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
         QString newline_port = "port " + ui->lineEdit_redis_port->text().toLatin1();
 
         // iterate over all lines and replace or re-add lines
@@ -364,9 +362,9 @@ namespace Configuration
             }
 
             // replace line: bind
-            else if (line.startsWith("bind", Qt::CaseInsensitive)) {
+            /*else if (line.startsWith("bind", Qt::CaseInsensitive)) {
                 configContent.append(QString("%0\n").arg(newline_bind));
-            }
+            }*/
 
             // append "old" line
             else {
@@ -740,6 +738,26 @@ namespace Configuration
     void ConfigurationDialog::on_pushButton_MongoDb_Reset_Port_clicked()
     {
         ui->lineEdit_mongodb_port->setText("27017");
+    }
+
+    void ConfigurationDialog::on_pushButton_MariaDb_Reset_Port_clicked()
+    {
+        ui->lineEdit_mariadb_port->setText("3306");
+    }
+
+    void ConfigurationDialog::on_pushButton_PostgreSql_Reset_Port_clicked()
+    {
+        ui->lineEdit_mariadb_port->setText("5432");
+    }
+
+    void ConfigurationDialog::on_pushButton_Memcached_Reset_Port_clicked()
+    {
+        ui->lineEdit_mariadb_port->setText("11211");
+    }
+
+    void ConfigurationDialog::on_pushButton_Redis_Reset_Port_clicked()
+    {
+        ui->lineEdit_mariadb_port->setText("6379");
     }
 
     void ConfigurationDialog::on_pushButton_Nginx_Reset_Upstreams_clicked()
