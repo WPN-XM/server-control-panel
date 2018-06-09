@@ -50,6 +50,15 @@ namespace Servers
         }
     }
 
+    bool Servers::isInstalled(const QString &serverName) const
+    {
+        foreach (Server *server, serverList) {
+            if (server->lowercaseName == serverName)
+                return true;
+        }
+        return false;
+    }
+
     void Servers::mapAction(QAction *action)
     {
         QMetaObject::invokeMethod(this, action->objectName().toLocal8Bit().constData());

@@ -209,6 +209,8 @@ namespace Configuration
 
         settings->set("global/editor", QString(ui->lineEdit_SelectedEditor->text()));
 
+        qApp->processEvents();
+
         /**
    * Configuration > Updater > Self Updater
    */
@@ -219,6 +221,8 @@ namespace Configuration
 
         settings->set("selfupdater/interval", QString("1"));
         //settings->set("selfupdater/last_time_checked", QVariant(0)).toDateTime());
+
+        qApp->processEvents();
 
         /**
    * Autostart Servers with the Server Control Panel
@@ -231,6 +235,8 @@ namespace Configuration
         settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
         settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
         settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
+
+        qApp->processEvents();
 
         /**
    * Configuration > Components > PHP
@@ -252,6 +258,8 @@ namespace Configuration
         settings->set("xdebug/remote_mode", QString(ui->comboBox_xdebug_remote_mode->currentText()));
 
         settings->set("xdebug/idekey", QString(ui->lineEdit_xdebug_idekey->text()));
+
+        qApp->processEvents();
 
         /**
    * Configuration > Components > MariaDB
@@ -289,22 +297,34 @@ namespace Configuration
         /**
    * Tab "Upstream" > Page "Nginx"
    */
-//saveSettings_Nginx_Upstream();
+        if(servers->isInstalled("nginx")) {
+            saveSettings_Nginx_Upstream();
+            qApp->processEvents();
+        }
 
         /**
    * Tab "Configuration" > Page "MariaDB"
    */
-        //saveSettings_MariaDB_Configuration();
+        if(servers->isInstalled("mariadb")) {
+            saveSettings_MariaDB_Configuration();
+            qApp->processEvents();
+        }
 
         /**
    * Tab "Configuration" > Page "Regis"
    */
-        //saveSettings_Redis_Configuration();
+        if(servers->isInstalled("redis")) {
+            saveSettings_Redis_Configuration();
+            qApp->processEvents();
+        }
 
         /**
    *Tab "Configuration" > Page "MongoDB"
    */
-        saveSettings_MongoDB_Configuration();
+        if(servers->isInstalled("mongodb")) {
+            saveSettings_MongoDB_Configuration();
+            qApp->processEvents();
+        }
     }
 
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
