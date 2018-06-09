@@ -106,15 +106,19 @@ namespace ServerControlPanel
         QStringList installedServers = servers->getInstalledServerNames();
         installedServers << "php-cgi";
 
+        QStringList alreadyUpdated;
+
         foreach (Process process, oProcesses->monitoredProcessesList)
         {
             QString processName = process.name.section(".", 0, 0);
             //qDebug() << Q_FUNC_INFO << processName;
 
-            if(installedServers.contains(processName)) {
+            if(installedServers.contains(processName) &&
+               !alreadyUpdated.contains(processName)) {
                 qDebug() << "[Processes Running][updateServerStatusIndicators]"""
                          << "for Process" << processName;
 
+                alreadyUpdated << processName;
                 updateServerStatusIndicators(processName, true);
             }
         }
@@ -1292,7 +1296,7 @@ namespace ServerControlPanel
             // Port
             if(server->name == "PHP") {
                 LabelWithHoverTooltip *labelPort = new LabelWithHoverTooltip();
-                labelPort->setObjectName(QString("label_" + server->name + "_Port"));
+                labelPort->setObjectName(QString("label_PHP_Port"));
                 //labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
@@ -1511,7 +1515,9 @@ namespace ServerControlPanel
 
     void MainWindow::updatePort(QString server, bool enabled)
     {
-        if(server == "php") {
+        //qDebug() << server << enabled;
+
+        if(server == "php" || server == "php-cgi") {
             if(enabled == true) {
                 // show Label Text to indicate that a HoverTooltip is available
                 QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
@@ -1539,7 +1545,6 @@ namespace ServerControlPanel
 
             }
         } else {
-            qDebug() << server << enabled;
             QString srvname = servers->getCamelCasedServerName(server);
             QLabel *label = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
             if(label != 0) {
