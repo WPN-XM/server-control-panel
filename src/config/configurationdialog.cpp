@@ -449,8 +449,6 @@ namespace Configuration
 
     void ConfigurationDialog::saveSettings_MongoDB_Configuration()
     {
-        qDebug() << Q_FUNC_INFO;
-
         QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
