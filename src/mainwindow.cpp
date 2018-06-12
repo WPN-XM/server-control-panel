@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "file/yml.h"
+
 namespace ServerControlPanel
 {
 
@@ -1562,7 +1564,19 @@ namespace ServerControlPanel
 
     QString MainWindow::getMemcachedPort() { return settings->get("memcached/tcpport").toString(); }
 
-    QString MainWindow::getMongoPort() { return settings->get("mongodb/port").toString(); }
+    QString MainWindow::getMongoPort()
+    {
+        QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
+
+        if (!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::Yml *yml = new File::Yml();
+        YAML::Node config = yml->load(file);
+
+        return QString::fromStdString(config["net"]["port"].as<std::string>());
+    }
 
     QString MainWindow::getMariaPort() { return settings->get("mariadb/port").toString(); }
 

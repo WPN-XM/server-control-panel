@@ -18,6 +18,8 @@
 #include "settings.h"
 #include "src/processviewer/processes.h"
 
+#include "file/yml.h"
+
 namespace Servers
 {
     class Server : public QObject
@@ -61,6 +63,8 @@ namespace Servers
         bool isInstalled(const QString &serverName) const;
 
         QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
+
+        QString getMongoPort();
 
     public slots:
 

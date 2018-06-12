@@ -323,7 +323,6 @@ namespace Configuration
    */
         if(servers->isInstalled("mongodb")) {
             saveSettings_MongoDB_Configuration();
-            qApp->processEvents();
         }
     }
 
@@ -458,39 +457,17 @@ namespace Configuration
             qDebug() << "[Error]" << file << "not found";
         }
 
-        // TODO switch to YAML (because the newer Mongodb versions use YAML as config
-        // format)
+        File::Yml *yml = new File::Yml();
+        YAML::Node config = yml->load(file);
 
-        /*File::INI *ini = new File::INI(file.toLatin1());
+        config["storage"]["dbPath"] = ui->lineEdit_mongodb_dbpath->text();
+        config["net"]["port"] = ui->lineEdit_mongodb_port->text();
 
-        ini->setStringValue("mongodb", "bind_ip", ui->lineEdit_mongodb_bindip->text().toLatin1());
-        ini->setStringValue("mongodb", "port", ui->lineEdit_mongodb_port->text().toLatin1());
-        ini->setStringValue("mongodb", "storageengine", ui->comboBox_mongodb_storageengine->currentText().toLatin1());
-        ini->setBoolValue("mongodb", "fork", ui->checkBox_mongodb_fork->isChecked());
-        ini->setBoolValue("mongodb", "rest", ui->checkBox_mongodb_rest->isChecked());
-        ini->setBoolValue("mongodb", "verbose", ui->checkBox_mongodb_verbose->isChecked());
-        ini->setBoolValue("mongodb", "noauth", ui->checkBox_mongodb_noauth->isChecked());
-        ini->setStringValue("mongodb", "dbpath", ui->lineEdit_mongodb_dbpath->text().toLatin1());
+        //qDebug() << YAML::yamlToVariant(config).toMap();
 
-        ini->writeConfigFile();*/
+        yml->saveConfig(file, config);
 
-        File::Yml *o = new File::Yml();
-        YAML::Node config = o->load(file);
-        const YAML::Node& storage = config["storage"]["dbpath"];
-
-        for (YAML::const_iterator it = storage.begin(); it != storage.end(); ++it){
-            qDebug() << "Key: " << toString(it->first.as<std::string>());
-            /*switch (it.Type()) {
-              case Null: // ...
-              case Scalar: // ...
-              case Sequence: // ...
-              case Map: // ...
-              case Undefined: // ...
-            }*/
-            qDebug() << toString(it->second.as<std::string>());
-            //qDebug() << "Val: " << toString(it->second.as<std::string>()) << "\n";
-        }
-
+        qDebug() << "[MongoDB Config] Saved: " << file;
     }
 
     void ConfigurationDialog::saveSettings_Nginx_Upstream()

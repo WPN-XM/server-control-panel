@@ -752,8 +752,8 @@ namespace Servers
 
         QStringList args;
         args << "--config " + QDir::currentPath() + "/bin/mongodb/mongod.conf";
-        args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
-        args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
+        //args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
+        //args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
 
         qDebug() << "[MongoDb] Starting...\n";
 
@@ -790,13 +790,14 @@ namespace Servers
         QString const mongoStopCommand = QDir::currentPath() + "/bin/mongodb/bin/mongo.exe";
 
         QStringList args;
+        args << "--port " + getMongoPort();
         args << "--eval \"db.getSiblingDB('admin').shutdownServer()\"";
 
         qDebug() << "[MongoDb] Stopping...\n";
 
         Processes::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
-        Processes::delay(250);
+        Processes::delay(1000);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", false);
     }
@@ -941,5 +942,19 @@ namespace Servers
     {
         stopRedis();
         startRedis();
+    }
+
+    QString Servers::getMongoPort()
+    {
+        QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
+
+        if (!QFile(file).exists()) {
+            qDebug() << "[Error]" << file << "not found";
+        }
+
+        File::Yml *yml = new File::Yml();
+        YAML::Node config = yml->load(file);
+
+        return QString::fromStdString(config["net"]["port"].as<std::string>());
     }
 }
