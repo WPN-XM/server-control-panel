@@ -752,8 +752,6 @@ namespace Servers
 
         QStringList args;
         args << "--config " + QDir::currentPath() + "/bin/mongodb/mongod.conf";
-        //args << "--dbpath " + QDir::currentPath() + "/bin/mongodb/data/db";
-        //args << "--logpath " + QDir::currentPath() + "/logs/mongodb.log";
 
         qDebug() << "[MongoDb] Starting...\n";
 
