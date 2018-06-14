@@ -193,9 +193,9 @@ namespace Configuration
         // because i like having a simple 0/1 in the INI file, instead of true/false.
         // if boolean is saved as string to ini, you'll get "\x1" as value for true.
 
-        /**
-   * Page "Server Control Panel" - Tab "Configuration"
-   */
+        //
+        // Configuration > Page "Server Control Panel" > Tab "Configuration"
+        //
 
         settings->set("global/runonstartup", int(ui->checkbox_runOnStartUp->isChecked()));
         settings->set("global/startminimized", int(ui->checkbox_startMinimized->isChecked()));
@@ -209,11 +209,24 @@ namespace Configuration
 
         settings->set("global/editor", QString(ui->lineEdit_SelectedEditor->text()));
 
+        //
+        // Autostart Servers with the Server Control Panel
+        //
+
+        settings->set("autostart/nginx", int(ui->checkbox_autostart_Nginx->isChecked()));
+        settings->set("autostart/php", int(ui->checkbox_autostart_PHP->isChecked()));
+        settings->set("autostart/mariadb", int(ui->checkbox_autostart_MariaDb->isChecked()));
+
+        settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
+        settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
+        settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
+        settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
+
         qApp->processEvents();
 
-        /**
-   * Configuration > Updater > Self Updater
-   */
+        //
+        // Configuration > Page "Updater" > Update Notification Settings
+        //
 
         settings->set("selfupdater/runonstartup", int(ui->checkBox_SelfUpdater_RunOnStartUp->isChecked()));
         settings->set("selfupdater/autoupdate", int(ui->checkBox_SelfUpdater_AutoUpdate->isChecked()));
@@ -224,31 +237,16 @@ namespace Configuration
 
         qApp->processEvents();
 
-        /**
-   * Autostart Servers with the Server Control Panel
-   */
+        //
+        // Configuration > Components > Nginx > Tab "Upstream"
+        //
 
-        settings->set("autostart/nginx", int(ui->checkbox_autostart_Nginx->isChecked()));
-        settings->set("autostart/php", int(ui->checkbox_autostart_PHP->isChecked()));
-        settings->set("autostart/mariadb", int(ui->checkbox_autostart_MariaDb->isChecked()));
-        settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
-        settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
-        settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
-        settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
-
+        saveSettings_Nginx_Upstream();
         qApp->processEvents();
 
-        /**
-   * Configuration > Components > PHP
-   */
-
-        /**
-   * Configuration > Components > Nginx
-   */
-
-        /**
-   * Configuration > Components > XDebug
-   */
+        //
+        // Configuration > Components > XDebug > Tab "Configuration"
+        //
 
         settings->set("xdebug/remote_enable", int(ui->checkBox_xdebug_remote_enable->isChecked()));
         settings->set("xdebug/remote_host", QString(ui->lineEdit_xdebug_remote_host->text()));
@@ -261,69 +259,64 @@ namespace Configuration
 
         qApp->processEvents();
 
-        /**
-   * Configuration > Components > MariaDB
-   */
+        //
+        // Configuration > Components > MariaDBTab > Tab "Configuration"
+        //
 
         settings->set("mariadb/port", QString(ui->lineEdit_mariadb_port->text()));
 
-        /**
-   * Configuration > Components > MongoDB
-   */
+        saveSettings_MariaDB_Configuration();
 
-        settings->set("mongodb/port", QString(ui->lineEdit_mongodb_port->text()));
-        settings->set("mongodb/dbpath", QString(QDir::toNativeSeparators(ui->lineEdit_mongodb_dbpath->text())));
+        qApp->processEvents();
 
-        /**
-   * Configuration > Components > PostgreSQL
-   */
-        settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
+        //
+        // Configuration > Components > MongoDB
+        //
 
-        /**
-   * Configuration > Components > Redis
-   */
-        settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
+        // We do not save mongodb values into the wpn-xm.ini file.
+        // All setting go directly into mongod.conf yaml file.
 
-        /**
-   * Configuration > Components > Memcached
-   */
-
-        settings->set("memcached/tcpport", QString(ui->lineEdit_memcached_tcpport->text()));
-        settings->set("memcached/udpport", QString(ui->lineEdit_memcached_udpport->text()));
-        settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
-        settings->set("memcached/maxconnections", QString(ui->lineEdit_memcached_maxconnections->text()));
-        settings->set("memcached/maxmemory", QString(ui->lineEdit_memcached_maxmemory->text()));
-
-        /**
-   * Tab "Upstream" > Page "Nginx"
-   */
-        if(servers->isInstalled("nginx")) {
-            saveSettings_Nginx_Upstream();
+        if(servers->isInstalled("mongodb"))
+        {
+            saveSettings_MongoDB_Configuration();
             qApp->processEvents();
         }
 
-        /**
-   * Tab "Configuration" > Page "MariaDB"
-   */
-        if(servers->isInstalled("mariadb")) {
-            saveSettings_MariaDB_Configuration();
+        //
+        // Configuration > Components > PostgreSQL
+        //
+
+        if(servers->isInstalled("postgresql"))
+        {
+            settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
             qApp->processEvents();
         }
 
-        /**
-   * Tab "Configuration" > Page "Regis"
-   */
-        if(servers->isInstalled("redis")) {
+        //
+        // Configuration > Components > Memcached
+        //
+
+        if(servers->isInstalled("memcached"))
+        {
+            settings->set("memcached/tcpport", QString(ui->lineEdit_memcached_tcpport->text()));
+            settings->set("memcached/udpport", QString(ui->lineEdit_memcached_udpport->text()));
+            settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
+            settings->set("memcached/maxconnections", QString(ui->lineEdit_memcached_maxconnections->text()));
+            settings->set("memcached/maxmemory", QString(ui->lineEdit_memcached_maxmemory->text()));
+            qApp->processEvents();
+        }
+
+        //
+        // Configuration > Components > Redis > Tab "Configuration"
+        //
+
+        if(servers->isInstalled("redis"))
+        {
+            settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
+
             saveSettings_Redis_Configuration();
             qApp->processEvents();
-        }
-
-        /**
-   *Tab "Configuration" > Page "MongoDB"
-   */
-        if(servers->isInstalled("mongodb")) {
-            saveSettings_MongoDB_Configuration();
-        }
+        }       
     }
 
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
