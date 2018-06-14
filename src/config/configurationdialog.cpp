@@ -42,8 +42,8 @@ namespace Configuration
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
     /**
-     * Search for items in the "Configuration Menu" TreeWidget by using type-ahead
-     * search
+     * Search for items in the "Configuration Menu" TreeWidget
+     * by using type-ahead search
      *
      * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
      * @param query
@@ -59,11 +59,12 @@ namespace Configuration
             if (item && item->text(0).contains(query, Qt::CaseInsensitive)) {
                 item->setHidden(false);
             } else {
-                // Problem: the matched child is visibile, but parent is hidden, because
-                // no match.
+                // Problem:
+                // the matched child is visibile, but parent is hidden, because no match.
                 // so, lets hide only items without childs.
-                // any not matching parent will stay visible.. until next iteration, see
-                // below.
+                // any not matching parent will stay visible..
+                // until we iterate over items with hidden childs and hide the parent
+                // see below
                 if (item->childCount() == 0) {
                     item->setHidden(true);
                 }
@@ -71,23 +72,14 @@ namespace Configuration
             ++iterator;
         }
 
-        // Iterate over items with childs : hide, if they do not have a matching
-        // (visible) child (see above).
-        QTreeWidgetItemIterator parentIterator(ui->configMenuTreeWidget, QTreeWidgetItemIterator::HasChildren);
+        // Iterate over items with hidden childs (parents) and hide them too
+        QTreeWidgetItemIterator parentIterator(ui->configMenuTreeWidget,
+             QTreeWidgetItemIterator::HasChildren|QTreeWidgetItemIterator::Hidden
+        );
+
         while (*parentIterator) {
             QTreeWidgetItem *item = *parentIterator;
-            // count the number of hidden childs
-            int childs = item->childCount();
-            int hiddenChilds = 0;
-            for (int i = 0; i < childs; ++i) {
-                if (item->child(i)->isHidden()) {
-                    ++hiddenChilds;
-                }
-            }
-            // finally: if all childs are hidden, hide the parent (*item), too
-            if (hiddenChilds == childs) {
-                item->setHidden(true);
-            }
+            item->setHidden(true);
             ++parentIterator;
         }
     }
