@@ -42,12 +42,12 @@ namespace Configuration
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
     /**
- * Search for items in the "Configuration Menu" TreeWidget by using type-ahead
- * search
- *
- * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
- * @param query
- */
+     * Search for items in the "Configuration Menu" TreeWidget by using type-ahead
+     * search
+     *
+     * @brief ConfigurationDialog::on_configMenuSearchLineEdit_textChanged
+     * @param query
+     */
     void ConfigurationDialog::on_configMenuSearchLineEdit_textChanged(const QString &query)
     {
         ui->configMenuTreeWidget->expandAll();
@@ -465,7 +465,7 @@ namespace Configuration
 
         yml->saveConfig(file, config);
 
-        qDebug() << "[MongoDB Config] Saved: " << file;
+        qDebug() << "[MongoDB][Config] Saved: " << file;
     }
 
     void ConfigurationDialog::saveSettings_Nginx_Upstream()
@@ -473,12 +473,12 @@ namespace Configuration
         QJsonObject upstreams;
         upstreams.insert("pools", serialize_toJSON_Nginx_Upstream_PoolsTable(ui->tableWidget_Nginx_Upstreams));
 
-        // write JSON file
+        // a) write JSON file
         QJsonDocument jsonDoc;
         jsonDoc.setObject(upstreams);
         File::JSON::save(jsonDoc, "./bin/wpnxm-scp/nginx-upstreams.json");
 
-        // update Nginx upstream config files
+        // b) update individual Nginx upstream config files
         writeNginxUpstreamConfigs(jsonDoc);
     }
 
@@ -541,7 +541,7 @@ namespace Configuration
             }
             file.close();
 
-            qDebug() << "[Nginx Upstream Config] Saved: " << filename;
+            qDebug() << "[Nginx][Upstream Config] Saved: " << filename;
         }
     }
 
@@ -579,8 +579,8 @@ namespace Configuration
 
             // serialize the currently displayed server table
             if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == poolName) {
-                qDebug() << "Serializing the currently displayed";
-                qDebug() << "Servers Table of Pool" << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name")
+                qDebug() << "[Nginx][Config] Serializing the Servers Table of Pool:"
+                         << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name").toString()
                          << poolName;
 
                 jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(ui->tableWidget_Nginx_Servers));
