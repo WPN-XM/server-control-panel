@@ -44,6 +44,8 @@ namespace Configuration
         void fileOpen();
 
         void setServers(Servers::Servers *servers);
+
+        void hideComponentsNotInstalledInMenuTree();
         void hideAutostartCheckboxesOfNotInstalledServers();
 
         void setCurrentStackWidget(QString widgetname);

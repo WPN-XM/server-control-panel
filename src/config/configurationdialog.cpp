@@ -7,8 +7,6 @@
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
 
-//#include <QTextStream>
-
 #include "third-party/qyaml/qyaml/qyaml.h"
 
 namespace Configuration
@@ -24,6 +22,8 @@ namespace Configuration
 
         this->settings = new Settings::SettingsManager;
         readSettings();
+
+        hideComponentsNotInstalledInMenuTree();
 
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
@@ -650,6 +650,44 @@ namespace Configuration
         // right box
         for (int i = 0; i < ui->autostartServersFormLayout2->count(); ++i) {
             ui->autostartServersFormLayout2->itemAt(i)->widget()->setEnabled(run);
+        }
+    }
+
+    // show only installed items/childs underneath "Components"
+    void ConfigurationDialog::hideComponentsNotInstalledInMenuTree()
+    {
+        QStringList installedSL = this->servers->getInstalledServerNames();
+
+        // force append xdebug as installed server to unhide it
+        installedSL << "xdebug";
+
+        // get tree item "Components"
+        QList<QTreeWidgetItem *> itemList = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString);
+        QTreeWidgetItem *components = itemList[0];
+
+        // iterate over childs
+        for (int i=0; i < components->childCount(); i++)
+        {
+            // get child and hide it
+            QTreeWidgetItem *childItem = components->child(i);
+            childItem->setHidden(true);
+
+            // iterate over installed server names
+            //for (int j=0; j < installed.count(); j++)
+            QMutableStringListIterator installedML(installedSL);
+            while(installedML.hasNext())
+            {
+                // get servername
+                QString serverName = installedML.next();
+
+                // check, if child name is an installed server name
+                if(childItem->text(0).contains(serverName, Qt::CaseInsensitive)) {
+                    childItem->setHidden(false); // show the item
+                    installedML.remove(); // remove from installed server list
+                    //qDebug() << "[ConfigDialog][Components] Show Item " << serverName;
+                    break;
+                }
+            }
         }
     }
 
