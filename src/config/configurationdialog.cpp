@@ -56,7 +56,7 @@ namespace Configuration
         QTreeWidgetItemIterator iterator(ui->configMenuTreeWidget, QTreeWidgetItemIterator::All);
         while (*iterator) {
             QTreeWidgetItem *item = *iterator;
-            if (item && item->text(0).contains(query, Qt::CaseInsensitive)) {
+            if (item->text(0).contains(query, Qt::CaseInsensitive)) {
                 item->setHidden(false);
             } else {
                 // Problem:
