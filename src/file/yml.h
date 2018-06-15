@@ -1,8 +1,13 @@
 #ifndef YML_H
 #define YML_H
 
-#include <QFile>
-#include <QTextStream>
+//#include <QFile>
+//#include <QTextStream>
+
+#include <QVariant>
+#include <QStringList>
+#include <QRegExp>
+
 #include "yaml-cpp/yaml.h"
 
 namespace YAML
@@ -19,7 +24,7 @@ namespace File
     {
     public:
         YAML::Node load(const QString &fileName);
-        bool save(const QString &filename, YAML::Node node);
+        //bool save(const QString &filename, YAML::Node node);
         bool saveConfig(const QString &filename, YAML::Node node);
     };
 }

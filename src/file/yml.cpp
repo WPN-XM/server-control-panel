@@ -1,5 +1,4 @@
 #include "src/file/yml.h"
-#include <QDebug>
 
 #include <iostream>
 #include <fstream>
@@ -104,9 +103,9 @@ namespace File
         return true;
     }
 
-    bool Yml::save(const QString &filename, YAML::Node node)
+    /*bool Yml::save(const QString &filename, YAML::Node node)
     {
-        /*
+
         //qDebug() << YAML::yamlToVariant(node).toMap();
 
         QFile file(filename);
@@ -119,7 +118,7 @@ namespace File
         out << node; // this doesn't work
 
         file.close();
-        */
+
         return true;
-    }
+    }*/
 } // end NS FILE
