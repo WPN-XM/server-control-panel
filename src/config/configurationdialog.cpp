@@ -784,7 +784,7 @@ namespace Configuration
         ui->tableWidget_Nginx_Upstreams->clearContents();
         ui->tableWidget_Nginx_Upstreams->model()->removeRows(0, ui->tableWidget_Nginx_Upstreams->rowCount());
 
-        // insert default data: "php_upstream_pool hash $request_uri consistent;"
+        // insert default data into row
         int row = ui->tableWidget_Nginx_Upstreams->rowCount();
         ui->tableWidget_Nginx_Upstreams->insertRow(row);
         ui->tableWidget_Nginx_Upstreams->setItem(row, NginxAddUpstreamDialog::Column::Pool,
@@ -800,16 +800,15 @@ namespace Configuration
         ui->tableWidget_Nginx_Servers->clearContents();
         ui->tableWidget_Nginx_Servers->model()->removeRows(0, ui->tableWidget_Nginx_Servers->rowCount());
 
+        // insert default data into row
         int row = ui->tableWidget_Nginx_Servers->rowCount();
         ui->tableWidget_Nginx_Servers->insertRow(row);
-        ui->tableWidget_Nginx_Servers->setItem(
-            row, NginxAddServerDialog::Column::Address, new QTableWidgetItem("127.0.0.1"));
-        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port, new QTableWidgetItem("9000"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address, new QTableWidgetItem("127.0.0.1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port, new QTableWidgetItem("9100"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight, new QTableWidgetItem("1"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails, new QTableWidgetItem("1"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout, new QTableWidgetItem("1s"));
-        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren,
-                                               new QTableWidgetItem("5"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren, new QTableWidgetItem("5"));
     }
 
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
