@@ -477,11 +477,11 @@ namespace Configuration
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml = new File::Yml();
+        File::Yml *yml    = new File::Yml();
         YAML::Node config = yml->load(file);
 
         config["storage"]["dbPath"] = ui->lineEdit_mongodb_dbpath->text();
-        config["net"]["port"] = ui->lineEdit_mongodb_port->text();
+        config["net"]["port"]       = ui->lineEdit_mongodb_port->text();
 
         // qDebug() << YAML::yamlToVariant(config).toMap();
 
@@ -510,7 +510,7 @@ namespace Configuration
 
         // build servers string by iterating over all pools
 
-        QJsonObject json = jsonDoc.object();
+        QJsonObject json      = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools (key)
@@ -518,8 +518,8 @@ namespace Configuration
             // the "value" object has the key/value pairs of a pool
             QJsonObject jsonPool = iter.value().toObject();
 
-            QString poolName = jsonPool["name"].toString();
-            QString method = jsonPool["method"].toString();
+            QString poolName        = jsonPool["name"].toString();
+            QString method          = jsonPool["method"].toString();
             QJsonObject jsonServers = jsonPool["servers"].toObject();
 
             // build "servers" block for later insertion into the upstream template
@@ -594,7 +594,7 @@ namespace Configuration
         for (int i = 0; i < rows; ++i) {
 
             QString poolName = pools->item(i, NginxAddUpstreamDialog::Column::Pool)->text();
-            QString method = pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
+            QString method   = pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
 
             jsonPool.insert("name", poolName);
             jsonPool.insert("method", method);
@@ -684,7 +684,7 @@ namespace Configuration
 
         // get tree item "Components"
         QList<QTreeWidgetItem *> itemList = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString);
-        QTreeWidgetItem *components = itemList[0];
+        QTreeWidgetItem *components       = itemList[0];
 
         // iterate over childs
         for (int i = 0; i < components->childCount(); i++) {
@@ -720,9 +720,9 @@ namespace Configuration
             QCheckBox *box = boxes.at(i);
 
             // return last part of "checkbox_autostart_*"
-            QString name = box->objectName().section("_", -1).toLower();
+            QString name      = box->objectName().section("_", -1).toLower();
             QString labelName = this->servers->getCamelCasedServerName(name) + "Label";
-            QLabel *label = ui->tabWidget->findChild<QLabel *>(labelName);
+            QLabel *label     = ui->tabWidget->findChild<QLabel *>(labelName);
 
             if (installed.contains(name) == true) {
                 qDebug() << "[" + name + "] Autostart Checkbox visible.";
@@ -922,7 +922,7 @@ namespace Configuration
 
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
-        QJsonObject json = jsonDoc.object();
+        QJsonObject json      = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools
@@ -1013,7 +1013,7 @@ namespace Configuration
     {
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
-        QJsonObject json = jsonDoc.object();
+        QJsonObject json      = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools

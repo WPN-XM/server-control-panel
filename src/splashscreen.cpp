@@ -9,9 +9,9 @@ namespace ServerControlPanel
         this->setCursor(Qt::BusyCursor);
 
         // set reference point, paddings
-        int paddingRight = 20;
-        int paddingTop = 50;
-        int titleVersionVSpace = 17;
+        int paddingRight         = 20;
+        int paddingTop           = 50;
+        int titleVersionVSpace   = 17;
         int titleCopyrightVSpace = 35;
 
         double physicalDPI = qApp->primaryScreen()->physicalDotsPerInch();
@@ -20,8 +20,8 @@ namespace ServerControlPanel
         float fontFactor = (((15 * 0.03937) * scaleFactor) + 0.5);
 
         // define texts
-        QString titleText = QString(QApplication::applicationName());
-        QString versionText = QString("Version %1").arg(QString::fromStdString(APP_VERSION_SHORT));
+        QString titleText     = QString(QApplication::applicationName());
+        QString versionText   = QString("Version %1").arg(QString::fromStdString(APP_VERSION_SHORT));
         QString copyrightText = QChar(0xA9) + QString(" 2010-%1 ").arg(QDate::currentDate().toString("yyyy")) +
                                 QString(tr("Jens-André Koch"));
 
@@ -36,7 +36,7 @@ namespace ServerControlPanel
 
         // check font size and drawing width
         pixPaint.setFont(QFont(font, 33 * fontFactor));
-        QFontMetrics fm = pixPaint.fontMetrics();
+        QFontMetrics fm    = pixPaint.fontMetrics();
         int titleTextWidth = fm.width(titleText);
         if (titleTextWidth > 160) {
             // strange font rendering, Arial probably not found
@@ -78,13 +78,13 @@ namespace ServerControlPanel
         // set style for progressbar
         QStyleOptionProgressBar progressBar;
         progressBar.initFrom(&bar);
-        progressBar.state = QStyle::State_Enabled | QStyle::State_Active;
-        progressBar.textVisible = false;
-        progressBar.minimum = 0;
-        progressBar.maximum = 100;
-        progressBar.progress = progress;
+        progressBar.state              = QStyle::State_Enabled | QStyle::State_Active;
+        progressBar.textVisible        = false;
+        progressBar.minimum            = 0;
+        progressBar.maximum            = 100;
+        progressBar.progress           = progress;
         progressBar.invertedAppearance = false;
-        progressBar.rect = QRect(20, 308, 440, 6); // Position of the progressBar
+        progressBar.rect               = QRect(20, 308, 440, 6); // Position of the progressBar
 
         painter->save();
 

@@ -18,7 +18,7 @@ namespace HostsFileManager
         enum Columns
         {
             COLUMN_ADDRESS = 0,
-            COLUMN_NAME = 1,
+            COLUMN_NAME    = 1,
         };
 
         int rowCount(const QModelIndex &parent) const;

@@ -14,20 +14,20 @@ namespace Servers
         foreach (QString serverName, installedServers) {
             Server *server = new Server();
 
-            server->lowercaseName = serverName;
-            server->name = getCamelCasedServerName(serverName);
-            server->icon = QIcon(":/status_stop");
-            server->logFiles = getLogFiles(serverName);
+            server->lowercaseName    = serverName;
+            server->name             = getCamelCasedServerName(serverName);
+            server->icon             = QIcon(":/status_stop");
+            server->logFiles         = getLogFiles(serverName);
             server->workingDirectory = getServerBinPath(serverName);
-            server->exe = getExecutablePath(server->name);
+            server->exe              = getExecutablePath(server->name);
 
             QMenu *menu = new QMenu(server->name);
             menu->setObjectName(QString("menu").append(server->name));
             menu->setIcon(server->icon);
 
             QAction *restartAction = new QAction(QIcon(":/action_restart"), tr("Restart"), menu);
-            QAction *startAction = new QAction(QIcon(":/action_run"), tr("Start"), menu);
-            QAction *stopAction = new QAction(QIcon(":/action_stop"), tr("Stop"), menu);
+            QAction *startAction   = new QAction(QIcon(":/action_run"), tr("Start"), menu);
+            QAction *stopAction    = new QAction(QIcon(":/action_stop"), tr("Stop"), menu);
 
             restartAction->setObjectName(QString("restart").append(server->name));
             startAction->setObjectName(QString("start").append(server->name));
@@ -238,7 +238,7 @@ namespace Servers
 
         // anti "control reaches end of non-void function" faked return
         Server *server = new Server();
-        server->name = QString("Not Installed");
+        server->name   = QString("Not Installed");
         return server;
     }
 
@@ -498,7 +498,7 @@ namespace Servers
 
         auto end = PHPServersToStart.cend();
         for (auto item = PHPServersToStart.cbegin(); item != end; ++item) {
-            QString port = item.key();
+            QString port        = item.key();
             QString phpchildren = item.value();
 
             // if PHP version 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP
@@ -535,13 +535,13 @@ namespace Servers
 
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
-        QJsonObject json = jsonDoc.object();
+        QJsonObject json      = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
         // iterate over 1..n pools
         for (QJsonObject::Iterator iter = jsonPools.begin(); iter != jsonPools.end(); ++iter) {
             // get values for a "pool", we need the key "servers"
-            QJsonObject jsonPool = iter.value().toObject();
+            QJsonObject jsonPool    = iter.value().toObject();
             QJsonObject jsonServers = jsonPool["servers"].toObject();
 
             // iterate over 1..n jsonServers
@@ -681,7 +681,7 @@ namespace Servers
         QString configFile = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/my.ini");
 
         // read the password from "my.ini"
-        File::INI *ini = new File::INI(configFile.toLatin1());
+        File::INI *ini   = new File::INI(configFile.toLatin1());
         QString password = ini->getStringValue("client", "password");
         delete ini;
 
@@ -946,7 +946,7 @@ namespace Servers
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml = new File::Yml();
+        File::Yml *yml    = new File::Yml();
         YAML::Node config = yml->load(file);
 
         return QString::fromStdString(config["net"]["port"].as<std::string>());

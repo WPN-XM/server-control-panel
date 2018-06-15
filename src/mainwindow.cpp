@@ -452,7 +452,7 @@ namespace ServerControlPanel
 
         // disable Action "Webinterface" in TrayMenu, when PHP+Nginx are off
         QList<QAction *> actions = tray->contextMenu()->actions();
-        const int listSize = actions.size();
+        const int listSize       = actions.size();
         for (int i = 0; i < listSize; ++i) {
             if (actions.at(i)->iconText() == tr("Webinterface")) {
                 actions.at(i)->setEnabled(enabled);
@@ -536,7 +536,7 @@ namespace ServerControlPanel
 
     void MainWindow::updateTrayIconTooltip()
     {
-        QString tip = "";
+        QString tip     = "";
         QWidget *widget = ui->centralWidget;
 
         if (widget->findChild<QLabel *>("label_Nginx_Status")->isEnabled()) {
@@ -1006,7 +1006,7 @@ namespace ServerControlPanel
     {
         // get log file from objectName of the Signal
         QPushButton *button = (QPushButton *)sender();
-        QString logfile = this->getLogfile(button->objectName());
+        QString logfile     = this->getLogfile(button->objectName());
 
         if (!QFile().exists(logfile)) {
             QMessageBox::warning(this, tr("Warning"), tr("Log file not found: \n") + logfile, QMessageBox::Yes);
@@ -1541,7 +1541,7 @@ namespace ServerControlPanel
             }
         } else {
             QString srvname = servers->getCamelCasedServerName(server);
-            QLabel *label = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
+            QLabel *label   = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
             if (label != 0) {
                 if (enabled) {
                     QString port = getPort(server);
@@ -1565,7 +1565,7 @@ namespace ServerControlPanel
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml = new File::Yml();
+        File::Yml *yml    = new File::Yml();
         YAML::Node config = yml->load(file);
 
         return QString::fromStdString(config["net"]["port"].as<std::string>());

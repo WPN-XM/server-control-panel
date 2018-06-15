@@ -142,14 +142,14 @@ namespace ServerControlPanel
     void Tray::setMessage(const QString &title)
     {
         tooltipTitle = "Info";
-        tooltipMsg = title;
+        tooltipMsg   = title;
         return;
     }
 
     void Tray::setMessage(const QString &title, const QString &msg)
     {
         tooltipTitle = title;
-        tooltipMsg = msg;
+        tooltipMsg   = msg;
         return;
     }
 

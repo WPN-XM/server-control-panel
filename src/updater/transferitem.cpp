@@ -29,8 +29,8 @@ namespace Downloader
     void TransferItem::updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
     {
         progress["bytesReceived"] = QString::number(bytesReceived);
-        progress["bytesTotal"] = QString::number(bytesTotal);
-        progress["size"] = getSizeHumanReadable(outputFile->size());
+        progress["bytesTotal"]    = QString::number(bytesTotal);
+        progress["size"]          = getSizeHumanReadable(outputFile->size());
         progress["speed"] = QString::number((double)outputFile->size() / timer.elapsed(), 'f', 0).append(" KB/s");
         // progress["time"]          =
         // QString::number((double)timer.elapsed()/1000,'f',2).append("s");
@@ -81,7 +81,7 @@ namespace Downloader
 
             // get filename from URL
             QString fileName = reply->url().path();
-            fileName = fileName.mid(fileName.lastIndexOf('/') + 1);
+            fileName         = fileName.mid(fileName.lastIndexOf('/') + 1);
             if (fileName.isEmpty()) {
                 fileName = QLatin1String("index.html"); // fallback filename
             }
@@ -122,7 +122,7 @@ namespace Downloader
                     if (!outputFile->exists() && outputFile->open(QIODevice::WriteOnly | QIODevice::Truncate)) {
                         break;
                     }
-                    QString enumedFileName = QString(QLatin1String("%1.%2")).arg(fileName).arg(i);
+                    QString enumedFileName   = QString(QLatin1String("%1.%2")).arg(fileName).arg(i);
                     QString downloadFilePath = QDir::toNativeSeparators(downloadFolder.append(enumedFileName));
                     outputFile->setFileName(downloadFilePath);
                 }
@@ -156,7 +156,7 @@ namespace Downloader
             }
 
             QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
-            url = reply->url().resolved(url);
+            url      = reply->url().resolved(url);
             qDebug() << "[DownloadItem] Finished, but " << reply->url() << "redirected to " << url;
             if (redirects.contains(url)) {
                 qDebug() << "[DownloadItem] Redirect Loop Detected";

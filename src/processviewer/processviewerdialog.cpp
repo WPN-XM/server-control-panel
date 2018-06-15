@@ -129,7 +129,7 @@ void ProcessViewerDialog::filter(QString filterByItem, const QString &query)
     while (*parentIterator) {
         QTreeWidgetItem *item = *parentIterator;
         // count the number of hidden childs
-        int childs = item->childCount();
+        int childs       = item->childCount();
         int hiddenChilds = 0;
         for (int i = 0; i < childs; ++i) {
             if (item->child(i)->isHidden()) {

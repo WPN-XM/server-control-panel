@@ -7,10 +7,10 @@ namespace HostsFileManager
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-        QPushButton *btnOk = new QPushButton("OK", this);
+        QPushButton *btnOk     = new QPushButton("OK", this);
         QPushButton *btnCancel = new QPushButton("Cancel", this);
 
-        lineEdit_Name = new QLineEdit(this);
+        lineEdit_Name    = new QLineEdit(this);
         lineEdit_Address = new QLineEdit(this);
         lineEdit_Address->setText("127.0.0.1");
 

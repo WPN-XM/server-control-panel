@@ -59,7 +59,7 @@ namespace ServerControlPanel
         // find out the positional arguments.
         parser.parse(QCoreApplication::arguments());
         const QStringList args = parser.positionalArguments();
-        const QString command = args.isEmpty() ? QString() : args.first();
+        const QString command  = args.isEmpty() ? QString() : args.first();
 
         // -h, --help, -?
         if (parser.isSet(helpOption)) {
@@ -290,72 +290,72 @@ namespace ServerControlPanel
     void CLI::colorPrint(QString msg, QString colorName)
     {
         int prefix = 0;
-        int color = 0;
+        int color  = 0;
 
         if (colorName == "black") {
             prefix = 0;
-            color = 0;
+            color  = 0;
         }
         if (colorName == "darkred") {
             prefix = 0;
-            color = 31;
+            color  = 31;
         }
         if (colorName == "green") {
             prefix = 0;
-            color = 32;
+            color  = 32;
         }
         if (colorName == "yellow") {
             prefix = 0;
-            color = 33;
+            color  = 33;
         }
         if (colorName == "blue") {
             prefix = 0;
-            color = 34;
+            color  = 34;
         }
         if (colorName == "magenta") {
             prefix = 0;
-            color = 35;
+            color  = 35;
         }
         if (colorName == "cyan") {
             prefix = 0;
-            color = 36;
+            color  = 36;
         }
         if (colorName == "white") {
             prefix = 0;
-            color = 37;
+            color  = 37;
         }
         if (colorName == "gray") {
             prefix = 0;
-            color = 37;
+            color  = 37;
         } // white = gray
 
         if (colorName == "red") {
             prefix = 1;
-            color = 31;
+            color  = 31;
         }
         if (colorName == "lightgreen") {
             prefix = 1;
-            color = 32;
+            color  = 32;
         }
         if (colorName == "lightyellow") {
             prefix = 1;
-            color = 33;
+            color  = 33;
         }
         if (colorName == "lightblue") {
             prefix = 1;
-            color = 34;
+            color  = 34;
         }
         if (colorName == "lightmagenta") {
             prefix = 1;
-            color = 35;
+            color  = 35;
         }
         if (colorName == "lightcyan") {
             prefix = 1;
-            color = 36;
+            color  = 36;
         }
         if (colorName == "brightwhite") {
             prefix = 1;
-            color = 37;
+            color  = 37;
         }
 
         WindowsAPI::qWinColoredMsg(prefix, color, msg.toLocal8Bit().constData());

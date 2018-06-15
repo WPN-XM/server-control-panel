@@ -51,7 +51,7 @@ namespace File
         if (bb.size() > 0) { // Check for memory allocation failure
             qint64 byteswritten;
             qint64 bytesread = src.read(bb.data(), bb.size());
-            success = (bytesread > 0);
+            success          = (bytesread > 0);
             while (bytesread > 0) {
                 byteswritten = dest.write(bb.data(), bytesread);
                 success &= (bytesread == byteswritten);

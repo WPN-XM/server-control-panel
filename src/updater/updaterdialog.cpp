@@ -73,7 +73,7 @@ namespace Updater
             rowItems.append(websiteURL);
 
             // Installed Version (= Your current version)
-            QString installedVersionString = "1.2.3"; // TODO: detect currently installed versions
+            QString installedVersionString  = "1.2.3"; // TODO: detect currently installed versions
             QStandardItem *installedVersion = new QStandardItem(installedVersionString);
             installedVersion->setTextAlignment(Qt::AlignCenter);
             rowItems.append(installedVersion);
@@ -234,7 +234,7 @@ namespace Updater
 
         // setup progressbar
         Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
-        ProgressBarUpdater *progressBar = new ProgressBarUpdater(this, index.row());
+        ProgressBarUpdater *progressBar    = new ProgressBarUpdater(this, index.row());
         connect(transfer, SIGNAL(downloadProgress(QMap<QString, QVariant>)), progressBar,
                 SLOT(updateProgress(QMap<QString, QVariant>)));
         connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem * t)), progressBar,

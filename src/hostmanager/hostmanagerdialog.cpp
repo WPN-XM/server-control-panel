@@ -62,11 +62,11 @@ namespace HostsFileManager
         HostsAddDialog aDialog;
 
         if (aDialog.exec()) {
-            QString name = aDialog.name();
+            QString name    = aDialog.name();
             QString address = aDialog.address();
 
             HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
-            QList<Host *> list = model->getList();
+            QList<Host *> list     = model->getList();
 
             // do the add
             Host host(name, address);
@@ -85,7 +85,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::editEntry()
     {
-        HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
+        HostsTableModel *model              = static_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -99,12 +99,12 @@ namespace HostsFileManager
                 row = index.row();
 
                 QModelIndex indexName = model->index(row, HostsTableModel::COLUMN_NAME, QModelIndex());
-                QVariant varName = model->data(indexName, Qt::DisplayRole);
-                name = varName.toString();
+                QVariant varName      = model->data(indexName, Qt::DisplayRole);
+                name                  = varName.toString();
 
                 QModelIndex indexAddress = model->index(row, HostsTableModel::COLUMN_ADDRESS, QModelIndex());
-                QVariant varAddr = model->data(indexAddress, Qt::DisplayRole);
-                address = varAddr.toString();
+                QVariant varAddr         = model->data(indexAddress, Qt::DisplayRole);
+                address                  = varAddr.toString();
             }
 
             HostsAddDialog aDialog;
@@ -122,7 +122,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::removeEntry()
     {
-        HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
+        HostsTableModel *model              = static_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();

@@ -58,7 +58,7 @@ namespace WindowsAPI
 
     BOOL QtWin::IsWow64()
     {
-        BOOL bIsWow64 = FALSE;
+        BOOL bIsWow64                        = FALSE;
         LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;
 
         fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");

@@ -81,11 +81,11 @@ public:
     /* This enum determines in which corner will be displayed the arrow */
     enum ArrowPositions
     {
-        TopLeft = 0,
-        TopRight = 1,
-        BottomLeft = 2,
+        TopLeft     = 0,
+        TopRight    = 1,
+        BottomLeft  = 2,
         BottomRight = 3,
-        LeftTop = 4
+        LeftTop     = 4
     };
     Q_DECLARE_FLAGS(ArrowPosition, ArrowPositions)
     Q_ENUMS(ArrowPositions)

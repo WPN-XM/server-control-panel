@@ -9,6 +9,7 @@
 ---
 AccessModifierOffset: -4
 ConstructorInitializerIndentWidth: 4
+AlignConsecutiveAssignments: true
 AlignEscapedNewlinesLeft: true
 AlignOperands: true
 AlignTrailingComments: false
@@ -16,6 +17,7 @@ AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: true
 
@@ -71,4 +73,3 @@ SpacesInParentheses: false
 Standard: Cpp11
 TabWidth: 4
 UseTab: Never
-...

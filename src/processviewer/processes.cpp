@@ -134,12 +134,12 @@ QList<Process> Processes::getRunningProcesses()
         QStringList details = getProcessDetails(pe.th32ProcessID);
 
         Process p;
-        p.pid = QString::number((int)pe.th32ProcessID);
+        p.pid  = QString::number((int)pe.th32ProcessID);
         p.ppid = QString::number((int)pe.th32ParentProcessID);
         p.name = QString::fromWCharArray(pe.szExeFile);
 
         if (!details.empty()) {
-            p.path = details.at(0);
+            p.path        = details.at(0);
             p.memoryUsage = details.at(1);
 
             // get icon
@@ -203,9 +203,9 @@ QList<PidAndPort> Processes::getPorts()
     DWORD size;
     DWORD result;
 
-    result = GetExtendedTcpTable(NULL, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+    result   = GetExtendedTcpTable(NULL, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
     pTCPInfo = (MIB_TCPTABLE_OWNER_PID *)malloc(size);
-    result = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+    result   = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
     if (result != NO_ERROR) {
         // qDebug() << "Couldn't get our IP table";
@@ -223,7 +223,7 @@ QList<PidAndPort> Processes::getPorts()
         long port = (owner->dwLocalPort / 256) + (owner->dwLocalPort % 256) * 256;
 
         PidAndPort p;
-        p.pid = QString::number(owner->dwOwningPid);
+        p.pid  = QString::number(owner->dwOwningPid);
         p.port = QString::number(port);
 
         ports.append(p);
@@ -361,7 +361,7 @@ QString Processes::qt_create_commandline(const QString &program, const QStringLi
 // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
 bool Processes::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
 {
-    bool success = false;
+    bool success                              = false;
     static const DWORD errorElevationRequired = 740;
     PROCESS_INFORMATION pinfo;
 
@@ -372,7 +372,7 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
     // changed to parent-> runs cmd.exe with no window -> runs child -> parent
     // kills cmd.exe (child gets parentless)
 
-    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+    DWORD dwCreationFlags    = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
                                 0,
                                 0,
@@ -429,7 +429,7 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
 
     static const DWORD errorElevationRequired = 740;
     PROCESS_INFORMATION pinfo;
-    DWORD dwCreationFlags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
+    DWORD dwCreationFlags    = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
                                 0,
                                 0,

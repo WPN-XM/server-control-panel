@@ -51,7 +51,7 @@ namespace File
             else if (state == Quote) {
                 // double quote
                 if (current == '"') {
-                    int index = (i + 1 < string.size()) ? i + 1 : string.size();
+                    int index  = (i + 1 < string.size()) ? i + 1 : string.size();
                     QChar next = string.at(index);
                     if (next == '"') {
                         value += '"';

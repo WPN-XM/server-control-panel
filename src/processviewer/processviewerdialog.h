@@ -44,9 +44,9 @@ private:
     enum Columns
     {
         COLUMN_NAME = 0,
-        COLUMN_PID = 1,
+        COLUMN_PID  = 1,
         COLUMN_PORT = 2,
-        COLUMN_MEM = 3,
+        COLUMN_MEM  = 3,
     };
 
     void filter(QString filterByItem, const QString &query);

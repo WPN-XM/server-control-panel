@@ -14,29 +14,29 @@ BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text,
     : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
-    my_title = title;
-    my_text = text;
-    my_duration = duration;
-    my_icon = qApp->style()->standardIcon(icon).pixmap(QSize(15, 15));
+    my_title       = title;
+    my_text        = text;
+    my_duration    = duration;
+    my_icon        = qApp->style()->standardIcon(icon).pixmap(QSize(15, 15));
     init();
 }
 
 BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
-    my_title = title;
-    my_text = text;
-    my_duration = duration;
-    my_icon = icon.scaled(QSize(15, 15), Qt::KeepAspectRatio);
+    my_title       = title;
+    my_text        = text;
+    my_duration    = duration;
+    my_icon        = icon.scaled(QSize(15, 15), Qt::KeepAspectRatio);
     init();
 }
 
 BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
-    my_title = title;
-    my_text = text;
-    my_duration = duration;
+    my_title       = title;
+    my_text        = text;
+    my_duration    = duration;
     init();
 }
 
@@ -98,7 +98,7 @@ void BalloonTip::createRects()
 void BalloonTip::defineArrowPosition()
 {
     QSize desktopSize = QApplication::desktop()->size();
-    QPoint pos = mapToGlobal(my_pos);
+    QPoint pos        = mapToGlobal(my_pos);
 
     if (pos.x() < desktopSize.width() / 2) {
         if (pos.y() < desktopSize.height() / 2) {
@@ -127,7 +127,7 @@ void BalloonTip::paintEvent(QPaintEvent * /*ev*/)
     painter.setFont(this->font());
 
     QRect popupRect = relativePopupRect();
-    QRect textRect = relativeTextRect();
+    QRect textRect  = relativeTextRect();
 
     QPainterPath path;
     QPolygon arrowTriangle;
@@ -181,7 +181,7 @@ BalloonTip::ArrowPosition BalloonTip::arrowPosition() { return my_arrowPos; }
 void BalloonTip::setArrowPosition(BalloonTip::ArrowPosition arrowPos)
 {
     my_arrowPos = arrowPos;
-    QRect r = relativePopupRect();
+    QRect r     = relativePopupRect();
     my_closeButton->move(r.topRight() - QPoint(30, -5));
 }
 

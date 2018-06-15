@@ -13,7 +13,7 @@ namespace YAML
         }
     }
 
-    const QRegExp _yamlScalarTrueValues = QRegExp("true|True|TRUE|on|On|ON");
+    const QRegExp _yamlScalarTrueValues  = QRegExp("true|True|TRUE|on|On|ON");
     const QRegExp _yamlScalarFalseValues = QRegExp("false|False|FALSE|off|Off|OFF");
 
     QVariant yamlToVariant(const YAML::Node &node)
@@ -37,7 +37,7 @@ namespace YAML
     QVariant yamlScalarToVariant(const YAML::Node &scalarNode)
     {
         std::string stdScalar = scalarNode.as<std::string>();
-        QString scalarString = QString::fromStdString(stdScalar);
+        QString scalarString  = QString::fromStdString(stdScalar);
         if (_yamlScalarTrueValues.exactMatch(scalarString))
             return QVariant(true);
         if (_yamlScalarFalseValues.exactMatch(scalarString))

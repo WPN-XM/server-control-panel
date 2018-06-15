@@ -11,7 +11,7 @@ namespace HostsFileManager
             QTextStream hostStream(&hostFile);
             QString strLine;
             while (!(strLine = hostStream.readLine()).isNull()) {
-                strLine = strLine.trimmed();
+                strLine          = strLine.trimmed();
                 QStringList list = strLine.split(QRegExp("[ \t]"), QString::SkipEmptyParts);
 
                 // skip comment line
@@ -71,19 +71,19 @@ namespace HostsFileManager
         QString strTempFile = QDir::toNativeSeparators(tempFile.fileName());
 
         QString strArguments = "/c copy /y \"" + strTempFile + "\" \"" + strHostFile + "\"";
-        std::wstring tmp = strArguments.toStdWString();
-        LPCTSTR wcArguments = tmp.c_str();
+        std::wstring tmp     = strArguments.toStdWString();
+        LPCTSTR wcArguments  = tmp.c_str();
 
         SHELLEXECUTEINFO shExecInfo;
-        shExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-        shExecInfo.fMask = 0; // NULL;
-        shExecInfo.hwnd = NULL;
-        shExecInfo.lpVerb = L"runas";
-        shExecInfo.lpFile = L"cmd.exe";
+        shExecInfo.cbSize       = sizeof(SHELLEXECUTEINFO);
+        shExecInfo.fMask        = 0; // NULL;
+        shExecInfo.hwnd         = NULL;
+        shExecInfo.lpVerb       = L"runas";
+        shExecInfo.lpFile       = L"cmd.exe";
         shExecInfo.lpParameters = wcArguments;
-        shExecInfo.lpDirectory = NULL;
-        shExecInfo.nShow = SW_MAXIMIZE;
-        shExecInfo.hInstApp = NULL;
+        shExecInfo.lpDirectory  = NULL;
+        shExecInfo.nShow        = SW_MAXIMIZE;
+        shExecInfo.hInstApp     = NULL;
 
         ShellExecuteEx(&shExecInfo);
     }

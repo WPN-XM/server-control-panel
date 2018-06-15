@@ -67,11 +67,11 @@ namespace File
             }
 
             if (isComment == true && (ch == '\n' || ch == '\r')) {
-                isComment = false;
-                line[i++] = '\0';
-                i = 0;
+                isComment       = false;
+                line[i++]       = '\0';
+                i               = 0;
                 entry.isComment = true;
-                entry.comment = line;
+                entry.comment   = line;
                 datas.push_back(entry);
             }
 
@@ -87,7 +87,7 @@ namespace File
                 if (i == 0)
                     continue;
                 line[i] = '\0';
-                str = string(line);
+                str     = string(line);
                 log("[INI] read line: %s", str.c_str());
                 // [section] start
                 if (line[0] == '[') {
@@ -95,11 +95,11 @@ namespace File
                 } else {
                     // key value pair
                     entry.index = index.substr(1, index.length() - 2);
-                    int fIndex = static_cast<int>(str.find_first_of('='));
-                    entry.name = str.substr(0, fIndex);
+                    int fIndex  = static_cast<int>(str.find_first_of('='));
+                    entry.name  = str.substr(0, fIndex);
                     entry.value = str.substr(fIndex + 1, str.length() - fIndex - 1);
                     // trim spaces
-                    entry.name = trim(entry.name);
+                    entry.name  = trim(entry.name);
                     entry.value = trim(entry.value);
                     // insert
                     datas.push_back(entry);
@@ -113,11 +113,11 @@ namespace File
         if (i != 0) {
             INIEntry entry;
             entry.index = str;
-            int fIndex = static_cast<int>(str.find_first_of('='));
-            entry.name = str.substr(0, fIndex);
+            int fIndex  = static_cast<int>(str.find_first_of('='));
+            entry.name  = str.substr(0, fIndex);
             entry.value = str.substr(fIndex + 1, str.length() - fIndex - 1);
             // trim spaces
-            entry.name = trim(entry.name);
+            entry.name  = trim(entry.name);
             entry.value = trim(entry.value);
             // insert
             datas.push_back(entry);
@@ -152,9 +152,9 @@ namespace File
         fstream fStream;
         fStream.open(fileName, ios_base::out | ios_base::trunc);
         log("[INI] start writing file[%s]", fileName);
-        string index = string("");
+        string index     = string("");
         bool withComment = false;
-        bool isStart = true;
+        bool isStart     = true;
         for (vector<INIEntry>::iterator it = datas.begin(); it != datas.end(); it++) {
             INIEntry entry = *it;
             if (entry.isEmptyLine) {
@@ -182,7 +182,7 @@ namespace File
                 if (withComment || isStart) {
                     fStream << '[' << entry.index << ']' << endl;
                     withComment = false;
-                    isStart = false;
+                    isStart     = false;
                     log("[INI] write section [%s]", entry.index.c_str());
                 } else {
                     fStream << endl << '[' << entry.index << ']' << endl;
@@ -202,15 +202,15 @@ namespace File
         autoSave = true;
         INIEntry entry;
         entry.index = index;
-        entry.name = name;
+        entry.name  = name;
         entry.value = value;
         if (datas.size() == 0) { /*cout<<"data is NULL, push and return"<<endl; */
             datas.push_back(entry);
             return;
         }
         vector<INIEntry>::iterator it = datas.begin();
-        bool findIndex = false;
-        bool findName = false;
+        bool findIndex                = false;
+        bool findName                 = false;
         vector<INIEntry>::iterator itInsertPos;
         for (it = datas.begin(); it != datas.end(); it++) {
             if (findIndex == false) {
@@ -225,7 +225,7 @@ namespace File
                     itInsertPos = it;
                 }
                 if (strcmp(it->name.c_str(), name) == 0) {
-                    findName = true;
+                    findName    = true;
                     itInsertPos = it;
                     break;
                 }

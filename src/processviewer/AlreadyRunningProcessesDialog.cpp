@@ -21,9 +21,9 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     // shutdown
     // if(processes->areThereAlreadyRunningProcesses())
     //{
-    QLabel *labelA = new QLabel(tr("The following processes are already running:"));
+    QLabel *labelA      = new QLabel(tr("The following processes are already running:"));
     QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
-    QVBoxLayout *vbox = new QVBoxLayout;
+    QVBoxLayout *vbox   = new QVBoxLayout;
 
     QList<Process> runningProcessesList = Processes::getInstance()->getRunningProcesses();
 

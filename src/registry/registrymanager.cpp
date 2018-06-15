@@ -67,7 +67,7 @@ namespace SoftwareRegistry
         if (updateCheckResponse->error() == QNetworkReply::NoError) {
 
             // read response and parse JSON
-            QString strReply = (QString)updateCheckResponse->readAll();
+            QString strReply           = (QString)updateCheckResponse->readAll();
             QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
 
             // save JSON to file
@@ -93,7 +93,7 @@ namespace SoftwareRegistry
 
         // if the file exists, we need to check if it is old
         QDateTime fileModificationDate = QFileInfo(fileName).lastModified();
-        QDateTime today = QDateTime::currentDateTime();
+        QDateTime today                = QDateTime::currentDateTime();
 
         // updateInterval hardcoded to 3 days
         if (3 <= fileModificationDate.daysTo(today)) {

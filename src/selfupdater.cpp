@@ -166,10 +166,10 @@ namespace Updater
 
     void SelfUpdater::renameExecutable()
     {
-        QString dirPath = QCoreApplication::applicationDirPath();
-        QString exeFilePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
-        QString exeName = QFileInfo(exeFilePath).fileName();
-        QString oldExeName = exeName + ".old";
+        QString dirPath        = QCoreApplication::applicationDirPath();
+        QString exeFilePath    = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        QString exeName        = QFileInfo(exeFilePath).fileName();
+        QString oldExeName     = exeName + ".old";
         QString oldExeFilePath = QDir::toNativeSeparators(dirPath + QDir::separator() + oldExeName);
 
         qDebug() << "[SelfUpdater] Renaming";
@@ -279,7 +279,7 @@ namespace Updater
 
             // read response and parse JSON
             QString strReply = (QString)updateCheckResponse->readAll();
-            jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
+            jsonResponse     = QJsonDocument::fromJson(strReply.toUtf8());
 
             // qDebug() << "RawResponse: " << strReply;
             // qDebug() << "JsonResponse: " << jsonResponse;

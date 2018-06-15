@@ -72,8 +72,8 @@ namespace Updater
     {
         QStyleOptionButton opt;
         opt.initFrom(btn);
-        opt.rect = option.rect.adjusted(2, 2, -2, -2);
-        opt.text = "Install";
+        opt.rect  = option.rect.adjusted(2, 2, -2, -2);
+        opt.text  = "Install";
         opt.state = QStyle::State_Enabled;
         opt.features |= QStyleOptionButton::DefaultButton;
 
@@ -97,9 +97,9 @@ namespace Updater
         opt.initFrom(bar);
         opt.rect = option.rect;
         opt.rect.adjust(3, 3, -3, -3);
-        opt.textVisible = true;
+        opt.textVisible   = true;
         opt.textAlignment = Qt::AlignCenter;
-        opt.state = QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
+        opt.state         = QStyle::State_Enabled | QStyle::State_Active | QStyle::State_Raised;
 
         // get progress
         QMap<QString, QVariant> progress = index.model()->data(index).toMap();
@@ -112,10 +112,10 @@ namespace Updater
         //.arg(progress["eta"].toString());
 
         // set progress
-        opt.minimum = 0;
-        opt.maximum = progress["bytesTotal"].toFloat();
+        opt.minimum  = 0;
+        opt.maximum  = progress["bytesTotal"].toFloat();
         opt.progress = progress["bytesReceived"].toFloat();
-        opt.text = text;
+        opt.text     = text;
 
         bar->style()->drawControl(QStyle::CE_ProgressBar, &opt, painter, bar);
     }
