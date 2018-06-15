@@ -57,7 +57,7 @@ namespace Updater
         qint64 now = QDateTime::currentDateTime().currentMSecsSinceEpoch();
 
         bool timeForUpdateCheck = false;
-        if(now - interval > lastTimeChecked) {
+        if (now - interval > lastTimeChecked) {
             timeForUpdateCheck = true;
         }
 
@@ -81,7 +81,7 @@ namespace Updater
             }
 
             if (updateAvailable()) {
-                //qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
+                // qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
 
                 emit notifyUpdateAvailable(versionInfo);
 
@@ -104,7 +104,7 @@ namespace Updater
     {
         versionInfo = getVersionInfo();
 
-        //qDebug() << versionInfo;
+        // qDebug() << versionInfo;
 
         return versionInfo["update_available"].toBool();
     }
@@ -255,7 +255,7 @@ namespace Updater
     {
         QString url = getUpdateCheckURL();
 
-        //qDebug() << "[SelfUpdater] UpdateCheckURL: " << url;
+        // qDebug() << "[SelfUpdater] UpdateCheckURL: " << url;
 
         // QNAM is non-blocking / non-synchronous, but we want to wait until reply has
         // been received
@@ -281,11 +281,11 @@ namespace Updater
             QString strReply = (QString)updateCheckResponse->readAll();
             jsonResponse = QJsonDocument::fromJson(strReply.toUtf8());
 
-            //qDebug() << "RawResponse: " << strReply;
-            //qDebug() << "JsonResponse: " << jsonResponse;
+            // qDebug() << "RawResponse: " << strReply;
+            // qDebug() << "JsonResponse: " << jsonResponse;
         } else {
             // QNetworkReply::HostNotFoundError
-            //qDebug() << "Request Failure: " << updateCheckResponse->errorString();
+            // qDebug() << "Request Failure: " << updateCheckResponse->errorString();
 
             QMessageBox::critical(QApplication::activeWindow(), "Request Failure", updateCheckResponse->errorString(),
                                   QMessageBox::Ok);

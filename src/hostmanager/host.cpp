@@ -93,10 +93,9 @@ namespace HostsFileManager
         QString windir;
 
         // "getenv("windir") is deprecated, use _dupenv_s"
-        char* buf = nullptr;
+        char *buf = nullptr;
         size_t sz = 0;
-        if (_dupenv_s(&buf, &sz, "windir") == 0 && buf != nullptr)
-        {
+        if (_dupenv_s(&buf, &sz, "windir") == 0 && buf != nullptr) {
             windir = buf;
             free(buf);
         }

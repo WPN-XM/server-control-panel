@@ -95,7 +95,6 @@ namespace Configuration
 
         void on_configMenuSearchLineEdit_textChanged(const QString &string);
 
-
     private:
         Ui::ConfigurationDialog *ui;
 
@@ -132,7 +131,6 @@ namespace Configuration
 
         QString getSettingString(const QString &key, const QVariant &defaultValue);
         QString getSettingString(const QString &key, const QString &defaultValue);
-
     };
 }
 

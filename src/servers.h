@@ -118,7 +118,6 @@ namespace Servers
 
     private:
         QList<Server *> serverList;
-
     };
 }
 #endif // SERVERS_H

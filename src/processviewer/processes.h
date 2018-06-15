@@ -84,6 +84,7 @@ public:
 
     static QList<Process> monitoredProcessesList;
     static QStringList getProcessNamesToSearchFor();
+
 private:
     // constructor is private, because singleton
     explicit Processes();

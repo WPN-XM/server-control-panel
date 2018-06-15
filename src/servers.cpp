@@ -11,8 +11,7 @@ namespace Servers
         qDebug() << "[Servers] Create Server objects and tray submenus for installed servers.";
 
         // build server objects
-        foreach (QString serverName, installedServers)
-        {
+        foreach (QString serverName, installedServers) {
             Server *server = new Server();
 
             server->lowercaseName = serverName;
@@ -213,8 +212,7 @@ namespace Servers
         qDebug() << "[Servers] Check, which servers are installed.";
 
         QStringList list;
-        foreach (QString serverName, getListOfServerNames())
-        {
+        foreach (QString serverName, getListOfServerNames()) {
             // these three servers are the base package.
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are not.
@@ -246,12 +244,10 @@ namespace Servers
 
     void Servers::clearLogFile(const QString &serverName) const
     {
-        if (settings->get("global/clearlogsonstart").toBool())
-        {
+        if (settings->get("global/clearlogsonstart").toBool()) {
             QStringList logfiles = getLogFiles(serverName);
 
-            foreach(QString logfile, logfiles)
-            {
+            foreach (QString logfile, logfiles) {
                 File::truncate(logfile);
                 qDebug() << ("[ %s ][ %s ] Log was cleared.\n", serverName, logfile);
             }
@@ -323,7 +319,7 @@ namespace Servers
         QStringList args;
         args << "-p " + QDir::currentPath();
         args << "-c " + QDir::currentPath() + "/bin/nginx/conf/nginx.conf";
-        args << "-s stop";        
+        args << "-s stop";
         Processes::start(stopNginx, args, getServer("Nginx")->workingDirectory);
 
         /*QProcess process;
@@ -343,7 +339,7 @@ namespace Servers
             processes->delay(100);
         }
 
-        emit signalMainWindow_ServerStatusChange("Nginx", false);        
+        emit signalMainWindow_ServerStatusChange("Nginx", false);
     }
 
     void Servers::reloadNginx()
@@ -487,7 +483,8 @@ namespace Servers
         qDebug() << "[PHP] Version " << phpVersion;
 
         // check that the tool "php-cgi-spawner" is present
-        QString spawnUtilFile = QDir::toNativeSeparators(QDir::currentPath() + "/bin/php-cgi-spawner/php-cgi-spawner.exe");
+        QString spawnUtilFile =
+            QDir::toNativeSeparators(QDir::currentPath() + "/bin/php-cgi-spawner/php-cgi-spawner.exe");
         if (!QFile().exists(spawnUtilFile)) {
             qDebug() << "[PHP] Starting PHP failed. Tool \"php-cgi-spawner.exe\" missing.";
             return;
@@ -500,8 +497,7 @@ namespace Servers
         QMap<QString, QString> PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
 
         auto end = PHPServersToStart.cend();
-        for (auto item = PHPServersToStart.cbegin(); item != end; ++item)
-        {
+        for (auto item = PHPServersToStart.cbegin(); item != end; ++item) {
             QString port = item.key();
             QString phpchildren = item.value();
 

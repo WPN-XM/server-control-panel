@@ -74,8 +74,7 @@ namespace Configuration
 
         // Iterate over items with hidden childs (parents) and hide them too
         QTreeWidgetItemIterator parentIterator(ui->configMenuTreeWidget,
-             QTreeWidgetItemIterator::HasChildren|QTreeWidgetItemIterator::Hidden
-        );
+                                               QTreeWidgetItemIterator::HasChildren | QTreeWidgetItemIterator::Hidden);
 
         while (*parentIterator) {
             QTreeWidgetItem *item = *parentIterator;
@@ -122,7 +121,8 @@ namespace Configuration
         ui->checkBox_SelfUpdater_AutoRestart->setChecked(getSettingBool("selfupdater/autorestart", false));
 
         ui->comboBox_SelfUpdater_Interval->setCurrentText(getSettingString("selfupdater/interval", QString("1")));
-        ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
+        ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(
+            settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
         //
         // Configuration > Components > Xdebug
@@ -152,22 +152,18 @@ namespace Configuration
         //
 <<<<<<< HEAD
 
-        if(servers->isInstalled('memcached'))
-        {
-            ui->lineEdit_mongodb_port->setText(
-                getSettingString("mongodb/port", QString("27017")));
+        if (servers->isInstalled('memcached')) {
+            ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
 
-            ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
-              QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
-            );
+            ui->lineEdit_mongodb_dbpath->setText(getSettingString(
+                "mongodb/dbpath", QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")));
         }
 
         //
         // Configuration > Components > PostgreSQL
         //
 
-        if(servers->isInstalled('memcached'))
-        {
+        if (servers->isInstalled('memcached')) {
             ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
         }
 
@@ -175,12 +171,12 @@ namespace Configuration
         // Configuration > Components > Memcached
         //
 
-        if(servers->isInstalled('memcached'))
-        {
+        if (servers->isInstalled('memcached')) {
             ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
             ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
             ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
-            ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QString("2048")));
+            ui->lineEdit_memcached_maxconnections->setText(
+                getSettingString("memcached/maxconnections", QString("2048")));
             ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
         }
 
@@ -188,24 +184,21 @@ namespace Configuration
         // Configuration > Components > Redis
         //
 
-=======
+        == == == =
 
-        if(servers->isInstalled("mongodb"))
+                     if (servers->isInstalled("mongodb"))
         {
-            ui->lineEdit_mongodb_port->setText(
-                getSettingString("mongodb/port", QString("27017")));
+            ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
 
-            ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
-              QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
-            );
+            ui->lineEdit_mongodb_dbpath->setText(getSettingString(
+                "mongodb/dbpath", QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")));
         }
 
         //
         // Configuration > Components > PostgreSQL
         //
 
-        if(servers->isInstalled("postgresql"))
-        {
+        if (servers->isInstalled("postgresql")) {
             ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
         }
 
@@ -213,12 +206,12 @@ namespace Configuration
         // Configuration > Components > Memcached
         //
 
-        if(servers->isInstalled("memcached"))
-        {
+        if (servers->isInstalled("memcached")) {
             ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
             ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
             ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
-            ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QString("2048")));
+            ui->lineEdit_memcached_maxconnections->setText(
+                getSettingString("memcached/maxconnections", QString("2048")));
             ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
         }
 
@@ -226,8 +219,7 @@ namespace Configuration
         // Configuration > Components > Redis
         //
 
-        if(servers->isInstalled("redis"))
-        {
+        if (servers->isInstalled("redis")) {
             ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
         }
     }
@@ -278,7 +270,7 @@ namespace Configuration
         settings->set("selfupdater/autorestart", int(ui->checkBox_SelfUpdater_AutoRestart->isChecked()));
 
         settings->set("selfupdater/interval", QString("1"));
-        //settings->set("selfupdater/last_time_checked", QVariant(0)).toDateTime());
+        // settings->set("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
         qApp->processEvents();
 
@@ -321,8 +313,7 @@ namespace Configuration
         // We do not save mongodb values into the wpn-xm.ini file.
         // All setting go directly into mongod.conf yaml file.
 
-        if(servers->isInstalled("mongodb"))
-        {
+        if (servers->isInstalled("mongodb")) {
             saveSettings_MongoDB_Configuration();
             qApp->processEvents();
         }
@@ -331,8 +322,7 @@ namespace Configuration
         // Configuration > Components > PostgreSQL
         //
 
-        if(servers->isInstalled("postgresql"))
-        {
+        if (servers->isInstalled("postgresql")) {
             settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
             qApp->processEvents();
         }
@@ -341,8 +331,7 @@ namespace Configuration
         // Configuration > Components > Memcached
         //
 
-        if(servers->isInstalled("memcached"))
-        {
+        if (servers->isInstalled("memcached")) {
             settings->set("memcached/tcpport", QString(ui->lineEdit_memcached_tcpport->text()));
             settings->set("memcached/udpport", QString(ui->lineEdit_memcached_udpport->text()));
             settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
@@ -355,13 +344,12 @@ namespace Configuration
         // Configuration > Components > Redis > Tab "Configuration"
         //
 
-        if(servers->isInstalled("redis"))
-        {
+        if (servers->isInstalled("redis")) {
             settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
 
             saveSettings_Redis_Configuration();
             qApp->processEvents();
-        }       
+        }
     }
 
     void ConfigurationDialog::saveSettings_PostgreSQL_Configuration()
@@ -369,7 +357,7 @@ namespace Configuration
         QString file = QDir(settings->get("postgresql/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
-            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
+            qDebug() << "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -390,9 +378,8 @@ namespace Configuration
         // get redis configuration file path
         QString file = QDir(settings->get("redis/config").toString()).absolutePath();
 
-
         if (!QFile(file).exists()) {
-            qDebug() <<  "[Error][" << Q_FUNC_INFO << "] redis/config not found";
+            qDebug() << "[Error][" << Q_FUNC_INFO << "] redis/config not found";
         }
 
         // read file
@@ -405,7 +392,7 @@ namespace Configuration
         configContent.clear();
 
         // prepare line(s) to replace
-        //QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
+        // QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
         QString newline_port = "port " + ui->lineEdit_redis_port->text().toLatin1();
 
         // iterate over all lines and replace or re-add lines
@@ -445,7 +432,7 @@ namespace Configuration
         QString file = QDir(settings->get("php/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
-            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
+            qDebug() << "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -470,7 +457,7 @@ namespace Configuration
         QString file = QDir(settings->get("mariadb/config").toString()).absolutePath();
 
         if (!QFile(file).exists()) {
-            qDebug() <<  "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
+            qDebug() << "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -480,10 +467,7 @@ namespace Configuration
         ini->writeConfigFile();
     }
 
-    QString toString(std::string s)
-    {
-        return QString( s.c_str() );
-    }
+    QString toString(std::string s) { return QString(s.c_str()); }
 
     void ConfigurationDialog::saveSettings_MongoDB_Configuration()
     {
@@ -499,7 +483,7 @@ namespace Configuration
         config["storage"]["dbPath"] = ui->lineEdit_mongodb_dbpath->text();
         config["net"]["port"] = ui->lineEdit_mongodb_port->text();
 
-        //qDebug() << YAML::yamlToVariant(config).toMap();
+        // qDebug() << YAML::yamlToVariant(config).toMap();
 
         yml->saveConfig(file, config);
 
@@ -618,8 +602,7 @@ namespace Configuration
             // serialize the currently displayed server table
             if (ui->tableWidget_Nginx_Servers->property("servers_of_pool_name") == poolName) {
                 qDebug() << "[Nginx][Config] Serializing the Servers Table of Pool:"
-                         << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name").toString()
-                         << poolName;
+                         << ui->tableWidget_Nginx_Servers->property("servers_of_pool_name").toString() << poolName;
 
                 jsonPool.insert("servers", serialize_toJSON_Nginx_Upstream_ServerTable(ui->tableWidget_Nginx_Servers));
             } else {
@@ -704,25 +687,23 @@ namespace Configuration
         QTreeWidgetItem *components = itemList[0];
 
         // iterate over childs
-        for (int i=0; i < components->childCount(); i++)
-        {
+        for (int i = 0; i < components->childCount(); i++) {
             // get child and hide it
             QTreeWidgetItem *childItem = components->child(i);
             childItem->setHidden(true);
 
             // iterate over installed server names
-            //for (int j=0; j < installed.count(); j++)
+            // for (int j=0; j < installed.count(); j++)
             QMutableStringListIterator installedML(installedSL);
-            while(installedML.hasNext())
-            {
+            while (installedML.hasNext()) {
                 // get servername
                 QString serverName = installedML.next();
 
                 // check, if child name is an installed server name
-                if(childItem->text(0).contains(serverName, Qt::CaseInsensitive)) {
+                if (childItem->text(0).contains(serverName, Qt::CaseInsensitive)) {
                     childItem->setHidden(false); // show the item
                     installedML.remove(); // remove from installed server list
-                    //qDebug() << "[ConfigDialog][Components] Show Item " << serverName;
+                    // qDebug() << "[ConfigDialog][Components] Show Item " << serverName;
                     break;
                 }
             }
@@ -811,10 +792,7 @@ namespace Configuration
         ui->lineEdit_mongodb_port->setText("27017");
     }
 
-    void ConfigurationDialog::on_pushButton_MariaDb_Reset_Port_clicked()
-    {
-        ui->lineEdit_mariadb_port->setText("3306");
-    }
+    void ConfigurationDialog::on_pushButton_MariaDb_Reset_Port_clicked() { ui->lineEdit_mariadb_port->setText("3306"); }
 
     void ConfigurationDialog::on_pushButton_PostgreSql_Reset_Port_clicked()
     {
@@ -826,10 +804,7 @@ namespace Configuration
         ui->lineEdit_mariadb_port->setText("11211");
     }
 
-    void ConfigurationDialog::on_pushButton_Redis_Reset_Port_clicked()
-    {
-        ui->lineEdit_mariadb_port->setText("6379");
-    }
+    void ConfigurationDialog::on_pushButton_Redis_Reset_Port_clicked() { ui->lineEdit_mariadb_port->setText("6379"); }
 
     void ConfigurationDialog::on_pushButton_Nginx_Reset_Upstreams_clicked()
     {
@@ -856,12 +831,14 @@ namespace Configuration
         // insert default data into row
         int row = ui->tableWidget_Nginx_Servers->rowCount();
         ui->tableWidget_Nginx_Servers->insertRow(row);
-        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address, new QTableWidgetItem("127.0.0.1"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Address,
+                                               new QTableWidgetItem("127.0.0.1"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Port, new QTableWidgetItem("9100"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Weight, new QTableWidgetItem("1"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::MaxFails, new QTableWidgetItem("1"));
         ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::Timeout, new QTableWidgetItem("1s"));
-        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren, new QTableWidgetItem("5"));
+        ui->tableWidget_Nginx_Servers->setItem(row, NginxAddServerDialog::Column::PHPChildren,
+                                               new QTableWidgetItem("5"));
     }
 
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)

@@ -21,8 +21,8 @@ namespace ServerControlPanel
    *       to capture the mouse hover event of the tray icon.
    *       It's not supported by Qt, yet (v5.7).
    */
-        //tooltip = new TrayToolTip;
-        //tooltipVisible = false;
+        // tooltip = new TrayToolTip;
+        // tooltipVisible = false;
         // startTimer(500);
     }
 
@@ -78,8 +78,7 @@ namespace ServerControlPanel
 
     void Tray::goToWebsiteHelp()
     {
-        QDesktopServices::openUrl(
-            QUrl("https://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
+        QDesktopServices::openUrl(QUrl("https://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
     }
 
     void Tray::startAllServers()

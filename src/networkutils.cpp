@@ -10,12 +10,11 @@ QList<QHostAddress> NetworkUtils::getLocalHostIPs()
     QList<QHostAddress> ips;
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
 
-    foreach (QNetworkInterface iface, interfaces) {        
+    foreach (QNetworkInterface iface, interfaces) {
 
         // interface must be up and running and not a loopback device
-        if (iface.flags().testFlag(QNetworkInterface::IsUp)
-                && iface.flags().testFlag(QNetworkInterface::IsRunning)
-                && !iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
+        if (iface.flags().testFlag(QNetworkInterface::IsUp) && iface.flags().testFlag(QNetworkInterface::IsRunning) &&
+            !iface.flags().testFlag(QNetworkInterface::IsLoopBack)) {
 
             foreach (const QNetworkAddressEntry &entry, iface.addressEntries()) {
 

@@ -62,8 +62,8 @@ namespace ServerControlPanel
         // Status Table - Column Status
         // if process state of a server changes, then change the label status in
         // UI::MainWindow too
-        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)),
-                this, SLOT(updateServerStatusIndicators(QString, bool)));
+        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)), this,
+                SLOT(updateServerStatusIndicators(QString, bool)));
 
         // server autostart
         if (settings->get("global/autostartservers").toBool()) {
@@ -78,8 +78,7 @@ namespace ServerControlPanel
             runSelfUpdate();
         }
 
-
-        //ui->pushButton_Updater->setEnabled(true);
+// ui->pushButton_Updater->setEnabled(true);
 #endif
     }
 
@@ -110,14 +109,13 @@ namespace ServerControlPanel
 
         QStringList alreadyUpdated;
 
-        foreach (Process process, oProcesses->monitoredProcessesList)
-        {
+        foreach (Process process, oProcesses->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
-            //qDebug() << Q_FUNC_INFO << processName;
+            // qDebug() << Q_FUNC_INFO << processName;
 
-            if(installedServers.contains(processName) &&
-               !alreadyUpdated.contains(processName)) {
-                qDebug() << "[Processes Running][updateServerStatusIndicators]"""
+            if (installedServers.contains(processName) && !alreadyUpdated.contains(processName)) {
+                qDebug() << "[Processes Running][updateServerStatusIndicators]"
+                            ""
                          << "for Process" << processName;
 
                 alreadyUpdated << processName;
@@ -222,8 +220,7 @@ namespace ServerControlPanel
         // Connect Actions for Status Table - Column Action (Stop)
         connect(cWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), SIGNAL(clicked()), servers,
                 SLOT(stopNginx()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers,
-                SLOT(stopPHP()));
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers, SLOT(stopPHP()));
         connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(stopMariaDb()));
         QPushButton *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
@@ -312,9 +309,8 @@ namespace ServerControlPanel
             switch (event->type()) {
             case QEvent::WindowStateChange: {
                 // minimize to tray (do not minimize to taskbar)
-                if ((this->windowState() & Qt::WindowMinimized)
-                     && !this->isHidden()) {
-                        this->hide();
+                if ((this->windowState() & Qt::WindowMinimized) && !this->isHidden()) {
+                    this->hide();
                 }
 
                 break;
@@ -521,7 +517,7 @@ namespace ServerControlPanel
     void MainWindow::updateServerStatusOnTray(QString serverName, bool enabled)
     {
         QIcon icon;
-        if(enabled) {
+        if (enabled) {
             icon = QIcon(":/status_run");
         } else {
             icon = QIcon(":/status_stop");
@@ -532,7 +528,7 @@ namespace ServerControlPanel
         const int listSize = actions.size();
         for (int i = 0; i < listSize; ++i) {
             QAction *action = actions.at(i);
-            if(action->iconText().toLower() == serverName) {
+            if (action->iconText().toLower() == serverName) {
                 action->setIcon(icon);
             }
         }
@@ -614,7 +610,7 @@ namespace ServerControlPanel
         // string for regexp testing
         // QString p_stdout = "nginx version: nginx/1.2.1";
 
-        //qDebug() << "[Nginx] Version: \n" << p_stdout;
+        // qDebug() << "[Nginx] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout);
     }
@@ -643,7 +639,7 @@ namespace ServerControlPanel
         // QString p_stdout = ".\\bin\\mariadb\\bin\\mysqlcheck.exe  Ver 2.7.4-MariaDB
         // Distrib 10.1.6-MariaDB, for Win64 (AMD64)\r\n";
 
-        //qDebug() << "[MariaDb] Version: \n" << p_stdout;
+        // qDebug() << "[MariaDb] Version: \n" << p_stdout;
 
         // scrape second version number
         return parseVersionNumber(p_stdout.mid(p_stdout.lastIndexOf("Distrib "), 15));
@@ -672,7 +668,7 @@ namespace ServerControlPanel
         // QString p_stdout = "PHP 7.0.0alpha2 (cli)  (non semantic version)";
         // QString p_stdout = "PHP 7.1.1 (cli) (built: Jan 18 2017 18:50:48)";
 
-        //qDebug() << "[PHP] Version: \n" << p_stdout;
+        // qDebug() << "[PHP] Version: \n" << p_stdout;
 
         // - grab inside "PHP x (cli)"
         // - "\\d.\\d.\\d." = grab "1.2.3"
@@ -680,7 +676,7 @@ namespace ServerControlPanel
         QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)");
         regex.indexIn(p_stdout);
 
-        //qDebug() << regex.capturedTexts();
+        // qDebug() << regex.capturedTexts();
 
         return regex.cap(1);
     }
@@ -697,7 +693,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        //qDebug() << "[MongoDb] Version: \n" << p_stdout;
+        // qDebug() << "[MongoDb] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(3)); // 21
     }
@@ -714,7 +710,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readAll();
 
-        //qDebug() << "[PostgreSQL] Version: \n" << p_stdout;
+        // qDebug() << "[PostgreSQL] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(2)); // 10
     }
@@ -731,7 +727,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        //qDebug() << "[Memcached] Version: \n" << p_stdout;
+        // qDebug() << "[Memcached] Version: \n" << p_stdout;
 
         return parseVersionNumber(p_stdout.mid(2)); // 10
     }
@@ -748,7 +744,7 @@ namespace ServerControlPanel
 
         QByteArray p_stdout = process.readLine();
 
-        //qDebug() << "[Redis] Version: \n" << p_stdout;
+        // qDebug() << "[Redis] Version: \n" << p_stdout;
 
         // Redis server v=2.8.21 sha
         return parseVersionNumber(p_stdout);
@@ -886,7 +882,7 @@ namespace ServerControlPanel
         QProcess::startDetached(cmd);
     }
 
-    QString MainWindow::getRootFolder()    const { return QDir::toNativeSeparators(QDir::currentPath()); }
+    QString MainWindow::getRootFolder() const { return QDir::toNativeSeparators(QDir::currentPath()); }
     QString MainWindow::getProjectFolder() const { return QDir::toNativeSeparators(QDir::currentPath() + "/www"); }
 
     void MainWindow::openConfigurationDialog()
@@ -1032,8 +1028,7 @@ namespace ServerControlPanel
 
     void MainWindow::openHelpDialog()
     {
-        QDesktopServices::openUrl(
-            QUrl("https://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
+        QDesktopServices::openUrl(QUrl("https://wpn-xm.github.io/docs/user-manual/en/#_the_server_control_panel"));
     }
 
     void MainWindow::openAboutDialog()
@@ -1295,16 +1290,16 @@ namespace ServerControlPanel
             ServersGridLayout->addWidget(labelStatus, rowCounter, 0);
 
             // Port
-            if(server->name == "PHP") {
+            if (server->name == "PHP") {
                 LabelWithHoverTooltip *labelPort = new LabelWithHoverTooltip();
                 labelPort->setObjectName(QString("label_PHP_Port"));
-                //labelPort->setTooltipText(getPort(server->lowercaseName));
+                // labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
             } else {
                 QLabel *labelPort = new QLabel();
                 labelPort->setObjectName(QString("label_" + server->name + "_Port"));
-                //labelPort->setText(getPort(server->lowercaseName));
+                // labelPort->setText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
             }
@@ -1476,7 +1471,7 @@ namespace ServerControlPanel
     }
 
     void MainWindow::updateVersion(QString server)
-    {       
+    {
         QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != 0) {
             QString version = getVersion(server);
@@ -1516,40 +1511,39 @@ namespace ServerControlPanel
 
     void MainWindow::updatePort(QString server, bool enabled)
     {
-        //qDebug() << server << enabled;
+        // qDebug() << server << enabled;
 
-        if(server == "php" || server == "php-cgi") {
-            if(enabled == true) {
+        if (server == "php" || server == "php-cgi") {
+            if (enabled == true) {
                 // show Label Text to indicate that a HoverTooltip is available
                 QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
-                if(label != 0) {
+                if (label != 0) {
                     label->setText("Pool*");
                 }
                 // enable hover tooltip + show PHP ports and childs text
                 LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                if(tip != 0) {
+                if (tip != 0) {
                     tip->enableToolTip(true);
                     tip->setTooltipText(getPHPPort());
                 }
             } else {
                 // clear label
                 QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
-                if(label != 0) {
+                if (label != 0) {
                     label->setText("");
                 }
                 // deactivate hover tooltip
                 LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                    if(tip != 0) {
+                if (tip != 0) {
                     tip->enableToolTip(false);
                     tip->setTooltipText("");
                 }
-
             }
         } else {
             QString srvname = servers->getCamelCasedServerName(server);
             QLabel *label = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
-            if(label != 0) {
-                if(enabled) {
+            if (label != 0) {
+                if (enabled) {
                     QString port = getPort(server);
                     label->setText(port);
                 } else {
@@ -1589,8 +1583,7 @@ namespace ServerControlPanel
         QString result;
 
         auto end = PHPServers.cend();
-        for (auto item = PHPServers.cbegin(); item != end; ++item)
-        {
+        for (auto item = PHPServers.cbegin(); item != end; ++item) {
             // item.key   = port,
             // item.value = num of childs
             result += portStringTemplate.arg(item.key(), item.value());

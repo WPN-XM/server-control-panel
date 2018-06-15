@@ -102,15 +102,9 @@ bool Processes::areThereAlreadyRunningProcesses()
 // static, process blacklist
 bool Processes::isSystemProcess(QString processName)
 {
-    if (processName == "[System Process]"
-            || processName == "svchost.exe"
-            || processName == "System"
-            || processName == "wininit"
-            || processName == "winlogon"
-            || processName == "dllhost"
-            || processName == "csrss"
-            || processName == "conhost"
-            || processName == "wpn-xm") {
+    if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
+        processName == "wininit" || processName == "winlogon" || processName == "dllhost" || processName == "csrss" ||
+        processName == "conhost" || processName == "wpn-xm") {
         return true;
     }
 
@@ -242,7 +236,8 @@ Processes::ProcessState Processes::getProcessState(const QString &name) const
 {
     Process p = findByName(name);
 
-    // qDebug("[Processes::getProcessState] Name %s | ProcessName %s", name.toLatin1().constData(), p.name.toLatin1().constData());
+    // qDebug("[Processes::getProcessState] Name %s | ProcessName %s", name.toLatin1().constData(),
+    // p.name.toLatin1().constData());
 
     return (p.name == "process not found") ? ProcessState::NotRunning : ProcessState::Running;
 }
