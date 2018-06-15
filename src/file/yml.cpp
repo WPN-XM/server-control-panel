@@ -5,6 +5,19 @@
 
 namespace YAML
 {
+    void operator>>(const YAML::Node &node, QString &q)
+    {
+        std::string sstr;
+        sstr = node.as<std::string>();
+        q    = QString(sstr.c_str());
+    }
+
+    void operator<<(YAML::Node &node, const QString &q)
+    {
+        std::string sstr = q.toStdString();
+        node             = sstr;
+    }
+
     void operator>>(const YAML::Node &node, QStringList &v)
     {
         for (size_t i = 0; i < node.size(); ++i) {

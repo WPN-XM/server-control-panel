@@ -7,8 +7,6 @@
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
 
-#include "third-party/qyaml/qyaml/qyaml.h"
-
 namespace Configuration
 {
     ConfigurationDialog::ConfigurationDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ConfigurationDialog)
@@ -151,40 +149,41 @@ namespace Configuration
         // Configuration > Components > MongoDb
         //
 
-        if (servers->isInstalled("mongodb"))
+        /*if (servers->isInstalled("mongodb"))
         {
             ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
 
             ui->lineEdit_mongodb_dbpath->setText(getSettingString(
                 "mongodb/dbpath", QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")));
-        }
+        }*/
 
         //
         // Configuration > Components > PostgreSQL
         //
-
+        /*
         if (servers->isInstalled("postgresql")) {
             ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
-        }
+        }*/
 
         //
         // Configuration > Components > Memcached
         //
-
-        if (servers->isInstalled("memcached")) {
-            ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
-            ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
-            ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
-            ui->lineEdit_memcached_maxconnections->setText(
-                getSettingString("memcached/maxconnections", QString("2048")));
-            ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
-        }
-
+        /*
+                if (servers->isInstalled("memcached")) {
+                    ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
+                    ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
+                    ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
+                    ui->lineEdit_memcached_maxconnections->setText(
+                        getSettingString("memcached/maxconnections", QString("2048")));
+                    ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
+                }
+        */
         //
         // Configuration > Components > Redis
         //
 
         if (servers->isInstalled("redis")) {
+            qDebug() << "Redis is installed";
             ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
         }
     }
