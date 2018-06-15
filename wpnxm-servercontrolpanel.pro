@@ -256,7 +256,6 @@ libs.path = $$OUT_PWD/$$DESTDIR
 libs.files += libs/quazip/bin/quazip.dll
 libs.files += libs/zlib/bin/zlib.dll
 libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
-libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
 libs.files += libs/openssl/bin/libeay32.dll
 libs.files += libs/openssl/bin/ssleay32.dll
 
