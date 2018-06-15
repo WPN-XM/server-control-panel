@@ -1,5 +1,7 @@
 @echo off
 
+git submodule status
+
 cd zlib
 git checkout v1.2.11
 cd ..
@@ -14,11 +16,10 @@ git add yaml-cpp
 rem git commit -m "updated submodule yaml-cpp to v0.5.2"
 git commit -m "updated submodule yaml-cpp to 4fb1c4"
 
-
 cd quazip 
-git checkout d59996137f4fb2796e64224b2387759191babf13
+git checkout 0.7.5
 cd ..
 git add quazip
-git commit -m "updated submodule quazip to d599961"
+git commit -m "updated submodule quazip to 0.7.5"
 
 git push
