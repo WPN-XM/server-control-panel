@@ -113,9 +113,9 @@ namespace Configuration
 
         ui->lineEdit_SelectedEditor->setText(getSettingString("global/editor", QString("notepad.exe")));
 
-        /**
-   * Configuration > Updater > Self Updater
-   */
+        //
+        // Configuration > Updater > Self Updater
+        //
 
         ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(getSettingBool("selfupdater/runonstartup", false));
         ui->checkBox_SelfUpdater_AutoUpdate->setChecked(getSettingBool("selfupdater/autoupdate", false));
@@ -124,9 +124,9 @@ namespace Configuration
         ui->comboBox_SelfUpdater_Interval->setCurrentText(getSettingString("selfupdater/interval", QString("1")));
         ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
-        /**
-   * Configuration > Components > Xdebug
-   */
+        //
+        // Configuration > Components > Xdebug
+        //
 
         // remote
         ui->checkBox_xdebug_remote_enable->setChecked(getSettingBool("xdebug/remote_enable", true));
@@ -141,42 +141,95 @@ namespace Configuration
 
         ui->lineEdit_xdebug_idekey->setText(getSettingString("xdebug/idekey", QString("netbeans-xdebug")));
 
-        /**
-   * Configuration > Components > MariaDB
-   */
+        //
+        // Configuration > Components > MariaDB
+        //
 
         ui->lineEdit_mariadb_port->setText(getSettingString("mariadb/port", QString("3306")));
 
-        /**
-   * Configuration > Components > MongoDB
-   */
-        ui->lineEdit_mongodb_port->setText(
-            getSettingString("mongodb/port", QString("27017")));
+        //
+        // Configuration > Components > MongoDB
+        //
+<<<<<<< HEAD
 
-        ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
-          QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
-        );
+        if(servers->isInstalled('memcached'))
+        {
+            ui->lineEdit_mongodb_port->setText(
+                getSettingString("mongodb/port", QString("27017")));
 
-   /**
-   * Configuration > Components > PostgreSQL
-   */
+            ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
+              QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
+            );
+        }
 
-        ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
+        //
+        // Configuration > Components > PostgreSQL
+        //
 
-        /**
-   * Configuration > Components > Memcached
-   */
+        if(servers->isInstalled('memcached'))
+        {
+            ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
+        }
 
-        ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
-        ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
-        ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
-        ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QString("2048")));
-        ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
+        //
+        // Configuration > Components > Memcached
+        //
 
-        /**
-   * Configuration > Components > Redis
-   */
-         ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
+        if(servers->isInstalled('memcached'))
+        {
+            ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
+            ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
+            ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
+            ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QString("2048")));
+            ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
+        }
+
+        //
+        // Configuration > Components > Redis
+        //
+
+=======
+
+        if(servers->isInstalled("mongodb"))
+        {
+            ui->lineEdit_mongodb_port->setText(
+                getSettingString("mongodb/port", QString("27017")));
+
+            ui->lineEdit_mongodb_dbpath->setText(getSettingString("mongodb/dbpath",
+              QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db"))
+            );
+        }
+
+        //
+        // Configuration > Components > PostgreSQL
+        //
+
+        if(servers->isInstalled("postgresql"))
+        {
+            ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
+        }
+
+        //
+        // Configuration > Components > Memcached
+        //
+
+        if(servers->isInstalled("memcached"))
+        {
+            ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
+            ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
+            ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
+            ui->lineEdit_memcached_maxconnections->setText(getSettingString("memcached/maxconnections", QString("2048")));
+            ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
+        }
+
+        //
+        // Configuration > Components > Redis
+        //
+
+        if(servers->isInstalled("redis"))
+        {
+            ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
+        }
     }
 
     void ConfigurationDialog::writeSettings()
@@ -186,7 +239,7 @@ namespace Configuration
         // if boolean is saved as string to ini, you'll get "\x1" as value for true.
 
         //
-        // Configuration > Page "Server Control Panel" > Tab "Configuration"
+        // Configuration > Server Control Panel > Tab "Configuration"
         //
 
         settings->set("global/runonstartup", int(ui->checkbox_runOnStartUp->isChecked()));
@@ -217,7 +270,7 @@ namespace Configuration
         qApp->processEvents();
 
         //
-        // Configuration > Page "Updater" > Update Notification Settings
+        // Configuration > Updater > Update Notification Settings
         //
 
         settings->set("selfupdater/runonstartup", int(ui->checkBox_SelfUpdater_RunOnStartUp->isChecked()));
