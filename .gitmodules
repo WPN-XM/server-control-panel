@@ -7,6 +7,3 @@
 [submodule "third-party/yaml-cpp"]
     path = third-party/yaml-cpp
     url = https://github.com/jbeder/yaml-cpp
-[submodule "third-party/qyaml"]
-	path = third-party/qyaml
-	url = https://github.com/simonmeaden/qyaml.git
