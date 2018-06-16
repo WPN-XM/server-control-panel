@@ -12,21 +12,24 @@
 
 namespace YAML
 {
-    template<>
-    struct convert<QString> {
-        static Node encode( const QString& rhs ) {
+    template <>
+    struct convert<QString>
+    {
+        static Node encode(const QString &rhs)
+        {
             Node node;
             node = rhs.toStdString();
             return node;
         }
 
-        static bool decode( const Node& node, QString& rhs ) {
-            if ( !node.IsScalar() ) {
+        static bool decode(const Node &node, QString &rhs)
+        {
+            if (!node.IsScalar()) {
                 return false;
             }
 
             std::string sstr = node.as<std::string>();
-            rhs = QString( sstr.c_str() );
+            rhs              = QString(sstr.c_str());
 
             return true;
         }
