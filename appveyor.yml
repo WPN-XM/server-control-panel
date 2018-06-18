@@ -18,14 +18,14 @@ environment:
     # MSVC x86
     #- bitsize:    x86
     #  platform:   amd64_x86
-    #  qt:         5.10.1\msvc2015
+    #  qt:         5.11\msvc2015
     #  suffix:     msvc2015
     #  generator:  "Visual Studio 14 2015"
 
     # MSVC x64
     - bitsize:    x64
       platform:   amd64
-      qt:         5.10.1\msvc2015_64
+      qt:         5.11\msvc2015_64
       suffix:     msvc2015
       generator:  "Visual Studio 14 2015 Win64"
 
@@ -130,36 +130,28 @@ after_build:
   # 4) openssl
   - mkdir %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin
   # - C:\OpenSSL-Win32\bin
-  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
-  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll
-  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll
-  - if %platform%==amd64_x86 copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll
+  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll )
+  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll )
+  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll )
+  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll )
   # - C:\OpenSSL-Win64\bin
-  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll
-  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll
-  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll
-  - if %platform%==amd64 copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll
+  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\libeay32.dll )
+  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\libs\openssl\bin\ssleay32.dll )
+  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\libeay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\libeay32.dll )
+  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\ssleay32.dll %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\ssleay32.dll )
   # cleanups
   - del *.obj
-  - del *.o
   - del *.cpp
-  - del *.a
-  - del vcredist*.exe
-  # - remove opengl rendering stuff 
-  - del opengl32sw.dll
-  - del D3Dcompiler*.dll
-  - del libGLES*.dll
-  - del libEGL.dll
-  # - remove SVG stuff
-  - del Qt5SVG.dll
-  - rd /s /q %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\iconengines
+  - del vcredist*.exe  
   # - remove imagehandlers
+  - del Qt5SVG.dll
+  - rd /s /q %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\iconengines  
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qwebp.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qtiff.dll
-  - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qdds.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qtga.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qgif.dll
   - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qicns.dll
+  - del %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%\imageformats\qsvg.dll  
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
@@ -199,4 +191,4 @@ test_script:
 
 # access build worker via remote desktop
 on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: if (($env:CONFIGURATION) -eq "Debug" ) { $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
