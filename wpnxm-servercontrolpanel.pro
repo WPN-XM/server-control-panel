@@ -46,30 +46,25 @@ LIBS += -luuid -lole32 -lshell32
 # needed for process and port detection, see ProcessViewerDialog
 #LIBS += -liphlpapi -lws2_32 -lwsock32
 
+# when, debug build, define a "d" to extend the library name "-lmylib$${DEBUG_EXT}" = mylibd.dll
+CONFIG(debug, debug|release) {
+  DEBUG_EXT = d 
+} else {
+  DEBUG_EXT = 
+}
+
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
-CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/libs/zlib/lib -lzlibd        
-} else {
-    LIBS += -L$$PWD/libs/zlib/lib -lzlib
-}
+LIBS += -L$$PWD/libs/zlib/lib -lzlib$${DEBUG_EXT}        
 
 # QuaZIP
 INCLUDEPATH += $$PWD/libs/quazip/include
-CONFIG(debug, debug|release) {
-   LIBS += -L$$PWD/libs/quazip/lib -lquazipd    
-} else {
-   LIBS += -L$$PWD/libs/quazip/lib -lquazip
-}
+LIBS += -L$$PWD/libs/quazip/lib -lquazip$${DEBUG_EXT}    
 
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
-CONFIG(debug, debug|release) {
-   # yaml-cpp => libyaml-cppmd - this is so stupid
-   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmdd
-} else {
-   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
-}
+# yaml-cpp => libyaml-cppmd - this is so stupid
+LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd$${DEBUG_EXT}
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 
