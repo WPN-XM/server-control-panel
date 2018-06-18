@@ -110,7 +110,6 @@ build_script:
 
 after_build:
   - echo %cd%
-  - dir %APPVEYOR_BUILD_FOLDER% /s
   - cd %APPVEYOR_BUILD_FOLDER%\%CONFIGURATION%
   - dir
   # identify and copy dependencies
