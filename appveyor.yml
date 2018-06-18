@@ -27,7 +27,7 @@ environment:
     # MSVC x64
     - bitsize:    x64
       platform:   amd64
-      qt:         5.11.0\msvc2015_64
+      qt:         5.11.0\msvc2017_64
       suffix:     msvc2015
       generator:  "Visual Studio 14 2015 Win64"
 
@@ -59,9 +59,11 @@ before_build:
   # set QT path and env vars
   - set PATH=C:\Qt\%qt%\bin;C:\Qt\%qt%;%PATH%
   - set QTDIR=C:\Qt\%qt%
-  - call "C:\Qt\%qt%\bin\qtenv2.bat"
-  # set Microsoft Visual Studio env vars
+  # set vars image 2015
+  #- call "C:\Qt\%qt%\bin\qtenv2.bat"
   #- call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+  # set vars image 2017
+  - call "C:\Qt\%qt%\bin\qtenv2.bat"
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set CPU=AMD64
   - set SPEC="win32-msvc"
