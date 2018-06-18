@@ -48,36 +48,30 @@ LIBS += -luuid -lole32 -lshell32
 
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
-release {
-    win32:LIBS += -L$$PWD/libs/zlib/lib -lzlib
-     unix:LIBS += -L$$PWD/libs/zlib/lib -lzlib
+CONFIG(release, debug|release) {
+    LIBS += -L$$PWD/libs/zlib/lib -lzlib    
 }
-debug {
-    win32:LIBS += -L$$PWD/libs/zlib/lib -lzlibd
-     unix:LIBS += -L$$PWD/libs/zlib/lib -lzlibd
+CONFIG(debug, debug|release) {
+    LIBS += -L$$PWD/libs/zlib/lib -lzlibd
 }
 
 # QuaZIP
 INCLUDEPATH += $$PWD/libs/quazip/include
-release {
-   win32:LIBS  += -L$$PWD/libs/quazip/lib -lquazip
-    unix:LIBS  += -L$$PWD/libs/quazip/lib -lquazip
+CONFIG(release, debug|release) {
+   LIBS += -L$$PWD/libs/quazip/lib -lquazip    
 }
-debug {
-   win32:LIBS  += -L$$PWD/libs/quazip/lib -lquazipd
-    unix:LIBS  += -L$$PWD/libs/quazip/lib -lquazipd
+CONFIG(debug, debug|release) {
+   LIBS += -L$$PWD/libs/quazip/lib -lquazipd
 }
 
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
-release {
+CONFIG(release, debug|release) {
    # yaml-cpp => libyaml-cppmd - this is so stupid
-   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
-    unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cpp
+   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
 }
-debug {
-   win32:LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmdd
-    unix:LIBS += -L$$PWD/libs/yaml-cpp/lib -lyaml-cppd
+CONFIG(debug, debug|release) {
+   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmdd
 }
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
