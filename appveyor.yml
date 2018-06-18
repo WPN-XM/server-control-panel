@@ -18,14 +18,14 @@ environment:
     # MSVC x86
     #- bitsize:    x86
     #  platform:   amd64_x86
-    #  qt:         5.11\msvc2015
+    #  qt:         5.11.0\msvc2015
     #  suffix:     msvc2015
     #  generator:  "Visual Studio 14 2015"
 
     # MSVC x64
     - bitsize:    x64
       platform:   amd64
-      qt:         5.11\msvc2015_64
+      qt:         5.11.0\msvc2015_64
       suffix:     msvc2015
       generator:  "Visual Studio 14 2015 Win64"
 
