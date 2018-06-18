@@ -91,6 +91,7 @@ before_build:
   - mkdir build
   - cd build
   - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ../ -DBUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
+  - dir
   - call msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" %APPVEYOR_BUILD_FOLDER%\third-party\yaml-cpp\build\yaml-cpp.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
 
