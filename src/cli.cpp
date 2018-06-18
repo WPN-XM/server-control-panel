@@ -68,7 +68,7 @@ namespace ServerControlPanel
 
         // -v, --version
         if (parser.isSet(versionOption)) {
-            colorPrint("WPN-XM Server Stack " APP_VERSION "\n", "brightwhite");
+            colorPrint("WPN-XM Server Stack - Server Control Panel " APP_VERSION "\n", "brightwhite");
             exit(0);
         }
 
@@ -187,7 +187,7 @@ namespace ServerControlPanel
 
     void CLI::printHelpText(QString errorMessage)
     {
-        colorPrint("WPN-XM Server Stack " APP_VERSION "\n", "brightwhite");
+        colorPrint("WPN-XM Server Stack - Server Control Panel " APP_VERSION "\n", "brightwhite");
 
         QString year = QDate::currentDate().toString("yyyy");
         colorPrint("Copyright (c) " + year + " Jens A. Koch. All rights reserved.\n\n");
