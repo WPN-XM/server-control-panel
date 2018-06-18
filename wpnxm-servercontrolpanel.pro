@@ -48,30 +48,27 @@ LIBS += -luuid -lole32 -lshell32
 
 # ZLIB
 INCLUDEPATH += $$PWD/libs/zlib/include
-CONFIG(release, debug|release) {
-    LIBS += -L$$PWD/libs/zlib/lib -lzlib    
-}
 CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/libs/zlib/lib -lzlibd
+    LIBS += -L$$PWD/libs/zlib/lib -lzlibd        
+} else {
+    LIBS += -L$$PWD/libs/zlib/lib -lzlib
 }
 
 # QuaZIP
 INCLUDEPATH += $$PWD/libs/quazip/include
-CONFIG(release, debug|release) {
-   LIBS += -L$$PWD/libs/quazip/lib -lquazip    
-}
 CONFIG(debug, debug|release) {
-   LIBS += -L$$PWD/libs/quazip/lib -lquazipd
+   LIBS += -L$$PWD/libs/quazip/lib -lquazipd    
+} else {
+   LIBS += -L$$PWD/libs/quazip/lib -lquazip
 }
 
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
-CONFIG(release, debug|release) {
-   # yaml-cpp => libyaml-cppmd - this is so stupid
-   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
-}
 CONFIG(debug, debug|release) {
+   # yaml-cpp => libyaml-cppmd - this is so stupid
    LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmdd
+} else {
+   LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd
 }
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
