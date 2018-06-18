@@ -102,14 +102,12 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
-        Processes *oProcesses = getProcessesObject();
-
         QStringList installedServers = servers->getInstalledServerNames();
         installedServers << "php-cgi";
 
         QStringList alreadyUpdated;
 
-        foreach (Process process, oProcesses->monitoredProcessesList) {
+        foreach (Process process, processes->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
             // qDebug() << Q_FUNC_INFO << processName;
 
