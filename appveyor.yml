@@ -61,7 +61,9 @@ before_build:
   - set QTDIR=C:\Qt\%qt%
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
   # set Microsoft Visual Studio env vars
-  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+  #- call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - set CPU=AMD64
   - set SPEC="win32-msvc"
   # Show build folder
   - echo %CONFIGURATION%
