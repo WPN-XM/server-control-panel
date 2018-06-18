@@ -38,8 +38,9 @@ clone_depth: 5
 
 # scripts that are called at very beginning, before repo cloning
 init:
+  # display eu-west time
+  - tzutil /s "W. Europe Standard Time"
   - date /T & time /T
-  - git config --global core.autocrlf input
   # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
   - ps: >-
       if ($env:APPVEYOR_REPO_TAG -eq "true")
