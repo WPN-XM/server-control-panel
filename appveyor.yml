@@ -126,7 +126,7 @@ after_build:
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
     )
   - if "%CONFIGURATION%"=="Debug" (
-      copy C:\projects\server-control-panel\libs\zlib\bin\zlibs.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll &&
+      copy C:\projects\server-control-panel\libs\zlib\bin\zlibd.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll &&
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlibd.exp C:\projects\server-control-panel\libs\quazip\lib\zlibd.exp
     )
   # 2) quazip
