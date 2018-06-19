@@ -108,20 +108,33 @@ build_script:
 
 after_build:
   - echo %cd%
-  - cd C:\projects\server-control-panel\%CONFIGURATION%
+  - cd C:\projects\server-control-panel\
   - dir
   # identify and copy dependencies
-  - windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --release wpn-xm.exe
+  - windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --%CONFIGURATION% wpn-xm.exe
   # copy dependencies 
   # 1) zlib 
-  - copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll
-  - copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
+  - if "%configuration%"=="Release" (
+      copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll
+      copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
+    )
+  - if "%configuration%"=="Debug" (
+      copy C:\projects\server-control-panel\libs\zlib\bin\zlibs.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll
+      copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlibd.exp C:\projects\server-control-panel\libs\quazip\lib\zlibd.exp
+    )
   # 2) quazip
   - mkdir C:\projects\server-control-panel\libs\quazip\bin
-  - copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll
-  - copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll
-  - copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazip.exp C:\projects\server-control-panel\libs\quazip\lib\quazip.exp
-  # 3) yaml-cpp
+  - if "%configuration%"=="Release" (
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll
+      copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazip.exp C:\projects\server-control-panel\libs\quazip\lib\quazip.exp
+    )
+  - if "%configuration%"=="Debug" (
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\libs\quazip\bin\quazipd.dll
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\%CONFIGURATION%\quazipd.dll
+      copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazipd.exp C:\projects\server-control-panel\libs\quazip\lib\quazipd.exp
+    )
+  # 3) yaml-cpp (statically linked)
   #- copy C:\projects\server-control-panel\libs\yaml-cpp\bin\yaml-cpp.dll C:\projects\server-control-panel\%CONFIGURATION%\yaml-cpp.dll
   # - no exports for yaml-cpp?
   # 4) openssl
