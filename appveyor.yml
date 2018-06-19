@@ -14,7 +14,8 @@ configuration:
   - Debug
 
 environment:
-  MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
+  #MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo
+  MSBUILD_FLAGS: /verbosity:diagnostic /maxcpucount /nologo /ds
   matrix: 
     # https://www.appveyor.com/docs/build-environment/#qt
 
