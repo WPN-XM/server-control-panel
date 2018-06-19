@@ -122,23 +122,23 @@ after_build:
   # copy dependencies 
   # 1) zlib 
   - if "%CONFIGURATION%"=="Release" (
-      copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll
+      copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll &&
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
     )
   - if "%CONFIGURATION%"=="Debug" (
-      copy C:\projects\server-control-panel\libs\zlib\bin\zlibs.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll
+      copy C:\projects\server-control-panel\libs\zlib\bin\zlibs.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll &&
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlibd.exp C:\projects\server-control-panel\libs\quazip\lib\zlibd.exp
     )
   # 2) quazip
   - mkdir C:\projects\server-control-panel\libs\quazip\bin
   - if "%CONFIGURATION%"=="Release" (
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll &&
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll &&
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazip.exp C:\projects\server-control-panel\libs\quazip\lib\quazip.exp
     )
   - if "%CONFIGURATION%"=="Debug" (
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\libs\quazip\bin\quazipd.dll
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\%CONFIGURATION%\quazipd.dll
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\libs\quazip\bin\quazipd.dll &&
+      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\%CONFIGURATION%\quazipd.dll &&
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazipd.exp C:\projects\server-control-panel\libs\quazip\lib\quazipd.exp
     )
   # 3) yaml-cpp (statically linked)
@@ -184,11 +184,11 @@ test_script:
   # test normal executable
   - cd C:\projects\server-control-panel\%CONFIGURATION%
   - if "%CONFIGURATION%"=="Release" (
-      wpn-xm.exe -v
+      wpn-xm.exe -v &&
       wpn-xm.exe --help
     )     
   - if "%CONFIGURATION%"=="Debug" (
-      wpn-xm-debug.exe -v
+      wpn-xm-debug.exe -v &&
       wpn-xm-debug.exe --help
     )
   # test boxed executable
