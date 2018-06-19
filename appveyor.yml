@@ -83,8 +83,8 @@ before_build:
   - cd C:\projects\server-control-panel\third-party\quazip
   - mkdir build
   - cd build
-  - if "%configuration%"=="Release" ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlib.lib)
-  - if "%configuration%"=="Debug"   ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlibd.lib)
+  - if "%CONFIGURATION%"=="Release" ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlib.lib)
+  - if "%CONFIGURATION%"=="Debug"   ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlibd.lib)
   - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIR="C:\projects\server-control-panel\libs\zlib\include;C:\projects\server-control-panel\third-party\zlib" -DZLIB_LIBRARY="%ZLIB_LIBRARY%" ../
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" quazip.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
@@ -111,30 +111,30 @@ after_build:
   - cd C:\projects\server-control-panel\
   - dir
   # identify and copy dependencies
-  - if "%configuration%"=="Release" (
+  - if "%CONFIGURATION%"=="Release" (
       windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --release wpn-xm.exe
     )
-  - if "%configuration%"=="Debug" (
+  - if "%CONFIGURATION%"=="Debug" (
       windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --debug wpn-xm-debug.exe
     )
   # copy dependencies 
   # 1) zlib 
-  - if "%configuration%"=="Release" (
+  - if "%CONFIGURATION%"=="Release" (
       copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
     )
-  - if "%configuration%"=="Debug" (
+  - if "%CONFIGURATION%"=="Debug" (
       copy C:\projects\server-control-panel\libs\zlib\bin\zlibs.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlibd.exp C:\projects\server-control-panel\libs\quazip\lib\zlibd.exp
     )
   # 2) quazip
   - mkdir C:\projects\server-control-panel\libs\quazip\bin
-  - if "%configuration%"=="Release" (
+  - if "%CONFIGURATION%"=="Release" (
       copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll
       copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazip.exp C:\projects\server-control-panel\libs\quazip\lib\quazip.exp
     )
-  - if "%configuration%"=="Debug" (
+  - if "%CONFIGURATION%"=="Debug" (
       copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\libs\quazip\bin\quazipd.dll
       copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\%CONFIGURATION%\quazipd.dll
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazipd.exp C:\projects\server-control-panel\libs\quazip\lib\quazipd.exp
@@ -181,11 +181,11 @@ after_build:
 test_script:
   # test normal executable
   - cd C:\projects\server-control-panel\%CONFIGURATION%
-  - if "%configuration%"=="Release" (
+  - if "%CONFIGURATION%"=="Release" (
       wpn-xm.exe -v
       wpn-xm.exe --help
     )     
-  - if "%configuration%"=="Debug" (
+  - if "%CONFIGURATION%"=="Debug" (
       wpn-xm-debug.exe -v
       wpn-xm-debug.exe --help
     )
