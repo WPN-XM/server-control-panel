@@ -110,7 +110,7 @@ build_script:
 
 after_build:
   - echo %cd%
-  - cd C:\projects\server-control-panel\
+  - cd C:\projects\server-control-panel\%CONFIGURATION%
   - dir
   # identify and copy dependencies
   - if "%CONFIGURATION%"=="Release" (
