@@ -103,8 +103,8 @@ build_script:
   - call bin\phing\phing.bat -f build.appveyor.xml
   # run qmake  
   - qmake wpnxm-servercontrolpanel.pro -r -spec %SPEC% -config %CONFIGURATION% 
-  # run make
-  - nmake BUILD=%CONFIGURATION%
+  # run nmake on "Makefile.Release|Debug"
+  - nmake /f Makefile.%CONFIGURATION% /NOLOGO
 
 after_build:
   - echo %cd%
