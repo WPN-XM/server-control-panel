@@ -17,12 +17,6 @@ environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo 
   matrix: 
     # https://www.appveyor.com/docs/build-environment/#qt
-    # MSVC x86
-    #- bitsize:    x86
-    #  platform:   amd64_x86
-    #  qt:         5.11.0\msvc2015
-    #  suffix:     msvc2015
-    #  generator:  "Visual Studio 14 2015"
 
     # MSVC x64
     - bitsize:    x64
@@ -132,16 +126,11 @@ after_build:
   # - no exports for yaml-cpp?
   # 4) openssl
   - mkdir C:\projects\server-control-panel\libs\openssl\bin
-  # - C:\OpenSSL-Win32\bin
-  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll )
-  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll )
-  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll )
-  - if "%platform%"=="amd64_x86" ( copy C:\OpenSSL-Win32\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll )
   # - C:\OpenSSL-Win64\bin
-  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll )
-  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll )
-  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll )
-  - if "%platform%"=="amd64" ( copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll )
+  - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll
+  - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll
   # cleanups
   - del *.obj
   - del *.cpp
