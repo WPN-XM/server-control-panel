@@ -88,7 +88,7 @@ before_build:
   - if "%CONFIGURATION%"=="Release" ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlib.lib)
   - if "%CONFIGURATION%"=="Debug"   ( set ZLIB_LIBRARY=C:\projects\server-control-panel\libs\zlib\lib\zlibd.lib)
   - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_INCLUDE_DIR="C:\projects\server-control-panel\libs\zlib\include" -DZLIB_LIBRARY="%ZLIB_LIBRARY%" ../
-  - msbuild %MSBUILD_FLAGS% /verbosity:detailed /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" quazip.sln
+  - msbuild %MSBUILD_FLAGS% /maxcpucount:1 /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" quazip.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
   # yaml-cpp
   - cd C:\projects\server-control-panel\third-party\yaml-cpp
