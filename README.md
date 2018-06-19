@@ -77,9 +77,10 @@ Breaking changes, new features, deprecations and bug fixes are tracked in the [C
 
 ## Build Dependencies
 
-* Qt >= 5.2
-* QuaZIP
-  * zlib
+* [Qt >= 5.2](http://download.qt.io/official_releases/)
+* [QuaZIP](https://github.com/stachenov/quazip) - LGPL v2.1
+  * [zlib](https://github.com/madler/zlib) - ZLIB License
+* [yaml-cpp](https://github.com/jbeder/yaml-cpp) - MIT License
 
 ### Downloading Qt
 
@@ -91,13 +92,13 @@ You should be able to find everything at http://download.qt.io/official_releases
 
   http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
 
-* Qt 5.10.x
+* Qt 5.11.1
 
-  http://download.qt.io/official_releases/qt/5.10/5.10.1/qt-opensource-windows-x86-5.10.1.exe
+  http://download.qt.io/official_releases/qt/5.11/5.11.1/qt-opensource-windows-x86-5.11.1.exe
 
 * Qt Creator
 
-  http://download.qt.io/official_releases/qtcreator/4.6/4.6.0/qt-creator-opensource-windows-x86_64-4.6.0.exe
+  http://download.qt.io/official_releases/qtcreator/4.6/4.6.2/qt-creator-opensource-windows-x86_64-4.6.2.exe
 
 ### Installation Steps and Requirements for Qt
 
