@@ -64,6 +64,8 @@ before_build:
   - set SPEC="win32-msvc"
   # Show build folder
   - echo %CONFIGURATION%
+  - echo %bitsize%
+  - echo %generator%
   # show versions
   - msbuild /version
   - cmake --version
