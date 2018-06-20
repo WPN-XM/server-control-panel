@@ -50,15 +50,15 @@ install:
   - git submodule update --init --recursive
 
 before_build:  
-  # set QT path and env vars
+  # set paths
   - set PATH=C:\Qt\%qt%\bin;C:\Qt\%qt%;%PATH%
   - set QTDIR=C:\Qt\%qt%
-  # set vars image 2017
+  # set vars
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set CPU=AMD64
   - set SPEC="win32-msvc"
-  # Show build folder
+  # show appveyor env vars
   - echo %CONFIGURATION%
   - echo %bitsize%
   - echo %generator%
@@ -91,7 +91,6 @@ before_build:
   - mkdir build
   - cd build
   - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ../ -DBUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DYAML_CPP_BUILD_CONTRIB=OFF
-  - dir
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" yaml_cpp.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
 
