@@ -183,17 +183,10 @@ after_build:
 test_script:
   # test normal executable
   - cd C:\projects\server-control-panel\%CONFIGURATION%
-  - if "%CONFIGURATION%"=="Release" (
-      wpn-xm.exe -v &&
-      wpn-xm.exe --help
-    )     
-  - if "%CONFIGURATION%"=="Debug" (
-      wpn-xm-debug.exe -v &&
-      wpn-xm-debug.exe --help
-    )
+  - if "%CONFIGURATION%"=="Release" ( wpn-xm.exe --help )     
+  - if "%CONFIGURATION%"=="Debug"   ( wpn-xm-debug.exe --help )
   # test boxed executable
   - cd C:\projects\server-control-panel\bin
-  - wpn-xm.exe -v
   - wpn-xm.exe --help
 
 #artifacts:
