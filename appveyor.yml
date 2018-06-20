@@ -70,7 +70,7 @@ before_build:
   - cd C:\projects\server-control-panel\third-party\zlib
   - mkdir build
   - cd build
-  - cmake -G "%generator%" ../ -DCMAKE_INSTALL_PREFIX=../../../libs/zlib
+  - cmake -G "%generator%" ../ -DCMAKE_INSTALL_PREFIX=../../../libs/zlib -DDISABLE_EXAMPLE_BINARIES=TRUE
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" zlib.sln 
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
   # apply CMakeList patch for quazip
