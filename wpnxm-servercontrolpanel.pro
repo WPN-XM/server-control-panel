@@ -31,7 +31,7 @@ QMAKE_TARGET_COPYRIGHT   = Copyright 2010-2018 Jens A. Koch
 
 DEPLOYMENT.display_name = WPN-XM Server Control Panel
 
-CONFIG += qt console c++11 #warn-on static
+CONFIG += qt console c++14
 
 QT += core network widgets
 
@@ -40,6 +40,9 @@ QT += core network widgets
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+
+# Let's disable all deprecated APIs before the following version:
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051100
 
 # needed for "createShellLink", see ConfigurationDialog
 LIBS += -luuid -lole32 -lshell32
@@ -215,7 +218,7 @@ win32-g++ {
 
 win32-msvc* {
     message("using win32 msvc")
-    QMAKE_CXXFLAGS += /MP
+    #QMAKE_CXXFLAGS += /MP
 }
 
 *-g++-32 {
@@ -224,6 +227,8 @@ win32-msvc* {
     QMAKE_CXXFLAGS += -msse2
     QMAKE_CFLAGS += -msse2
 }
+
+message("QMAKE_CXXFLAGS is $${QMAKE_CXXFLAGS}")
 
 # Deployment - Automatically Determine AND Copy Dependencies to Build Folder
 
@@ -242,7 +247,7 @@ win32 {
     }
 
     # Uncomment the following line to help debug the deploy command when running qmake
-    warning($${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET})
+    message($${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET})
 
     QMAKE_POST_LINK = $${DEPLOY_COMMAND} $${DEPLOY_OPTIONS} $${DEPLOY_TARGET}
 }
@@ -251,10 +256,21 @@ win32 {
 
 libs.path = $$OUT_PWD/$$DESTDIR
 
-libs.files += libs/quazip/bin/quazip.dll
-libs.files += libs/zlib/bin/zlib.dll
-libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
-libs.files += libs/openssl/bin/libeay32.dll
-libs.files += libs/openssl/bin/ssleay32.dll
+CONFIG(debug, debug|release) { # copy Debug libraries
+
+    libs.files += libs/quazip/bin/quazipd.dll
+    libs.files += libs/zlib/bin/zlibd.dll
+    libs.files += libs/yaml-cpp/bin/yaml-cppmd.dll
+    libs.files += libs/openssl/bin/libeay32.dll # not av
+    libs.files += libs/openssl/bin/ssleay32.dll # not av
+
+} else { # copy Release libraries
+
+    libs.files += libs/quazip/bin/quazip.dll
+    libs.files += libs/zlib/bin/zlib.dll
+    libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
+    libs.files += libs/openssl/bin/libeay32.dll
+    libs.files += libs/openssl/bin/ssleay32.dll
+}
 
 INSTALLS += libs
