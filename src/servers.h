@@ -60,8 +60,6 @@ namespace Servers
         QStringList getLogFiles(const QString &serverName) const;
         void clearLogFile(const QString &serverName) const;
 
-        bool isInstalled(const QString &serverName) const;
-
         QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
 
         QString getMongoPort();

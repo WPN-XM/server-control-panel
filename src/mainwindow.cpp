@@ -886,14 +886,14 @@ namespace ServerControlPanel
     void MainWindow::openConfigurationDialog()
     {
         Configuration::ConfigurationDialog cfgDlg;
-        cfgDlg.setServers(this->servers);
+        cfgDlg.setServers(servers);
         cfgDlg.exec();
     }
 
     void MainWindow::openConfigurationDialogNginx()
     {
         Configuration::ConfigurationDialog cfgDlg;
-        cfgDlg.setServers(this->servers);
+        cfgDlg.setServers(servers);
         cfgDlg.setCurrentStackWidget("nginx");
         cfgDlg.exec();
     }
@@ -1044,7 +1044,7 @@ namespace ServerControlPanel
                          "<tr><td colspan=2>&nbsp;&nbsp;</td></tr>"
                          "<tr><td align=center><b>Website</b></td><td><a "
                          "href=\"https://wpn-xm.org/\">https://wpn-xm.org/</a><br></td></tr>"
-                         "<tr><td align=center><b>Author</b></td><td>Jens A. Koch (c) 2011 "
+                         "<tr><td align=center><b>Author</b></td><td>Jens A. Koch (c) 2010 "
                          "- ")
                           .append(year)
                           .append(".<br></td></tr>"

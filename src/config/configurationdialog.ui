@@ -173,7 +173,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>9</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -184,7 +184,7 @@
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>321</width>
+       <width>511</width>
        <height>361</height>
       </rect>
      </property>
@@ -861,6 +861,12 @@
          <height>101</height>
         </rect>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>481</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="horizontalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOff</enum>
        </property>
@@ -880,13 +886,13 @@
         <bool>false</bool>
        </attribute>
        <attribute name="horizontalHeaderDefaultSectionSize">
-        <number>100</number>
+        <number>140</number>
        </attribute>
        <attribute name="horizontalHeaderHighlightSections">
         <bool>true</bool>
        </attribute>
        <attribute name="horizontalHeaderMinimumSectionSize">
-        <number>50</number>
+        <number>140</number>
        </attribute>
        <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
         <bool>false</bool>
@@ -951,7 +957,7 @@
         <enum>QAbstractItemView::SingleSelection</enum>
        </property>
        <property name="textElideMode">
-        <enum>Qt::ElideLeft</enum>
+        <enum>Qt::ElideMiddle</enum>
        </property>
        <property name="showGrid">
         <bool>true</bool>
@@ -2149,7 +2155,11 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_redis_port"/>
+         <widget class="QLineEdit" name="lineEdit_redis_port">
+          <property name="text">
+           <string>6379</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

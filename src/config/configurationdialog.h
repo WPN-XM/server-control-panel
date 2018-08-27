@@ -116,6 +116,9 @@ namespace Configuration
         QCheckBox *checkbox_autostart_PostgreSQL;
         QCheckBox *checkbox_autostart_Redis;
 
+        QStringList installedServersList;
+        bool isServerInstalled(const QString &serverName) const;
+
         void readSettings();
         void writeSettings();
 

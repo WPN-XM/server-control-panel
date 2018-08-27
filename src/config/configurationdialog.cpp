@@ -18,7 +18,7 @@ namespace Configuration
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-        this->settings = new Settings::SettingsManager;
+        settings = new Settings::SettingsManager;
         readSettings();
 
         hideComponentsNotInstalledInMenuTree();
@@ -149,21 +149,21 @@ namespace Configuration
         // Configuration > Components > MongoDb
         //
 
-        /*if (servers->isInstalled("mongodb"))
+        if (isServerInstalled("mongodb"))
         {
             ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
 
             ui->lineEdit_mongodb_dbpath->setText(getSettingString(
                 "mongodb/dbpath", QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")));
-        }*/
+        }
 
         //
         // Configuration > Components > PostgreSQL
         //
-        /*
-        if (servers->isInstalled("postgresql")) {
+
+        if (isServerInstalled("postgresql")) {
             ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
-        }*/
+        }
 
         //
         // Configuration > Components > Memcached
@@ -182,10 +182,19 @@ namespace Configuration
         // Configuration > Components > Redis
         //
 
-        if (servers->isInstalled("redis")) {
-            qDebug() << "Redis is installed";
+        if (isServerInstalled("redis")) {
             ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
         }
+    }
+
+    bool ConfigurationDialog::isServerInstalled(const QString &serverName) const
+    {
+        foreach(QString server, installedServersList) {
+            if(server == serverName) {
+                return true;
+            }
+        }
+        return false;
     }
 
     void ConfigurationDialog::writeSettings()
@@ -218,6 +227,7 @@ namespace Configuration
         settings->set("autostart/php", int(ui->checkbox_autostart_PHP->isChecked()));
         settings->set("autostart/mariadb", int(ui->checkbox_autostart_MariaDb->isChecked()));
 
+        // checkboxes are automatically removed by hideAutostartCheckboxes...
         settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
         settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
         settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
@@ -277,7 +287,7 @@ namespace Configuration
         // We do not save mongodb values into the wpn-xm.ini file.
         // All setting go directly into mongod.conf yaml file.
 
-        if (servers->isInstalled("mongodb")) {
+        if (isServerInstalled("mongodb")) {
             saveSettings_MongoDB_Configuration();
             qApp->processEvents();
         }
@@ -286,7 +296,7 @@ namespace Configuration
         // Configuration > Components > PostgreSQL
         //
 
-        if (servers->isInstalled("postgresql")) {
+        if (isServerInstalled("postgresql")) {
             settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
             qApp->processEvents();
         }
@@ -295,7 +305,7 @@ namespace Configuration
         // Configuration > Components > Memcached
         //
 
-        if (servers->isInstalled("memcached")) {
+        if (isServerInstalled("memcached")) {
             settings->set("memcached/tcpport", QString(ui->lineEdit_memcached_tcpport->text()));
             settings->set("memcached/udpport", QString(ui->lineEdit_memcached_udpport->text()));
             settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
@@ -308,7 +318,7 @@ namespace Configuration
         // Configuration > Components > Redis > Tab "Configuration"
         //
 
-        if (servers->isInstalled("redis")) {
+        if (isServerInstalled("redis")) {
             settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
 
             saveSettings_Redis_Configuration();
@@ -641,10 +651,10 @@ namespace Configuration
     // show only installed items/childs underneath "Components"
     void ConfigurationDialog::hideComponentsNotInstalledInMenuTree()
     {
-        QStringList installedSL = this->servers->getInstalledServerNames();
+        installedServersList = servers->getInstalledServerNames();
 
         // force append xdebug as installed server to unhide it
-        installedSL << "xdebug";
+        installedServersList << "xdebug";
 
         // get tree item "Components"
         QList<QTreeWidgetItem *> itemList = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString);
@@ -658,7 +668,7 @@ namespace Configuration
 
             // iterate over installed server names
             // for (int j=0; j < installed.count(); j++)
-            QMutableStringListIterator installedML(installedSL);
+            QMutableStringListIterator installedML(installedServersList);
             while (installedML.hasNext()) {
                 // get servername
                 QString serverName = installedML.next();
