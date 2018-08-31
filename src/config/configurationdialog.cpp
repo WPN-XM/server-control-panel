@@ -1,11 +1,11 @@
 #include "configurationdialog.h"
 #include "ui_configurationdialog.h"
 
+#include "nginxaddserverdialog.h"
+#include "nginxaddupstreamdialog.h"
 #include "src/file/ini.h"
 #include "src/file/json.h"
 #include "src/file/yml.h"
-#include "nginxaddserverdialog.h"
-#include "nginxaddupstreamdialog.h"
 
 namespace Configuration
 {
@@ -149,8 +149,7 @@ namespace Configuration
         // Configuration > Components > MongoDb
         //
 
-        if (isServerInstalled("mongodb"))
-        {
+        if (isServerInstalled("mongodb")) {
             ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
 
             ui->lineEdit_mongodb_dbpath->setText(getSettingString(
@@ -170,12 +169,16 @@ namespace Configuration
         //
         /*
                 if (servers->isInstalled("memcached")) {
-                    ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport", QString("11211")));
-                    ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport", QString("0")));
-                    ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads", QString("2")));
-                    ui->lineEdit_memcached_maxconnections->setText(
-                        getSettingString("memcached/maxconnections", QString("2048")));
-                    ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory", QString("2048")));
+                    ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport",
+           QString("11211")));
+                    ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport",
+           QString("0")));
+                    ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads",
+           QString("2"))); ui->lineEdit_memcached_maxconnections->setText(
+                        getSettingString("memcached/maxconnections",
+           QString("2048")));
+                    ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory",
+           QString("2048")));
                 }
         */
         //
@@ -189,8 +192,8 @@ namespace Configuration
 
     bool ConfigurationDialog::isServerInstalled(const QString &serverName) const
     {
-        foreach(QString server, installedServersList) {
-            if(server == serverName) {
+        foreach (QString server, installedServersList) {
+            if (server == serverName) {
                 return true;
             }
         }
@@ -342,11 +345,11 @@ namespace Configuration
     }
 
     /**
- * Redis uses a custom configuration file format
- * with a custom read and write mechanism for the config file: CONFIG GET +
- * CONFIG SET.
- * We read the file as a standard text file and replace lines in the content.
- */
+     * Redis uses a custom configuration file format
+     * with a custom read and write mechanism for the config file: CONFIG GET +
+     * CONFIG SET.
+     * We read the file as a standard text file and replace lines in the content.
+     */
     void ConfigurationDialog::saveSettings_Redis_Configuration()
     {
         // get redis configuration file path
@@ -366,7 +369,8 @@ namespace Configuration
         configContent.clear();
 
         // prepare line(s) to replace
-        // QString newline_bind = "bind " + ui->lineEdit_redis_bind->text().toLatin1();
+        // QString newline_bind = "bind " +
+        // ui->lineEdit_redis_bind->text().toLatin1();
         QString newline_port = "port " + ui->lineEdit_redis_port->text().toLatin1();
 
         // iterate over all lines and replace or re-add lines
@@ -566,7 +570,6 @@ namespace Configuration
         int rows = pools->rowCount();
 
         for (int i = 0; i < rows; ++i) {
-
             QString poolName = pools->item(i, NginxAddUpstreamDialog::Column::Pool)->text();
             QString method   = pools->item(i, NginxAddUpstreamDialog::Column::Method)->text();
 
@@ -601,7 +604,6 @@ namespace Configuration
         int rows = servers->rowCount();
 
         for (int i = 0; i < rows; ++i) {
-
             jsonServer.insert("address", servers->item(i, 0 /*NginxAddServerDialog::Column::Address*/)->text());
             jsonServer.insert("port", servers->item(i, 1 /*NginxAddServerDialog::Column::Port*/)->text());
             jsonServer.insert("weight", servers->item(i, 2 /*NginxAddServerDialog::Column::Weight*/)->text());
@@ -737,7 +739,7 @@ namespace Configuration
                                                qApp->applicationFilePath(), 0, // icon path and idx
                                                qApp->applicationDirPath(), // working dir
                                                startupDir + "\\WPN-XM Server Control Panel.lnk" // filepath of shortcut
-                                               );
+            );
         } else {
             // remove link
             QFile::remove(startupDir + "\\WPN-XM Server Control Panel.lnk");
@@ -815,6 +817,162 @@ namespace Configuration
                                                new QTableWidgetItem("5"));
     }
 
+    void ConfigurationDialog::on_pushButton_searchPHPInstallations_clicked()
+    {
+        ui->comboBox_PHPVersions->setDisabled(1);
+
+        // find all folders inside "bin" containing a php executable
+        QStringList filters = {"php.exe"};
+        QString binFolder   = QDir::currentPath() + "/bin/";
+
+        QList<PhpVersions> list;
+
+        QDirIterator it(binFolder, filters, QDir::NoSymLinks | QDir::Files | QDir::Dirs, QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            QString php_exe = it.next();
+
+            QFile f(php_exe);
+            QString path        = f.fileName();
+            QString originalDir = path.section("/", 0, -2);
+            QString phpDirName  = path.remove(binFolder).section("/", 0, -2);
+
+            PhpVersions v;
+            v.php_dir = phpDirName;
+            v.version = getPHPVersionFromExe(php_exe);
+
+            qDebug() << v.php_dir << v.version;
+
+            // rename folders = versionize PHP folders ("php-version")
+            QString expectedPhpDirName = QString("php-").append(v.version);
+
+            if (phpDirName == "php") {
+                qDebug() << "Skipping bin/php folder.";
+            } else if (phpDirName == expectedPhpDirName) {
+                qDebug() << "Folder already correctly versionized.";
+            } else {
+                QString dest(binFolder);
+                dest.append(expectedPhpDirName);
+                qDebug() << "dest: " << dest;
+                QDir dir;
+                if (!dir.rename(originalDir, dest)) {
+                    qDebug() << "Error renaming folder.";
+                } else {
+                    qDebug() << "Folder renamed: " << originalDir << dest;
+                }
+            }
+
+            list.append(v);
+        }
+
+        //        for (int i = 0; i < list.count(); ++i) {
+        //            qDebug() << list[i].version;
+        //        }
+
+        // TODO: do we really need to sort the values from QDirIterator?
+        // sort the php version list
+        int i, j;
+        for (i = 0; i < list.count(); ++i) {
+            for (j = i + 1; j < list.count(); ++j) {
+                QVersionNumber version1 = QVersionNumber::fromString(list[i].version);
+                QVersionNumber version2 = QVersionNumber::fromString(list[j].version);
+                // qDebug() << version1.toString() << version2.toString();
+                // TODO: compare WTF: -1,0,1? but i get -8 to 2. thanks qt
+                // qDebug() << QVersionNumber::compare(version1, version2);
+                if (QVersionNumber::compare(version1, version2) >= 1) {
+                    list.move(i, j);
+                    i = 0;
+                }
+            }
+        }
+
+        //        for (int i = 0; i < list.count(); ++i) {
+        //            qDebug() << list[i].version;
+        //        }
+
+        // populate php version dropdown
+        ui->comboBox_PHPVersions->clear();
+        for (int i = 0; i < list.count(); ++i) {
+            // qDebug() << list[i].version;
+            ui->comboBox_PHPVersions->addItem(list[i].version);
+            // highlight the currently selected php version for bin/php
+            if (list[i].php_dir == "php") {
+                ui->comboBox_PHPVersions->setCurrentText(list[i].version);
+                ui->lineEdit_currentPHPVersion->setText(list[i].version);
+            }
+        }
+        ui->comboBox_PHPVersions->setEnabled(1);
+    }
+
+    void ConfigurationDialog::on_pushButton_setPHPVersionForBinFolder_clicked()
+    {
+        QString selectedPHPVersion = ui->comboBox_PHPVersions->currentText();
+        QString currentPHPVersion  = ui->lineEdit_currentPHPVersion->text();
+
+        if (ui->lineEdit_currentPHPVersion->text() == selectedPHPVersion) {
+            qDebug() << "This PHP version is already set for bin/php.";
+        } else {
+            QString binFolder          = QDir::currentPath() + "/bin/";
+            QString selectedPhpDirName = QString("php-").append(selectedPHPVersion);
+            QString currentPhPDirName  = QString("php-").append(currentPHPVersion);
+
+            // rename (current) "bin/php" to "bin/php-version"
+
+            QString current(binFolder);
+            current.append(currentPhPDirName);
+
+            QDir dir;
+            if (!dir.rename(binFolder + "php", current)) {
+                qDebug() << "Error renaming folder.";
+            } else {
+                qDebug() << "Folder renamed: bin/php to " << current;
+            }
+
+            // rename (selected) "bin/php-version" to "bin/php"
+
+            QString src(binFolder);
+            src.append(selectedPhpDirName);
+            QDir dir2;
+            if (!dir2.rename(src, binFolder + "php")) {
+                qDebug() << "Error renaming folder.";
+            } else {
+                qDebug() << "Folder renamed: " << src << "to bin/php";
+            }
+
+            ui->lineEdit_currentPHPVersion->setText(selectedPHPVersion);
+        }
+    }
+
+    QString ConfigurationDialog::getPHPVersionFromExe(QString pathToPHPExecutable)
+    {
+        // this happens only during testing
+        if (!QFile().exists(pathToPHPExecutable)) {
+            return "0.0.0";
+        }
+
+        QProcess process;
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        process.start(pathToPHPExecutable.append(" -n -v"));
+
+        if (!process.waitForFinished()) {
+            qDebug() << "[PHP] Version failed:" << process.errorString();
+            return "";
+        }
+
+        QByteArray p_stdout = process.readLine();
+
+        // qDebug() << "[PHP] Version: \n" << p_stdout;
+
+        // - grab inside "PHP x (cli)"
+        // - "\\d.\\d.\\d." = grab "1.2.3"
+        // - "(\\w+\\d+)?" = grab optional "alpha2" version
+        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)");
+        regex.indexIn(p_stdout);
+
+        // qDebug() << regex.capturedTexts();
+
+        return regex.cap(1).trimmed();
+    }
+
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
     {
         // a click on a menu item returns the name of the item
@@ -826,7 +984,7 @@ namespace Configuration
     void ConfigurationDialog::setCurrentStackWidget(QString widgetname)
     {
         QWidget *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
-        if (w != 0)
+        if (w != nullptr)
             ui->stackedWidget->setCurrentWidget(w);
         else
             qDebug() << "[Config Menu] There is no page " << widgetname << " in the stack widget.";
@@ -959,7 +1117,6 @@ namespace Configuration
         QJsonObject jsonServers = jsonPool["servers"].toObject();
 
         for (int i = 0; i < jsonServers.count(); ++i) {
-
             // values for a "server"
             QJsonObject values = jsonServers.value(QString::number(i)).toObject();
 
@@ -1033,4 +1190,4 @@ namespace Configuration
     {
         return settings->get(key, QVariant(defaultValue)).toString();
     }
-}
+} // namespace Configuration

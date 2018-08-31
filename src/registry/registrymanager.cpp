@@ -25,7 +25,7 @@ namespace SoftwareRegistry
         QString stackRegistryFile = QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
 
         if (fileNotExistingOrOutdated(stackRegistryFile)) {
-            downloadRegistry(QUrl("http://wpn-xm.org/updatecheck.php?s=all"), stackRegistryFile);
+            downloadRegistry(QUrl("https://wpn-xm.org/updatecheck.php?s=all"), stackRegistryFile);
         } else {
             qDebug() << "[Loading from Cache] Server Stack Software Registry";
             stackSoftwareRegistry = File::JSON::load(stackRegistryFile);

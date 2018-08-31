@@ -73,6 +73,7 @@ namespace ServerControlPanel
 
         updateTrayIconTooltip();
         updateToolsPushButtons();
+
 #ifdef QT_DEBUG
         if (settings->get("selfupdater/runonstartup").toBool()) {
             runSelfUpdate();
@@ -324,8 +325,8 @@ namespace ServerControlPanel
     void MainWindow::MainWindow_ShowEvent()
     {
         /**
-   * Only show the log file icons/buttons, if the respective file exists.
-   */
+         * Only show the log file icons/buttons, if the respective file exists.
+         */
 
         // Set enabled/disabled state for all "pushButton_ShowLog_*" buttons
         QList<QPushButton *> allShowLogPushButtons =
@@ -420,6 +421,8 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusIndicators(QString server, bool enabled)
     {
+        updateVersion(server);
+
         server = server.toLower();
 
         updateLabelStatus(server, enabled);
@@ -652,7 +655,7 @@ namespace ServerControlPanel
 
         QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start("./bin/php/php.exe -v");
+        process.start("./bin/php/php.exe -n -v");
 
         if (!process.waitForFinished()) {
             qDebug() << "[PHP] Version failed:" << process.errorString();
@@ -1192,10 +1195,10 @@ namespace ServerControlPanel
         // ServersGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
         /**
-   * The ServersGrid has the following columns:
-   *
-   * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
-   */
+         * The ServersGrid has the following columns:
+         *
+         * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
+         */
 
         QLabel *label_Status = new QLabel();
         label_Status->setText(QApplication::translate("MainWindow", "Status", 0));
@@ -1248,8 +1251,8 @@ namespace ServerControlPanel
         ServersGridLayout->addWidget(label_Actions, 1, 8, 1, 2); // two columns
 
         /**
-   * Define Icons
-   */
+         * Define Icons
+         */
 
         QIcon iconConfig;
         iconConfig.addFile(QStringLiteral(":/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
@@ -1274,10 +1277,10 @@ namespace ServerControlPanel
         foreach (Servers::Server *server, servers->servers()) {
 
             /**
-     * Columns:
-     *
-     * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
-     */
+             * Columns:
+             *
+             * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
+             */
 
             // Status
             QLabel *labelStatus = new QLabel();
@@ -1399,14 +1402,14 @@ namespace ServerControlPanel
         }
 
         /**
-   * The ServersGridLayout size depends on the number of installed Components.
-   * The BottomWidget has to move down (y + height of ServersGridLayout +
-   * margin)
-   * The RightSideWidget moves up, if there are only 3-4 elements,
-   * the "Webinterface" PushButton will be on par with the Labels.
-   * If there are more then 4 elements, the "console" PushButton
-   * is on par with the first server.
-   */
+         * The ServersGridLayout size depends on the number of installed Components.
+         * The BottomWidget has to move down (y + height of ServersGridLayout +
+         * margin)
+         * The RightSideWidget moves up, if there are only 3-4 elements,
+         * the "Webinterface" PushButton will be on par with the Labels.
+         * If there are more then 4 elements, the "console" PushButton
+         * is on par with the first server.
+         */
 
         // 0) we added a lot of widgets dynamically,
         // now we need to adjust the size of the widgets to fit its contents.
@@ -1471,7 +1474,7 @@ namespace ServerControlPanel
     void MainWindow::updateVersion(QString server)
     {
         QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
-        if (label != 0) {
+        if (label != nullptr) {
             QString version = getVersion(server);
             label->setText(version);
         }
@@ -1515,24 +1518,24 @@ namespace ServerControlPanel
             if (enabled == true) {
                 // show Label Text to indicate that a HoverTooltip is available
                 QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
-                if (label != 0) {
+                if (label != nullptr) {
                     label->setText("Pool*");
                 }
                 // enable hover tooltip + show PHP ports and childs text
                 LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                if (tip != 0) {
+                if (tip != nullptr) {
                     tip->enableToolTip(true);
                     tip->setTooltipText(getPHPPort());
                 }
             } else {
                 // clear label
                 QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
-                if (label != 0) {
+                if (label != nullptr) {
                     label->setText("");
                 }
                 // deactivate hover tooltip
                 LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
-                if (tip != 0) {
+                if (tip != nullptr) {
                     tip->enableToolTip(false);
                     tip->setTooltipText("");
                 }
@@ -1540,7 +1543,7 @@ namespace ServerControlPanel
         } else {
             QString srvname = servers->getCamelCasedServerName(server);
             QLabel *label   = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
-            if (label != 0) {
+            if (label != nullptr) {
                 if (enabled) {
                     QString port = getPort(server);
                     label->setText(port);
@@ -1607,4 +1610,4 @@ namespace ServerControlPanel
         ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
         pvd->exec();
     }
-}
+} // namespace ServerControlPanel

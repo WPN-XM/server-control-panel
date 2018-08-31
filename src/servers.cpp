@@ -49,19 +49,18 @@ namespace Servers
         }
     }
 
-
     void Servers::mapAction(QAction *action)
     {
         QMetaObject::invokeMethod(this, action->objectName().toLocal8Bit().constData());
     }
 
     /**
- * @brief Servers::getCamelCasedServerName
- * translates lowercase server and process names to internally used camel-cased
- * label names
- * @param serverName
- * @return
- */
+     * @brief Servers::getCamelCasedServerName
+     * translates lowercase server and process names to internally used camel-cased
+     * label names
+     * @param serverName
+     * @return
+     */
     QString Servers::getCamelCasedServerName(QString &serverName) const
     {
         if (serverName == "nginx") {
@@ -249,8 +248,8 @@ namespace Servers
     // Server "Start - Stop - Restart" Methods
 
     /*
- * Nginx - Actions: run, stop, restart
- */
+     * Nginx - Actions: run, stop, restart
+     */
     void Servers::startNginx()
     {
         // already running
@@ -355,8 +354,8 @@ namespace Servers
     }
 
     /*
- * PostgreSQL Actions: run, stop, restart
- */
+     * PostgreSQL Actions: run, stop, restart
+     */
     void Servers::startPostgreSQL()
     {
         // if not installed, skip
@@ -442,8 +441,8 @@ namespace Servers
     }
 
     /*
- * PHP - Actions: run, stop, restart
- */
+     * PHP - Actions: run, stop, restart
+     */
     void Servers::startPHP()
     {
         // already running: PHP
@@ -492,18 +491,18 @@ namespace Servers
         for (auto item = PHPServersToStart.cbegin(); item != end; ++item) {
             QString port        = item.key();
             QString phpchildren = item.value();
+            QString startPHPCGI;
 
-            // if PHP version 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP
-            // spawning childs
-            if (phpVersion >= 71000) {
+            // if PHP 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP spawning childs
+            if (phpVersion >= 70100) {
                 env.insert("PHP_FCGI_CHILDREN", phpchildren);
                 qDebug() << "[PHP] Set ENV:PHP_FCGI_CHILDREN " << phpchildren;
 
-                startCmdStringTemplate.clear();
-                startCmdStringTemplate.append(QDir::currentPath() + "/bin/php/php-cgi.exe");
+                startPHPCGI = QDir::currentPath() + "/bin/php/php-cgi.exe";
+            } else {
+                // use php-cgi-spawner
+                startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
             }
-
-            QString startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
 
             qDebug() << "[PHP] Starting...\n" << startPHPCGI;
 
@@ -580,15 +579,15 @@ namespace Servers
         qDebug() << "[PHP] Stopping...";
 
         /**
-   * There is only one way stop the PHP server:
-   * By terminating the process. That means we are crashing it!
-   *
-   * WARNING!
-   *
-   * The order is important.
-   * The php-cgi-spawner needs to be killed before we are trying to kill PHP childs.
-   *
-   */
+         * There is only one way stop the PHP server:
+         * By terminating the process. That means we are crashing it!
+         *
+         * WARNING!
+         *
+         * The order is important.
+         * The php-cgi-spawner needs to be killed before we are trying to kill PHP childs.
+         *
+         */
 
         while (processes->getProcessState("php-cgi-spawner.exe") == Processes::ProcessState::Running) {
             processes->killProcessTree("php-cgi-spawner.exe");
@@ -610,8 +609,8 @@ namespace Servers
     }
 
     /*
- * MariaDb Actions - run, stop, restart
- */
+     * MariaDb Actions - run, stop, restart
+     */
     void Servers::startMariaDb()
     {
         // if already running, skip
@@ -700,8 +699,8 @@ namespace Servers
     }
 
     /*
- * MongoDb Actions - start, stop, restart
- */
+     * MongoDb Actions - start, stop, restart
+     */
     void Servers::startMongoDb()
     {
         // if not installed, skip
@@ -769,9 +768,9 @@ namespace Servers
         }
 
         /**
-   * build mongo stop command based on CLI evaluation
-   * mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
-   */
+         * build mongo stop command based on CLI evaluation
+         * mongodb is stopped via "mongo.exe --eval", not "mongodb.exe"
+         */
 
         QString const mongoStopCommand = QDir::currentPath() + "/bin/mongodb/bin/mongo.exe";
 
@@ -795,8 +794,8 @@ namespace Servers
     }
 
     /*
- * Memcached Actions - run, stop, restart
- */
+     * Memcached Actions - run, stop, restart
+     */
     void Servers::startMemcached()
     {
 
@@ -943,4 +942,4 @@ namespace Servers
 
         return QString::fromStdString(config["net"]["port"].as<std::string>());
     }
-}
+} // namespace Servers

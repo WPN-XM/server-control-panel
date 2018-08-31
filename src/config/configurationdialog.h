@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QDir>
 
 #include <QTableWidget>
 #include <QTreeWidgetItem>
@@ -25,7 +26,7 @@ namespace Configuration
         Q_OBJECT
 
     public:
-        explicit ConfigurationDialog(QWidget *parent = 0);
+        explicit ConfigurationDialog(QWidget *parent = nullptr);
 
         ~ConfigurationDialog();
 
@@ -93,6 +94,9 @@ namespace Configuration
         void on_pushButton_PostgreSql_Reset_Port_clicked();
         void on_pushButton_Redis_Reset_Port_clicked();
 
+        void on_pushButton_searchPHPInstallations_clicked();
+        void on_pushButton_setPHPVersionForBinFolder_clicked();
+
         void on_configMenuSearchLineEdit_textChanged(const QString &string);
 
     private:
@@ -116,6 +120,12 @@ namespace Configuration
         QCheckBox *checkbox_autostart_PostgreSQL;
         QCheckBox *checkbox_autostart_Redis;
 
+        struct PhpVersions
+        {
+            QString php_dir;
+            QString version;
+        };
+
         QStringList installedServersList;
         bool isServerInstalled(const QString &serverName) const;
 
@@ -130,11 +140,14 @@ namespace Configuration
         bool getSettingBool(const QString &key, const bool &defaultValue);
 
         int getSettingInt(const QString &key, const QVariant &defaultValue);
-        int ConfigurationDialog::getSettingInt(const QString &key, const int &defaultValue);
+        int getSettingInt(const QString &key, const int &defaultValue);
 
         QString getSettingString(const QString &key, const QVariant &defaultValue);
         QString getSettingString(const QString &key, const QString &defaultValue);
+
+        static bool sortByPhpVersion(const PhpVersions &d1, const PhpVersions &d2);
+        QString getPHPVersionFromExe(QString pathToPHPExecutable);
     };
-}
+} // namespace Configuration
 
 #endif // CONFIGURATIONDIALOG_H
