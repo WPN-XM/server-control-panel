@@ -76,7 +76,7 @@ namespace Downloader
             Serial
         };
         void setQueueMode(QueueMode mode);
-        TransferItem *findTransfer(QUrl url);
+        TransferItem *findTransfer(const QUrl &url);
 
         void setDownloadFolder(QString downloadFolder);
         void setDownloadMode(DownloadItem::DownloadMode mode);
@@ -104,6 +104,6 @@ namespace Downloader
         int FilesDownloadedCounter;
         int FilesToDownloadCounter;
     };
-}
+} // namespace Downloader
 
 #endif // DOWNLOADMANAGER_H

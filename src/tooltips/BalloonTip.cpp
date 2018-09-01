@@ -21,7 +21,8 @@ BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text,
     init();
 }
 
-BalloonTip::BalloonTip(QPixmap icon, QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
+BalloonTip::BalloonTip(const QPixmap &icon, QString title, QString text, int duration, QWidget *parent)
+    : QWidget(parent)
 {
     my_closeButton = new TipButton(TipButton::NoButton, this);
     my_title       = title;
@@ -253,17 +254,19 @@ void BalloonTip::move(QPoint pos)
     switch (my_arrowPos) {
     case BottomLeft:
         pos.setY(pos.y() - my_popupRect.height() - 60);
+        break;
     case TopLeft:
         pos.setX(pos.x() - 30);
         break;
     case BottomRight:
         pos.setY(pos.y() - my_popupRect.height() - 60);
+        break;
     case TopRight:
         pos.setX(pos.x() - my_popupRect.width() + 30);
         break;
     case LeftTop:
         pos.setX(pos.x() + 10);
-        pos.setY(pos.y() - my_popupRect.height() * 0.63);
+        pos.setY(pos.y() - int(my_popupRect.height() * 0.63));
         break;
     }
     QWidget::move(pos);

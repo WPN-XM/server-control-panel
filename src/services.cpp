@@ -36,7 +36,7 @@ void Services::remove(QString serviceName) { Q_UNUSED(serviceName); }
  * Reinstall Windows Service
  * equivalent to remove() followed by install()
  */
-void Services::reinstall(QString serviceName)
+void Services::reinstall(const QString &serviceName)
 {
     remove(serviceName);
     install(serviceName);

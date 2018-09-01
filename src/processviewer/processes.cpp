@@ -99,7 +99,7 @@ bool Processes::areThereAlreadyRunningProcesses()
 }
 
 // static, process blacklist
-bool Processes::isSystemProcess(QString processName)
+bool Processes::isSystemProcess(const QString &processName)
 {
     if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
         processName == "wininit" || processName == "winlogon" || processName == "dllhost" || processName == "csrss" ||
@@ -202,7 +202,7 @@ QList<PidAndPort> Processes::getPorts()
     DWORD size;
     DWORD result;
 
-    result   = GetExtendedTcpTable(NULL, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
+    result   = GetExtendedTcpTable(nullptr, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
     pTCPInfo = (MIB_TCPTABLE_OWNER_PID *)malloc(size);
     result   = GetExtendedTcpTable(pTCPInfo, &size, false, AF_INET, TCP_TABLE_OWNER_PID_ALL, 0);
 
@@ -250,7 +250,7 @@ bool Processes::killProcess(qint64 pid)
 
     hProcess = OpenProcess(PROCESS_ALL_ACCESS | PROCESS_TERMINATE, FALSE, DWORD(pid));
 
-    if (hProcess == NULL) {
+    if (hProcess == nullptr) {
         qDebug() << "OpenProcess() failed, ecode:" << GetLastError();
         return false;
     }
@@ -399,8 +399,8 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
 
     qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
-    success = CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
-                            workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
+    success = CreateProcess(0, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                            workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
     if (success) {
         CloseHandle(pinfo.hThread);
@@ -430,23 +430,23 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
     PROCESS_INFORMATION pinfo;
     DWORD dwCreationFlags    = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
-                                0,
-                                0,
-                                0,
-                                (ulong)CW_USEDEFAULT,
-                                (ulong)CW_USEDEFAULT,
-                                (ulong)CW_USEDEFAULT,
-                                (ulong)CW_USEDEFAULT,
-                                0,
-                                0,
+                                nullptr,
+                                nullptr,
+                                nullptr,
+                                static_cast<ulong>(CW_USEDEFAULT),
+                                static_cast<ulong>(CW_USEDEFAULT),
+                                static_cast<ulong>(CW_USEDEFAULT),
+                                static_cast<ulong>(CW_USEDEFAULT),
                                 0,
                                 0,
                                 0,
                                 0,
                                 0,
                                 0,
-                                0,
-                                0};
+                                nullptr,
+                                nullptr,
+                                nullptr,
+                                nullptr};
 
     QString cmd = program + QLatin1Char(' ');
 
@@ -456,7 +456,7 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
 
     qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
-    success = CreateProcess(0, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+    success = CreateProcess(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
                             workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
     if (success) {

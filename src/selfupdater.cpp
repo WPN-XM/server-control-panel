@@ -68,7 +68,7 @@ namespace Updater
         // 1. userRequestedUpdate = forced update run, regardless of interval
         // 2. lastTimeCheck 0 = an update was never done before
         // 3. based on the selected update interval = it's now time to check for updates
-        if (userRequestedUpdate || lastTimeChecked == 0 || timeForUpdateCheck == true) {
+        if (userRequestedUpdate || lastTimeChecked == 0 || timeForUpdateCheck) {
 
             // set the last time check flag
             settings->set("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));

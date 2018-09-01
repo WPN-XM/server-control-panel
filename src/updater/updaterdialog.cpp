@@ -251,7 +251,7 @@ namespace Updater
         index = model->index(currentRow, UpdaterDialog::Columns::Action);
     }
 
-    void ProgressBarUpdater::updateProgress(QMap<QString, QVariant> progress)
+    void ProgressBarUpdater::updateProgress(const QMap<QString, QVariant>& progress)
     {
         // update the "progress" data in the model
         model->setData(index, progress);

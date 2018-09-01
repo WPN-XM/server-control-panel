@@ -117,7 +117,7 @@ protected:
 
 public:
     explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = 0);
-    explicit BalloonTip(QPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
+    explicit BalloonTip(const QPixmap &pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
     explicit BalloonTip(
         QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
 

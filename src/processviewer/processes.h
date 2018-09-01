@@ -58,7 +58,7 @@ public:
 
     static bool areThereAlreadyRunningProcesses();
 
-    static bool isSystemProcess(QString processName);
+    static bool isSystemProcess(const QString &processName);
 
     enum ProcessState
     {

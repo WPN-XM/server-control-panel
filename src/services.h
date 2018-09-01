@@ -11,7 +11,7 @@ public:
     void available(QString serviceName);
     void install(QString serviceName);
     void remove(QString serviceName);
-    void reinstall(QString serviceName);
+    void reinstall(const QString &serviceName);
     void status(QString serviceName);
 };
 

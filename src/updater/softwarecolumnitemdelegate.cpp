@@ -29,7 +29,7 @@ namespace Updater
         QString websiteURL =
             index.model()->data(index.model()->index(index.row(), UpdaterDialog::Columns::WebsiteURL)).toString();
 
-        QString link = "<img src=\":/home.png\"><a href=\"" + websiteURL + "\">" + softwareName + "</a>";
+        QString link = R"(<img src=":/home.png"><a href=")" + websiteURL + "\">" + softwareName + "</a>";
 
         QTextDocument document;
 
@@ -47,14 +47,13 @@ namespace Updater
         document.drawContents(painter);
 
         painter->restore();
-        return;
     }
 
     /**
-* Qt makes it really hard to add widgets and events to tableviews
-* The cell doesn't contain an editor, but this allows to bind to events...
-* so its a hack to intercept the mouseclick on the table cell.
-*/
+     * Qt makes it really hard to add widgets and events to tableviews
+     * The cell doesn't contain an editor, but this allows to bind to events...
+     * so its a hack to intercept the mouseclick on the table cell.
+     */
     bool SoftwareColumnItemDelegate::editorEvent(QEvent *event,
                                                  QAbstractItemModel *model,
                                                  const QStyleOptionViewItem &option,
@@ -75,4 +74,4 @@ namespace Updater
             index.model()->data(index.model()->index(index.row(), UpdaterDialog::Columns::WebsiteURL)).toString();
         QDesktopServices::openUrl(QUrl(websiteURL));
     }
-}
+} // namespace Updater

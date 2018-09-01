@@ -49,7 +49,7 @@ namespace Configuration
         void hideComponentsNotInstalledInMenuTree();
         void hideAutostartCheckboxesOfNotInstalledServers();
 
-        void setCurrentStackWidget(QString widgetname);
+        void setCurrentStackWidget(const QString &widgetname);
 
         // TODO move config stuff into own class per component
 

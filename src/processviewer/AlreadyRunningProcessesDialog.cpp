@@ -92,7 +92,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
                 // handle the PostgreSQL PID file deletion, too
                 if (cb->text() == "postgres") {
                     QString file =
-                        QDir::toNativeSeparators(qApp->applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
+                        QDir::toNativeSeparators(QApplication::applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
                     if (QFile().exists(file)) {
                         QFile().remove(file);
                     }

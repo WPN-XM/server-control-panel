@@ -13,7 +13,7 @@ namespace ServerControlPanel
         // The tray icon is an instance of the QSystemTrayIcon class.
         // Check, whether a system tray is present on the user's desktop.
         if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-            QMessageBox::critical(0, APP_NAME, tr("You don't have a system tray."));
+            QMessageBox::critical(nullptr, APP_NAME, tr("You don't have a system tray."));
             QApplication::exit(1);
         }
 
@@ -200,19 +200,19 @@ namespace ServerControlPanel
         connect(cWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(startMariaDb()));
         QPushButton *buttonStartMongoDb = cWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
-        if (buttonStartMongoDb != 0) {
+        if (buttonStartMongoDb != nullptr) {
             connect(buttonStartMongoDb, SIGNAL(clicked()), servers, SLOT(startMongoDb()));
         }
         QPushButton *buttonStartMemcached = cWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
-        if (buttonStartMemcached != 0) {
+        if (buttonStartMemcached != nullptr) {
             connect(buttonStartMemcached, SIGNAL(clicked()), servers, SLOT(startMemcached()));
         }
         QPushButton *buttonStartPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
-        if (buttonStartPostgreSQL != 0) {
+        if (buttonStartPostgreSQL != nullptr) {
             connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers, SLOT(startPostgreSQL()));
         }
         QPushButton *buttonStartRedis = cWidget->findChild<QPushButton *>("pushButton_Start_Redis");
-        if (buttonStartRedis != 0) {
+        if (buttonStartRedis != nullptr) {
             connect(buttonStartRedis, SIGNAL(clicked()), servers, SLOT(startRedis()));
         }
 
@@ -223,19 +223,19 @@ namespace ServerControlPanel
         connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(stopMariaDb()));
         QPushButton *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
-        if (buttonStopMongoDb != 0) {
+        if (buttonStopMongoDb != nullptr) {
             connect(buttonStopMongoDb, SIGNAL(clicked()), servers, SLOT(stopMongoDb()));
         }
         QPushButton *buttonStopMemcached = cWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
-        if (buttonStopMemcached != 0) {
+        if (buttonStopMemcached != nullptr) {
             connect(buttonStopMemcached, SIGNAL(clicked()), servers, SLOT(stopMemcached()));
         }
         QPushButton *buttonStopPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
-        if (buttonStopPostgreSQL != 0) {
+        if (buttonStopPostgreSQL != nullptr) {
             connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers, SLOT(stopPostgreSQL()));
         }
         QPushButton *buttonStopRedis = cWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
-        if (buttonStopRedis != 0) {
+        if (buttonStopRedis != nullptr) {
             connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis()));
         }
 
@@ -1200,14 +1200,14 @@ namespace ServerControlPanel
          */
 
         QLabel *label_Status = new QLabel();
-        label_Status->setText(QApplication::translate("MainWindow", "Status", 0));
+        label_Status->setText(QApplication::translate("MainWindow", "Status", nullptr));
         label_Status->setAlignment(Qt::AlignCenter);
         label_Status->setFont(font1);
         label_Status->setEnabled(false);
         ServersGridLayout->addWidget(label_Status, 1, 0);
 
         QLabel *label_Port = new QLabel();
-        label_Port->setText(QApplication::translate("MainWindow", "Port", 0));
+        label_Port->setText(QApplication::translate("MainWindow", "Port", nullptr));
         label_Port->setMinimumWidth(38);
         label_Port->setAlignment(Qt::AlignCenter);
         label_Port->setFont(font1);
@@ -1215,28 +1215,28 @@ namespace ServerControlPanel
         ServersGridLayout->addWidget(label_Port, 1, 1);
 
         QLabel *label_Server = new QLabel();
-        label_Server->setText(QApplication::translate("MainWindow", "Server", 0));
+        label_Server->setText(QApplication::translate("MainWindow", "Server", nullptr));
         label_Server->setAlignment(Qt::AlignCenter);
         label_Server->setFont(font1);
         label_Server->setEnabled(false);
         ServersGridLayout->addWidget(label_Server, 1, 2);
 
         QLabel *label_Version = new QLabel();
-        label_Version->setText(QApplication::translate("MainWindow", "Version", 0));
+        label_Version->setText(QApplication::translate("MainWindow", "Version", nullptr));
         label_Version->setAlignment(Qt::AlignCenter);
         label_Version->setFont(font1);
         label_Version->setEnabled(false);
         ServersGridLayout->addWidget(label_Version, 1, 3);
 
         QLabel *label_Config = new QLabel();
-        label_Config->setText(QApplication::translate("MainWindow", "Config", 0));
+        label_Config->setText(QApplication::translate("MainWindow", "Config", nullptr));
         label_Config->setAlignment(Qt::AlignCenter);
         label_Config->setFont(font1);
         label_Config->setEnabled(false);
         ServersGridLayout->addWidget(label_Config, 1, 4, 1, 2); // two columns (gear and gear-pencil)
 
         QLabel *label_Logs = new QLabel();
-        label_Logs->setText(QApplication::translate("MainWindow", "Logs", 0));
+        label_Logs->setText(QApplication::translate("MainWindow", "Logs", nullptr));
         label_Logs->setAlignment(Qt::AlignCenter);
         label_Logs->setFont(font1);
         label_Logs->setEnabled(false);
@@ -1440,7 +1440,7 @@ namespace ServerControlPanel
         this->setFixedHeight(ServersBoxBottomY + BottomWidget.height() + 10);
     }
 
-    QString MainWindow::getVersion(QString server)
+    QString MainWindow::getVersion(const QString &server)
     {
         QString s = server.toLower();
         if (s == "nginx") {
@@ -1479,7 +1479,7 @@ namespace ServerControlPanel
         }
     }
 
-    QString MainWindow::getPort(QString server)
+    QString MainWindow::getPort(const QString &server)
     {
         QString s = server.toLower();
         if (s == "nginx") {

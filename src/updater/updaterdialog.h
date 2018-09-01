@@ -77,7 +77,7 @@ namespace Updater
     public:
         explicit ProgressBarUpdater(UpdaterDialog *parent = 0, int currentRow = 0);
     public slots:
-        void updateProgress(QMap<QString, QVariant> progress);
+        void updateProgress(const QMap<QString, QVariant> &progress);
         void downloadFinished(Downloader::TransferItem *transfer);
 
     private:

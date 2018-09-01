@@ -13,9 +13,9 @@ class TrayToolTip : public QWidget
     Q_OBJECT
 
 public:
-    explicit TrayToolTip(QWidget *parent = 0);
-    void showMessage(const QPixmap &pixmap, QString title, QString msg, QPoint point);
-    void showMessage(QString msg, QPoint point);
+    explicit TrayToolTip(QWidget *parent = nullptr);
+    void showMessage(const QPixmap &pixmap, const QString &title, const QString &msg, QPoint point);
+    void showMessage(const QString &msg, QPoint point);
 
 signals:
 

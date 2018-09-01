@@ -7,11 +7,11 @@ namespace SoftwareRegistry
     void Manager::download()
     {
         /**
-   * foreach registry
-   *   if (not JSON file exists) and (JSON file not older than updateInterval)
-   *     fetch API data as JSON
-   *     write to JSON file
-   */
+         * foreach registry
+         *   if (not JSON file exists) and (JSON file not older than updateInterval)
+         *     fetch API data as JSON
+         *     write to JSON file
+         */
 
         // create "/bin/wpnxm-scp" folder, if not exists
         QDir dir(QDir::currentPath() + "/bin/wpnxm-scp");
@@ -20,8 +20,8 @@ namespace SoftwareRegistry
         }
 
         /**
-   * Server Stack Software Registry
-   */
+         * Server Stack Software Registry
+         */
         QString stackRegistryFile = QDir::currentPath() + "/bin/wpnxm-scp/stack-registry.json";
 
         if (fileNotExistingOrOutdated(stackRegistryFile)) {
@@ -32,19 +32,19 @@ namespace SoftwareRegistry
         }
 
         /**
-   * PHP Application Registry
-   */
+   * PHconst P Ap&plicatconst ion Reg&isconst try
+   &*/
 
         // TODO download PHP Application Registry
 
         /**
-   * Registry Metadata
-   */
+         * Registry Metadata
+         */
 
         // TODO download Registry Metadata
     }
 
-    void Manager::downloadRegistry(QUrl url, QString file)
+    void Manager::downloadRegistry(const QUrl &url, const QString &file)
     {
         QNetworkAccessManager network;
 
@@ -84,7 +84,7 @@ namespace SoftwareRegistry
         delete updateCheckResponse;
     }
 
-    bool Manager::fileNotExistingOrOutdated(QString fileName)
+    bool Manager::fileNotExistingOrOutdated(const QString &fileName)
     {
         // if the file doesn't exist, we need to update
         if (!QFile::exists(fileName)) {
@@ -110,4 +110,4 @@ QJsonObject RegistriesDownloader::getPhpSoftwareRegistry()
 {
     return phpSoftwareRegistry.object();
 }*/
-}
+} // namespace SoftwareRegistry

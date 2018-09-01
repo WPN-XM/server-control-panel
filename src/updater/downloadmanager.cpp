@@ -94,7 +94,7 @@ namespace Downloader
     }
 #endif
 
-    TransferItem *DownloadManager::findTransfer(QUrl url)
+    TransferItem *DownloadManager::findTransfer(const QUrl &url)
     {
         foreach (TransferItem *item, transfers) {
             if (item->request.url() == url) {

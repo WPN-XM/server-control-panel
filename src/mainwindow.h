@@ -141,8 +141,8 @@ namespace ServerControlPanel
         QString getProjectFolder() const;
         void showPushButtonsOnlyForInstalledTools();
 
-        QString getVersion(QString server);
-        QString getPort(QString server);
+        QString getVersion(const QString &server);
+        QString getPort(const QString &server);
 
         QString getLogfile(QString objectName);
         QString getServerNameFromPushButton(QPushButton *button);

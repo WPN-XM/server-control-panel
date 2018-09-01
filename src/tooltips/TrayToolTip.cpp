@@ -45,7 +45,7 @@ TrayToolTip::TrayToolTip(QWidget *parent) : QWidget(parent)
     hBoxLayout->addLayout(vBoxLayout, 4);
 }
 
-void TrayToolTip::showMessage(const QPixmap &pixmap, QString title, QString msg, QPoint point)
+void TrayToolTip::showMessage(const QPixmap &pixmap, const QString &title, const QString &msg, QPoint point)
 {
     labelIcon->setPixmap(pixmap);
     labelTitle->setText(title);
@@ -59,7 +59,7 @@ void TrayToolTip::showMessage(const QPixmap &pixmap, QString title, QString msg,
     QWidget::show();
 }
 
-void TrayToolTip::showMessage(QString msg, QPoint point)
+void TrayToolTip::showMessage(const QString &msg, QPoint point)
 {
     labelMessage->setText(msg);
 

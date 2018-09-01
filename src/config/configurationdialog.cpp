@@ -236,7 +236,7 @@ namespace Configuration
         settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
         settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
 
-        qApp->processEvents();
+        QApplication::processEvents();
 
         //
         // Configuration > Updater > Update Notification Settings
@@ -249,14 +249,14 @@ namespace Configuration
         settings->set("selfupdater/interval", QString("1"));
         // settings->set("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
-        qApp->processEvents();
+        QApplication::processEvents();
 
         //
         // Configuration > Components > Nginx > Tab "Upstream"
         //
 
         saveSettings_Nginx_Upstream();
-        qApp->processEvents();
+        QApplication::processEvents();
 
         //
         // Configuration > Components > XDebug > Tab "Configuration"
@@ -281,7 +281,7 @@ namespace Configuration
 
         saveSettings_MariaDB_Configuration();
 
-        qApp->processEvents();
+        QApplication::processEvents();
 
         //
         // Configuration > Components > MongoDB
@@ -292,7 +292,7 @@ namespace Configuration
 
         if (isServerInstalled("mongodb")) {
             saveSettings_MongoDB_Configuration();
-            qApp->processEvents();
+            QApplication::processEvents();
         }
 
         //
@@ -301,7 +301,7 @@ namespace Configuration
 
         if (isServerInstalled("postgresql")) {
             settings->set("postgresql/port", QString(ui->lineEdit_postgresql_port->text()));
-            qApp->processEvents();
+            QApplication::processEvents();
         }
 
         //
@@ -314,7 +314,7 @@ namespace Configuration
             settings->set("memcached/threads", QString(ui->lineEdit_memcached_threads->text()));
             settings->set("memcached/maxconnections", QString(ui->lineEdit_memcached_maxconnections->text()));
             settings->set("memcached/maxmemory", QString(ui->lineEdit_memcached_maxmemory->text()));
-            qApp->processEvents();
+            QApplication::processEvents();
         }
 
         //
@@ -325,7 +325,7 @@ namespace Configuration
             settings->set("redis/port", QString(ui->lineEdit_redis_port->text()));
 
             saveSettings_Redis_Configuration();
-            qApp->processEvents();
+            QApplication::processEvents();
         }
     }
 
@@ -698,7 +698,7 @@ namespace Configuration
             QString labelName = this->servers->getCamelCasedServerName(name) + "Label";
             QLabel *label     = ui->tabWidget->findChild<QLabel *>(labelName);
 
-            if (installed.contains(name) == true) {
+            if (installed.contains(name)) {
                 qDebug() << "[" + name + "] Autostart Checkbox visible.";
                 box->setVisible(true);
                 // label->setVisible(true);
@@ -817,7 +817,7 @@ namespace Configuration
 
     void ConfigurationDialog::on_pushButton_searchPHPInstallations_clicked()
     {
-        ui->comboBox_PHPVersions->setDisabled(1);
+        ui->comboBox_PHPVersions->setDisabled(true);
 
         // find all folders inside "bin" containing a php executable
         QStringList filters = {"php.exe"};
@@ -898,7 +898,7 @@ namespace Configuration
                 ui->lineEdit_currentPHPVersion->setText(list[i].version);
             }
         }
-        ui->comboBox_PHPVersions->setEnabled(1);
+        ui->comboBox_PHPVersions->setEnabled(true);
     }
 
     void ConfigurationDialog::on_pushButton_setPHPVersionForBinFolder_clicked()
@@ -979,7 +979,7 @@ namespace Configuration
         setCurrentStackWidget(menuitem);
     }
 
-    void ConfigurationDialog::setCurrentStackWidget(QString widgetname)
+    void ConfigurationDialog::setCurrentStackWidget(const QString &widgetname)
     {
         auto *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
         if (w != nullptr)

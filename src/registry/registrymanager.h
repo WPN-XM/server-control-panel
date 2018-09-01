@@ -29,13 +29,13 @@ namespace SoftwareRegistry
         // QJsonObject getPhpSoftwareRegistry();
     private:
         void download();
-        void downloadRegistry(QUrl url, QString file);
-        bool fileNotExistingOrOutdated(QString fileName);
+        void downloadRegistry(const QUrl &url, const QString &file);
+        bool fileNotExistingOrOutdated(const QString &fileName);
 
     protected:
         QJsonDocument stackSoftwareRegistry;
         // QJsonDocument phpSoftwareRegistry;
     };
-}
+} // namespace SoftwareRegistry
 
 #endif // REGISTRIESDOWNLOADER_H

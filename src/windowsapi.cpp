@@ -11,13 +11,13 @@ namespace WindowsAPI
     /*
      * http://msdn.microsoft.com/en-us/library/windows/desktop/bb776891%28v=vs.85%29.aspx
      */
-    IShellLink *QtWin::CreateShellLink(QString target_app_path,
-                                       QString app_args,
-                                       QString description,
-                                       QString icon_path,
+    IShellLink *QtWin::CreateShellLink(const QString &target_app_path,
+                                       const QString &app_args,
+                                       const QString &description,
+                                       const QString &icon_path,
                                        int icon_index,
-                                       QString working_dir,
-                                       QString linkShortcut)
+                                       const QString &working_dir,
+                                       const QString &linkShortcut)
     {
         IShellLink *shell_link = nullptr;
 
@@ -26,7 +26,7 @@ namespace WindowsAPI
 
         if (SUCCEEDED(hres)) {
 
-            IPersistFile *persistFile = NULL;
+            IPersistFile *persistFile = nullptr;
 
             shell_link->SetPath(target_app_path.toStdWString().c_str());
             shell_link->SetArguments(app_args.toStdWString().c_str());

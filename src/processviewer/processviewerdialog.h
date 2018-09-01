@@ -49,7 +49,7 @@ private:
         COLUMN_MEM  = 3,
     };
 
-    void filter(QString filterByItem, const QString &query);
+    void filter(const QString &filterByItem, const QString &query);
 
 private slots:
     void on_lineEdit_searchProcessByName_textChanged(const QString &query);
