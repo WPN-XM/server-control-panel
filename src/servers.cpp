@@ -259,7 +259,6 @@ namespace Servers
         }
 
         clearLogFile("Nginx");
-        emit signalMainWindow_updateVersion("Nginx");
 
         // http://wiki.nginx.org/CommandLine - start Nginx
         QString program = getServer("Nginx")->exe;
@@ -374,7 +373,6 @@ namespace Servers
         }
 
         clearLogFile("PostgreSQL");
-        emit signalMainWindow_updateVersion("PostgreSQL");
 
         QString const startCmd = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe");
 
@@ -458,7 +456,6 @@ namespace Servers
         }
 
         clearLogFile("PHP");
-        emit signalMainWindow_updateVersion("PHP");
 
         // disable PHP_FCGI_MAX_REQUESTS to go beyond the default request limit of 500
         // requests
@@ -635,7 +632,6 @@ namespace Servers
         }
 
         clearLogFile("MariaDb");
-        emit signalMainWindow_updateVersion("MariaDb");
 
         QString const startMariaDb = getServer("MariaDb")->exe;
 
@@ -747,8 +743,6 @@ namespace Servers
             clearLogFile("MongoDb");
         }
 
-        emit signalMainWindow_updateVersion("MongoDb");
-
         // build mongo start command
         QString const mongoStartCommand = getServer("MongoDb")->exe;
 
@@ -837,8 +831,6 @@ namespace Servers
             return;
         }
 
-        emit signalMainWindow_updateVersion("Memcached");
-
         qDebug() << "[Memcached] Starting...\n";
 
         Processes::startDetached(memcachedStartCommand, args, getServer("Memcached")->workingDirectory);
@@ -898,7 +890,6 @@ namespace Servers
         }
 
         clearLogFile("Redis");
-        emit signalMainWindow_updateVersion("Redis");
 
         qDebug() << "[Redis] Starting...\n" << redisStartCommand;
 

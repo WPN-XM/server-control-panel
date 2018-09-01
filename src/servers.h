@@ -110,9 +110,6 @@ namespace Servers
 
     signals:
         void signalMainWindow_ServerStatusChange(QString label, bool enabled);
-        void signalMainWindow_EnableToolsPushButtons(bool enabled);
-        void signalMainWindow_updateVersion(QString server);
-        void signalMainWindow_updatePort(QString server, bool enabled = true);
 
     private:
         QList<Server *> serverList;
