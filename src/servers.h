@@ -42,7 +42,7 @@ namespace Servers
         Q_OBJECT
 
     public:
-        Servers(QObject *parent = 0);
+        Servers(QObject *parent = nullptr);
         Servers(Processes *processes, QObject *parent = 0);
 
         Processes *processes;
@@ -60,7 +60,7 @@ namespace Servers
         QStringList getLogFiles(const QString &serverName) const;
         void clearLogFile(const QString &serverName) const;
 
-        QMap<QString, QString> getPHPServersFromNginxUpstreamConfig();
+        QVariantMap getPHPServersFromNginxUpstreamConfig();
 
         QString getMongoPort();
 
@@ -117,5 +117,5 @@ namespace Servers
     private:
         QList<Server *> serverList;
     };
-}
+} // namespace Servers
 #endif // SERVERS_H

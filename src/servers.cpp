@@ -254,7 +254,7 @@ namespace Servers
     {
         // already running
         if (processes->getProcessState(getServer("Nginx")->exe) == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("Nginx"), tr("Nginx already running."));
+            QMessageBox::warning(nullptr, tr("Nginx"), tr("Nginx already running."));
             return;
         }
 
@@ -447,7 +447,7 @@ namespace Servers
     {
         // already running: PHP
         if (processes->getProcessState("php-cgi.exe") == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("PHP"), tr("PHP is already running."));
+            QMessageBox::warning(nullptr, tr("PHP"), tr("PHP is already running."));
             return;
         }
 
@@ -485,47 +485,60 @@ namespace Servers
         QString startCmdStringTemplate(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
         // get the nginx upstream configuration and read the defined PHP pools
-        QMap<QString, QString> PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
+        QVariantMap PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
 
         auto end = PHPServersToStart.cend();
         for (auto item = PHPServersToStart.cbegin(); item != end; ++item) {
-            QString port        = item.key();
-            QString phpchildren = item.value();
-            QString startPHPCGI;
+            QString poolName = item.key();
 
-            // if PHP 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP spawning childs
-            if (phpVersion >= 70100) {
-                env.insert("PHP_FCGI_CHILDREN", phpchildren);
-                qDebug() << "[PHP] Set ENV:PHP_FCGI_CHILDREN " << phpchildren;
+            // item.value = QMap (port, num childs)
+            QMap<QString, QVariant> m = item.value().toMap();
+            auto end2                 = m.cend();
+            for (auto item2 = m.cbegin(); item2 != end2; ++item2) {
+                QString port        = item2.key();
+                QString phpchildren = item2.value().toString();
 
-                startPHPCGI = QDir::currentPath() + "/bin/php/php-cgi.exe";
-            } else {
-                // use php-cgi-spawner
-                startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
+                QString startPHPCGI;
+
+                // if PHP 7.1+, then use env var PHP_FCGI_CHILDREN to allow PHP spawning childs
+                if (phpVersion >= 70100) {
+                    env.insert("PHP_FCGI_CHILDREN", phpchildren);
+                    qDebug() << "[PHP] Set ENV:PHP_FCGI_CHILDREN " << phpchildren;
+
+                    startPHPCGI = QDir::currentPath() + "/bin/php/php-cgi.exe";
+                } else {
+                    // use php-cgi-spawner
+                    startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
+                }
+
+                qDebug() << "[PHP] Starting...";
+                qDebug() << "        Pool:" << poolName;
+                qDebug() << "        php-cgi:" << startPHPCGI;
+
+                QProcess *process = new QProcess;
+                process->setEnvironment(env.toStringList());
+                process->startDetached(startPHPCGI);
+                qDebug() << "        Process PID:" << process->pid() << "\n";
             }
-
-            qDebug() << "[PHP] Starting...\n" << startPHPCGI;
-
-            QProcess *process = new QProcess;
-            process->setEnvironment(env.toStringList());
-            process->startDetached(startPHPCGI);
-            qDebug() << "[PHP] Process PID" << process->pid();
         }
 
         emit signalMainWindow_ServerStatusChange("PHP", true);
     }
 
-    QMap<QString, QString> Servers::getPHPServersFromNginxUpstreamConfig()
+    QVariantMap Servers::getPHPServersFromNginxUpstreamConfig()
     {
-        QMap<QString, QString> serversToStart;
+        QVariantMap serversToStart; // QString port, QString childs
+        QVariantMap serversToStartOuter; // QString poolname, serversToStart
 
-        QFile upstreamConfigFile("./bin/wpnxm-scp/nginx-upstreams.json");
-        if (!upstreamConfigFile.exists()) {
+        QString nginxUpstreamsFile = "./bin/wpnxm-scp/nginx-upstreams.json";
+
+        QFile file(nginxUpstreamsFile);
+        if (!file.exists()) {
             qDebug() << "[PHP] Nginx Upstream Configuration file not found.\n";
         }
 
         // load JSON
-        QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
+        QJsonDocument jsonDoc = File::JSON::load(nginxUpstreamsFile);
         QJsonObject json      = jsonDoc.object();
         QJsonObject jsonPools = json["pools"].toObject();
 
@@ -534,6 +547,7 @@ namespace Servers
             // get values for a "pool", we need the key "servers"
             QJsonObject jsonPool    = iter.value().toObject();
             QJsonObject jsonServers = jsonPool["servers"].toObject();
+            QString poolName        = jsonPool["name"].toString();
 
             // iterate over 1..n jsonServers
             for (int i = 0; i < jsonServers.count(); ++i) {
@@ -550,15 +564,16 @@ namespace Servers
                     serversToStart.insert(s["port"].toString(), s["phpchildren"].toString());
                 }
             }
+
+            serversToStartOuter.insert(poolName, serversToStart);
         }
 
         if (serversToStart.count() == 0) {
-            qDebug() << "[PHP] Found no servers to start. Check your upstream "
-                        "configuration.";
+            qDebug() << "[PHP] Found no servers to start. Check your upstream configuration.";
             qDebug() << "[PHP] At least one address must be localhost or 127.0.0.1.";
         }
 
-        return serversToStart;
+        return serversToStartOuter;
     }
 
     void Servers::stopPHP()
@@ -615,7 +630,7 @@ namespace Servers
     {
         // if already running, skip
         if (processes->getProcessState("mysqld.exe") == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("MariaDB"), tr("MariaDB already running."));
+            QMessageBox::warning(nullptr, tr("MariaDB"), tr("MariaDB already running."));
             return;
         }
 
@@ -711,7 +726,7 @@ namespace Servers
 
         // if already running, skip
         if (processes->getProcessState("mongod.exe") == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("MongoDb"), tr("MongoDb already running."));
+            QMessageBox::warning(nullptr, tr("MongoDb"), tr("MongoDb already running."));
             return;
         }
 
@@ -818,7 +833,7 @@ namespace Servers
 
         // if already running, skip
         if (processes->getProcessState("memcached.exe") == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("Memcached"), tr("Memcached already running."));
+            QMessageBox::warning(nullptr, tr("Memcached"), tr("Memcached already running."));
             return;
         }
 
@@ -878,7 +893,7 @@ namespace Servers
 
         // if already running, skip
         if (processes->getProcessState("redis-server.exe") == Processes::ProcessState::Running) {
-            QMessageBox::warning(0, tr("Redis"), tr("Redis already running."));
+            QMessageBox::warning(nullptr, tr("Redis"), tr("Redis already running."));
             return;
         }
 

@@ -1576,18 +1576,26 @@ namespace ServerControlPanel
 
     QString MainWindow::getPHPPort()
     {
-        QMap<QString, QString> PHPServers = servers->getPHPServersFromNginxUpstreamConfig();
+        QVariantMap PHPServers = servers->getPHPServersFromNginxUpstreamConfig();
 
         // string template used during iteration
-        const QString portStringTemplate("  Port: %1 (%2 Childs) \n");
+        const QString portStringTemplate("[%1] Port: %2 (%3 Childs) \n");
 
         QString result;
 
         auto end = PHPServers.cend();
         for (auto item = PHPServers.cbegin(); item != end; ++item) {
-            // item.key   = port,
-            // item.value = num of childs
-            result += portStringTemplate.arg(item.key(), item.value());
+            // item.key   = pool_name
+            QString poolName = item.key();
+
+            // item.value = QMap (port, num childs)
+            QMap<QString, QVariant> m = item.value().toMap();
+            auto end2                 = m.cend();
+            for (auto item2 = m.cbegin(); item2 != end2; ++item2) {
+                QString port   = item2.key();
+                QString childs = item2.value().toString();
+                result += portStringTemplate.arg(poolName, port, childs);
+            }
         }
 
         return result;
