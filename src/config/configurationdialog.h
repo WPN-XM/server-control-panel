@@ -65,8 +65,8 @@ namespace Configuration
         QJsonValue serialize_toJSON_Nginx_Upstream_ServerTable(QTableWidget *servers);
         QJsonValue serialize_toJSON_Nginx_Upstream_PoolsTable(QTableWidget *pools);
 
-        void writeNginxUpstreamConfigs(QJsonDocument jsonDoc);
-        QJsonObject getNginxUpstreamPoolByName(QString requestedUpstreamPoolName);
+        void writeNginxUpstreamConfigs(const QJsonDocument &jsonDoc);
+        QJsonObject getNginxUpstreamPoolByName(const QString &poolName);
         void updateServersTable(QJsonObject jsonPool);
 
         void createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs();

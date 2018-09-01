@@ -40,10 +40,9 @@ namespace Updater
         QString intervalString = settings->get("selfupdater/interval", QVariant(QString("notset"))).toString();
 
         qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
-        qint64 interval;
-        if (intervalString == "notset") {
-            interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
-        }
+
+        qint64 interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
+
         if (intervalString == "daily") {
             interval = QDateTime::currentDateTime().addDays(Interval::Daily).currentMSecsSinceEpoch();
         }
@@ -278,7 +277,7 @@ namespace Updater
         if (updateCheckResponse->error() == QNetworkReply::NoError) {
 
             // read response and parse JSON
-            QString strReply = (QString)updateCheckResponse->readAll();
+            QString strReply = updateCheckResponse->readAll().data();
             jsonResponse     = QJsonDocument::fromJson(strReply.toUtf8());
 
             // qDebug() << "RawResponse: " << strReply;
@@ -322,4 +321,4 @@ namespace Updater
 
         return url;
     }
-}
+} // namespace Updater

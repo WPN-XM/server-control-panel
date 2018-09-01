@@ -3,7 +3,7 @@
 
 #include "servers.h"
 #include "version.h"
-#include "windows.h"
+#include "Windows.h"
 
 #include <QCommandLineOption>
 #include <QCommandLineParser>
@@ -23,6 +23,6 @@ namespace ServerControlPanel
         void colorTest();
         void colorPrint(QString msg, QString colorName = "gray");
     };
-}
+} // namespace ServerControlPanel
 
 #endif // CLI_H

@@ -58,7 +58,7 @@ namespace Updater
 
     private:
         QUrl getDownloadUrl(const QModelIndex &index);
-        bool validateURL(QUrl url);
+        bool validateURL(const QUrl &url);
         Updater::SoftwareColumnItemDelegate *softwareDelegate;
         Updater::ActionColumnItemDelegate *actionDelegate;
     signals:
@@ -88,6 +88,6 @@ namespace Updater
         QAbstractItemModel *model;
         const int currentRow;
     };
-}
+} // namespace Updater
 
 #endif // UPDATERDIALOG_H

@@ -101,7 +101,7 @@ namespace Downloader
                 return item;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     TransferItem *DownloadManager::findTransfer(QNetworkReply *reply)
@@ -111,7 +111,7 @@ namespace Downloader
                 return item;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     void DownloadManager::setQueueMode(QueueMode mode) { queueMode = mode; }
@@ -119,4 +119,4 @@ namespace Downloader
     void DownloadManager::setDownloadFolder(QString folder) { downloadFolder = folder; }
 
     void DownloadManager::setDownloadMode(DownloadItem::DownloadMode mode) { downloadMode = mode; }
-}
+} // namespace Downloader

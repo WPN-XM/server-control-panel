@@ -43,7 +43,7 @@ namespace Servers
 
     public:
         Servers(QObject *parent = nullptr);
-        Servers(Processes *processes, QObject *parent = 0);
+        Servers(Processes *processes, QObject *parent = nullptr);
 
         Processes *processes;
         Settings::SettingsManager *settings;

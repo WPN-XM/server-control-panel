@@ -5,13 +5,13 @@
 #include <QTime>
 
 // initialize static members
-Processes *Processes::theInstance = NULL;
+Processes *Processes::theInstance = nullptr;
 
 QList<Process> Processes::monitoredProcessesList;
 
 Processes *Processes::getInstance()
 {
-    if (theInstance == NULL) {
+    if (theInstance == nullptr) {
         theInstance = new Processes();
     }
 
@@ -20,20 +20,19 @@ Processes *Processes::getInstance()
 
 void Processes::release()
 {
-    if (theInstance != NULL) {
-        delete theInstance;
-    }
-    theInstance = NULL;
+    delete theInstance;
+
+    theInstance = nullptr;
 }
 
-Processes::Processes() {}
+Processes::Processes() = default;
 
 Process Processes::findByName(const QString &name)
 {
     QList<Process> processes = getRunningProcesses();
     Process p;
     foreach (p, processes) {
-        if (p.pid < 0) {
+        if (p.pid < nullptr) {
             continue; // if negative pid
         }
         if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
@@ -374,9 +373,9 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
 
     DWORD dwCreationFlags    = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
     STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
-                                0,
-                                0,
-                                0,
+                                nullptr,
+                                nullptr,
+                                nullptr,
                                 (ulong)CW_USEDEFAULT,
                                 (ulong)CW_USEDEFAULT,
                                 (ulong)CW_USEDEFAULT,
@@ -387,10 +386,10 @@ bool Processes::startDetached(const QString &program, const QStringList &argumen
                                 0,
                                 0,
                                 0,
-                                0,
-                                0,
-                                0,
-                                0};
+                                nullptr,
+                                nullptr,
+                                nullptr,
+                                nullptr};
 
     QString cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
 
@@ -457,8 +456,8 @@ bool Processes::start(const QString &program, const QStringList &arguments, cons
 
     qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
-    success = CreateProcess(0, (wchar_t *)cmd.utf16(), 0, 0, FALSE, dwCreationFlags, 0,
-                            workingDir.isEmpty() ? 0 : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
+    success = CreateProcess(0, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                            workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
     if (success) {
         CloseHandle(pinfo.hThread);

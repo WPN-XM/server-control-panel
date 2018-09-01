@@ -162,7 +162,7 @@ void ProcessViewerDialog::filter(QString filterByItem, const QString &query) {
 ProcessViewerDialog::~ProcessViewerDialog() { delete ui; }
 
 QTreeWidgetItem *ProcessViewerDialog::addRoot(Process process) {
-  QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
+  auto *item = new QTreeWidgetItem(ui->treeWidget);
   item->setText(0, process.name);
   item->setIcon(0, process.icon);
   item->setData(0, Qt::ItemDataRole::ToolTipRole, process.path);
@@ -174,7 +174,7 @@ QTreeWidgetItem *ProcessViewerDialog::addRoot(Process process) {
 }
 
 void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process) {
-  QTreeWidgetItem *item = new QTreeWidgetItem();
+  auto *item = new QTreeWidgetItem();
   item->setText(0, process.name);
   item->setIcon(0, process.icon);
   item->setData(0, Qt::ItemDataRole::ToolTipRole, process.path);

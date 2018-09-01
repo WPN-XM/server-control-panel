@@ -12,7 +12,7 @@ namespace ServerControlPanel
 
         // The tray icon is an instance of the QSystemTrayIcon class.
         // Check, whether a system tray is present on the user's desktop.
-        if (false == QSystemTrayIcon::isSystemTrayAvailable()) {
+        if (!QSystemTrayIcon::isSystemTrayAvailable()) {
             QMessageBox::critical(0, APP_NAME, tr("You don't have a system tray."));
             QApplication::exit(1);
         }
@@ -282,29 +282,29 @@ namespace ServerControlPanel
                 SLOT(openConfigurationDialogMariaDb()));
 
         QPushButton *btnConfigureMongoDb = cWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
-        if (btnConfigureMongoDb != 0) {
+        if (btnConfigureMongoDb != nullptr) {
             connect(btnConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
         }
 
         QPushButton *btnConfigureMemcached = cWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
-        if (btnConfigureMemcached != 0) {
+        if (btnConfigureMemcached != nullptr) {
             connect(btnConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
         }
 
         QPushButton *btnConfigurePostgresql = cWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
-        if (btnConfigurePostgresql != 0) {
+        if (btnConfigurePostgresql != nullptr) {
             connect(btnConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
         }
 
         QPushButton *btnConfigureRedis = cWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
-        if (btnConfigureRedis != 0) {
+        if (btnConfigureRedis != nullptr) {
             connect(btnConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
     }
 
     void MainWindow::changeEvent(QEvent *event)
     {
-        if (0 != event) {
+        if (nullptr != event) {
             switch (event->type()) {
             case QEvent::WindowStateChange: {
                 // minimize to tray (do not minimize to taskbar)
@@ -332,18 +332,17 @@ namespace ServerControlPanel
         QList<QPushButton *> allShowLogPushButtons =
             ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowLog_\\w"));
 
-        for (int i = 0; i < allShowLogPushButtons.size(); ++i) {
-            allShowLogPushButtons[i]->setEnabled(
-                QFile().exists(this->getLogfile(allShowLogPushButtons[i]->objectName())));
+        for (auto &allShowLogPushButton : allShowLogPushButtons) {
+            allShowLogPushButton->setEnabled(QFile().exists(this->getLogfile(allShowLogPushButton->objectName())));
         }
 
         // Set enabled/disabled state for all "pushButton_ShowErrorLog_*" buttons
         QList<QPushButton *> allShowErrorLogPushButtons =
             ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowErrorLog_\\w"));
 
-        for (int i = 0; i < allShowErrorLogPushButtons.size(); ++i) {
-            allShowErrorLogPushButtons[i]->setEnabled(
-                QFile().exists(this->getLogfile(allShowErrorLogPushButtons[i]->objectName())));
+        for (auto &allShowErrorLogPushButton : allShowErrorLogPushButtons) {
+            allShowErrorLogPushButton->setEnabled(
+                QFile().exists(this->getLogfile(allShowErrorLogPushButton->objectName())));
         }
     }
 
@@ -419,23 +418,23 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::updateServerStatusIndicators(QString server, bool enabled)
+    void MainWindow::updateServerStatusIndicators(const QString &server, bool enabled)
     {
         updateVersion(server);
 
-        server = server.toLower();
+        QString srv = server.toLower();
 
-        updateLabelStatus(server, enabled);
+        updateLabelStatus(srv, enabled);
 
         updateTrayIconTooltip();
 
-        if (server == "nginx" || server == "php" || server == "php-cgi") {
+        if (srv == "nginx" || srv == "php" || srv == "php-cgi") {
             updateToolsPushButtons();
         }
 
-        updateServerStatusOnTray(server, enabled);
+        updateServerStatusOnTray(srv, enabled);
 
-        updatePort(server, enabled);
+        updatePort(srv, enabled);
     }
 
     void MainWindow::enableToolsPushButtons(bool enabled)
@@ -444,8 +443,8 @@ namespace ServerControlPanel
         QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons enabled/disabled
-        for (int i = 0; i < allPushButtonsButtons.size(); ++i) {
-            allPushButtonsButtons[i]->setEnabled(enabled);
+        for (auto &allPushButtonsButton : allPushButtonsButtons) {
+            allPushButtonsButton->setEnabled(enabled);
         }
 
         // change state of "Open Projects Folder" >> "Browser" button
@@ -467,8 +466,8 @@ namespace ServerControlPanel
         QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons invisible
-        for (int i = 0; i < allPushButtonsButtons.size(); ++i) {
-            allPushButtonsButtons[i]->setVisible(false);
+        for (auto &allPushButtonsButton : allPushButtonsButtons) {
+            allPushButtonsButton->setVisible(false);
         }
 
         // if "component" exists in "tools" or "bin" directory, show pushButtons in
@@ -490,7 +489,7 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::updateLabelStatus(QString server, bool enabled)
+    void MainWindow::updateLabelStatus(const QString &server, bool enabled)
     {
         if (server == "nginx") {
             ui->centralWidget->findChild<QLabel *>("label_Nginx_Status")->setEnabled(enabled);
@@ -515,7 +514,7 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::updateServerStatusOnTray(QString serverName, bool enabled)
+    void MainWindow::updateServerStatusOnTray(const QString &serverName, bool enabled)
     {
         QIcon icon;
         if (enabled) {
@@ -1113,7 +1112,7 @@ namespace ServerControlPanel
     {
         // if the INI is not existing yet, set defaults, they will be written to file
         // if the INI exists, do not set the defaults but read them from file
-        if (false == QFile(settings->file()).exists()) {
+        if (!QFile(settings->file()).exists()) {
 
             settings->set("global/runonstartup", 0);
             settings->set("global/autostartservers", 0);
@@ -1471,7 +1470,7 @@ namespace ServerControlPanel
         return ":(";
     }
 
-    void MainWindow::updateVersion(QString server)
+    void MainWindow::updateVersion(const QString &server)
     {
         QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != nullptr) {
@@ -1515,26 +1514,26 @@ namespace ServerControlPanel
         // qDebug() << server << enabled;
 
         if (server == "php" || server == "php-cgi") {
-            if (enabled == true) {
+            if (enabled) {
                 // show Label Text to indicate that a HoverTooltip is available
-                QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
+                auto *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
                 if (label != nullptr) {
                     label->setText("Pool*");
                 }
                 // enable hover tooltip + show PHP ports and childs text
-                LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(true);
                     tip->setTooltipText(getPHPPort());
                 }
             } else {
                 // clear label
-                QLabel *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
+                auto *label = ui->centralWidget->findChild<QLabel *>("label_PHP_Port");
                 if (label != nullptr) {
                     label->setText("");
                 }
                 // deactivate hover tooltip
-                LabelWithHoverTooltip *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(false);
                     tip->setTooltipText("");
@@ -1542,7 +1541,7 @@ namespace ServerControlPanel
             }
         } else {
             QString srvname = servers->getCamelCasedServerName(server);
-            QLabel *label   = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
+            auto *label     = ui->centralWidget->findChild<QLabel *>("label_" + srvname + "_Port");
             if (label != nullptr) {
                 if (enabled) {
                     QString port = getPort(server);
@@ -1615,7 +1614,7 @@ namespace ServerControlPanel
 
     void MainWindow::openProcessViewerDialog()
     {
-        ProcessViewerDialog *pvd = new ProcessViewerDialog(this);
+        auto *pvd = new ProcessViewerDialog(this);
         pvd->exec();
     }
 } // namespace ServerControlPanel

@@ -48,7 +48,7 @@ namespace File
     public:
         YAML::Node load(const QString &fileName);
         // bool save(const QString &filename, YAML::Node node);
-        bool saveConfig(const QString &filename, YAML::Node node);
+        bool saveConfig(const QString &filename, const YAML::Node& node);
     };
 }
 

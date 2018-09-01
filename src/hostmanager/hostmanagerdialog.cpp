@@ -7,7 +7,7 @@ namespace HostsFileManager
         // remove question mark from the title bar
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-        QToolBar *toolbar = new QToolBar(this);
+        auto *toolbar = new QToolBar(this);
         toolbar->addAction("Add", this, SLOT(addEntry()));
         toolbar->addAction("Edit", this, SLOT(editEntry()));
         toolbar->addAction("Delete", this, SLOT(removeEntry()));
@@ -15,7 +15,7 @@ namespace HostsFileManager
         QPushButton *btnOk = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_VistaShield), "OK", this);
         QPushButton *btnCancel = new QPushButton("Cancel", this);
 
-        HostsTableModel *tableModel = new HostsTableModel(this);
+        auto *tableModel = new HostsTableModel(this);
         tableModel->setList(Host::GetHosts());
 
         tableView = new QTableView(this);
@@ -27,17 +27,17 @@ namespace HostsFileManager
         tableView->setSelectionMode(QAbstractItemView::SingleSelection);
         tableView->setMinimumWidth(300);
 
-        QGridLayout *gLayout = new QGridLayout;
+        auto *gLayout = new QGridLayout;
         gLayout->addWidget(toolbar, 0, 0);
         gLayout->addWidget(tableView, 1, 0);
 
-        QHBoxLayout *buttonLayout = new QHBoxLayout;
+        auto *buttonLayout = new QHBoxLayout;
         buttonLayout->addWidget(btnOk);
         buttonLayout->addWidget(btnCancel);
 
         gLayout->addLayout(buttonLayout, 2, 0, Qt::AlignRight);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout;
+        auto *mainLayout = new QVBoxLayout;
         mainLayout->addLayout(gLayout);
         setLayout(mainLayout);
 
@@ -53,7 +53,7 @@ namespace HostsFileManager
 
     HostsManagerDialog::~HostsManagerDialog()
     {
-        HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
+        auto *model = dynamic_cast<HostsTableModel *>(tableView->model());
         qDeleteAll(model->getList());
     }
 
@@ -65,7 +65,7 @@ namespace HostsFileManager
             QString name    = aDialog.name();
             QString address = aDialog.address();
 
-            HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
+            auto *model = dynamic_cast<HostsTableModel *>(tableView->model());
             QList<Host *> list     = model->getList();
 
             // do the add
@@ -85,7 +85,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::editEntry()
     {
-        HostsTableModel *model              = static_cast<HostsTableModel *>(tableView->model());
+        auto *model              = dynamic_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -122,7 +122,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::removeEntry()
     {
-        HostsTableModel *model              = static_cast<HostsTableModel *>(tableView->model());
+        HostsTableModel *model              = dynamic_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -135,7 +135,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::accept()
     {
-        HostsTableModel *model = static_cast<HostsTableModel *>(tableView->model());
+        auto *model = dynamic_cast<HostsTableModel *>(tableView->model());
         Host::SetHosts(model->getList());
         QDialog::accept();
     }

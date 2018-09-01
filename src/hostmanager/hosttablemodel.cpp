@@ -103,7 +103,7 @@ namespace HostsFileManager
         beginInsertRows(QModelIndex(), position, position + rows - 1);
 
         for (int row = 0; row < rows; row++) {
-            Host *host = new Host();
+            auto *host = new Host();
             listHosts.insert(position, host);
         }
 

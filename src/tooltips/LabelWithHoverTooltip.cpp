@@ -39,7 +39,7 @@ void LabelWithHoverTooltip::leaveEvent(QEvent *event)
     if (!tooltipEnabled) {
         return;
     }
-    if (balloonTip != 0) {
+    if (balloonTip != nullptr) {
         balloonTip->close();
         delete balloonTip;
     }

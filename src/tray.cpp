@@ -143,15 +143,13 @@ namespace ServerControlPanel
     {
         tooltipTitle = "Info";
         tooltipMsg   = title;
-        return;
-    }
+   }
 
     void Tray::setMessage(const QString &title, const QString &msg)
     {
         tooltipTitle = title;
         tooltipMsg   = msg;
-        return;
-    }
+   }
 
     bool Tray::isTooltipVisible()
     {

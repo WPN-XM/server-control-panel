@@ -312,7 +312,7 @@ namespace Servers
         args << "-s stop";
         Processes::start(stopNginx, args, getServer("Nginx")->workingDirectory);
 
-        /*QProcess process;
+        QProcess process;
         process.start(stopNginx, args);
         process.waitForFinished();
 
@@ -320,7 +320,8 @@ namespace Servers
         // we need to catch it and force the shutdown with a process kill
         QByteArray p_stdout = process.readLine();
         qDebug() << p_stdout;
-        if(p_stdout.contains("nginx: [error] CreateFile()") == true) {*/
+        if(p_stdout.contains("nginx: [error] CreateFile()") == true) {
+*/
 
         // you know what: process multi kill. fuck off.
         while (processes->getProcessState("nginx.exe") == Processes::ProcessState::Running) {

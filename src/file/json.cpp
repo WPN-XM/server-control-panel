@@ -2,7 +2,7 @@
 
 namespace File
 {
-    QJsonDocument JSON::load(QString fileName)
+    QJsonDocument JSON::load(const QString &fileName)
     {
         QFile file(fileName);
         file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -11,7 +11,7 @@ namespace File
         return document;
     }
 
-    void JSON::save(QJsonDocument document, QString fileName)
+    void JSON::save(const QJsonDocument &document, const QString &fileName)
     {
         QFile file(fileName);
         file.open(QIODevice::WriteOnly);
@@ -19,7 +19,7 @@ namespace File
         file.close();
     }
 
-    QString Text::load(QString fileName)
+    QString Text::load(const QString &fileName)
     {
         // qDebug() << "[TEXT] Reading file [" << fileName << "]";
 
@@ -30,7 +30,7 @@ namespace File
         return text;
     }
 
-    void Text::save(QString text, QString fileName)
+    void Text::save(const QString &text, const QString &fileName)
     {
         // qDebug() << "[TEXT] Writing file [" << fileName << "]";
 
@@ -39,4 +39,4 @@ namespace File
         file.write(text.toLatin1());
         file.close();
     }
-}
+} // namespace File

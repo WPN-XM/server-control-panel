@@ -18,11 +18,11 @@ namespace HostsFileManager
         Q_OBJECT
 
     public:
-        explicit HostsAddDialog(QWidget *parent = 0);
+        explicit HostsAddDialog(QWidget *parent = nullptr);
         QString name();
         QString address();
 
-        void edit(QString name, QString adress);
+        void edit(const QString &name, const QString &adress);
 
     signals:
 
@@ -32,6 +32,6 @@ namespace HostsFileManager
         QLineEdit *lineEdit_Name;
         QLineEdit *lineEdit_Address;
     };
-}
+} // namespace HostsFileManager
 
 #endif // ADDDIALOG_H

@@ -5,7 +5,7 @@
 namespace Downloader
 {
     TransferItem::TransferItem(const QNetworkRequest &r, QNetworkAccessManager &n)
-        : request(r), reply(0), nam(n), inputFile(0), outputFile(0), progress()
+        : request(r), reply(nullptr), nam(n), inputFile(nullptr), outputFile(nullptr), progress()
     {
         // qDebug() << "New TransferItem instantiated";
     }
@@ -197,4 +197,4 @@ namespace Downloader
     void DownloadItem::setDownloadFolder(QString folder) { downloadFolder = folder; }
 
     void DownloadItem::setDownloadMode(DownloadItem::DownloadMode mode) { downloadMode = mode; }
-}
+} // namespace Downloader

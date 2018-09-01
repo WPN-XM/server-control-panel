@@ -9,15 +9,15 @@ namespace File
     class JSON
     {
     public:
-        static void save(QJsonDocument document, QString fileName);
-        static QJsonDocument load(QString fileName);
+        static void save(const QJsonDocument &document, const QString &fileName);
+        static QJsonDocument load(const QString &fileName);
     };
 
     class Text
     {
     public:
-        static void save(QString text, QString fileName);
-        static QString load(QString fileName);
+        static void save(const QString &text, const QString &fileName);
+        static QString load(const QString &fileName);
     };
-}
+} // namespace File
 #endif // JSON_H

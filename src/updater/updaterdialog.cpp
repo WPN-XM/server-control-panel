@@ -30,24 +30,24 @@ namespace Updater
         model = new QStandardItemModel(0, 4, this);
 
         /**
-   * @brief jsonObject has the following item structure:
-   *
-   *   {...},
-   *   {
-   *     "wpnxmscp": {
-   *       "latest": {
-   *           "url": "https://github.com/WPN-XM/../file.zip",
-   *           "version": "0.8.4"
-   *       },
-   *       "name": "WPN-XM Server Control Panel x86",
-   *       "website": "http://wpn-xm.org/"
-   *   },
-   *   {...}
-   */
+         * @brief jsonObject has the following item structure:
+         *
+         *   {...},
+         *   {
+         *     "wpnxmscp": {
+         *       "latest": {
+         *           "url": "https://github.com/WPN-XM/../file.zip",
+         *           "version": "0.8.4"
+         *       },
+         *       "name": "WPN-XM Server Control Panel x86",
+         *       "website": "http://wpn-xm.org/"
+         *   },
+         *   {...}
+         */
 
         /**
-   * populate Model with JSON data
-   */
+         * populate Model with JSON data
+         */
         for (QJsonObject::Iterator iter = json.begin(); iter != json.end(); ++iter) {
             QList<QStandardItem *> rowItems;
 
@@ -90,33 +90,33 @@ namespace Updater
             // Action
 
             /**
-     * How to render widgets in a table cell when using QTableView?
-     *
-     * Setting a QPushButton directly to the model is not possible at this
-     * point.
-     * But its possible to set the model to the tableView and then use
-     * rowCount()
-     * and draw the buttons using setIndexWidet() in a second iteration.
-     *
-     * Boils down to: When using a
-     * - tableWidget: ugly sorting, no-model, but full cell control with all
-     * widgets
-     * - tableView: either nice sorting, less cell control, no widgets, but a
-     * proper model
-     *
-     * ----------
-     * Finally, i came up with using an ItemDelegate to render the widgets in
-     * the action column.
-     * The rendering is done by the delegate's paint function.
-     * To render multiple widgets (Download Button, Download ProgressBar,
-     * Install Button)
-     * i've added a custom UserRole "WidgetRole" and three Roles:
-     * DownloadPushButton, DownloadProgressBar, InstallPushButton.
-     * These roles are set as data to the model and tell the view what to
-     * render.
-     * This allows to easily update the model and get the matching widgets based
-     * on the role.
-     */
+             * How to render widgets in a table cell when using QTableView?
+             *
+             * Setting a QPushButton directly to the model is not possible at this
+             * point.
+             * But its possible to set the model to the tableView and then use
+             * rowCount()
+             * and draw the buttons using setIndexWidet() in a second iteration.
+             *
+             * Boils down to: When using a
+             * - tableWidget: ugly sorting, no-model, but full cell control with all
+             * widgets
+             * - tableView: either nice sorting, less cell control, no widgets, but a
+             * proper model
+             *
+             * ----------
+             * Finally, i came up with using an ItemDelegate to render the widgets in
+             * the action column.
+             * The rendering is done by the delegate's paint function.
+             * To render multiple widgets (Download Button, Download ProgressBar,
+             * Install Button)
+             * i've added a custom UserRole "WidgetRole" and three Roles:
+             * DownloadPushButton, DownloadProgressBar, InstallPushButton.
+             * These roles are set as data to the model and tell the view what to
+             * render.
+             * This allows to easily update the model and get the matching widgets based
+             * on the role.
+             */
             QStandardItem *action = new QStandardItem("ActionCell");
             action->setData(ActionColumnItemDelegate::DownloadPushButton, ActionColumnItemDelegate::WidgetRole);
             rowItems.append(action);
@@ -125,8 +125,8 @@ namespace Updater
         }
 
         /**
-   * Set Header Labels for Table
-   */
+         * Set Header Labels for Table
+         */
         QStringList headerLabels;
         // Table               1              (hidden)           2               3
         // (hidden)        4
@@ -139,8 +139,8 @@ namespace Updater
         model->setHorizontalHeaderLabels(headerLabels);
 
         /**
-   * Setup SortingProxy for the Model
-   */
+         * Setup SortingProxy for the Model
+         */
         sortFilterProxyModel = new QSortFilterProxyModel(this);
         sortFilterProxyModel->setSourceModel(model);
         // sorting is case-insensitive
@@ -153,13 +153,13 @@ namespace Updater
     void UpdaterDialog::initView()
     {
         /**
-   * Set "sortFilterProxy" Model to View
-   */
+         * Set "sortFilterProxy" Model to View
+         */
         ui->tableView_1->setModel(sortFilterProxyModel);
 
         /**
-   * Set Item Delegates for "SoftwareComponent" and "Action" Columns
-   */
+         * Set Item Delegates for "SoftwareComponent" and "Action" Columns
+         */
         softwareDelegate = new Updater::SoftwareColumnItemDelegate;
         ui->tableView_1->setItemDelegateForColumn(Columns::SoftwareComponent, softwareDelegate);
 
@@ -170,8 +170,8 @@ namespace Updater
         connect(actionDelegate, SIGNAL(installButtonClicked(QModelIndex)), this, SLOT(doInstall(QModelIndex)));
 
         /**
-   * Configure view
-   */
+         * Configure view
+         */
         // enable mouse tracking to be able to bind the mouseover/hover event
         ui->tableView_1->setMouseTracking(true);
         // disable resizing of the columns
@@ -211,8 +211,8 @@ namespace Updater
         // QString targetName   = "test.zip";
 
         /**
-   * Download Request
-   */
+         * Download Request
+         */
 
         // setup Proxy
         // use system proxy (by default) "--use-proxy=on"
@@ -298,7 +298,7 @@ namespace Updater
         sortFilterProxyModel->setFilterFixedString(arg1);
     }
 
-    bool UpdaterDialog::validateURL(QUrl url)
+    bool UpdaterDialog::validateURL(const QUrl &url)
     {
         if (!url.isValid() || url.isEmpty() || url.host().isEmpty()) {
             qDebug() << "URL invalid:" << url;
@@ -306,4 +306,4 @@ namespace Updater
         }
         return true;
     }
-}
+} // namespace Updater

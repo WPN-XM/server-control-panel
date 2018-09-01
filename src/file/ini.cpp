@@ -15,7 +15,7 @@ namespace File
 #define log
 
     INI::INI(const char *fileNameWithPath, bool _autoCreate)
-        : data(NULL), fStream(NULL), autoSave(false), autoCreate(_autoCreate)
+        : data(nullptr), fStream(nullptr), autoSave(false), autoCreate(_autoCreate)
     {
         strcpy(iniFileName, fileNameWithPath);
         loadConfigFile();
@@ -53,7 +53,7 @@ namespace File
             INIEntry entry;
 
             // handle empty lines
-            if (isComment == false && ch == '\n' && i == 0) {
+            if (!isComment && ch == '\n' && i == 0) {
                 // entry.index = str;
                 entry.isEmptyLine = true;
                 datas.push_back(entry);
@@ -66,7 +66,7 @@ namespace File
                 isComment = true;
             }
 
-            if (isComment == true && (ch == '\n' || ch == '\r')) {
+            if (isComment && (ch == '\n' || ch == '\r')) {
                 isComment       = false;
                 line[i++]       = '\0';
                 i               = 0;
@@ -75,7 +75,7 @@ namespace File
                 datas.push_back(entry);
             }
 
-            if (isComment == true) {
+            if (isComment) {
                 line[i++] = ch;
                 continue;
             }
@@ -147,7 +147,7 @@ namespace File
     void INI::writeConfigFile(const char *fileName)
     {
         autoSave = false;
-        if (fileName == NULL)
+        if (fileName == nullptr)
             fileName = iniFileName;
         fstream fStream;
         fStream.open(fileName, ios_base::out | ios_base::trunc);
@@ -155,7 +155,7 @@ namespace File
         string index     = string("");
         bool withComment = false;
         bool isStart     = true;
-        for (vector<INIEntry>::iterator it = datas.begin(); it != datas.end(); it++) {
+        for (auto it = datas.begin(); it != datas.end(); it++) {
             INIEntry entry = *it;
             if (entry.isEmptyLine) {
                 fStream << "\n";
@@ -208,17 +208,17 @@ namespace File
             datas.push_back(entry);
             return;
         }
-        vector<INIEntry>::iterator it = datas.begin();
+        auto it = datas.begin();
         bool findIndex                = false;
         bool findName                 = false;
         vector<INIEntry>::iterator itInsertPos;
         for (it = datas.begin(); it != datas.end(); it++) {
-            if (findIndex == false) {
+            if (!findIndex) {
                 if (strcmp(it->index.c_str(), index) == 0) {
                     findIndex = true;
                 }
             }
-            if (findIndex == true) {
+            if (findIndex) {
                 if (strcmp(it->index.c_str(), index) != 0) {
                     break;
                 } else {
@@ -245,7 +245,7 @@ namespace File
     bool INI::getBoolValue(const char *index, const char *name)
     {
         const char *str = getStringValue(index, name);
-        if (str == NULL) {
+        if (str == nullptr) {
             log("notfound for [%s]-[%s]", index, name);
             return false;
         }
@@ -268,7 +268,7 @@ namespace File
     float INI::getFloatValue(const char *index, const char *name)
     {
         const char *str = getStringValue(index, name);
-        if (str == NULL) {
+        if (str == nullptr) {
             cout << "notfound" << endl;
             return -1.0;
         }
@@ -288,7 +288,7 @@ namespace File
             }
         }
         cout << "DEBUG: [" << index << "] of--[" << name << "] not found" << endl;
-        return NULL;
+        return nullptr;
     }
 
     // setter
@@ -333,4 +333,4 @@ namespace File
             log("  value : %s", entry.value.c_str());
         }
     }
-};
+}; // namespace File

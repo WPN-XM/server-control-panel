@@ -455,7 +455,7 @@ namespace Configuration
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml    = new File::Yml();
+        auto *yml         = new File::Yml();
         YAML::Node config = yml->load(file);
 
         config["storage"]["dbPath"] = ui->lineEdit_mongodb_dbpath->text();
@@ -482,7 +482,7 @@ namespace Configuration
         writeNginxUpstreamConfigs(jsonDoc);
     }
 
-    void ConfigurationDialog::writeNginxUpstreamConfigs(QJsonDocument jsonDoc)
+    void ConfigurationDialog::writeNginxUpstreamConfigs(const QJsonDocument &jsonDoc)
     {
         createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs();
 
@@ -692,9 +692,7 @@ namespace Configuration
 
         QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(QRegExp("checkbox_autostart_\\w"));
 
-        for (int i = 0; i < boxes.size(); ++i) {
-            QCheckBox *box = boxes.at(i);
-
+        for (auto box : boxes) {
             // return last part of "checkbox_autostart_*"
             QString name      = box->objectName().section("_", -1).toLower();
             QString labelName = this->servers->getCamelCasedServerName(name) + "Label";
@@ -983,7 +981,7 @@ namespace Configuration
 
     void ConfigurationDialog::setCurrentStackWidget(QString widgetname)
     {
-        QWidget *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
+        auto *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
         if (w != nullptr)
             ui->stackedWidget->setCurrentWidget(w);
         else
@@ -994,7 +992,7 @@ namespace Configuration
     {
         int result;
 
-        NginxAddUpstreamDialog *dialog = new NginxAddUpstreamDialog();
+        auto *dialog = new NginxAddUpstreamDialog();
         dialog->setWindowTitle("Nginx - Add Pool");
 
         // ui->tableWidget_pools->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -1018,7 +1016,7 @@ namespace Configuration
     {
         int result;
 
-        NginxAddServerDialog *dialog = new NginxAddServerDialog();
+        auto *dialog = new NginxAddServerDialog();
         dialog->setWindowTitle("Nginx - Add Server");
 
         ui->tableWidget_Nginx_Servers->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -1140,7 +1138,7 @@ namespace Configuration
         }
     }
 
-    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(QString requestedUpstreamPoolName)
+    QJsonObject ConfigurationDialog::getNginxUpstreamPoolByName(const QString &poolName)
     {
         // load JSON
         QJsonDocument jsonDoc = File::JSON::load("./bin/wpnxm-scp/nginx-upstreams.json");
@@ -1153,7 +1151,7 @@ namespace Configuration
             QJsonObject jsonPool = iter.value().toObject();
 
             // key "name" = poolName
-            if (jsonPool["name"].toString() == requestedUpstreamPoolName) {
+            if (jsonPool["name"].toString() == poolName) {
                 return jsonPool;
             }
         }

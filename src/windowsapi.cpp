@@ -9,8 +9,8 @@
 namespace WindowsAPI
 {
     /*
- * http://msdn.microsoft.com/en-us/library/windows/desktop/bb776891%28v=vs.85%29.aspx
- */
+     * http://msdn.microsoft.com/en-us/library/windows/desktop/bb776891%28v=vs.85%29.aspx
+     */
     IShellLink *QtWin::CreateShellLink(QString target_app_path,
                                        QString app_args,
                                        QString description,
@@ -19,9 +19,9 @@ namespace WindowsAPI
                                        QString working_dir,
                                        QString linkShortcut)
     {
-        IShellLink *shell_link = NULL;
+        IShellLink *shell_link = nullptr;
 
-        HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink,
+        HRESULT hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink,
                                         reinterpret_cast<void **>(&(shell_link)));
 
         if (SUCCEEDED(hres)) {
@@ -59,11 +59,11 @@ namespace WindowsAPI
     BOOL QtWin::IsWow64()
     {
         BOOL bIsWow64                        = FALSE;
-        LPFN_ISWOW64PROCESS fnIsWow64Process = NULL;
+        LPFN_ISWOW64PROCESS fnIsWow64Process = nullptr;
 
         fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(GetModuleHandle(TEXT("kernel32")), "IsWow64Process");
 
-        if (NULL != fnIsWow64Process) {
+        if (nullptr != fnIsWow64Process) {
             if (!fnIsWow64Process(GetCurrentProcess(), &bIsWow64)) {
                 // handle error
             }
@@ -105,4 +105,4 @@ QLibrary::resolve("kernel32", "QueryFullProcessImageNameW");
 
     return processPath;
 }*/
-}
+} // namespace WindowsAPI

@@ -20,8 +20,8 @@ namespace YAML
 
     void operator>>(const YAML::Node &node, QStringList &v)
     {
-        for (size_t i = 0; i < node.size(); ++i) {
-            v.append(QString::fromStdString(node[i].as<std::string>()));
+        for (const auto &i : node) {
+            v.append(QString::fromStdString(i.as<std::string>()));
         }
     }
 
@@ -56,7 +56,7 @@ namespace YAML
             return QVariant(false);
         if (QRegExp("[-+]?\\d+").exactMatch(scalarString))
             return QVariant(scalarString.toInt());
-        if (QRegExp("[-+]?\\d*\\.?\\d+").exactMatch(scalarString))
+        if (QRegExp(R"([-+]?\d*\.?\d+)").exactMatch(scalarString))
             return QVariant(scalarString.toDouble());
         return QVariant(scalarString);
     }
@@ -78,7 +78,7 @@ namespace YAML
         }
         return vm;
     }
-}
+} // namespace YAML
 
 namespace File
 {
@@ -95,7 +95,7 @@ namespace File
         return emitter.c_str();
     }
 
-    bool Yml::saveConfig(const QString &filename, YAML::Node node)
+    bool Yml::saveConfig(const QString &filename, const YAML::Node &node)
     {
         QString configHeaderString = QStringLiteral(
             "#\n"
@@ -134,4 +134,4 @@ namespace File
 
         return true;
     }*/
-} // end NS FILE
+} // namespace File

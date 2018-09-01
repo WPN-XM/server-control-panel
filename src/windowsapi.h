@@ -3,8 +3,8 @@
 
 // this is needed for "createShellLink"
 #include <objbase.h>
-#include <shlobj.h> // type defintion for IShellLink
-#include <windows.h>
+#include <ShlObj.h> // type defintion for IShellLink
+#include <Windows.h>
 //#include <Shobjidl.h>
 
 #include <QtCore>
@@ -27,6 +27,6 @@ namespace WindowsAPI
         static BOOL IsWow64();
         static bool running_on_64_bits_os();
     };
-}
+} // namespace WindowsAPI
 
 #endif // WINDOWSAPI_H

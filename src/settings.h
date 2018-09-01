@@ -16,13 +16,13 @@ namespace Settings
         Q_OBJECT
 
     public:
-        SettingsManager(QObject *parent = 0);
+        SettingsManager(QObject *parent = nullptr);
 
         QVariant get(const QString &key, const QVariant &defaultValue = QVariant()) const;
         QStringList getKeys(const QString &groupPrefix) const;
         QString file() const;
         void set(const QString &key, const QVariant &value);
     };
-}
+} // namespace Settings
 
 #endif // SETTINGS_H

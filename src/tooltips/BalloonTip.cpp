@@ -53,10 +53,10 @@ void BalloonTip::init()
     connect(my_closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
     // install event filter
-    if (parentWidget() != 0) {
+    if (parentWidget() != nullptr) {
         parentWidget()->installEventFilter(this);
         QWidget *w = parentWidget()->parentWidget();
-        while (w != 0) {
+        while (w != nullptr) {
             w->installEventFilter(this);
             w = w->parentWidget();
         }

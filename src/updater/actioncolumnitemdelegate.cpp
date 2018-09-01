@@ -93,7 +93,7 @@ namespace Updater
                                                            const QStyleOptionViewItem &option,
                                                            const QModelIndex &index) const
     {
-        QStyleOptionProgressBarV2 opt;
+        QStyleOptionProgressBar opt;
         opt.initFrom(bar);
         opt.rect = option.rect;
         opt.rect.adjust(3, 3, -3, -3);
@@ -151,11 +151,11 @@ namespace Updater
     }
 
     /**
-* Qt makes it really hard to add widgets and events to tableviews
-* The cell doesn't contain an editor, but the editorEvent() allows to bind to
-* events:
-* so it's a hack to intercept the mouseClicks on the table cell.
-*/
+     * Qt makes it really hard to add widgets and events to tableviews
+     * The cell doesn't contain an editor, but the editorEvent() allows to bind to
+     * events:
+     * so it's a hack to intercept the mouseClicks on the table cell.
+     */
     bool ActionColumnItemDelegate::editorEvent(QEvent *event,
                                                QAbstractItemModel *model,
                                                const QStyleOptionViewItem &option,
@@ -201,4 +201,4 @@ namespace Updater
 
         return false;
     }
-}
+} // namespace Updater

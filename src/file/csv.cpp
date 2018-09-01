@@ -98,7 +98,7 @@ namespace File
         return parse(initString(string));
     }
 
-    bool CSV::write(const QList<QStringList> data, const QString &filename, const QString &codec)
+    bool CSV::write(const QList<QStringList> &data, const QString &filename, const QString &codec)
     {
         QFile file(filename);
         if (!file.open(QIODevice::WriteOnly)) {
@@ -128,4 +128,4 @@ namespace File
 
         return true;
     }
-}
+} // namespace File

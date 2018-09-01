@@ -55,17 +55,17 @@ namespace ServerControlPanel
     private:
         void createTrayMenu();
 
-        Settings::SettingsManager *settings;
+        Settings::SettingsManager *settings{};
         Servers::Servers *servers;
-        TrayToolTip *tooltip = NULL;
+        TrayToolTip *tooltip = nullptr;
 
-        bool tooltipVisible;
+        bool tooltipVisible{};
         QString tooltipTitle;
         QString tooltipMsg;
 
     protected:
         void timerEvent(QTimerEvent *event);
     };
-}
+} // namespace ServerControlPanel
 
 #endif // Tray_H

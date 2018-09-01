@@ -11,8 +11,8 @@ namespace ServerControlPanel
         QCommandLineParser parser;
 
         /**
-   * Definition of Command Line Arguments
-   */
+         * Definition of Command Line Arguments
+         */
 
         // -h, --help, -?
         QCommandLineOption helpOption(QStringList() << "h"
@@ -53,8 +53,8 @@ namespace ServerControlPanel
         parser.addOption(restartOption);
 
         /**
-   * Handling of Command Line Arguments
-   */
+         * Handling of Command Line Arguments
+         */
 
         // find out the positional arguments.
         parser.parse(QCoreApplication::arguments());
@@ -141,15 +141,15 @@ namespace ServerControlPanel
     }
 
     /**
- * @brief execServers - executes "command" on multiple Servers
- * @param command "start", "stop", "restart"
- * @param clioption
- * @param args
- */
-    void CLI::execServers(const QString &command,
-                          QCommandLineOption &clioption,
-                          QStringList args,
-                          QCommandLineParser &parser)
+     * @brief execServers - executes "command" on multiple Servers
+     * @param command "start", "stop", "restart"
+     * @param clioption
+     * @param args
+     */
+    [[noreturn]] void CLI::execServers(const QString &command,
+                                       QCommandLineOption &clioption,
+                                       QStringList args,
+                                       QCommandLineParser &parser)
     {
         // the value of the key "--start|--stop|--restart" is the first server
         QString server = parser.value(clioption);
@@ -185,7 +185,7 @@ namespace ServerControlPanel
         exit(0);
     }
 
-    void CLI::printHelpText(QString errorMessage)
+    [[noreturn]] void CLI::printHelpText(QString errorMessage)
     {
         colorPrint("WPN-XM Server Stack - Server Control Panel " APP_VERSION "\n", "brightwhite");
 
@@ -247,7 +247,7 @@ namespace ServerControlPanel
 
         static const char *qWinColoredMsg(int prefix, int color, const char *msg)
         {
-            if (hConsole == NULL) {
+            if (hConsole == nullptr) {
                 hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
             }
 
@@ -284,7 +284,7 @@ namespace ServerControlPanel
             SetConsoleTextAttribute(hConsole, oldConsoleAttributes);
             return "";
         }
-    }
+    } // namespace WindowsAPI
 
     // sorry, i don't like color numbers
     void CLI::colorPrint(QString msg, QString colorName)
@@ -378,4 +378,4 @@ namespace ServerControlPanel
         printf("%s/n", WindowsAPI::qWinColoredMsg(1, 37, "1-37"));
         printf("%s/n", WindowsAPI::qWinColoredMsg(0, 37, "0-37"));
     }
-}
+} // namespace ServerControlPanel

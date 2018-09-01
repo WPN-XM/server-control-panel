@@ -77,13 +77,13 @@ namespace HostsFileManager
         SHELLEXECUTEINFO shExecInfo;
         shExecInfo.cbSize       = sizeof(SHELLEXECUTEINFO);
         shExecInfo.fMask        = 0; // NULL;
-        shExecInfo.hwnd         = NULL;
+        shExecInfo.hwnd         = nullptr;
         shExecInfo.lpVerb       = L"runas";
         shExecInfo.lpFile       = L"cmd.exe";
         shExecInfo.lpParameters = wcArguments;
-        shExecInfo.lpDirectory  = NULL;
+        shExecInfo.lpDirectory  = nullptr;
         shExecInfo.nShow        = SW_MAXIMIZE;
-        shExecInfo.hInstApp     = NULL;
+        shExecInfo.hInstApp     = nullptr;
 
         ShellExecuteEx(&shExecInfo);
     }
@@ -135,4 +135,4 @@ namespace HostsFileManager
     //}
 
     bool Host::operator==(const Host &host) const { return strName == host.strName && strAddress == host.strAddress; }
-}
+} // namespace HostsFileManager

@@ -93,16 +93,16 @@ namespace ServerControlPanel
         void openLog();
         void openConfigurationInEditor();
 
-        void updateServerStatusIndicators(QString server, bool enabled);
+        void updateServerStatusIndicators(const QString &server, bool enabled);
 
-        void updateLabelStatus(QString server, bool enabled);
-        void updateVersion(QString server);
+        void updateLabelStatus(const QString &server, bool enabled);
+        void updateVersion(const QString &server);
         void updatePort(QString server, bool enabled);
 
         void enableToolsPushButtons(bool enabled);
         void updateTrayIconTooltip();
         void updateToolsPushButtons();
-        void updateServerStatusOnTray(QString serverName, bool enabled);
+        void updateServerStatusOnTray(const QString &serverName, bool enabled);
 
         void quitApplication();
 
@@ -167,6 +167,6 @@ namespace ServerControlPanel
         void changeEvent(QEvent *event);
         void showEvent(QShowEvent *event);
     };
-}
+} // namespace ServerControlPanel
 
 #endif // MAINWINDOW_H
