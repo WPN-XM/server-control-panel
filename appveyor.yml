@@ -48,6 +48,7 @@ init:
 install:
   - cd %REPO_DIR%
   - git submodule update --init --recursive
+  - git submodule status
 
 before_build:  
   # set paths
