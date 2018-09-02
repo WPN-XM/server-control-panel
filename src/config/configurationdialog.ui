@@ -156,6 +156,11 @@
      </property>
     </item>
    </item>
+   <item>
+    <property name="text">
+     <string>Hosts</string>
+    </property>
+   </item>
   </widget>
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
@@ -173,7 +178,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>10</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -757,143 +762,6 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="php">
-    <widget class="QLabel" name="label_php">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>141</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>PHP</string>
-     </property>
-    </widget>
-    <widget class="QTabWidget" name="tabWidget_php">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>511</width>
-       <height>361</height>
-      </rect>
-     </property>
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="php_tab_versionswitch">
-      <attribute name="title">
-       <string>Version Switch</string>
-      </attribute>
-      <widget class="QWidget" name="gridLayoutWidget_6">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>9</y>
-         <width>371</width>
-         <height>111</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_17">
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_selectPHPVersion">
-          <property name="text">
-           <string>Select PHP Version for &quot;bin\php&quot;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="3">
-         <widget class="QPushButton" name="pushButton_searchPHPInstallations">
-          <property name="text">
-           <string>Search for PHP Installations</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QPushButton" name="pushButton_setPHPVersionForBinFolder">
-          <property name="text">
-           <string>Use this version</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLineEdit" name="lineEdit_currentPHPVersion">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="frame">
-           <bool>true</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_currentPHPVersion">
-          <property name="text">
-           <string>Current PHP Version of &quot;bin\php&quot;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="2">
-         <widget class="QComboBox" name="comboBox_PHPVersions"/>
-        </item>
-        <item row="1" column="1" rowspan="2">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>150</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-     <widget class="QWidget" name="php_tab_configuration">
-      <attribute name="title">
-       <string>Configuration</string>
-      </attribute>
-     </widget>
-     <widget class="QWidget" name="php_tab_extensions">
-      <attribute name="title">
-       <string>Extensions</string>
-      </attribute>
-     </widget>
-    </widget>
-   </widget>
    <widget class="QWidget" name="nginx">
     <widget class="QLabel" name="label_nginx">
      <property name="geometry">
@@ -1303,6 +1171,143 @@
         </item>
        </layout>
       </widget>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="php">
+    <widget class="QLabel" name="label_php">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>PHP</string>
+     </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidget_php">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>511</width>
+       <height>361</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="php_tab_versionswitch">
+      <attribute name="title">
+       <string>Version Switch</string>
+      </attribute>
+      <widget class="QWidget" name="gridLayoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>9</y>
+         <width>371</width>
+         <height>111</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_17">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_selectPHPVersion">
+          <property name="text">
+           <string>Select PHP Version for &quot;bin\php&quot;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <widget class="QPushButton" name="pushButton_searchPHPInstallations">
+          <property name="text">
+           <string>Search for PHP Installations</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="pushButton_setPHPVersionForBinFolder">
+          <property name="text">
+           <string>Use this version</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLineEdit" name="lineEdit_currentPHPVersion">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="frame">
+           <bool>true</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_currentPHPVersion">
+          <property name="text">
+           <string>Current PHP Version of &quot;bin\php&quot;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QComboBox" name="comboBox_PHPVersions"/>
+        </item>
+        <item row="1" column="1" rowspan="2">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>150</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="php_tab_configuration">
+      <attribute name="title">
+       <string>Configuration</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="php_tab_extensions">
+      <attribute name="title">
+       <string>Extensions</string>
+      </attribute>
      </widget>
     </widget>
    </widget>
@@ -2056,6 +2061,79 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QWidget" name="redis">
+    <widget class="QLabel" name="label_redis">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>141</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Redis</string>
+     </property>
+    </widget>
+    <widget class="QTabWidget" name="tabWidget_redis">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>511</width>
+       <height>361</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="redis_tab_1">
+      <attribute name="title">
+       <string>Configuration</string>
+      </attribute>
+      <widget class="QWidget" name="gridLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>181</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_16">
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButton_Redis_Reset_Port">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_redis_port">
+          <property name="text">
+           <string>Port</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEdit_redis_port">
+          <property name="text">
+           <string>6379</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
    <widget class="QWidget" name="memcached">
     <widget class="QLabel" name="label_memcached">
      <property name="geometry">
@@ -2185,8 +2263,8 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="redis">
-    <widget class="QLabel" name="label_redis">
+   <widget class="QWidget" name="page">
+    <widget class="QLabel" name="label_hosts">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -2203,10 +2281,10 @@
       </font>
      </property>
      <property name="text">
-      <string>Redis</string>
+      <string>Hosts</string>
      </property>
     </widget>
-    <widget class="QTabWidget" name="tabWidget_redis">
+    <widget class="QTabWidget" name="tabWidget_hosts">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -2218,43 +2296,10 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="redis_tab_1">
+     <widget class="QWidget" name="hosts_tab_1">
       <attribute name="title">
-       <string>Configuration</string>
+       <string>Hosts File Manager</string>
       </attribute>
-      <widget class="QWidget" name="gridLayoutWidget_5">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>10</y>
-         <width>181</width>
-         <height>31</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_16">
-        <item row="0" column="2">
-         <widget class="QPushButton" name="pushButton_Redis_Reset_Port">
-          <property name="text">
-           <string>Reset</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_redis_port">
-          <property name="text">
-           <string>Port</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_redis_port">
-          <property name="text">
-           <string>6379</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </widget>
    </widget>
