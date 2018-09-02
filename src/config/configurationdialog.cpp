@@ -271,7 +271,7 @@ namespace Configuration
 
         settings->set("xdebug/idekey", QString(ui->lineEdit_xdebug_idekey->text()));
 
-        qApp->processEvents();
+        QApplication::processEvents();
 
         //
         // Configuration > Components > MariaDBTab > Tab "Configuration"
@@ -732,10 +732,10 @@ namespace Configuration
         if (runOnStartUp()) {
             // Add WPN-XM SCP shortcut to the Windows Autostart folder.
             // In Windows terminology "shortcuts" are "shell links".
-            WindowsAPI::QtWin::CreateShellLink(qApp->applicationFilePath(), "",
+            WindowsAPI::QtWin::CreateShellLink(QApplication::applicationFilePath(), "",
                                                "WPN-XM Server Control Panel", // app, args, desc
-                                               qApp->applicationFilePath(), 0, // icon path and idx
-                                               qApp->applicationDirPath(), // working dir
+                                               QApplication::applicationFilePath(), 0, // icon path and idx
+                                               QApplication::applicationDirPath(), // working dir
                                                startupDir + "\\WPN-XM Server Control Panel.lnk" // filepath of shortcut
             );
         } else {
@@ -943,7 +943,7 @@ namespace Configuration
     QString ConfigurationDialog::getPHPVersionFromExe(QString pathToPHPExecutable)
     {
         // this happens only during testing
-        if (!QFile().exists(pathToPHPExecutable)) {
+        if (!QFile::exists(pathToPHPExecutable)) {
             return "0.0.0";
         }
 

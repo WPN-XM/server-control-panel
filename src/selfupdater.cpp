@@ -176,7 +176,7 @@ namespace Updater
         qDebug() << oldExeFilePath;
 
         // delete the destination file first (the old ".old" file)
-        if (QFile().exists(oldExeFilePath)) {
+        if (QFile::exists(oldExeFilePath)) {
             qDebug() << "[SelfUpdater] delete target first:" << QFile::remove(oldExeFilePath);
         }
 
@@ -241,8 +241,7 @@ namespace Updater
             // cross fingers and hope and pray, that starting the new process is slow
             // and we are not running into the single application check.. ;)
 
-            QProcess p;
-            p.startDetached(QApplication::applicationFilePath());
+            QProcess::startDetached(QApplication::applicationFilePath());
 
             QApplication::exit();
         }

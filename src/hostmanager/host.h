@@ -2,7 +2,7 @@
 #define HOST_H
 
 // Windows / C++
-#include <windows.h>
+#include <Windows.h>
 #include <shellapi.h>
 #include <stdlib.h>
 #include <string>
@@ -22,17 +22,13 @@ namespace HostsFileManager
     {
     public:
         explicit Host();
-        explicit Host(QString strName, QString strAddress);
+        explicit Host(QString name, QString address);
 
         static QList<Host *> GetHosts();
         static void SetHosts(QList<Host *> listHosts);
 
-        QString name();
-        void setName(QString strName);
-
-        QString address();
-        void setAddress(QString strAddress);
-
+        QString name;
+        QString address;
         // bool isEnable();
         // void setEnable(bool bEnable);
 
@@ -40,11 +36,8 @@ namespace HostsFileManager
 
     private:
         static QString getHostFile();
-
         // bool m_bIsEnable;
-        QString strName;
-        QString strAddress;
     };
-}
+} // namespace HostsFileManager
 
 #endif // HOST_H

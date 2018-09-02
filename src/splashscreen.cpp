@@ -14,7 +14,7 @@ namespace ServerControlPanel
         int titleVersionVSpace   = 20;
         int titleCopyrightVSpace = 37;
 
-        double physicalDPI = qApp->primaryScreen()->physicalDotsPerInch();
+        double physicalDPI = QApplication::primaryScreen()->physicalDotsPerInch();
         double scaleFactor =
             QString::number((physicalDPI / 160), 'f', 2).toDouble(); // scale factor normalized to 160 DPI
         float fontFactor = float(((15 * 0.03937) * scaleFactor) + 0.5);

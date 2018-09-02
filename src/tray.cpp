@@ -9,18 +9,18 @@ namespace ServerControlPanel
         createTrayMenu();
 
         /**
-   * TrayToolTip:
-   *  - we instantiate a QWidget based tooltip
-   *  - and set visibility false
-   *  - then, we start a timer, which polls the mouse position, see timerEvent()
-   *  - then, when the cursor.pos is inside the rectangle of the SystemTrayIcon,
-   *    we display the tooltip widget
-   *
-   * Note: it's not possible to use event() or eventFilter() methods
-   *       to wait for the events QEvent:ToolTip or QHelpEvent
-   *       to capture the mouse hover event of the tray icon.
-   *       It's not supported by Qt, yet (v5.7).
-   */
+         * TrayToolTip:
+         *  - we instantiate a QWidget based tooltip
+         *  - and set visibility false
+         *  - then, we start a timer, which polls the mouse position, see timerEvent()
+         *  - then, when the cursor.pos is inside the rectangle of the SystemTrayIcon,
+         *    we display the tooltip widget
+         *
+         * Note: it's not possible to use event() or eventFilter() methods
+         *       to wait for the events QEvent:ToolTip or QHelpEvent
+         *       to capture the mouse hover event of the tray icon.
+         *       It's not supported by Qt, yet (v5.7).
+         */
         // tooltip = new TrayToolTip;
         // tooltipVisible = false;
         // startTimer(500);
@@ -67,7 +67,7 @@ namespace ServerControlPanel
         trayMenu->addSeparator();
         trayMenu->addAction(QIcon(":/report_bug"), tr("&Report Bug"), this, SLOT(goToReportIssue()), QKeySequence());
         trayMenu->addAction(QIcon(":/question"), tr("&Help"), this, SLOT(goToWebsiteHelp()), QKeySequence());
-        trayMenu->addAction(QIcon(":/quit"), tr("&Quit"), qApp, SLOT(quit()), QKeySequence());
+        trayMenu->addAction(QIcon(":/quit"), tr("&Quit"), QCoreApplication::instance(), SLOT(quit()), QKeySequence());
 
         setContextMenu(trayMenu);
     }
@@ -143,13 +143,13 @@ namespace ServerControlPanel
     {
         tooltipTitle = "Info";
         tooltipMsg   = title;
-   }
+    }
 
     void Tray::setMessage(const QString &title, const QString &msg)
     {
         tooltipTitle = title;
         tooltipMsg   = msg;
-   }
+    }
 
     bool Tray::isTooltipVisible()
     {
@@ -161,4 +161,4 @@ namespace ServerControlPanel
     }
 
     void Tray::hideTooltip() { tooltip->hide(); }
-}
+} // namespace ServerControlPanel

@@ -208,7 +208,7 @@ namespace Servers
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are not.
             if (serverName == "nginx" || serverName == "php" || serverName == "mariadb" ||
-                QFile().exists(getExecutablePath(serverName))) {
+                QFile::exists(getExecutablePath(serverName))) {
                 qDebug() << "Installed:\t" << serverName;
                 list << serverName;
             } else {
@@ -359,7 +359,7 @@ namespace Servers
     void Servers::startPostgreSQL()
     {
         // if not installed, skip
-        if (!QFile().exists(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")) {
+        if (!QFile::exists(QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe")) {
             qDebug() << "Not found: " + QDir::currentPath() + "/bin/pgsql/bin/pg_ctl.exe";
             qDebug() << "[PostgreSQL] Is not installed. Skipping start command.";
             return;
@@ -367,7 +367,7 @@ namespace Servers
 
         // already running
         if (processes->getProcessState("postgres.exe") == Processes::ProcessState::Running) {
-            // if(QFile().exists(QDir::currentPath() +
+            // if(QFile::exists(QDir::currentPath() +
             // "/bin/pgsql/data/postmaster.pid")) {
             QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
             return;
@@ -394,7 +394,7 @@ namespace Servers
         Server *server = getServer("PostgreSQL");
 
         // if not installed, skip
-        if (!QFile().exists(server->exe)) {
+        if (!QFile::exists(server->exe)) {
             qDebug() << "[PostgreSQL] Is not installed. Skipping stop command.";
             return;
         }
@@ -402,7 +402,7 @@ namespace Servers
         // if not running, skip
         QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
         if (processes->getProcessState("postgres.exe") == Processes::ProcessState::NotRunning) {
-            // if(!QFile().exists(file)) {
+            // if(!QFile::exists(file)) {
             qDebug() << "[PostgreSQL] Not running.. Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("PostgreSQL", false);
             return;
@@ -424,10 +424,10 @@ namespace Servers
         Processes::delay(1250); // delay PID file check, PostgreSQL must shutdown first
 
         // do we have a failed shutdown? if so, delete PID file, to allow a restart
-        if (QFile().exists(file)) {
+        if (QFile::exists(file)) {
             qDebug() << "[PostgreSQL] PID file exists. Removing PID file to allow a "
                         "restart.";
-            QFile().remove(file);
+            QFile::remove(file);
         }
 
         emit signalMainWindow_ServerStatusChange("PostgreSQL", false);
@@ -474,7 +474,7 @@ namespace Servers
         // check that the tool "php-cgi-spawner" is present
         QString spawnUtilFile =
             QDir::toNativeSeparators(QDir::currentPath() + "/bin/php-cgi-spawner/php-cgi-spawner.exe");
-        if (!QFile().exists(spawnUtilFile)) {
+        if (!QFile::exists(spawnUtilFile)) {
             qDebug() << "[PHP] Starting PHP failed. Tool \"php-cgi-spawner.exe\" missing.";
             return;
         }
@@ -577,7 +577,7 @@ namespace Servers
     void Servers::stopPHP()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("PHP")->exe)) {
+        if (!QFile::exists(getServer("PHP")->exe)) {
             qDebug() << "[PHP] Is not installed. Skipping stop command.";
             return;
         }
@@ -659,7 +659,7 @@ namespace Servers
     void Servers::stopMariaDb()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("MariaDb")->exe)) {
+        if (!QFile::exists(getServer("MariaDb")->exe)) {
             qDebug() << "[MariaDb] Is not installed. Skipping stop command.";
             return;
         }
@@ -675,7 +675,7 @@ namespace Servers
         QString stopCommand = QDir::toNativeSeparators(QDir::currentPath() + "/bin/mariadb/bin/mysqladmin.exe");
 
         // check, if mysqladmin.exe is present
-        if (!QFile().exists(stopCommand)) {
+        if (!QFile::exists(stopCommand)) {
             qDebug() << "[MariaDb] Can not stop. Missing mysqladmin.exe.";
             return;
         }
@@ -716,7 +716,7 @@ namespace Servers
     void Servers::startMongoDb()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("MongoDb")->exe)) {
+        if (!QFile::exists(getServer("MongoDb")->exe)) {
             qDebug() << "[MongoDb] Is not installed. Skipping start command.";
             return;
         }
@@ -765,7 +765,7 @@ namespace Servers
     void Servers::stopMongoDb()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("MongoDb")->exe)) {
+        if (!QFile::exists(getServer("MongoDb")->exe)) {
             qDebug() << "[MongoDb] Is not installed. Skipping stop command.";
             return;
         }
@@ -821,7 +821,7 @@ namespace Servers
         args << " -m " + settings->get("memcached/maxmemory").toString();
 
         // if not installed, skip
-        if (!QFile().exists(getServer("Memcached")->exe)) {
+        if (!QFile::exists(getServer("Memcached")->exe)) {
             qDebug() << "[Memcached] Is not installed. Skipping start command.";
             return;
         }
@@ -842,7 +842,7 @@ namespace Servers
     void Servers::stopMemcached()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("Memcached")->exe)) {
+        if (!QFile::exists(getServer("Memcached")->exe)) {
             qDebug() << "[Memcached] Is not installed. Skipping stop command.";
             return;
         }
@@ -879,7 +879,7 @@ namespace Servers
         args << "redis.windows.conf";
 
         // if not installed, skip
-        if (!QFile().exists(getServer("Redis")->exe)) {
+        if (!QFile::exists(getServer("Redis")->exe)) {
             qDebug() << "[Redis] Is not installed. Skipping start command.";
             return;
         }
@@ -902,7 +902,7 @@ namespace Servers
     void Servers::stopRedis()
     {
         // if not installed, skip
-        if (!QFile().exists(getServer("Redis")->exe)) {
+        if (!QFile::exists(getServer("Redis")->exe)) {
             qDebug() << "[Redis] Is not installed. Skipping stop command.";
             return;
         }

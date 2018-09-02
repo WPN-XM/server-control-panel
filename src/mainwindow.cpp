@@ -333,7 +333,7 @@ namespace ServerControlPanel
             ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowLog_\\w"));
 
         for (auto &allShowLogPushButton : allShowLogPushButtons) {
-            allShowLogPushButton->setEnabled(QFile().exists(this->getLogfile(allShowLogPushButton->objectName())));
+            allShowLogPushButton->setEnabled(QFile::exists(this->getLogfile(allShowLogPushButton->objectName())));
         }
 
         // Set enabled/disabled state for all "pushButton_ShowErrorLog_*" buttons
@@ -342,7 +342,7 @@ namespace ServerControlPanel
 
         for (auto &allShowErrorLogPushButton : allShowErrorLogPushButtons) {
             allShowErrorLogPushButton->setEnabled(
-                QFile().exists(this->getLogfile(allShowErrorLogPushButton->objectName())));
+                QFile::exists(this->getLogfile(allShowErrorLogPushButton->objectName())));
         }
     }
 
@@ -363,7 +363,7 @@ namespace ServerControlPanel
                 checkbox->setChecked(doNotAskAgainCloseToTray);
 
                 QMessageBox msgbox(this);
-                msgbox.setWindowTitle(qApp->applicationName());
+                msgbox.setWindowTitle(QApplication::applicationName());
                 msgbox.setIconPixmap(QMessageBox::standardIcon(QMessageBox::Information));
                 msgbox.setText(
                     tr("This program will keep running in the system tray.<br>"
@@ -586,13 +586,13 @@ namespace ServerControlPanel
             qDebug() << "[Servers] Stopping on Quit...\n";
             stopAllServers();
         }
-        qApp->quit();
+        QApplication::quit();
     }
 
     QString MainWindow::getNginxVersion()
     {
         // this happens only during testing
-        if (!QFile().exists("./bin/nginx/nginx.exe")) {
+        if (!QFile::exists("./bin/nginx/nginx.exe")) {
             return "0.0.0";
         }
 
@@ -618,7 +618,7 @@ namespace ServerControlPanel
     QString MainWindow::getMariaVersion()
     {
         // this happens only during testing
-        if (!QFile().exists("./bin/mariadb/bin/mysqld.exe") || !QFile().exists("./bin/mariadb/bin/mysqlcheck.exe")) {
+        if (!QFile::exists("./bin/mariadb/bin/mysqld.exe") || !QFile::exists("./bin/mariadb/bin/mysqlcheck.exe")) {
             return "0.0.0";
         }
 
@@ -648,7 +648,7 @@ namespace ServerControlPanel
     QString MainWindow::getPHPVersion()
     {
         // this happens only during testing
-        if (!QFile().exists("./bin/php/php.exe")) {
+        if (!QFile::exists("./bin/php/php.exe")) {
             return "0.0.0";
         }
 
@@ -750,7 +750,7 @@ namespace ServerControlPanel
         return parseVersionNumber(p_stdout);
     }
 
-    QString MainWindow::parseVersionNumber(QString stringWithVersion)
+    QString MainWindow::parseVersionNumber(const QString &stringWithVersion)
     {
         // This RegExp matches version numbers: (\d+\.)?(\d+\.)?(\d+\.)?(\*|\d+)
         // This is the same, but escaped:
@@ -829,7 +829,7 @@ namespace ServerControlPanel
     {
         QString command("./bin/robomongo/robomongo.exe");
 
-        if (!QFile().exists(command)) {
+        if (!QFile::exists(command)) {
             return;
         }
 
@@ -873,7 +873,7 @@ namespace ServerControlPanel
         }
 
         // prefer "ConEmu", else fallback to "Windows Console"
-        if (QFile().exists(conemu)) {
+        if (QFile::exists(conemu)) {
             cmd = conemu + " /LoadCfgFile ./bin/conemu/ConEmu.xml";
         } else {
             cmd = "cmd.exe";
@@ -960,7 +960,7 @@ namespace ServerControlPanel
         // fetch config file for server from the ini
         QString cfgFile = QDir(settings->get(serverName + "/config").toString()).absolutePath();
 
-        if (!QFile().exists(cfgFile)) {
+        if (!QFile::exists(cfgFile)) {
             QMessageBox::warning(this, tr("Warning"), tr("Config file not found: \n") + cfgFile, QMessageBox::Yes);
         } else {
             QDesktopServices::setUrlHandler("file", this, "execEditor");
@@ -970,7 +970,7 @@ namespace ServerControlPanel
         }
     }
 
-    QString MainWindow::getLogfile(QString objectName)
+    QString MainWindow::getLogfile(const QString &objectName)
     {
         // map objectName to fileName
 
@@ -1008,7 +1008,7 @@ namespace ServerControlPanel
         QPushButton *button = (QPushButton *)sender();
         QString logfile     = this->getLogfile(button->objectName());
 
-        if (!QFile().exists(logfile)) {
+        if (!QFile::exists(logfile)) {
             QMessageBox::warning(this, tr("Warning"), tr("Log file not found: \n") + logfile, QMessageBox::Yes);
         } else {
             QDesktopServices::setUrlHandler("file", this, "execEditor");
@@ -1018,7 +1018,7 @@ namespace ServerControlPanel
         }
     }
 
-    void MainWindow::execEditor(QUrl logfile)
+    void MainWindow::execEditor(const QUrl &logfile)
     {
         QString program = settings->get("global/editor").toString();
         qDebug() << logfile.toLocalFile();
@@ -1472,7 +1472,7 @@ namespace ServerControlPanel
 
     void MainWindow::updateVersion(const QString &server)
     {
-        QLabel *label = qApp->activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
+        QLabel *label = QApplication::activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != nullptr) {
             QString version = getVersion(server);
             label->setText(version);

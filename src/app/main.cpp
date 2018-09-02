@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     QApplication::processEvents();
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
-    if (processes->areThereAlreadyRunningProcesses()) {
+    if (Processes::areThereAlreadyRunningProcesses()) {
         // this fills monitoredProcessesList
         splash.hide();
         // displayShutdownAlreadyRunningProcessesOrContinueDialog

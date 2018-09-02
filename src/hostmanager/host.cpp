@@ -1,4 +1,5 @@
 #include "host.h"
+#include <QDebug>
 
 namespace HostsFileManager
 {
@@ -21,6 +22,7 @@ namespace HostsFileManager
                 Host *host = new Host(list[1], list[0]);
                 listReturn << host;
             }
+            qDebug() << strLine;
         }
 
         return listReturn;
@@ -50,7 +52,7 @@ namespace HostsFileManager
                 // It match an host setup
                 if (index >= 0) {
                     Host *host = listHosts.takeAt(index);
-                    tempStream << host->address() << "       " << host->name() << "\r\n";
+                    tempStream << host->address << "       " << host->name << "\r\n";
                 }
             }
 
@@ -58,7 +60,7 @@ namespace HostsFileManager
             tempStream << "\r\n";
             while (!listHosts.isEmpty()) {
                 Host *host = listHosts.takeFirst();
-                tempStream << host->address() << "       " << host->name() << "\r\n";
+                tempStream << host->address << "       " << host->name << "\r\n";
             }
 
             // Cleanup
@@ -76,7 +78,7 @@ namespace HostsFileManager
 
         SHELLEXECUTEINFO shExecInfo;
         shExecInfo.cbSize       = sizeof(SHELLEXECUTEINFO);
-        shExecInfo.fMask        = 0; // NULL;
+        shExecInfo.fMask        = 0;
         shExecInfo.hwnd         = nullptr;
         shExecInfo.lpVerb       = L"runas";
         shExecInfo.lpFile       = L"cmd.exe";
@@ -109,20 +111,12 @@ namespace HostsFileManager
         // m_bIsEnable = true;
     }
 
-    Host::Host(QString strName, QString strAddress)
+    Host::Host(QString name, QString address)
     {
-        setName(strName);
-        setAddress(strAddress);
+        name    = name.trimmed();
+        address = address.trimmed();
         // m_bIsEnable = true;
     }
-
-    void Host::setAddress(QString strAddress) { strAddress = strAddress.trimmed(); }
-
-    QString Host::address() { return strAddress; }
-
-    void Host::setName(QString strName) { strName = strName.trimmed(); }
-
-    QString Host::name() { return strName; }
 
     // void Host::setEnable(bool bEnable)
     //{
@@ -134,5 +128,5 @@ namespace HostsFileManager
     //    return m_bIsEnable;
     //}
 
-    bool Host::operator==(const Host &host) const { return strName == host.strName && strAddress == host.strAddress; }
+    bool Host::operator==(const Host &host) const { return name == host.name && address == host.address; }
 } // namespace HostsFileManager

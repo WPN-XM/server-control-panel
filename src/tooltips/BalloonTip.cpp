@@ -17,7 +17,7 @@ BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text,
     my_title       = title;
     my_text        = text;
     my_duration    = duration;
-    my_icon        = qApp->style()->standardIcon(icon).pixmap(QSize(15, 15));
+    my_icon        = QApplication::style()->standardIcon(icon).pixmap(QSize(15, 15));
     init();
 }
 

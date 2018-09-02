@@ -236,8 +236,8 @@ void ProcessViewerDialog::on_checkBox_filterShowOnlyWpnxmProcesses_stateChanged(
             if (item && !item->isHidden() && !item->text(Columns::COLUMN_NAME).contains("wpn-xm")) {
                 // remove all names without the install location of the server stack
                 QString path = item->data(Columns::COLUMN_NAME, Qt::ItemDataRole::ToolTipRole).toString();
-                if (!path.contains(qApp->applicationDirPath(), Qt::CaseInsensitive)) {
-                    qDebug() << "removed app dir " << path << qApp->applicationDirPath();
+                if (!path.contains(QApplication::applicationDirPath(), Qt::CaseInsensitive)) {
+                    qDebug() << "removed app dir " << path << QApplication::applicationDirPath();
                     item->setHidden(true);
                 }
             }

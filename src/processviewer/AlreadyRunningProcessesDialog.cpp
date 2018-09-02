@@ -25,7 +25,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
     QVBoxLayout *vbox   = new QVBoxLayout;
 
-    QList<Process> runningProcessesList = Processes::getInstance()->getRunningProcesses();
+    QList<Process> runningProcessesList = Processes::getRunningProcesses();
 
     // iterate over proccesFoundList and draw a "process shutdown" checkbox for
     // each one
@@ -93,8 +93,8 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
                 if (cb->text() == "postgres") {
                     QString file =
                         QDir::toNativeSeparators(QApplication::applicationDirPath() + "/bin/pgsql/data/postmaster.pid");
-                    if (QFile().exists(file)) {
-                        QFile().remove(file);
+                    if (QFile::exists(file)) {
+                        QFile::remove(file);
                     }
                 }
 
@@ -112,7 +112,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
         }
 
         // delay, after process kills
-        Processes::getInstance()->delay(250);
+        Processes::delay(250);
 
         //}
 

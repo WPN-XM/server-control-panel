@@ -50,7 +50,7 @@ namespace ServerControlPanel
         QString getPostgresqlPort();
         QString getRedisPort();
 
-        QString parseVersionNumber(QString stringWithVersion);
+        QString parseVersionNumber(const QString &stringWithVersion);
 
         Settings::SettingsManager *settings;
 
@@ -106,7 +106,7 @@ namespace ServerControlPanel
 
         void quitApplication();
 
-        void execEditor(QUrl logfile);
+        void execEditor(const QUrl &logfile);
 
         void runSelfUpdate();
 
@@ -144,7 +144,7 @@ namespace ServerControlPanel
         QString getVersion(const QString &server);
         QString getPort(const QString &server);
 
-        QString getLogfile(QString objectName);
+        QString getLogfile(const QString &objectName);
         QString getServerNameFromPushButton(QPushButton *button);
 
     signals:

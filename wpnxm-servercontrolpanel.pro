@@ -219,6 +219,7 @@ win32-g++ {
 win32-msvc* {
     message("using win32 msvc")
     #QMAKE_CXXFLAGS += /MP
+    QMAKE_CXXFLAGS += /D_CRT_SECURE_NO_WARNINGS
 }
 
 *-g++-32 {
