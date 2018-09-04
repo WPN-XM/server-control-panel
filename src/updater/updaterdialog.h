@@ -34,7 +34,7 @@ namespace Updater
         Q_OBJECT
 
     public:
-        explicit UpdaterDialog(QWidget *parent = 0);
+        explicit UpdaterDialog(QWidget *parent = nullptr);
         ~UpdaterDialog();
         void initModel(QJsonObject json);
         void initView();
@@ -75,7 +75,7 @@ namespace Updater
     {
         Q_OBJECT
     public:
-        explicit ProgressBarUpdater(UpdaterDialog *parent = 0, int currentRow = 0);
+        explicit ProgressBarUpdater(UpdaterDialog *parent = nullptr, int currentRow = 0);
     public slots:
         void updateProgress(const QMap<QString, QVariant> &progress);
         void downloadFinished(Downloader::TransferItem *transfer);

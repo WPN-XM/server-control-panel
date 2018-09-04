@@ -77,7 +77,11 @@ namespace Downloader
 
         if (!outputFile->isOpen()) {
             // qDebug() << reply->header(QNetworkRequest::ContentTypeHeader) <<
-            // reply->header(QNetworkRequest::ContentLengthHeader);
+            QVariant v2 = reply->header(QNetworkRequest::ContentLengthHeader); // there is a invalid value
+            if (v2.type() != QVariant::Invalid) {
+                // int ContentLength = v2.toInt();
+                qDebug() << "ContentLengthHeader:" + v2.toString();
+            }
 
             // get filename from URL
             QString fileName = reply->url().path();
@@ -87,8 +91,6 @@ namespace Downloader
             }
             qDebug() << "[DownloadItem::readyRead] Filename from URL:" << fileName;
 
-            // TODO move to settings function? (folder name should be fixed/ensured,
-            // when set and get to/from settings)
             if (!downloadFolder.endsWith(QDir::separator())) {
                 downloadFolder.append(QDir::separator());
             }
@@ -97,12 +99,10 @@ namespace Downloader
 
             outputFile->setFileName(downloadFilePath);
 
-            qDebug() << "[DownloadItem::readyRead] Download FullFilePath:" << downloadFilePath;
-            qDebug() << "[DownloadItem::readyRead] DownloadMode" << downloadMode;
+            qDebug() << "[DownloadItem::readyRead] Download Filepath (Target):" << downloadFilePath;
 
             if (downloadMode == DownloadMode::SkipIfExists) {
-                qDebug() << "[DownloadItem::readyRead] DownloadMode::SkipIfExists - File "
-                            "exists:"
+                qDebug() << "[DownloadItem::readyRead] DownloadMode::SkipIfExists - File exists:"
                          << outputFile->exists();
                 if (outputFile->exists()) {
                     downloadSkipped = true;
@@ -146,15 +146,15 @@ namespace Downloader
     {
         qDebug() << "DownloadItem::finished()";
 
-        // handle Redirection
+        // handle a download skip, file exists
+        if (downloadSkipped) {
+            timer.invalidate();
+            emit transferFinished(this);
+            return;
+        }
+
+        // handle redirect
         if (reply->attribute(QNetworkRequest::RedirectionTargetAttribute).isValid()) {
-
-            if (downloadSkipped) {
-                timer.invalidate();
-                emit transferFinished(this);
-                return;
-            }
-
             QUrl url = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
             url      = reply->url().resolved(url);
             qDebug() << "[DownloadItem] Finished, but " << reply->url() << "redirected to " << url;
@@ -163,6 +163,7 @@ namespace Downloader
             } else if (redirects.count() > 10) {
                 qDebug() << "[DownloadItem] Too Many Redirects";
             } else {
+                downloadMode = DownloadMode::Overwrite;
                 // follow redirect
                 if (outputFile && outputFile->isOpen()) {
                     if (!outputFile->seek(0) || !outputFile->resize(0)) {
@@ -182,6 +183,7 @@ namespace Downloader
                 return;
             }
         }
+        // normal download finish (not redirected, not skipped)
 
         // write reply to file
         if (outputFile && outputFile->isOpen()) {
@@ -190,7 +192,6 @@ namespace Downloader
         }
 
         timer.invalidate();
-
         emit transferFinished(this);
     }
 

@@ -35,12 +35,12 @@ namespace Downloader
         request.setRawHeader("User-Agent", userAgent);
         request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
 
-        // enqueue the download
+        // set download item
         DownloadItem *dl = new DownloadItem(request, nam);
-
         dl->setDownloadFolder(downloadFolder);
         dl->setDownloadMode(downloadMode);
 
+        // enqueue the download
         transfers.append(dl);
         FilesToDownloadCounter = transfers.count();
 

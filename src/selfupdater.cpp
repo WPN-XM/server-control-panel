@@ -80,10 +80,7 @@ namespace Updater
             }
 
             if (updateAvailable()) {
-                // qDebug() << "[SelfUpdater] Update available \n VersionInfo:" << versionInfo;
-
                 emit notifyUpdateAvailable(versionInfo);
-
                 if (settings->get("selfupdater/autoupdate").toBool()) {
                     doUpdate();
                 }
@@ -128,41 +125,6 @@ namespace Updater
         QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);
     }
 
-    void SelfUpdater::extract()
-    {
-        qDebug() << "SelfUpdater::extract";
-
-        QUrl url(versionInfo["url"].toString());
-        QString fileToExtract = "wpn-xm.exe";
-        QString zipFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() + url.fileName()));
-        QString targetPath(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
-
-        if (!QFile(zipFile).exists()) {
-            qDebug() << "[SelfUpdater] Zip File missing" << zipFile;
-        }
-
-        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipFile << "to" << targetPath;
-
-        // WTF? extractFile() doesn't work ???
-        // qDebug() << "[SelfUpdater] Filelist:" << JlCompress::getFileList(zipFile);
-        // qDebug() << JlCompress::extractFile( zipFile, fileToExtract,
-        // QDir::toNativeSeparators(downloadFolder));
-        // qDebug() << JlCompress::extractFile( zipFile, fileToExtract, targetPath);
-
-        // thanks to me, the zip file contains only the executable
-        // so extractDir() is basically extractFile(), but still.... grrrr
-        QStringList extractedFiles = JlCompress::extractDir(zipFile, targetPath);
-        if (QFileInfo(extractedFiles.at(0)).fileName() == "wpn-xm.exe") {
-            qDebug() << "[SelfUpdater] ---- Success! ----";
-
-            if (settings->get("selfupdater/autorestart").toBool()) {
-                emit notifyRestartNeeded(versionInfo);
-            } else {
-                askForRestart();
-            }
-        }
-    }
-
     void SelfUpdater::renameExecutable()
     {
         QString dirPath        = QCoreApplication::applicationDirPath();
@@ -177,10 +139,104 @@ namespace Updater
 
         // delete the destination file first (the old ".old" file)
         if (QFile::exists(oldExeFilePath)) {
-            qDebug() << "[SelfUpdater] delete target first:" << QFile::remove(oldExeFilePath);
+            qDebug() << "[SelfUpdater] Deleted old wpn-xm.exe.old:" << QFile::remove(oldExeFilePath);
         }
 
-        qDebug() << "[SelfUpdater] Move:" << QFile::rename(exeFilePath, oldExeFilePath); // wpn-xm.exe -> wpn-xm.exe.old
+        qDebug() << "[SelfUpdater] Renamed wpn-xm.exe to wpn-xm.exe.old:" << QFile::rename(exeFilePath, oldExeFilePath);
+    }
+
+    void SelfUpdater::extract()
+    {
+        qDebug() << "[SelfUpdater] Extract started.";
+
+        QUrl url(versionInfo["url"].toString());
+        QString fileToExtract = "wpn-xm.exe";
+        QString zipArchiveFile(QDir::toNativeSeparators(downloadFolder + QDir::separator() + url.fileName()));
+        QString targetPath(QDir::toNativeSeparators(QCoreApplication::applicationDirPath()));
+
+        if (!QFile::exists(zipArchiveFile)) {
+            qDebug() << "[SelfUpdater] Zip File missing" << zipArchiveFile;
+        }
+
+        qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipArchiveFile << "to" << targetPath;
+
+        QuaZipFileInfo info;
+
+        QuaZip zipArchive(zipArchiveFile);
+
+        if (!zipArchive.open(QuaZip::mdUnzip)) {
+            qWarning("Cannot open zip archive, error: %d", zipArchive.getZipError());
+            // return false;
+        }
+
+        qDebug() << "[SelfUpdater] Extracting files:" << zipArchive.getFileNameList();
+
+        QuaZipFile zippedFile(&zipArchive);
+
+        QFile outFile;
+
+        for (bool more = zipArchive.goToFirstFile(); more; more = zipArchive.goToNextFile()) {
+
+            if (!zipArchive.getCurrentFileInfo(&info)) {
+                qWarning("Cannot get zip file info, error: %d", zipArchive.getZipError());
+            }
+
+            // it's a folder
+            if (info.name.endsWith("/")) {
+                QDir dir(targetPath);
+                dir.mkpath(info.name);
+                continue;
+            }
+
+            // is this the file we want?
+            if (!fileToExtract.isEmpty()) {
+                if (!info.name.contains(fileToExtract)) {
+                    continue;
+                }
+            }
+
+            zippedFile.open(QIODevice::ReadOnly);
+
+            QString name = QString("%1/%2").arg(targetPath).arg(fileToExtract);
+
+            if (zippedFile.getZipError() != UNZ_OK) {
+                qWarning("Cannot get actual file name, error: %d", zippedFile.getZipError());
+            }
+
+            outFile.setFileName(name);
+            outFile.open(QIODevice::WriteOnly);
+            QByteArray data = zippedFile.readAll();
+            outFile.write(data);
+            outFile.close();
+
+            if (zippedFile.getZipError() != UNZ_OK) {
+                qWarning("Read zip file error: %d", zippedFile.getZipError());
+            }
+
+            if (!zippedFile.atEnd()) {
+                qWarning("Read all data from zip file, but it's not EOF.");
+            }
+
+            zippedFile.close();
+
+            if (zippedFile.getZipError() != UNZ_OK) {
+                qWarning("Cannot close zip file, error: %d", zippedFile.getZipError());
+            }
+        }
+
+        zipArchive.close();
+
+        if (zipArchive.getZipError() != UNZ_OK) {
+            qWarning("Cannot close zip archive: %d", zipArchive.getZipError());
+        }
+
+        qDebug() << "[SelfUpdater] Extract: OK.";
+
+        if (settings->get("selfupdater/autorestart").toBool()) {
+            emit notifyRestartNeeded(versionInfo);
+        } else {
+            askForRestart();
+        }
     }
 
     void SelfUpdater::askForUpdate()
@@ -199,7 +255,7 @@ namespace Updater
 
         QMessageBox msgBox;
         msgBox.setIconPixmap(iconPixmap);
-        msgBox.setWindowTitle("WPN-XM Server Control Panel - Self Updater");
+        msgBox.setWindowTitle("WPN-XM Server Control Panel - Update Notification");
         msgBox.setText(text);
         msgBox.setInformativeText(infoText);
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -226,7 +282,7 @@ namespace Updater
 
         QMessageBox msgBox;
         msgBox.setIconPixmap(iconPixmap);
-        msgBox.setWindowTitle("WPN-XM Server Control Panel - Self Updater");
+        msgBox.setWindowTitle("WPN-XM Server Control Panel - Update Notification");
         msgBox.setText(text);
         msgBox.setInformativeText(infoText);
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -238,10 +294,19 @@ namespace Updater
             // Should we send a final farewell signal before we leave?
             // QApplication::aboutToQuit(finalFarewellSignal);
 
-            // cross fingers and hope and pray, that starting the new process is slow
-            // and we are not running into the single application check.. ;)
+            // let's hope that starting the new process is slow.
+            // so slow, that we are not running into the single application check.
 
-            QProcess::startDetached(QApplication::applicationFilePath());
+            QString exe = QApplication::applicationFilePath();
+            if (QFile::exists(exe)) {
+                qDebug() << "[SelfUpdater] Restarting: " << exe;
+                QProcess::startDetached(exe);
+            } else if (QFile::exists(QApplication::applicationDirPath() + "/wpn-xm.exe")) {
+                qDebug() << "[SelfUpdater] Restarting (debug): " << QApplication::applicationDirPath() + "/wpn-xm.exe";
+                QProcess::startDetached(QApplication::applicationDirPath() + "/wpn-xm.exe");
+            } else {
+                qDebug() << "[SelfUpdater] Executable for restart not found!" << exe;
+            }
 
             QApplication::exit();
         }
