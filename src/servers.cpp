@@ -458,8 +458,8 @@ namespace Servers
 
         clearLogFile("PHP");
 
-        // disable PHP_FCGI_MAX_REQUESTS to go beyond the default request limit of 500
-        // requests
+        // disable PHP_FCGI_MAX_REQUESTS
+        // to go beyond the default request limit of 500 requests
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("PHP_FCGI_MAX_REQUESTS", "0");
         qDebug() << "[PHP] Set ENV:PHP_FCGI_MAX_REQUESTS \"0\" (disabled).";
@@ -478,9 +478,6 @@ namespace Servers
             qDebug() << "[PHP] Starting PHP failed. Tool \"php-cgi-spawner.exe\" missing.";
             return;
         }
-
-        // if PHP version below 7.1, use "php-cgi-spawner.exe" to spawn multiple processes
-        QString startCmdStringTemplate(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
 
         // get the nginx upstream configuration and read the defined PHP pools
         QVariantMap PHPServersToStart(getPHPServersFromNginxUpstreamConfig());
@@ -503,9 +500,11 @@ namespace Servers
                     env.insert("PHP_FCGI_CHILDREN", phpchildren);
                     qDebug() << "[PHP] Set ENV:PHP_FCGI_CHILDREN " << phpchildren;
 
-                    startPHPCGI = QDir::currentPath() + "/bin/php/php-cgi.exe";
+                    QString startCmdStringTemplate(QDir::currentPath() + "/bin/php/php-cgi.exe -b 127.0.0.1:%1");
+                    startPHPCGI = startCmdStringTemplate.arg(port);
                 } else {
-                    // use php-cgi-spawner
+                    // if PHP version below 7.1, use "php-cgi-spawner.exe" to spawn multiple processes
+                    QString startCmdStringTemplate(spawnUtilFile + " ./bin/php/php-cgi.exe %1 %2");
                     startPHPCGI = startCmdStringTemplate.arg(port, phpchildren);
                 }
 
