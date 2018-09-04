@@ -15,7 +15,7 @@ namespace Configuration
         Q_OBJECT
 
     public:
-        explicit NginxAddUpstreamDialog(QWidget *parent = 0);
+        explicit NginxAddUpstreamDialog(QWidget *parent = nullptr);
         ~NginxAddUpstreamDialog();
 
         QString pool();
@@ -30,5 +30,5 @@ namespace Configuration
     private:
         Configuration::Ui::NginxAddPoolDialog *ui;
     };
-}
+} // namespace Configuration
 #endif // NGINXADDUPSTREAMDIALOG_H

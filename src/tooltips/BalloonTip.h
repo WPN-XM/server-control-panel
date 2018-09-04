@@ -29,7 +29,7 @@ protected:
     TipButtonRole my_role;
 
 public:
-    TipButton(TipButtonRole role, QWidget *parent = 0) : QPushButton(parent)
+    TipButton(TipButtonRole role, QWidget *parent) : QPushButton(parent)
     {
         setFixedSize(20, 20);
         my_role = role;
@@ -116,10 +116,10 @@ protected:
     bool eventFilter(QObject *, QEvent *);
 
 public:
-    explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = 0);
-    explicit BalloonTip(const QPixmap &pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
+    explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
+    explicit BalloonTip(const QPixmap &pix, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
     explicit BalloonTip(
-        QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = 0);
+        QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
 
     ~BalloonTip();
     ArrowPosition arrowPosition();

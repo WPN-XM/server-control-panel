@@ -15,7 +15,7 @@ namespace Configuration
         Q_OBJECT
 
     public:
-        explicit NginxAddServerDialog(QWidget *parent = 0);
+        explicit NginxAddServerDialog(QWidget *parent = nullptr);
         ~NginxAddServerDialog();
 
         QString address();
@@ -38,6 +38,6 @@ namespace Configuration
     private:
         Configuration::Ui::NginxAddServerDialog *ui;
     };
-}
+} // namespace Configuration
 
 #endif // NGINXADDSERVERDIALOG_H
