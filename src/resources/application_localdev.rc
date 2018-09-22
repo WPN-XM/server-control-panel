@@ -1,6 +1,6 @@
 IDI_ICON1               ICON    DISCARDABLE     "wpnxm.ico"
 
-#include <windows.h>
+#include <Windows.h>
 #include "../version_localdev.h"
 
 VS_VERSION_INFO VERSIONINFO
