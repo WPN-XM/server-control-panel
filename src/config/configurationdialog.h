@@ -10,6 +10,9 @@
 #include <QTableWidget>
 #include <QTreeWidgetItem>
 
+#include <QListWidget>
+#include <QListWidgetItem>
+
 #include "../servers.h"
 #include "../settings.h"
 #include "../windowsapi.h"
@@ -71,6 +74,10 @@ namespace Configuration
 
         void createNginxConfUpstreamFolderIfNotExists_And_clearOldConfigs();
 
+        void createPHPExtensionListWidget();
+        QStringList getAvailablePHPExtensions();
+        QStringList getEnabledPHPExtensions();
+
     private slots:
         void toggleAutostartServerCheckboxes(bool run = true);
         void onClickedButtonBoxOk();
@@ -98,6 +105,9 @@ namespace Configuration
         void on_pushButton_setPHPVersionForBinFolder_clicked();
 
         void on_configMenuSearchLineEdit_textChanged(const QString &string);
+
+        void PHPExtensionListWidgetHighlightChecked(QListWidgetItem *item);
+        void savePHPExtensionState(QString ext, bool enable);
 
     private:
         Ui::ConfigurationDialog *ui;

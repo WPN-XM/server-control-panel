@@ -32,12 +32,134 @@ namespace Configuration
         // load initial data for pages
         loadNginxUpstreams();
 
+        createPHPExtensionListWidget();
+        QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
+                         SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+
         connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
 
         ui->configMenuTreeWidget->expandAll();
     }
 
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
+
+    QStringList ConfigurationDialog::getAvailablePHPExtensions()
+    {
+        QStringList availableExtensions;
+
+        QString folder = QDir::currentPath() + "/bin/php/ext";
+        QDir ext(folder);
+        ext.setNameFilters(QStringList() << "*.dll");
+        QStringList fileList = ext.entryList();
+
+        for (int i = 0; i < fileList.size(); ++i) {
+            availableExtensions << fileList.at(i).chopped(4).mid(4);
+        }
+
+        // qDebug() << availableExtensions;
+
+        return availableExtensions;
+    }
+
+    QStringList ConfigurationDialog::getEnabledPHPExtensions()
+    {
+        QStringList enabledExtensions;
+
+        QString filename = QDir::toNativeSeparators(QDir::currentPath() + "/bin/php/php.ini");
+        QFile f(filename);
+        if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            qDebug() << " Could not open the file for reading";
+        }
+
+        QTextStream in(&f);
+        while (!in.atEnd()) {
+            QString line = in.readLine();
+            if (line.startsWith("extension=")) {
+                enabledExtensions << line.mid(10);
+            }
+        }
+
+        f.close();
+
+        return enabledExtensions;
+    }
+
+    void ConfigurationDialog::createPHPExtensionListWidget()
+    {
+        QStringList availableList = getAvailablePHPExtensions();
+        QStringList enabledList   = getEnabledPHPExtensions();
+
+        ui->php_extensions_listWidget->addItems(availableList);
+
+        QListWidgetItem *item = nullptr;
+        for (int i = 0; i < ui->php_extensions_listWidget->count(); ++i) {
+            item = ui->php_extensions_listWidget->item(i);
+            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            if (enabledList.contains(item->text())) {
+                item->setCheckState(Qt::Checked);
+                item->setBackgroundColor(QColor("#90ee90"));
+            } else {
+                item->setCheckState(Qt::Unchecked);
+            }
+        }
+    }
+
+    void ConfigurationDialog::PHPExtensionListWidgetHighlightChecked(QListWidgetItem *item)
+    {
+        // disconnect is needed, because setBackgroundColor triggers itemChanged
+        // we need to avoid getting two signals, because we want to save the state only once
+        QObject::disconnect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
+                            SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+
+        if (item->checkState() == Qt::Checked) {
+            item->setBackgroundColor(QColor("#90ee90"));
+            savePHPExtensionState(item->text(), true);
+        } else {
+            item->setBackgroundColor(QColor("#ffffff"));
+            savePHPExtensionState(item->text(), false);
+        }
+
+        QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
+                         SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+    }
+
+    void ConfigurationDialog::savePHPExtensionState(QString ext, bool enable)
+    {
+        qDebug() << ext << enable;
+
+        QString filename = QDir::toNativeSeparators(QDir::currentPath() + "/bin/php/php.ini");
+        QFile f(filename);
+        if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
+            qDebug() << " Could not open the file for reading and writing.";
+        }
+
+        QString content;
+        QTextStream in(&f);
+        while (!in.atEnd()) {
+            content = in.readAll();
+        }
+
+        QString extName = QString("extension=").append(ext);
+
+        if (content.contains(extName)) {
+            if (enable) {
+                content.replace(QString(";extension=").append(ext), extName);
+            } else {
+                content.replace(extName, QString(";extension=").append(ext));
+            }
+        } else {
+            // no entry in ini, yet. add to ini
+            if (enable) {
+                content.append(extName);
+            } else {
+                content.append(QString(";extension=").append(ext));
+            }
+        }
+
+        f.seek(0);
+        f.write(content.toUtf8());
+        f.close();
+    }
 
     /**
      * Search for items in the "Configuration Menu" TreeWidget
