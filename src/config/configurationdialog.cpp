@@ -125,8 +125,6 @@ namespace Configuration
 
     void ConfigurationDialog::savePHPExtensionState(QString ext, bool enable)
     {
-        qDebug() << ext << enable;
-
         QString filename = QDir::toNativeSeparators(QDir::currentPath() + "/bin/php/php.ini");
         QFile f(filename);
         if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
