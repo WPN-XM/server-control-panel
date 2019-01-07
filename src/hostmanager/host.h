@@ -27,8 +27,8 @@ namespace HostsFileManager
         static QList<Host *> GetHosts();
         static void SetHosts(QList<Host *> listHosts);
 
-        QString name;
-        QString address;
+        QString hostname;
+        QString ipaddress;
         // bool isEnable();
         // void setEnable(bool bEnable);
 

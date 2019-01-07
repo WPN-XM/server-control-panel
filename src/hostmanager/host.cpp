@@ -3,6 +3,7 @@
 
 namespace HostsFileManager
 {
+    // path: "%SystemRoot%\\System32\\drivers\\etc\\hosts"
     QList<Host *> Host::GetHosts()
     {
         QList<Host *> listReturn;
@@ -52,7 +53,7 @@ namespace HostsFileManager
                 // It match an host setup
                 if (index >= 0) {
                     Host *host = listHosts.takeAt(index);
-                    tempStream << host->address << "       " << host->name << "\r\n";
+                    tempStream << host->ipaddress << "       " << host->hostname << "\r\n";
                 }
             }
 
@@ -60,7 +61,7 @@ namespace HostsFileManager
             tempStream << "\r\n";
             while (!listHosts.isEmpty()) {
                 Host *host = listHosts.takeFirst();
-                tempStream << host->address << "       " << host->name << "\r\n";
+                tempStream << host->ipaddress << "       " << host->hostname << "\r\n";
             }
 
             // Cleanup
@@ -113,8 +114,8 @@ namespace HostsFileManager
 
     Host::Host(QString name, QString address)
     {
-        name    = name.trimmed();
-        address = address.trimmed();
+        hostname  = name.trimmed();
+        ipaddress = address.trimmed();
         // m_bIsEnable = true;
     }
 
@@ -128,5 +129,5 @@ namespace HostsFileManager
     //    return m_bIsEnable;
     //}
 
-    bool Host::operator==(const Host &host) const { return name == host.name && address == host.address; }
+    bool Host::operator==(const Host &host) const { return hostname == host.hostname && ipaddress == host.ipaddress; }
 } // namespace HostsFileManager

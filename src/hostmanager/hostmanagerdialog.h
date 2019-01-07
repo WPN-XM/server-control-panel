@@ -24,7 +24,7 @@ namespace HostsFileManager
         Q_OBJECT
 
     public:
-        explicit HostsManagerDialog(QWidget *parent = 0);
+        explicit HostsManagerDialog(QWidget *parent = nullptr);
         ~HostsManagerDialog();
     signals:
         void selectionChanged(const QItemSelection &selected);
@@ -37,6 +37,6 @@ namespace HostsFileManager
     private:
         QTableView *tableView;
     };
-}
+} // namespace HostsFileManager
 
 #endif // HOSTMANAGERDIALOG_H

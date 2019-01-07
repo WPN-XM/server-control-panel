@@ -36,9 +36,9 @@ namespace HostsFileManager
         if (role == Qt::DisplayRole) {
             switch (index.column()) {
             case COLUMN_ADDRESS:
-                return host->address;
+                return host->ipaddress;
             case COLUMN_NAME:
-                return host->name;
+                return host->hostname;
             }
         }
         return QVariant();
@@ -80,10 +80,10 @@ namespace HostsFileManager
 
             switch (index.column()) {
             case COLUMN_ADDRESS:
-                host->address = value.toString();
+                host->ipaddress = value.toString();
                 break;
             case COLUMN_NAME:
-                host->name = value.toString();
+                host->hostname = value.toString();
                 break;
             default:
                 return false;
@@ -125,9 +125,9 @@ namespace HostsFileManager
         return true;
     }
 
-    void HostsTableModel::setList(QList<Host *> listHosts)
+    void HostsTableModel::setList(QList<Host *> hosts)
     {
-        listHosts        = listHosts;
+        listHosts        = hosts;
         QModelIndex root = index(0, 0);
         emit(dataChanged(root, index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
     }

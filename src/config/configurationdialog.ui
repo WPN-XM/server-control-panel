@@ -2063,7 +2063,11 @@
        </property>
        <layout class="QGridLayout" name="gridLayout_14">
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit_postgresql_port"/>
+         <widget class="QLineEdit" name="lineEdit_postgresql_port">
+          <property name="text">
+           <string>5432</string>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_postgresql_port">
@@ -2126,7 +2130,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>181</width>
+         <width>191</width>
          <height>41</height>
         </rect>
        </property>

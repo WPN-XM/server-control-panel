@@ -156,7 +156,7 @@ namespace Configuration
         QString getSettingString(const QString &key, const QString &defaultValue);
 
         static bool sortByPhpVersion(const PhpVersions &d1, const PhpVersions &d2);
-        QString getPHPVersionFromExe(QString pathToPHPExecutable);
+        QString getPHPVersionOfExe(QString pathToPHPExecutable);
     };
 } // namespace Configuration
 

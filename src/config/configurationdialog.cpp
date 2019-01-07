@@ -94,7 +94,14 @@ namespace Configuration
         QListWidgetItem *item = nullptr;
         for (int i = 0; i < ui->php_extensions_listWidget->count(); ++i) {
             item = ui->php_extensions_listWidget->item(i);
-            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            // special handling for zend_extension xdebug
+            if (item->text() == "xdebug") {
+                item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsUserCheckable);
+                item->setBackgroundColor(QColor("lightgray"));
+            } else {
+                item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            }
+
             if (enabledList.contains(item->text())) {
                 item->setCheckState(Qt::Checked);
                 item->setBackgroundColor(QColor("#90ee90"));
@@ -942,6 +949,7 @@ namespace Configuration
         // find all folders inside "bin" containing a php executable
         QStringList filters = {"php.exe"};
         QString binFolder   = QDir::currentPath() + "/bin/";
+        QString currentPHPversion;
 
         QList<PhpVersions> list;
 
@@ -956,7 +964,7 @@ namespace Configuration
 
             PhpVersions v;
             v.php_dir = phpDirName;
-            v.version = getPHPVersionFromExe(php_exe);
+            v.version = getPHPVersionOfExe(php_exe);
 
             qDebug() << v.php_dir << v.version;
 
@@ -965,28 +973,25 @@ namespace Configuration
 
             if (phpDirName == "php") {
                 qDebug() << "Skipping bin/php folder.";
+                currentPHPversion = v.version;
+                continue;
             } else if (phpDirName == expectedPhpDirName) {
-                qDebug() << "Folder already correctly versionized.";
+                qDebug() << "PHP Folder already correctly versionized.";
             } else {
                 QString dest(binFolder);
                 dest.append(expectedPhpDirName);
                 qDebug() << "dest: " << dest;
                 QDir dir;
                 if (!dir.rename(originalDir, dest)) {
-                    qDebug() << "Error renaming folder.";
+                    qDebug() << "Error renaming PHP folder.";
                 } else {
-                    qDebug() << "Folder renamed: " << originalDir << dest;
+                    qDebug() << "PHP Folder renamed: " << originalDir << dest;
                 }
             }
 
             list.append(v);
         }
 
-        //        for (int i = 0; i < list.count(); ++i) {
-        //            qDebug() << list[i].version;
-        //        }
-
-        // TODO: do we really need to sort the values from QDirIterator?
         // sort the php version list
         int i, j;
         for (i = 0; i < list.count(); ++i) {
@@ -1003,19 +1008,16 @@ namespace Configuration
             }
         }
 
-        //        for (int i = 0; i < list.count(); ++i) {
-        //            qDebug() << list[i].version;
-        //        }
-
         // populate php version dropdown
         ui->comboBox_PHPVersions->clear();
         for (int i = 0; i < list.count(); ++i) {
-            // qDebug() << list[i].version;
             ui->comboBox_PHPVersions->addItem(list[i].version);
-            // highlight the currently selected php version for bin/php
-            if (list[i].php_dir == "php") {
-                ui->comboBox_PHPVersions->setCurrentText(list[i].version);
+            // highlight the currently selected php version for "bin\php")
+            if (list[i].version == currentPHPversion) {
+                // a) in current version line edit
                 ui->lineEdit_currentPHPVersion->setText(list[i].version);
+                // b) in dropdown
+                ui->comboBox_PHPVersions->setCurrentText(list[i].version);
             }
         }
         ui->comboBox_PHPVersions->setEnabled(true);
@@ -1030,6 +1032,7 @@ namespace Configuration
             qDebug() << "This PHP version is already set for bin/php.";
         } else {
             QString binFolder          = QDir::currentPath() + "/bin/";
+            QString binPHPFolder       = binFolder + "php";
             QString selectedPhpDirName = QString("php-").append(selectedPHPVersion);
             QString currentPhPDirName  = QString("php-").append(currentPHPVersion);
 
@@ -1038,11 +1041,17 @@ namespace Configuration
             QString current(binFolder);
             current.append(currentPhPDirName);
 
+            // first, we need to remove the "bin/php-version" folder, if it exists
+            if (QDir(current).exists()) {
+                QDir(current).removeRecursively();
+            }
+
+            // second, rename
             QDir dir;
-            if (!dir.rename(binFolder + "php", current)) {
+            if (!dir.rename(binPHPFolder, current)) {
                 qDebug() << "Error renaming folder.";
             } else {
-                qDebug() << "Folder renamed: bin/php to " << current;
+                qDebug() << "Folder renamed:" << binPHPFolder << "to" << current;
             }
 
             // rename (selected) "bin/php-version" to "bin/php"
@@ -1050,17 +1059,17 @@ namespace Configuration
             QString src(binFolder);
             src.append(selectedPhpDirName);
             QDir dir2;
-            if (!dir2.rename(src, binFolder + "php")) {
+            if (!dir2.rename(src, binPHPFolder)) {
                 qDebug() << "Error renaming folder.";
             } else {
-                qDebug() << "Folder renamed: " << src << "to bin/php";
+                qDebug() << "Folder renamed:" << src << "to" << binPHPFolder;
             }
 
             ui->lineEdit_currentPHPVersion->setText(selectedPHPVersion);
         }
     }
 
-    QString ConfigurationDialog::getPHPVersionFromExe(QString pathToPHPExecutable)
+    QString ConfigurationDialog::getPHPVersionOfExe(QString pathToPHPExecutable)
     {
         // this happens only during testing
         if (!QFile::exists(pathToPHPExecutable)) {
@@ -1097,6 +1106,8 @@ namespace Configuration
         // switches to the matching page in the stacked widget
         QString menuitem = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
         setCurrentStackWidget(menuitem);
+
+        // TODO implement per page config loading/saving
     }
 
     void ConfigurationDialog::setCurrentStackWidget(const QString &widgetname)

@@ -13,7 +13,7 @@ namespace HostsFileManager
         Q_OBJECT
 
     public:
-        explicit HostsTableModel(QObject *parent = 0);
+        explicit HostsTableModel(QObject *parent = nullptr);
 
         enum Columns
         {
@@ -30,7 +30,7 @@ namespace HostsFileManager
         bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex());
         bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex());
 
-        void setList(QList<Host *> listHosts);
+        void setList(QList<Host *> hosts);
         QList<Host *> getList();
 
     signals:
@@ -40,6 +40,6 @@ namespace HostsFileManager
     private:
         QList<Host *> listHosts;
     };
-}
+} // namespace HostsFileManager
 
 #endif // HOSTTABLEMODEL_H
