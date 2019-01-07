@@ -141,15 +141,20 @@ after_build:
   # 3) yaml-cpp (statically linked)
   #- copy C:\projects\server-control-panel\libs\yaml-cpp\bin\yaml-cpp.dll C:\projects\server-control-panel\%CONFIGURATION%\yaml-cpp.dll
   # - no exports for yaml-cpp?
-  # 4) openssl
+  # 4) openssl - copy from C:\OpenSSL-Win64\bin
   - mkdir C:\projects\server-control-panel\libs\openssl\bin
-  # - C:\OpenSSL-Win64\bin
+  # - copy openssl dlls to libs folder
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\libssl32.dll
+  - copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libcrypto-1_1.dll
+  - copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libssl-1_1.dll
+  # - copy openssl dlls to release|debug folder
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl32.dll
+  - copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libcrypto-1_1.dll
+  - copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl-1_1.dll
   # cleanups
   - del *.obj
   - del *.cpp
