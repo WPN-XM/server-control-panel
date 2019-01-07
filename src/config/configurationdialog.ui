@@ -178,7 +178,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>10</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -1205,7 +1205,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="php_tab_versionswitch">
       <attribute name="title">
@@ -1299,11 +1299,6 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="php_tab_configuration">
-      <attribute name="title">
-       <string>Configuration</string>
-      </attribute>
-     </widget>
      <widget class="QWidget" name="php_tab_extensions">
       <attribute name="title">
        <string>Extensions</string>
@@ -1331,6 +1326,11 @@
         </property>
        </widget>
       </widget>
+     </widget>
+     <widget class="QWidget" name="php_tab_configuration">
+      <attribute name="title">
+       <string>Configuration</string>
+      </attribute>
      </widget>
     </widget>
    </widget>
