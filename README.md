@@ -81,6 +81,7 @@ Breaking changes, new features, deprecations and bug fixes are tracked in the [C
 * [QuaZIP](https://github.com/stachenov/quazip) - LGPL v2.1
   * [zlib](https://github.com/madler/zlib) - ZLIB License
 * [yaml-cpp](https://github.com/jbeder/yaml-cpp) - MIT License
+* [openssl](https://github.com/openssl/openssl) - Apache License v2.0
 
 ### Downloading Qt
 
