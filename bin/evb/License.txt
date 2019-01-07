@@ -2,7 +2,7 @@ Enigma Virtual Box
 Copyright (C) 2004-2018 The Enigma Protector Developers Team
 All Rights Reserved
 Web:		http://www.enigmaprotector.com/
-E-mail:		vbox@enigmaprotector.com
+E-mail:		support@enigmaprotector.com
 Developers:	Vladimir Sukhov
 
 *** LICENSE AGREEMENT ***
@@ -11,7 +11,7 @@ Please carefully read the following terms and conditions before using "Enigma Vi
 
 *** END USER LICENSE AGREEMENT ***
 
-1. The Enigma Protector is a result of the intellectual property of "The Enigma Protector Developers Team" and is protected by intellectual property laws. You will be able to use "Enigma Virtual Box" only within the scope of the current license agreement. In case you do not agree to the terms set forth, please do not use or download or store "Enigma Virtual Box".
+1. "Enigma Virtual Box" is a result of the intellectual property of "The Enigma Protector Developers Team" and is protected by intellectual property laws. You will be able to use "Enigma Virtual Box" only within the scope of the current license agreement. In case you do not agree to the terms set forth, please do not use or download or store "Enigma Virtual Box".
 
 2. "Enigma Virtual Box" and all accompanying files are licensed "AS IS" without warranties as to performance or merchantability or any other warranties whether expressed or implied. Because of the various hardware and software environments in which "Enigma Virtual Box" may be operated, no warranty of fitness for a particular purpose is offered.
 

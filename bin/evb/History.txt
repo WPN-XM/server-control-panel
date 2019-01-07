@@ -1,3 +1,23 @@
+Enigma Virtual Box v9.20 Build 20181016
+- Added new virtualization method "Never Write to Disk, Use File from Disk (if Exists)"
+- Few improvements for Packages feature
+- Select multiple files or folders to change properties for
+- File and folder attributes and time are being extracted from real items while adding to the tree
+
+Enigma Virtual Box v9.10 Build 20180910
+- Added manifest support for virtual exe files
+- Fixed issue running virtual exe files with bound import
+
+Enigma Virtual Box v9.00 Build 20180626
+- Virtual Box is much faster now!
+- Added drag and drop feature for input file
+- Critical core improvements for faster files and registry operations
+- Improved loading speed if thousands virtual files are used
+- Fixed logic of registry virtualization caused much issues with virtual registry
+- Fixed memory overflow issue for GUI version when packing tons files
+- Bug fixed with processing of file synchronous operations for 64 bit files
+- Manual appended and fixed
+
 Enigma Virtual Box v8.20 Build 20180516
 - Minor improvements
 - Fixed crash of console version
