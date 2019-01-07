@@ -142,19 +142,22 @@ after_build:
   #- copy C:\projects\server-control-panel\libs\yaml-cpp\bin\yaml-cpp.dll C:\projects\server-control-panel\%CONFIGURATION%\yaml-cpp.dll
   # - no exports for yaml-cpp?
   # 4) openssl - copy from C:\OpenSSL-Win64\bin
+  # Appveyor - January 2019
+  # OpenSSL 1.0.2p (64-bit) (C:\OpenSSL-Win64\bin)
+  # OpenSSL 1.1.1 (64-bit)  (C:\OpenSSL-v111-Win64\bin)
   - mkdir C:\projects\server-control-panel\libs\openssl\bin
   # - copy openssl dlls to libs folder
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\libssl32.dll
-  - copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libcrypto-1_1.dll
-  - copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libssl-1_1.dll
+  #- copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libcrypto-1_1.dll
+  #- copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libssl-1_1.dll
   # - copy openssl dlls to release|debug folder
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl32.dll
-  - copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libcrypto-1_1.dll
-  - copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl-1_1.dll
+  #- copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libcrypto-1_1.dll
+  #- copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl-1_1.dll
   # cleanups
   - del *.obj
   - del *.cpp
