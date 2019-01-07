@@ -1129,10 +1129,18 @@ namespace ServerControlPanel
             settings->set("autostart/nginx", 1);
             settings->set("autostart/php", 1);
             settings->set("autostart/mariadb", 1);
-            settings->set("autostart/mongodb", 0);
-            settings->set("autostart/memcached", 0);
-            settings->set("autostart/postgresql", 0);
-            settings->set("autostart/redis", 0);
+            if (servers->isInstalled("mongodb")) {
+                settings->set("autostart/mongodb", 0);
+            }
+            if (servers->isInstalled("memcached")) {
+                settings->set("autostart/memcached", 0);
+            }
+            if (servers->isInstalled("postgresql")) {
+                settings->set("autostart/postgresql", 0);
+            }
+            if (servers->isInstalled("redis")) {
+                settings->set("autostart/redis", 0);
+            }
 
             settings->set("php/config", "./bin/php/php.ini");
 
@@ -1143,20 +1151,24 @@ namespace ServerControlPanel
             settings->set("mariadb/config", "./bin/mariadb/my.ini");
             settings->set("mariadb/port", 3306);
             settings->set("mariadb/password", "");
-
-            settings->set("memcached/tcpport", "11211");
-            settings->set("memcached/udpport", "0");
-            settings->set("memcached/threads", "2");
-            settings->set("memcached/maxconnections", "2048");
-            settings->set("memcached/maxmemory", "2048");
-
-            settings->set("mongodb/config", "./bin/mongodb/mongod.conf");
-
-            settings->set("postgresql/config", "./bin/pgsql/data/postgresql.conf");
-            settings->set("postgresql/port", 5432);
-
-            settings->set("redis/config", "./bin/redis/redis.windows.conf");
-            settings->set("redis/port", 6379);
+            if (servers->isInstalled("memcached")) {
+                settings->set("memcached/tcpport", "11211");
+                settings->set("memcached/udpport", "0");
+                settings->set("memcached/threads", "2");
+                settings->set("memcached/maxconnections", "2048");
+                settings->set("memcached/maxmemory", "2048");
+            }
+            if (servers->isInstalled("mongodb")) {
+                settings->set("mongodb/config", "./bin/mongodb/mongod.conf");
+            }
+            if (servers->isInstalled("postgresql")) {
+                settings->set("postgresql/config", "./bin/pgsql/data/postgresql.conf");
+                settings->set("postgresql/port", 5432);
+            }
+            if (servers->isInstalled("redis")) {
+                settings->set("redis/config", "./bin/redis/redis.windows.conf");
+                settings->set("redis/port", 6379);
+            }
 
             settings->set("selfupdater/runonstartup", 1);
             settings->set("selfupdater/autoupdate", 0);

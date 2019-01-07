@@ -51,6 +51,7 @@ namespace Servers
         QList<Server *> servers() const;
         QStringList getListOfServerNames() const;
         QStringList getInstalledServerNames();
+        bool isInstalled(const QString &serverName);
         QString getCamelCasedServerName(QString &serverName) const;
         Server *getServer(const QString &serverName) const;
         QString getExecutable(QString &serverName) const;

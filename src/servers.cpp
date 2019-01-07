@@ -218,6 +218,22 @@ namespace Servers
         return list;
     }
 
+    bool Servers::isInstalled(const QString &searchServerName)
+    {
+        qDebug() << "[Servers] isInstalled?" << searchServerName;
+
+        QStringList installedServers = getInstalledServerNames();
+
+        foreach (QString serverName, installedServers) {
+            if (searchServerName == serverName) {
+                qDebug() << "Installed:\t" << serverName;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     QList<Server *> Servers::servers() const { return serverList; }
 
     Server *Servers::getServer(const QString &serverName) const

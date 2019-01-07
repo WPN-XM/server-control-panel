@@ -224,10 +224,18 @@ namespace Configuration
         ui->checkbox_autostart_PHP->setChecked(getSettingBool("autostart/php", true));
         ui->checkbox_autostart_Nginx->setChecked(getSettingBool("autostart/nginx", true));
         ui->checkbox_autostart_MariaDb->setChecked(getSettingBool("autostart/mariadb", true));
-        ui->checkbox_autostart_MongoDb->setChecked(getSettingBool("autostart/mongodb", false));
-        ui->checkbox_autostart_Memcached->setChecked(getSettingBool("autostart/memcached", false));
-        ui->checkbox_autostart_Postgresql->setChecked(getSettingBool("autostart/postgresql", false));
-        ui->checkbox_autostart_Redis->setChecked(getSettingBool("autostart/redis", false));
+        if (isServerInstalled("mongodb")) {
+            ui->checkbox_autostart_MongoDb->setChecked(getSettingBool("autostart/mongodb", false));
+        }
+        if (isServerInstalled("memcached")) {
+            ui->checkbox_autostart_Memcached->setChecked(getSettingBool("autostart/memcached", false));
+        }
+        if (isServerInstalled("postgresql")) {
+            ui->checkbox_autostart_Postgresql->setChecked(getSettingBool("autostart/postgresql", false));
+        }
+        if (isServerInstalled("redis")) {
+            ui->checkbox_autostart_Redis->setChecked(getSettingBool("autostart/redis", false));
+        }
 
         ui->checkbox_clearLogsOnStart->setChecked(getSettingBool("global/clearlogsonstart", false));
         ui->checkbox_stopServersOnQuit->setChecked(getSettingBool("global/stopServersonquit", false));
@@ -358,10 +366,18 @@ namespace Configuration
         settings->set("autostart/mariadb", int(ui->checkbox_autostart_MariaDb->isChecked()));
 
         // checkboxes are automatically removed by hideAutostartCheckboxes...
-        settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
-        settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
-        settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
-        settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
+        if (isServerInstalled("mongodb")) {
+            settings->set("autostart/mongodb", int(ui->checkbox_autostart_MongoDb->isChecked()));
+        }
+        if (isServerInstalled("memcached")) {
+            settings->set("autostart/memcached", int(ui->checkbox_autostart_Memcached->isChecked()));
+        }
+        if (isServerInstalled("postgresql")) {
+            settings->set("autostart/postgresql", int(ui->checkbox_autostart_Postgresql->isChecked()));
+        }
+        if (isServerInstalled("redis")) {
+            settings->set("autostart/redis", int(ui->checkbox_autostart_Redis->isChecked()));
+        }
 
         QApplication::processEvents();
 
