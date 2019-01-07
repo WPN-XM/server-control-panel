@@ -973,7 +973,10 @@ namespace Configuration
 
             if (phpDirName == "php") {
                 qDebug() << "Skipping bin/php folder.";
+                // set current php version to lineEdit
                 currentPHPversion = v.version;
+                qDebug() << "Current PHP version: " << currentPHPversion;
+                ui->lineEdit_currentPHPVersion->setText(v.version);
                 continue;
             } else if (phpDirName == expectedPhpDirName) {
                 qDebug() << "PHP Folder already correctly versionized.";
@@ -1012,13 +1015,6 @@ namespace Configuration
         ui->comboBox_PHPVersions->clear();
         for (int i = 0; i < list.count(); ++i) {
             ui->comboBox_PHPVersions->addItem(list[i].version);
-            // highlight the currently selected php version for "bin\php")
-            if (list[i].version == currentPHPversion) {
-                // a) in current version line edit
-                ui->lineEdit_currentPHPVersion->setText(list[i].version);
-                // b) in dropdown
-                ui->comboBox_PHPVersions->setCurrentText(list[i].version);
-            }
         }
         ui->comboBox_PHPVersions->setEnabled(true);
     }
