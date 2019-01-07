@@ -20,7 +20,8 @@ environment:
 
     # MSVC x64
     - bitsize:    x64
-      qt:         5.11.1\msvc2017_64
+      #qt:        latest\msvc2017_64
+      qt:         5.11\msvc2017_64
       suffix:     msvc2017
       generator:  "Visual Studio 15 2017 Win64"
 
@@ -202,4 +203,4 @@ test_script:
 # access build worker via remote desktop
 on_finish:
   #- ps: if (($env:CONFIGURATION) -eq "Debug" ) { $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
