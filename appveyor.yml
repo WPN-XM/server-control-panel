@@ -151,7 +151,8 @@ after_build:
   # cleanups
   - del *.obj
   - del *.cpp
-  - del vcredist*.exe  
+  - del vcredist*.exe 
+  - del vc_redist*.exe 
   # - remove imagehandlers
   - del Qt5SVG.dll
   - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qwebp.dll
