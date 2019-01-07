@@ -17,9 +17,9 @@ rem git commit -m "updated submodule yaml-cpp to v0.5.2"
 git commit -m "updated submodule yaml-cpp to 4fb1c4"
 
 cd quazip 
-git checkout 0.7.5
+git checkout 0.7.6
 cd ..
 git add quazip
-git commit -m "updated submodule quazip to 0.7.5"
+git commit -m "updated submodule quazip to 0.7.6"
 
 git push
