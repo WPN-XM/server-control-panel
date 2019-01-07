@@ -146,8 +146,10 @@ after_build:
   # - C:\OpenSSL-Win64\bin
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\libs\openssl\bin\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\ssleay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\libs\openssl\bin\libssl32.dll
   - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll
   - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl32.dll
   # cleanups
   - del *.obj
   - del *.cpp
