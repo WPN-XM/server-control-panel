@@ -734,8 +734,11 @@ namespace ServerControlPanel
 
     QString MainWindow::getRedisVersion()
     {
+        // notes: --version doesn't work
         QProcess process;
-        process.start("./bin/redis/redis-server.exe", QStringList() << "--version");
+        process.setProcessChannelMode(QProcess::MergedChannels);
+        QString redisExe = getRootFolder() + "\\bin\\redis\\redis-cli.exe --help";
+        process.start(redisExe);
 
         if (!process.waitForFinished()) {
             qDebug() << "[Redis] Version failed:" << process.errorString();
