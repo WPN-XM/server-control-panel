@@ -178,7 +178,7 @@
     <enum>QFrame::Sunken</enum>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="servercontrolpanel">
     <widget class="QTabWidget" name="tabWidget">
@@ -619,7 +619,7 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="checkBox_SelfUpdater_RunOnStartUp">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>Check for a new version, when starting?</string>
@@ -793,7 +793,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="nginx_tab_1">
       <attribute name="title">
@@ -1015,7 +1015,7 @@
        </item>
        <item row="0" column="5">
         <property name="text">
-         <string>64</string>
+         <string>6</string>
         </property>
        </item>
        <item row="1" column="0">
@@ -1045,7 +1045,7 @@
        </item>
        <item row="1" column="5">
         <property name="text">
-         <string>64</string>
+         <string>6</string>
         </property>
        </item>
        <item row="2" column="0">
@@ -1075,7 +1075,7 @@
        </item>
        <item row="2" column="5">
         <property name="text">
-         <string>64</string>
+         <string>6</string>
         </property>
        </item>
       </widget>
@@ -1205,7 +1205,7 @@
       </rect>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="php_tab_versionswitch">
       <attribute name="title">
@@ -1308,7 +1308,7 @@
         <rect>
          <x>10</x>
          <y>20</y>
-         <width>201</width>
+         <width>181</width>
          <height>291</height>
         </rect>
        </property>
@@ -1320,9 +1320,21 @@
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>181</width>
+          <width>161</width>
           <height>261</height>
          </rect>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::IgnoreAction</enum>
+        </property>
+        <property name="isWrapping" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="layoutMode">
+         <enum>QListView::SinglePass</enum>
+        </property>
+        <property name="batchSize">
+         <number>100</number>
         </property>
        </widget>
       </widget>
