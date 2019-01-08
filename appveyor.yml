@@ -159,6 +159,8 @@ after_build:
   #- copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libcrypto-1_1.dll
   #- copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl-1_1.dll
   # cleanups
+  - del *.res
+  - del *.h
   - del *.obj
   - del *.cpp
   - del vcredist*.exe 
