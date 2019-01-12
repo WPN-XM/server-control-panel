@@ -7,7 +7,7 @@
 // initialize static members
 Processes *Processes::theInstance = nullptr;
 
-QList<Process> Processes::monitoredProcessesList;
+QList<Processes::Process> Processes::monitoredProcessesList;
 
 Processes *Processes::getInstance()
 {
@@ -27,7 +27,7 @@ void Processes::release()
 
 Processes::Processes() = default;
 
-Process Processes::findByName(const QString &name)
+Processes::Process Processes::findByName(const QString &name)
 {
     QList<Process> processes = getRunningProcesses();
     Process p;
@@ -43,7 +43,7 @@ Process Processes::findByName(const QString &name)
     return p;
 }
 
-Process Processes::findByPid(const QString &pid)
+Processes::Process Processes::findByPid(const QString &pid)
 {
     QList<Process> processes = getRunningProcesses();
     Process p;
@@ -111,7 +111,7 @@ bool Processes::isSystemProcess(const QString &processName)
 }
 
 // static
-QList<Process> Processes::getRunningProcesses()
+QList<Processes::Process> Processes::getRunningProcesses()
 {
     QList<Process> processes;
 
@@ -193,7 +193,7 @@ QStringList Processes::getProcessDetails(DWORD processID)
 }
 
 // static
-QList<PidAndPort> Processes::getPorts()
+QList<Processes::PidAndPort> Processes::getPorts()
 {
     QList<PidAndPort> ports;
 

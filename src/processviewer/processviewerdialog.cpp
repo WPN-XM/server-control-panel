@@ -55,13 +55,13 @@ void ProcessViewerDialog::refreshProcesses()
 
 void ProcessViewerDialog::renderProcesses()
 {
-    foreach (Process process, processes->getRunningProcesses()) {
+    foreach (Processes::Process process, processes->getRunningProcesses()) {
         // find parentItem in the tree by looking for parentId recursivley
         QList<QTreeWidgetItem *> parentItem =
             ui->treeWidget->findItems(process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
 
         // lookup port for this pid and add it to the process struct
-        foreach (const PidAndPort &p, processes->getPorts()) {
+        foreach (const Processes::PidAndPort &p, processes->getPorts()) {
             if (p.pid == process.pid) {
                 process.port = p.port;
                 break;
@@ -147,7 +147,7 @@ void ProcessViewerDialog::filter(const QString &filterByItem, const QString &que
 
 ProcessViewerDialog::~ProcessViewerDialog() { delete ui; }
 
-QTreeWidgetItem *ProcessViewerDialog::addRoot(Process process)
+QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::Process process)
 {
     auto *item = new QTreeWidgetItem(ui->treeWidget);
     item->setText(0, process.name);
@@ -160,7 +160,7 @@ QTreeWidgetItem *ProcessViewerDialog::addRoot(Process process)
     return item;
 }
 
-void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Process process)
+void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Processes::Process process)
 {
     auto *item = new QTreeWidgetItem();
     item->setText(0, process.name);

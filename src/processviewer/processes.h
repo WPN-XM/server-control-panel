@@ -6,37 +6,37 @@
 #include <QIcon>
 #include <QObject>
 
-#include <windows.h>
+#include <Windows.h>
 #include <TlHelp32.h>
-#include <psapi.h>
+#include <Psapi.h>
 #include <stdio.h>
 
 // Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
 #include <iphlpapi.h>
 #pragma comment(lib, "iphlpapi.lib")
 
-struct Process
-{
-    QString name; // 1
-    QString path;
-    QString pid; // 2
-    QString ppid;
-    QString port; // 3
-    QString memoryUsage; // 4
-    QIcon icon;
-};
-
-struct PidAndPort
-{
-    QString pid;
-    QString port;
-};
-
 class Processes : public QObject
 {
     Q_OBJECT
 
 public:
+    struct Process
+    {
+        QString name; // 1
+        QString path;
+        QString pid; // 2
+        QString ppid;
+        QString port; // 3
+        QString memoryUsage; // 4
+        QIcon icon;
+    };
+
+    struct PidAndPort
+    {
+        QString pid;
+        QString port;
+    };
+
     // singleton
     static Processes *getInstance();
     static void release();

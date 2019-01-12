@@ -23,8 +23,8 @@ public:
     explicit ProcessViewerDialog(QWidget *parent);
     ~ProcessViewerDialog();
 
-    QTreeWidgetItem *addRoot(Process process);
-    void addChild(QTreeWidgetItem *parent, Process process);
+    QTreeWidgetItem *addRoot(Processes::Process process);
+    void addChild(QTreeWidgetItem *parent, Processes::Process process);
 
     void setChecked_ShowOnlyWpnxmProcesses();
     void setProcessesInstance(Processes *p);
@@ -33,13 +33,13 @@ private:
     Ui::ProcessViewerDialog *ui;
     Processes *processes;
 
-    QList<Process> runningProcesses;
-    QList<PidAndPort> ports;
+    QList<Processes::Process> runningProcesses;
+    QList<Processes::PidAndPort> ports;
 
     void renderProcesses();
     void refreshProcesses();
 
-    QList<PidAndPort> getPorts();
+    QList<Processes::PidAndPort> getPorts();
 
     enum Columns
     {
