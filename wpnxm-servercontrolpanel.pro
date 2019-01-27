@@ -66,7 +66,6 @@ LIBS += -L$$PWD/libs/quazip/lib -lquazip$${DEBUG_EXT}
 
 # YAML-CPP
 INCLUDEPATH += $$PWD/libs/yaml-cpp/include
-# yaml-cpp => libyaml-cppmd - this is so stupid
 LIBS += -L$$PWD/libs/yaml-cpp/lib -llibyaml-cppmd$${DEBUG_EXT}
 
 QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
@@ -272,6 +271,7 @@ CONFIG(debug, debug|release) { # copy Debug libraries
     libs.files += libs/yaml-cpp/bin/yaml-cpp.dll
     libs.files += libs/openssl/bin/libeay32.dll
     libs.files += libs/openssl/bin/ssleay32.dll
+    libs.files += libs/openssl/bin/libssl32.dll
 }
 
 INSTALLS += libs
