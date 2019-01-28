@@ -209,7 +209,7 @@ win32 {
 
 # Build Folder
 
-DESTDIR     = $${RELEASE_DIR}
+DESTDIR = $${RELEASE_DIR}
 
 # Deployment - Copy Dependencies
 
@@ -225,8 +225,9 @@ CONFIG(debug, debug|release) { # copy Debug libraries
     #libs.files += $${LIBS_DIR}/yaml-cpp/bin/yaml-cppmd.dll
     libs.files += $${LIBS_DIR}/openssl/bin/libeay32.dll # not av
     libs.files += $${LIBS_DIR}/openssl/bin/ssleay32.dll # not av
-}
-CONFIG(release, debug|release) { # copy Debug libraries # copy Release libraries
+
+} else {  # copy Release libraries
+
     libs.files += $${LIBS_DIR}/quazip/bin/quazip.dll
     libs.files += $${LIBS_DIR}/zlib/bin/zlib.dll
     #libs.files += $${LIBS_DIR}/yaml-cpp/bin/yaml-cpp.dll
