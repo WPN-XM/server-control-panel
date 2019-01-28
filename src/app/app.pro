@@ -23,7 +23,6 @@ if(!equals(QT_MAJOR_VERSION, 5)) {
     error("This program can only be compiled with Qt 5.")
 }
 
-
 # emit warnings if you use deprecated features
 DEFINES += QT_DEPRECATED_WARNINGS
 
@@ -161,13 +160,7 @@ CONFIG(debug, debug|release):   TARGET = wpn-xm-debug
 
 message($$QMAKESPEC) # Determine the platform we are on
 
-!isEmpty($$(TRAVIS)) {
-    message("The project is build on Travis: $$(TRAVIS)")
-}
-
-linux-g++ {
-    message("using linux g++")
-}
+# Compiler specific settings
 
 win32-g++ {
     message("using win32 g++")
@@ -217,6 +210,7 @@ DESTDIR = $${RELEASE_DIR}
 libs.path = $${RELEASE_DIR}
 
 message(Deploying libraries to $${libs.path})
+message(Libraries folder: $${LIBS_DIR})
 
 CONFIG(debug, debug|release) { # copy Debug libraries
 
@@ -236,9 +230,5 @@ CONFIG(debug, debug|release) { # copy Debug libraries
 }
 
 INSTALLS  += libs
-
-# enable file copy feature
-# this exists, because INSTALLS doesn't work on Windows
-# https://stackoverflow.com/a/54162789/1163786
-CONFIG += file_copies
+# use file_copies feature, because INSTALLS doesn't work on Windows
 COPIES += libs

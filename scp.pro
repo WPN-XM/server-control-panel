@@ -25,4 +25,4 @@ CONFIG -= qml_debug
 
 # enable file copy feature
 # this exists, because INSTALLS doesn't work cross-platform
-CONFIG *= file_copies
+CONFIG += file_copies
