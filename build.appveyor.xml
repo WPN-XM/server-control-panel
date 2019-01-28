@@ -30,7 +30,7 @@
     </target>
 
     <target name="bump-version-number" description="Inserts the current version number into version.h.">
-        <loadfile srcFile="${basedir}/src/version.h" property="filecontent.scp.version.h">
+        <loadfile srcFile="${basedir}/src/app/version.h" property="filecontent.scp.version.h">
             <filterchain>
                 <replacetokens>
                     <token key="APPVERSION" value="${Version}"/>
@@ -39,8 +39,8 @@
                 </replacetokens>
             </filterchain>
         </loadfile>
-        <delete file="${basedir}/src/version.h"/>
-        <echo file="${basedir}/src/version.h">${filecontent.scp.version.h}</echo>
+        <delete file="${basedir}/src/app/version.h"/>
+        <echo file="${basedir}/src/app/version.h">${filecontent.scp.version.h}</echo>
     </target>
 
     <target name="main" depends="print-version-number, bump-version-number"></target>
