@@ -143,7 +143,7 @@ build_script:
   - mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - set RELEASE_FOLDER=C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
   # run qmake  
-  - qmake -o Makefile -r -spec %SPEC% -set SHADOWED_BUILD_DIR %RELEASE_FOLDER% C:\projects\server-control-panel\scp.pro
+  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC%
   # run nmake on "Makefile.Release|Debug"
   #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
   - nmake /f Makefile /NOLOGO
