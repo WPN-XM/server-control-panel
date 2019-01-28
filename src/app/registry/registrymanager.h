@@ -1,7 +1,7 @@
 #ifndef REGISTRIESDOWNLOADER_H
 #define REGISTRIESDOWNLOADER_H
 
-#include "src/file/json.h"
+#include "file/json.h"
 
 #include <QEventLoop>
 #include <QNetworkAccessManager>

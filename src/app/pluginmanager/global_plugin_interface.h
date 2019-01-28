@@ -1,0 +1,12 @@
+#ifndef GLOBAL_PLUGIN_INTERFACE_H
+#define GLOBAL_PLUGIN_INTERFACE_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(PLUGIN_LIBRARY)
+#define PLUGIN_EXPORT Q_DECL_EXPORT
+#else
+#define PLUGIN_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // GLOBAL_PLUGIN_INTERFACE_H

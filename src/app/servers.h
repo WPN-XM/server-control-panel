@@ -12,13 +12,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-#include "src/file/filehandling.h"
-#include "src/file/json.h"
-#include "src/file/ini.h"
-#include "settings.h"
-#include "src/processviewer/processes.h"
-
+#include "file/filehandling.h"
+#include "file/json.h"
+#include "file/ini.h"
 #include "file/yml.h"
+#include "settings.h"
+#include "processviewer/processes.h"
 
 namespace Servers
 {

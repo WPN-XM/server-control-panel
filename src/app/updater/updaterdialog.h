@@ -14,10 +14,10 @@
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 
-#include "src/file/json.h"
-#include "src/registry/registrymanager.h"
+#include "file/json.h"
+#include "registry/registrymanager.h"
 
-#include "src/updater/downloadmanager.h"
+#include "updater/downloadmanager.h"
 
 #include "actioncolumnitemdelegate.h"
 #include "softwarecolumnitemdelegate.h"

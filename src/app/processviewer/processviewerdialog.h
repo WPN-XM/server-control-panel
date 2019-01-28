@@ -1,8 +1,8 @@
 #ifndef PROCESSVIEWERDIALOG_H
 #define PROCESSVIEWERDIALOG_H
 
-#include "src/file/csv.h"
-#include "src/processviewer/processes.h"
+#include "file/csv.h"
+#include "processviewer/processes.h"
 
 #include <QDesktopWidget>
 #include <QDialog>

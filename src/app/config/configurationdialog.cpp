@@ -3,9 +3,9 @@
 
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
-#include "src/file/ini.h"
-#include "src/file/json.h"
-#include "src/file/yml.h"
+#include "file/ini.h"
+#include "file/json.h"
+#include "file/yml.h"
 
 namespace Configuration
 {
