@@ -104,7 +104,8 @@ build_script:
   # run qmake  
   - qmake scp.pro -r -spec %SPEC% -config %CONFIGURATION% 
   # run nmake on "Makefile.Release|Debug"
-  - nmake /f Makefile.%CONFIGURATION% /NOLOGO
+  #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
+  - nmake /f Makefile /NOLOGO
 
 after_build:
   - echo %cd%
