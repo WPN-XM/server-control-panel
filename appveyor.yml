@@ -61,6 +61,9 @@ before_build:
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
   - set CPU=AMD64
   - set SPEC="win32-msvc"
+  # convert matrix var "qt" to folder name (replace dot, then replace slash)
+  - set QT_BUILD_FOLDER=%qt:.=_%
+  - set QT_BUILD_FOLDER=%QT_BUILD_FOLDER:\=_%
   # show appveyor env vars
   - echo %CONFIGURATION%
   - echo %bitsize%
@@ -96,48 +99,20 @@ before_build:
   - cmake -G "%generator%" -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp ../ -DBUILD_SHARED_LIBS=OFF -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF -DYAML_CPP_BUILD_CONTRIB=OFF
   - msbuild %MSBUILD_FLAGS% /t:Build /p:Configuration=%CONFIGURATION% /p:Platform="%bitsize%" yaml_cpp.sln
   - msbuild %MSBUILD_FLAGS% INSTALL.vcxproj
-
-build_script:
-  - cd C:\projects\server-control-panel
-  # versionize 
-  - call bin\phing\phing.bat -f build.appveyor.xml
-  # run qmake  
-  - qmake scp.pro -r -spec %SPEC% -config %CONFIGURATION% 
-  # run nmake on "Makefile.Release|Debug"
-  #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
-  - nmake /f Makefile /NOLOGO
-
-after_build:
-  - echo %cd%
-  - cd C:\projects\server-control-panel\%CONFIGURATION%
-  - dir
-  # identify and copy dependencies
-  #- if "%CONFIGURATION%"=="Release" (
-  #    windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --release wpn-xm.exe
-  #  )
-  #- if "%CONFIGURATION%"=="Debug" (
-  #    windeployqt.exe --no-system-d3d-compiler --no-angle --no-opengl --no-opengl-sw --no-translations --debug wpn-xm-debug.exe
-  #  )
-  # copy dependencies 
+  # copy dependencies (from their build/release folders to the main lib folder)
   # 1) zlib 
   - if "%CONFIGURATION%"=="Release" (
-      copy C:\projects\server-control-panel\libs\zlib\bin\zlib.dll C:\projects\server-control-panel\%CONFIGURATION%\zlib.dll &&
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlib.exp C:\projects\server-control-panel\libs\quazip\lib\zlib.exp
     )
   - if "%CONFIGURATION%"=="Debug" (
-      copy C:\projects\server-control-panel\libs\zlib\bin\zlibd.dll C:\projects\server-control-panel\%CONFIGURATION%\zlibd.dll &&
       copy C:\projects\server-control-panel\third-party\zlib\build\%CONFIGURATION%\zlibd.exp C:\projects\server-control-panel\libs\quazip\lib\zlibd.exp
     )
   # 2) quazip
   - mkdir C:\projects\server-control-panel\libs\quazip\bin
   - if "%CONFIGURATION%"=="Release" (
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\libs\quazip\bin\quazip.dll &&
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazip.dll C:\projects\server-control-panel\%CONFIGURATION%\quazip.dll &&
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazip.exp C:\projects\server-control-panel\libs\quazip\lib\quazip.exp
     )
   - if "%CONFIGURATION%"=="Debug" (
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\libs\quazip\bin\quazipd.dll &&
-      copy C:\projects\server-control-panel\libs\quazip\lib\quazipd.dll C:\projects\server-control-panel\%CONFIGURATION%\quazipd.dll &&
       copy C:\projects\server-control-panel\third-party\quazip\build\%CONFIGURATION%\quazipd.exp C:\projects\server-control-panel\libs\quazip\lib\quazipd.exp
     )
   # 3) yaml-cpp (statically linked)
@@ -155,11 +130,30 @@ after_build:
   #- copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libcrypto-1_1.dll
   #- copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\libs\openssl\bin\libssl-1_1.dll
   # - copy openssl dlls to release|debug folder
-  - copy C:\OpenSSL-Win64\bin\libeay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libeay32.dll
-  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\ssleay32.dll
-  - copy C:\OpenSSL-Win64\bin\ssleay32.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl32.dll
+  - copy C:\OpenSSL-Win64\bin\libeay32.dll %RELEASE_FOLDER%\libeay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll %RELEASE_FOLDER%\ssleay32.dll
+  - copy C:\OpenSSL-Win64\bin\ssleay32.dll %RELEASE_FOLDER%\libssl32.dll
   #- copy C:\OpenSSL-Win64\bin\libcrypto-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libcrypto-1_1.dll
   #- copy C:\OpenSSL-Win64\bin\libssl-1_1.dll C:\projects\server-control-panel\%CONFIGURATION%\libssl-1_1.dll
+
+build_script:
+  - cd C:\projects\server-control-panel
+  # versionize 
+  - call bin\phing\phing.bat -f build.appveyor.xml
+  # make shadow build folder
+  - cd C:\projects
+  - mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - set RELEASE_FOLDER=C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
+  # run qmake  
+  - qmake C:\projects\server-control-panel\scp.pro -r -spec %SPEC%
+  # run nmake on "Makefile.Release|Debug"
+  #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
+  - nmake /f Makefile /NOLOGO
+
+after_build:
+  - echo %cd%
+  - cd C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - dir
   # cleanups
   - del *.res
   - del *.h
@@ -167,26 +161,26 @@ after_build:
   - del *.cpp
   - del vcredist*.exe 
   - del vc_redist*.exe 
-  # - remove imagehandlers
+  # remove imagehandlers
   - del Qt5SVG.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qwebp.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qtiff.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qtga.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qgif.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qicns.dll
-  - del C:\projects\server-control-panel\%CONFIGURATION%\imageformats\qsvg.dll  
+  - del %RELEASE_FOLDER%\imageformats\qwebp.dll
+  - del %RELEASE_FOLDER%\imageformats\qtiff.dll
+  - del %RELEASE_FOLDER%\imageformats\qtga.dll
+  - del %RELEASE_FOLDER%\imageformats\qgif.dll
+  - del %RELEASE_FOLDER%\imageformats\qicns.dll
+  - del %RELEASE_FOLDER%\imageformats\qsvg.dll  
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   - del wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # package dependencies 
-  - cd C:\projects\server-control-panel
+  - cd %RELEASE_FOLDER%
   - 7z a -tzip wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
   - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # build enigma package
   - cd C:\projects\server-control-panel\bin
-  - if "%CONFIGURATION%"=="Release" ( php\php EnigmaVirtualBox.php ..\release wpn-xm.exe wpn-xm_boxed.exe )
-  - if "%CONFIGURATION%"=="Debug"   ( php\php EnigmaVirtualBox.php ..\debug wpn-xm-debug.exe wpn-xm_boxed.exe )
+  - if "%CONFIGURATION%"=="Release" ( php\php EnigmaVirtualBox.php %RELEASE_FOLDER% wpn-xm.exe wpn-xm_boxed.exe )
+  - if "%CONFIGURATION%"=="Debug"   ( php\php EnigmaVirtualBox.php %RELEASE_FOLDER% wpn-xm-debug.exe wpn-xm_boxed.exe )
   - ren wpn-xm_boxed.exe wpn-xm.exe
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%-boxed.zip wpn-xm.exe -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%-boxed.zip
