@@ -142,6 +142,7 @@ build_script:
   - cd C:\projects
   - mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - set RELEASE_FOLDER=C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
+  - qmake -set SHADOWED_BUILD_DIR %RELEASE_FOLDER
   # run qmake  
   - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC%
   # run nmake on "Makefile.Release|Debug"
@@ -210,4 +211,4 @@ test_script:
 # access build worker via remote desktop
 on_finish:
   #- ps: if (($env:CONFIGURATION) -eq "Debug" ) { $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
-  #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
