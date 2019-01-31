@@ -26,7 +26,3 @@ CONFIG -= qml_debug
 # enable file copy feature
 # this exists, because INSTALLS doesn't work cross-platform
 CONFIG += file_copies
-
-!isEmpty($$(RELEASE_FOLDER)) {
-    SHADOWED_BUILD_DIR = $$(RELEASE_FOLDER)
-} 
