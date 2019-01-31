@@ -183,7 +183,7 @@ after_build:
   - 7z a -tzip wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
   - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # build enigma package
-  - cd cd C:\projects\server-control-panel\bin
+  - cd C:\projects\server-control-panel\bin
   - if "%CONFIGURATION%"=="Release" ( php\php EnigmaVirtualBox.php C:\projects\release wpn-xm.exe wpn-xm_boxed.exe )
   - if "%CONFIGURATION%"=="Debug"   ( php\php EnigmaVirtualBox.php C:\projects\release wpn-xm-debug.exe wpn-xm_boxed.exe )
   - ren wpn-xm_boxed.exe wpn-xm.exe
