@@ -27,8 +27,6 @@ CONFIG -= qml_debug
 # this exists, because INSTALLS doesn't work cross-platform
 CONFIG += file_copies
 
-message(On Appveyor? : $${APPVEYOR})
-!isEmpty(APPVEYOR) {
-    message(Setting Shadow Build Dir via ENV var: $${RELEASE_FOLDER})
-    SHADOWED_BUILD_DIR = $(RELEASE_FOLDER)
-}
+!isEmpty($$(RELEASE_FOLDER)) {
+    SHADOWED_BUILD_DIR = $$(RELEASE_FOLDER)
+} 
