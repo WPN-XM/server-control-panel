@@ -144,16 +144,20 @@ build_script:
   - call bin\phing\phing.bat -f build.appveyor.xml
   # make shadow build folder
   - cd C:\projects
-  - mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  #- mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - mkdir build
+  - cd build
+  # set RELEASE_FOLDER
+  - set RELEASE_FOLDER=C:\projects\release
   # run qmake  
-  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC% CONFIG+=%CONFIGURATION% RELEASE_FOLDER=build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC% CONFIG+=%CONFIGURATION%
   # run nmake on "Makefile.Release|Debug"
   #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
   - nmake /f Makefile /NOLOGO
 
 after_build:
   - echo %cd%
-  - cd C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - cd C:\projects\release
   - dir
   # cleanups
   - del *.res
@@ -188,7 +192,7 @@ after_build:
   
 test_script:
   # test normal executable
-  - cd C:\projects\server-control-panel\%CONFIGURATION%
+  - cd C:\projects\release
   - if "%CONFIGURATION%"=="Release" ( 
       wpn-xm.exe --help 
     )     
@@ -196,7 +200,7 @@ test_script:
       wpn-xm-debug.exe --help 
     )
   # test boxed executable
-  - cd C:\projects\server-control-panel\bin
+  - cd C:\projects\release\bin
   - wpn-xm.exe --help
 
 #artifacts:
