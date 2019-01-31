@@ -16,6 +16,7 @@ configuration:
 
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo /ds
+  APPVEYOR_SAVE_CACHE_ON_ERROR: true
   matrix: 
     # https://www.appveyor.com/docs/build-environment/#qt
 
@@ -145,7 +146,7 @@ build_script:
   - cd C:\projects
   - mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   # run qmake  
-  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC% CONFIG+=%CONFIGURATION% DEFINES+="SHADOWED_BUILD_DIR C:\projects\build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release"
+  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC% CONFIG+=%CONFIGURATION% RELEASE_FOLDER=build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   # run nmake on "Makefile.Release|Debug"
   #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
   - nmake /f Makefile /NOLOGO
