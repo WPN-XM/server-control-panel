@@ -150,11 +150,14 @@ build_script:
   - cd build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
   # run qmake to create a makefile
-  - qmake ..\server-control-panel\scp.pro -spec %SPEC% "CONFIG+=%CONFIGURATION%"
-  # run jom to process the makefile
-  - jom -f Makefile qmake_all
-  # run jom to build the project
-  - jom
+  - if "%CONFIGURATION%"=="Release" (
+      qmake -r -spec %SPEC% "CONFIG+=release" ..\server-control-panel\scp.pro      
+    )
+  - if "%CONFIGURATION%"=="Debug" (
+      qmake -r -spec %SPEC% "CONFIG+=debug" ..\server-control-panel\scp.pro
+    )
+  # run nmake for all Makefile.Release | Makefile.Debug
+  - dir /s /b Makefile.%CONFIGURATION% | nmake
 
 after_build:
   - echo %cd%
@@ -175,6 +178,9 @@ after_build:
   - del %RELEASE_FOLDER%\imageformats\qgif.dll
   - del %RELEASE_FOLDER%\imageformats\qicns.dll
   - del %RELEASE_FOLDER%\imageformats\qsvg.dll  
+  # cleanup plugins
+  - del %RELEASE_FOLDER%\plugins\*.exp
+  - del %RELEASE_FOLDER%\plugins\*.lib
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip

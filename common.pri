@@ -30,7 +30,7 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051100
 
 # disable the creation of debug/release folders in shadow build folders
 # https://bugreports.qt.io/browse/QTCREATORBUG-13807
-CONFIG -= debug_and_release
+#CONFIG -= debug_and_release
 
 # not sure, if this works from a pro file
 # if not, diable qml_debug in the project configuration dialog
