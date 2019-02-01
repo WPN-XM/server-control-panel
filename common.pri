@@ -22,6 +22,12 @@ if(!equals(QT_MAJOR_VERSION, 5)) {
     error("This program can only be compiled with Qt 5.")
 }
 
+CONFIG(debug, debug|release) {
+    DEBUG_EXT = d
+} else {
+    DEBUG_EXT =
+}
+
 # emit warnings if you use deprecated features
 DEFINES += QT_DEPRECATED_WARNINGS
 
