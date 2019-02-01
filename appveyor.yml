@@ -11,8 +11,8 @@ branches:
     - plugin_system
 
 configuration: 
-  - release 
-  - debug
+  - Release 
+  - Debug
 
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo /ds
@@ -51,6 +51,7 @@ init:
       {
         Update-AppveyorBuild -Version "dev-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
       }
+  - vcpkg integrate remove
 
 install:
   - cd %REPO_DIR%
