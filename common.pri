@@ -3,8 +3,12 @@ PROJECT_DIR         = $$PWD
 LIBS_DIR            = $$PWD/libs
 SHADOWED_BUILD_DIR  = $$shadowed($$PWD)
 BUILD_DIR           = $$SHADOWED_BUILD_DIR/build
-RELEASE_DIR         = $$SHADOWED_BUILD_DIR/release
-PLUGINS_DIR         = $$SHADOWED_BUILD_DIR/release/plugins
+CONFIG(debug, debug|release) {
+    RELEASE_DIR     = $$SHADOWED_BUILD_DIR/debug
+} else {
+    RELEASE_DIR     = $$SHADOWED_BUILD_DIR/release
+}
+PLUGINS_DIR         = $$RELEASE_DIR/plugins
 
 message(Project folder: $${PROJECT_DIR})
 message(Library folder: $${LIBS_DIR})
