@@ -32,9 +32,9 @@ matrix:
 
 clone_depth: 5
 
-cache:
-  - C:/projects/server-control-panel/third-party/  -> appveyor.yml
-  - C:/projects/server-control-panel/libs/         -> appveyor.yml
+#cache:
+  #- C:/projects/server-control-panel/third-party/  -> appveyor.yml
+  #- C:/projects/server-control-panel/libs/         -> appveyor.yml
 
 # scripts that are called at very beginning, before repo cloning
 init:
