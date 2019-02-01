@@ -148,7 +148,6 @@ build_script:
   - cd C:\projects
   - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - cd build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
-  - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
   # run qmake to create a makefile
   - if "%CONFIGURATION%"=="Release" (
       qmake -r -spec %SPEC% "CONFIG+=release" ..\server-control-panel\scp.pro      
@@ -161,16 +160,16 @@ build_script:
 
 after_build:
   - echo %cd%
+  - if "%CONFIGURATION%"=="Release" (
+      set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release        
+    )
+  - if "%CONFIGURATION%"=="Debug" (
+      set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\debug 
+    )
   - cd %RELEASE_FOLDER%
   - dir
   # cleanups
-  - del *.res
-  - del *.h
-  - del *.obj
-  - del *.cpp
-  - del vcredist*.exe 
   - del vc_redist*.exe 
-  # remove imagehandlers
   - del Qt5SVG.dll
   - del %RELEASE_FOLDER%\imageformats\qwebp.dll
   - del %RELEASE_FOLDER%\imageformats\qtiff.dll
@@ -179,8 +178,10 @@ after_build:
   - del %RELEASE_FOLDER%\imageformats\qicns.dll
   - del %RELEASE_FOLDER%\imageformats\qsvg.dll  
   # cleanup plugins
-  - del %RELEASE_FOLDER%\plugins\*.exp
-  - del %RELEASE_FOLDER%\plugins\*.lib
+  - if "%CONFIGURATION%"=="Release" (
+     del %RELEASE_FOLDER%\plugins\*.exp
+     del %RELEASE_FOLDER%\plugins\*.lib
+    )
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
