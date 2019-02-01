@@ -11,8 +11,8 @@ branches:
     - plugin_system
 
 configuration: 
-  - Release 
-  - Debug
+  - release 
+  - debug
 
 environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo /ds
@@ -146,16 +146,14 @@ build_script:
   # make shadow build folder
   - cd C:\projects
   - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
-  #- mkdir build
-  # set RELEASE_FOLDER
-  - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
-  # run qmake  
-  - qmake C:\projects\server-control-panel\scp.pro -spec %SPEC% "CONFIG+=%CONFIGURATION%"
-  # run jom
-  - jom.exe -f %RELEASE_FOLDER%/Makefile qmake_all
-  # run nmake on "Makefile.Release|Debug"
-  #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
-  #- nmake /f Makefile /NOLOGO
+  - cd build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%\release
+  # run qmake to create a makefile
+  - qmake ..\server-control-panel\scp.pro -spec %SPEC% "CONFIG+=%CONFIGURATION%"
+  # run jom to process the makefile
+  - jom -f Makefile qmake_all
+  # run jom to build the project
+  - jom
 
 after_build:
   - echo %cd%
