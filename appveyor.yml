@@ -145,20 +145,21 @@ build_script:
   - call bin\phing\phing.bat -f build.appveyor.xml
   # make shadow build folder
   - cd C:\projects
-  - dir
-  #- mkdir build-Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
-  - mkdir build
+  - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
+  #- mkdir build
   # set RELEASE_FOLDER
-  - set RELEASE_FOLDER=C:\projects\release
+  - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   # run qmake  
-  - qmake -o Makefile C:\projects\server-control-panel\scp.pro -r -spec %SPEC% CONFIG+=%CONFIGURATION%
+  - qmake C:\projects\server-control-panel\scp.pro -spec %SPEC% "CONFIG+=%CONFIGURATION%"
+  # run jom
+  - jom.exe -f %RELEASE_FOLDER%/Makefile qmake_all
   # run nmake on "Makefile.Release|Debug"
   #- nmake /f Makefile.%CONFIGURATION% /NOLOGO
-  - nmake /f Makefile /NOLOGO
+  #- nmake /f Makefile /NOLOGO
 
 after_build:
   - echo %cd%
-  - cd C:\projects\release
+  - cd %RELEASE_FOLDER%
   - dir
   # cleanups
   - del *.res

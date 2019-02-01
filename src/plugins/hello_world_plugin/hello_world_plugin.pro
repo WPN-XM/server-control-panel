@@ -1,4 +1,4 @@
-include($${PROJECT_DIR}/common.pri)
+include(../../../common.pri)
 
 TEMPLATE = lib
 
