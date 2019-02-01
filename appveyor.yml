@@ -171,16 +171,16 @@ after_build:
   # cleanups
   - del vc_redist*.exe 
   - del Qt5SVG.dll
-  - del %RELEASE_FOLDER%\imageformats\qwebp.dll
-  - del %RELEASE_FOLDER%\imageformats\qtiff.dll
-  - del %RELEASE_FOLDER%\imageformats\qtga.dll
-  - del %RELEASE_FOLDER%\imageformats\qgif.dll
-  - del %RELEASE_FOLDER%\imageformats\qicns.dll
-  - del %RELEASE_FOLDER%\imageformats\qsvg.dll  
+  - del imageformats\qwebp.dll
+  - del imageformats\qtiff.dll
+  - del imageformats\qtga.dll
+  - del imageformats\qgif.dll
+  - del imageformats\qicns.dll
+  - del imageformats\qsvg.dll  
   # cleanup plugins
   - if "%CONFIGURATION%"=="Release" (
-     del %RELEASE_FOLDER%\plugins\*.exp
-     del %RELEASE_FOLDER%\plugins\*.lib
+     del plugins\*.exp
+     del plugins\*.lib
     )
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
