@@ -1,3 +1,5 @@
+include($${PROJECT_DIR}/common.pri)
+
 TEMPLATE = lib
 
 CONFIG += plugin

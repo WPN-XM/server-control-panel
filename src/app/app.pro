@@ -19,19 +19,8 @@
 
 message("You are running qmake on app.pro file.")
 
-if(!equals(QT_MAJOR_VERSION, 5)) {
-    error("This program can only be compiled with Qt 5.")
-}
-
-# emit warnings if you use deprecated features
-DEFINES += QT_DEPRECATED_WARNINGS
-
-# disable all deprecated APIs before the following version
-DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051100
-
-include($${PROJECT_DIR}/project-version.pri)
-
-DEPLOYMENT.display_name = WPN-XM Server Control Panel
+include(../../common.pri)
+include($${PROJECT_DIR}/version.pri)
 
 CONFIG += qt console c++14
 
