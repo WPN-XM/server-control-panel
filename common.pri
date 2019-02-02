@@ -49,3 +49,28 @@ CONFIG -= qml_debug
 # enable file copy feature
 # this exists, because INSTALLS doesn't work cross-platform
 CONFIG += file_copies
+
+# Determine the platform we are on
+message($$QMAKESPEC)
+
+# Compiler specific settings
+
+QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
+
+win32-g++ {
+    message("using win32 g++")
+}
+win32-msvc* {
+    message("using win32 msvc")
+    #QMAKE_CXXFLAGS *= /MP
+    QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS
+    QMAKE_CXXFLAGS *= /std:c++17
+    QMAKE_CXXFLAGS *= /O2
+}
+*-g++-32 {
+    message("using g++-32, adding -msse2 flag")
+    QMAKE_CXXFLAGS *= -msse2
+    QMAKE_CFLAGS   *= -msse2
+}
+
+message("QMAKE_CXXFLAGS is $${QMAKE_CXXFLAGS}")

@@ -20,9 +20,9 @@
 message("You are running qmake on app.pro file.")
 
 include(../../common.pri)
-include($${PROJECT_DIR}/version.pri)
+include(../../version.pri)
 
-CONFIG += qt console c++14
+CONFIG += qt console c++17
 
 QT += core network widgets
 
@@ -42,8 +42,6 @@ LIBS += -L$${LIBS_DIR}/quazip/lib -lquazip$${DEBUG_EXT}
 # YAML-CPP (static linkage!)
 INCLUDEPATH += $${LIBS_DIR}/yaml-cpp/include
 LIBS += -L$${LIBS_DIR}/yaml-cpp/lib -llibyaml-cppmd$${DEBUG_EXT}
-
-QMAKE_CXXFLAGS -= -fno-keep-inline-dllexport
 
 HEADERS += \
     main/main.h \
@@ -146,29 +144,6 @@ exists(C:\Windows\System32\cmd.exe) {
 # set binary name
 CONFIG(release, debug|release): TARGET = wpn-xm
 CONFIG(debug, debug|release):   TARGET = wpn-xm-debug
-
-message($$QMAKESPEC) # Determine the platform we are on
-
-# Compiler specific settings
-
-win32-g++ {
-    message("using win32 g++")
-}
-
-win32-msvc* {
-    message("using win32 msvc")
-    #QMAKE_CXXFLAGS += /MP
-    QMAKE_CXXFLAGS += /D_CRT_SECURE_NO_WARNINGS
-}
-
-*-g++-32 {
-    message("using g++-32, adding -msse2 flag")
-
-    QMAKE_CXXFLAGS += -msse2
-    QMAKE_CFLAGS += -msse2
-}
-
-message("QMAKE_CXXFLAGS is $${QMAKE_CXXFLAGS}")
 
 # Deployment - Automatically Determine AND Copy Dependencies to Build Folder
 
