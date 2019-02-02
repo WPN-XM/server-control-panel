@@ -188,8 +188,8 @@ after_build:
   - del wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # package dependencies 
   - cd C:\projects\server-control-panel
-  - 7z a -tzip wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
-  - appveyor PushArtifact wpnxm-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
+  - 7z a -tzip wpnxm-scp-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip libs -mx9 -mmt
+  - appveyor PushArtifact wpnxm-scp-dependencies-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
   # build enigma package
   - cd C:\projects\server-control-panel\bin
   - if "%CONFIGURATION%"=="Release" ( php\php EnigmaVirtualBox.php %RELEASE_FOLDER% wpn-xm.exe wpn-xm_boxed.exe )
