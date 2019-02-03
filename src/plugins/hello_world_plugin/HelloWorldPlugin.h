@@ -1,31 +1,27 @@
 #ifndef HELLOWORLDPLUGIN_H
 #define HELLOWORLDPLUGIN_H
 
-#include <QObject>
-#include <QtPlugin>
-
 #include "../../app/pluginmanager/plugininterface.h"
 
 class HelloWorldPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.wpn-xm.server-control-panel.HelloWorldPlugin")
     Q_INTERFACES(PluginInterface)
+    Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld")
 
 public:
     // the class has to implement all pure virtual methods from PluginInterface
     ~HelloWorldPlugin() {}
 
-    void onLoad();
-    QString getName() const;
+    void onLoad() override;
+    QString getName() const override;
 
-    // QWidget getConfigPage();
-
-    bool loadDefaultSettings(Settings::SettingsManager *settings);
-    bool saveSettings(Settings::SettingsManager *settings);
+    void showSettings(QWidget *parent = nullptr) override;
+    // bool loadDefaultSettings(Settings::SettingsManager *settings) override;
+    // bool saveSettings(Settings::SettingsManager *settings) override;
 
 private:
-    Settings::SettingsManager *m_settings;
+    // Settings::SettingsManager *m_settings;
 };
 
 #endif // HELLOWORLDPLUGIN_H
