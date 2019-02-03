@@ -80,7 +80,8 @@ HEADERS += \
     updater/softwarecolumnitemdelegate.h \
     updater/updaterdialog.h \
     version.h \
-    windowsapi.h
+    windowsapi.h \
+    pluginmanager\plugininterface.h
 
 SOURCES += \
     main/main.cpp \
@@ -150,7 +151,8 @@ CONFIG(debug, debug|release):   TARGET = wpn-xm-debug
 win32 {
     DEPLOY_COMMAND = $$shell_quote($$shell_path($$[QT_INSTALL_BINS]/windeployqt))
 
-    DEPLOY_OPTIONS = "--no-svg --no-system-d3d-compiler --no-opengl --no-angle --no-opengl-sw"
+    DEPLOY_OPTIONS  = "--no-svg --no-system-d3d-compiler --no-opengl --no-angle --no-opengl-sw"
+    DEPLOY_OPTIONS += "--compiler-runtime"
 
     CONFIG(debug, debug|release) {
         DEPLOY_TARGET = $$shell_quote($$shell_path($${RELEASE_DIR}/$${TARGET}.exe))

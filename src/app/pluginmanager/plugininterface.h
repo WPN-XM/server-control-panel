@@ -3,7 +3,7 @@
 
 #include <QtPlugin>
 
-#include "../settings.h"
+//#include "../settings.h"
 
 class PluginInterface
 {
@@ -27,8 +27,9 @@ public:
     // virtual bool disable();
 
     // settings related
-    virtual bool loadDefaultSettings(Settings::SettingsManager *settings) = 0;
-    virtual bool saveSettings(Settings::SettingsManager *settings)        = 0;
+    virtual void showSettings(QWidget *parent = nullptr) = 0;
+//virtual bool loadDefaultSettings(Settings::SettingsManager *settings) = 0;
+//virtual bool saveSettings(Settings::SettingsManager *settings)        = 0;
     // virtual bool loadSettings();
     // virtual void onSettingChanged(const QString &setting);
 
@@ -39,8 +40,6 @@ signals:
 public slots:
 };
 
-#define PluginInterfaceIID "org.wpn-xm.Server-Control-Panel.PluginInterface/1.0"
-
-Q_DECLARE_INTERFACE(PluginInterface, PluginInterfaceIID)
+Q_DECLARE_INTERFACE(PluginInterface, "WPN-XM.ServerControlPanel.PluginInterface/1.0")
 
 #endif // PLUGININTERFACE_H
