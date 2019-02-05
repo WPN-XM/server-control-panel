@@ -1,7 +1,7 @@
 #ifndef HELLOWORLDPLUGIN_H
 #define HELLOWORLDPLUGIN_H
 
-#include "../../app/pluginmanager/plugininterface.h"
+#include "../../app/plugins/plugininterface.h"
 
 class HelloWorldPlugin : public QObject, public PluginInterface
 {

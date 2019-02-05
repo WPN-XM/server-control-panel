@@ -81,7 +81,8 @@ HEADERS += \
     updater/updaterdialog.h \
     version.h \
     windowsapi.h \
-    pluginmanager\plugininterface.h
+    plugins\plugininterface.h \
+    plugins\pluginmanager.h
 
 SOURCES += \
     main/main.cpp \
@@ -120,7 +121,8 @@ SOURCES += \
     updater/softwarecolumnitemdelegate.cpp \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
-    windowsapi.cpp
+    windowsapi.cpp \
+    plugins\pluginmanager.cpp
 
 RESOURCES += \
     resources/resources.qrc
