@@ -1,15 +1,6 @@
 #include "configurationdialog.h"
 #include "ui_configurationdialog.h"
 
-#include "nginxaddserverdialog.h"
-#include "nginxaddupstreamdialog.h"
-#include "file/ini.h"
-#include "file/json.h"
-#include "file/yml.h"
-
-#include "plugins/plugins.h"
-#include "plugins/pluginmanager.h"
-
 namespace Configuration
 {
     ConfigurationDialog::ConfigurationDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ConfigurationDialog)
@@ -40,9 +31,15 @@ namespace Configuration
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
         // plugins
+        ui->listWidget_plugins->setLayoutDirection(Qt::LeftToRight);
+        ui->listWidget_plugins->setItemDelegate(new PluginListDelegate(ui->listWidget_plugins));
+
         PluginManager *pManager                  = new PluginManager();
         const QList<Plugins::Plugin> &allPlugins = pManager->getAvailablePlugins();
+
         foreach (const Plugins::Plugin &plugin, allPlugins) {
+
+            qDebug() << plugin.metaData.name;
 
             QListWidgetItem *item = new QListWidgetItem(ui->listWidget_plugins);
             // QIcon icon = QIcon(desc.icon);

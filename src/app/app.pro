@@ -83,7 +83,8 @@ HEADERS += \
     windowsapi.h \
     plugins\plugininterface.h \
     plugins\pluginmanager.h \
-    plugins/plugins.h
+    plugins/plugins.h \
+    plugins/pluginlistdelegate.h
 
 SOURCES += \
     main/main.cpp \
@@ -124,7 +125,8 @@ SOURCES += \
     updater/updaterdialog.cpp \
     windowsapi.cpp \
     plugins\pluginmanager.cpp \
-    plugins/plugins.cpp
+    plugins/plugins.cpp \
+    plugins/pluginlistdelegate.cpp
 
 RESOURCES += \
     resources/resources.qrc

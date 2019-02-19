@@ -1,3 +1,9 @@
 {
-    "Keys" : [ ]
+    "name"              : "Hello World Plugin",
+    "pluginVersion"     : "1.0.0",
+    "author"            : "Jens A. Koch",
+    "compiler"          : "MVSC 64bit",
+    "operatingSystem"   : "windows",
+    "description"       : "Description for Hello World Plugin.",
+    "dependencies"      : false
 }

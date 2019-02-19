@@ -7,7 +7,7 @@ class HelloWorldPlugin : public QObject, public PluginInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
-    Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld")
+    Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld" FILE "HelloWorldPlugin.json")
 
 public:
     // the class has to implement all pure virtual methods from PluginInterface

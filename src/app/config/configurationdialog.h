@@ -13,9 +13,19 @@
 #include <QListWidget>
 #include <QListWidgetItem>
 
-#include "../servers.h"
-#include "../settings.h"
-#include "../windowsapi.h"
+#include "servers.h"
+#include "settings.h"
+#include "windowsapi.h"
+
+#include "nginxaddserverdialog.h"
+#include "nginxaddupstreamdialog.h"
+#include "file/ini.h"
+#include "file/json.h"
+#include "file/yml.h"
+
+#include "plugins/plugins.h"
+#include "plugins/pluginmanager.h"
+#include "plugins/pluginlistdelegate.h"
 
 namespace Configuration
 {

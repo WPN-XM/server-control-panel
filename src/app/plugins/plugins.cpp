@@ -1,20 +1,25 @@
 #include "plugins.h"
 
+#include <QDebug>
+
 Plugins::Plugins(QObject *parent) : QObject(parent) {}
 
 PluginMetaData Plugins::getMetaData(const QJsonObject &metaData)
 {
     PluginMetaData pluginMetaData;
 
+    QJsonObject metaDataObject = metaData.value("MetaData").toObject();
+
     pluginMetaData.iid             = metaData.value("IID").toString();
-    pluginMetaData.name            = metaData.value("MetaData").toObject().value("name").toString();
-    pluginMetaData.version         = metaData.value("MetaData").toObject().value("pluginVersion").toString();
-    pluginMetaData.author          = metaData.value("MetaData").toObject().value("author").toString();
-    pluginMetaData.compiler        = metaData.value("MetaData").toObject().value("compiler").toString();
-    pluginMetaData.operatingSystem = metaData.value("MetaData").toObject().value("operatingSystem").toString();
-    pluginMetaData.dependencies    = metaData.value("MetaData").toObject().value("dependencies").toBool();
-    pluginMetaData.description     = metaData.value("MetaData").toObject().value("description").toString();
-    // pluginMetaData.dependenciesPath = metaData.value("MetaData").toObject().value("libPaths").toArray();
+    pluginMetaData.name            = metaDataObject.value("name").toString();
+    pluginMetaData.version         = metaDataObject.value("pluginVersion").toString();
+    pluginMetaData.author          = metaDataObject.value("author").toString();
+    pluginMetaData.type            = metaDataObject.value("type").toString();
+    pluginMetaData.compiler        = metaDataObject.value("compiler").toString();
+    pluginMetaData.operatingSystem = metaDataObject.value("operatingSystem").toString();
+    pluginMetaData.dependencies    = metaDataObject.value("dependencies").toBool();
+    pluginMetaData.description     = metaDataObject.value("description").toString();
+    // pluginMetaData.dependenciesPath = metaDataObject.value("libPaths").toArray();
 
     return pluginMetaData;
 }

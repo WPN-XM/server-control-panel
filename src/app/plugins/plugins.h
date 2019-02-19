@@ -18,14 +18,13 @@ public:
     QString pluginName;
     QString version;
     QString author;
+    QString type;
     QString compiler;
     QString operatingSystem;
     bool dependencies;
     // QJsonArray dependenciesPath;
     QString description;
     QString path;
-    // bool isValid;
-    QString pluginType;
 };
 
 class Plugins : public QObject

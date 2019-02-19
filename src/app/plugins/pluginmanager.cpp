@@ -38,28 +38,26 @@ void PluginManager::loadAvailablePlugins()
         QPluginLoader *pluginLoader = new QPluginLoader(fileName);
 
         if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
-            qDebug() << "Invalid plugin : " << fileName << " config missing " << fileName
-                     << pluginLoader->errorString();
+            qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
             continue;
         }
+
+        QJsonObject pluginMetaData = pluginLoader->metaData();
 
         QObject *pluginInstance = pluginLoader->instance();
         if (!pluginInstance) {
-            qDebug() << "Error loading plugin : " << fileName << pluginLoader->errorString();
+            qDebug() << "Error loading plugin:" << fileName << pluginLoader->errorString();
             continue;
         } else {
-            qDebug() << "Plugin loaded : " << fileName;
+            qDebug() << "Plugin loaded:" << fileName;
         }
-
-        QJsonObject pluginMetaData = pluginLoader->metaData().value("MetaData").toObject();
-        QString pluginName         = pluginMetaData.value("name").toString();
 
         PluginInterface *pluginObject = qobject_cast<PluginInterface *>(pluginInstance);
 
         // const QMetaObject *pluginMeta = pluginInstance->metaObject();
 
         Plugins::Plugin plugin;
-        plugin.id          = pluginName;
+        plugin.id          = pluginMetaData.value("name").toString();
         plugin.instance    = pluginObject;
         plugin.libraryPath = fileName;
         plugin.loader      = pluginLoader;
