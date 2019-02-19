@@ -75,13 +75,14 @@ void PluginListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &op
     style->drawItemText(painter, nameRect, Qt::AlignLeft, textPalette, true, name, colorRole);
 
     // Draw version
-    /*const QString version = index.data(Qt::UserRole).toString();
+    const int leftPosForVersion = titleMetrics.boundingRect(name).width() + m_padding;
+    const QString version       = index.data(Qt::UserRole).toString();
     QRect versionRect(nameRect.x() + leftPosForVersion, nameRect.y(), rightTitleEdge - leftPosForVersion,
                       titleMetrics.height());
     QFont versionFont = titleFont;
     versionFont.setBold(false);
     painter->setFont(versionFont);
-    style->drawItemText(painter, versionRect, Qt::AlignLeft, textPalette, true, version, colorRole);*/
+    style->drawItemText(painter, versionRect, Qt::AlignLeft, textPalette, true, version, colorRole);
 
     // Draw description
     const int descriptionYPos = nameRect.bottom() + opt.fontMetrics.leading();

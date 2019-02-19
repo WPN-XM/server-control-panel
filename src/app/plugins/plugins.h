@@ -7,6 +7,8 @@
 //#include <QIcon>
 #include <QFileInfo>
 #include <QDir>
+#include <QJsonArray>
+#include <QMap>
 
 #include "plugininterface.h"
 
@@ -15,15 +17,15 @@ class PluginMetaData
 public:
     QString iid;
     QString name;
-    QString pluginName;
-    QString version;
-    QString author;
-    QString type;
-    QString compiler;
-    QString operatingSystem;
-    bool dependencies;
-    // QJsonArray dependenciesPath;
     QString description;
+    QString version;
+    QMap<QString, QString> authors;
+    QString type;
+    bool core;
+
+    // bool dependencies;
+    // QJsonArray dependenciesPath;
+
     QString path;
 };
 

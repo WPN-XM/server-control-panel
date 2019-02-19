@@ -39,18 +39,25 @@ namespace Configuration
 
         foreach (const Plugins::Plugin &plugin, allPlugins) {
 
-            qDebug() << plugin.metaData.name;
-
             QListWidgetItem *item = new QListWidgetItem(ui->listWidget_plugins);
+
             // QIcon icon = QIcon(desc.icon);
             // item->setIcon(icon);
-            QString pluginInfo = QString("<b>%1</b> %2<br/><i>%3</i><br/>")
-                                     .arg(plugin.metaData.name, plugin.metaData.version, plugin.metaData.author);
+
+            QStringList authorsList;
+            QMapIterator<QString, QString> i(plugin.metaData.authors);
+            while (i.hasNext()) {
+                authorsList << i.next().key();
+            }
+            QString authors = authorsList.join(", ");
+
+            QString pluginInfo =
+                QString("<b>%1</b> %2<br/><i>%3</i><br/>").arg(plugin.metaData.name, plugin.metaData.version, authors);
             item->setToolTip(pluginInfo);
 
             item->setText(plugin.metaData.name);
             item->setData(Qt::UserRole, plugin.metaData.version);
-            item->setData(Qt::UserRole + 1, plugin.metaData.author);
+            item->setData(Qt::UserRole + 1, authors);
             item->setData(Qt::UserRole + 2, plugin.metaData.description);
 
             item->setFlags(item->flags() | Qt::ItemIsUserCheckable);

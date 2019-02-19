@@ -1,9 +1,19 @@
 {
     "name"              : "Hello World Plugin",
-    "pluginVersion"     : "1.0.0",
-    "author"            : "Jens A. Koch",
-    "compiler"          : "MVSC 64bit",
-    "operatingSystem"   : "windows",
-    "description"       : "Description for Hello World Plugin.",
-    "dependencies"      : false
+    "version"           : "1.0.0",
+    "description"       : "This is the description of the Hello World plugin.",
+    "type"              : "SharedLibraryPlugin",
+    "core"              : true,
+    "authors": [
+        {
+            "name"      : "Jens A. Koch",
+            "email"     : "jakoch@web.de"
+        }
+    ],    
+    "references": [
+        {
+            "text"      : "Documentation",
+            "url"       : "https://wpn-xm.org/manual/plugin/hello_world_plugin"
+        }
+    ]
 }
