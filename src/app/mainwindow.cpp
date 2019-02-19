@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "file/yml.h"
-
 namespace ServerControlPanel
 {
 
@@ -101,6 +99,10 @@ namespace ServerControlPanel
 
     Processes *MainWindow::getProcessesObject() { return processes; }
 
+    void MainWindow::setPluginManagerInstance(PluginManager *oPluginManager) { pluginManager = oPluginManager; }
+
+    PluginManager *MainWindow::getPluginManager() { return pluginManager; }
+
     void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
         QStringList installedServers = servers->getInstalledServerNames();
@@ -108,7 +110,7 @@ namespace ServerControlPanel
 
         QStringList alreadyUpdated;
 
-        foreach (Processes::Process process, processes->monitoredProcessesList) {
+        foreach (const Processes::Process &process, processes->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
             // qDebug() << Q_FUNC_INFO << processName;
 
@@ -440,11 +442,11 @@ namespace ServerControlPanel
     void MainWindow::enableToolsPushButtons(bool enabled)
     {
         // get all PushButtons from the Tools GroupBox of MainWindow::UI
-        QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
+        QList<QPushButton *> buttons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons enabled/disabled
-        for (auto &allPushButtonsButton : allPushButtonsButtons) {
-            allPushButtonsButton->setEnabled(enabled);
+        for (auto &button : buttons) {
+            button->setEnabled(enabled);
         }
 
         // change state of "Open Projects Folder" >> "Browser" button
@@ -463,11 +465,11 @@ namespace ServerControlPanel
     void MainWindow::showPushButtonsOnlyForInstalledTools()
     {
         // get all PushButtons from the Tools GroupBox of MainWindow::UI
-        QList<QPushButton *> allPushButtonsButtons = ui->ToolsGroupBox->findChildren<QPushButton *>();
+        QList<QPushButton *> buttons = ui->ToolsGroupBox->findChildren<QPushButton *>();
 
         // set all PushButtons invisible
-        for (auto &allPushButtonsButton : allPushButtonsButtons) {
-            allPushButtonsButton->setVisible(false);
+        for (auto &button : buttons) {
+            button->setVisible(false);
         }
 
         // if "component" exists in "tools" or "bin" directory, show pushButtons in

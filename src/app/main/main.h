@@ -11,6 +11,8 @@
 //#include "../processviewer/processviewerdialog.h"
 #include "../processviewer/AlreadyRunningProcessesDialog.h"
 
+#include "../plugins/pluginmanager.h"
+
 #include <QSharedMemory>
 #include <QtCore>
 #include <QtWidgets>
@@ -25,6 +27,6 @@ namespace ServerControlPanel
         explicit Main(QObject *parent = 0);
         static void exitIfAlreadyRunning();
     };
-}
+} // namespace ServerControlPanel
 
 #endif // MAIN_H

@@ -16,6 +16,8 @@
 #include "tooltips/LabelWithHoverTooltip.h"
 #include "tray.h"
 #include "updater/updaterdialog.h"
+#include "file/yml.h"
+#include "plugins/pluginmanager.h"
 
 namespace ServerControlPanel
 {
@@ -116,6 +118,9 @@ namespace ServerControlPanel
         void setProcessesInstance(Processes *oProcesses);
         Processes *getProcessesObject();
 
+        void setPluginManagerInstance(PluginManager *oPluginManger);
+        PluginManager *getPluginManager();
+
     private:
         Ui::MainWindow *ui;
 
@@ -123,6 +128,7 @@ namespace ServerControlPanel
         Servers::Servers *servers;
         Updater::SelfUpdater *selfUpdater;
         Processes *processes;
+        PluginManager *pluginManager;
 
         QAction *minimizeAction;
         QAction *restoreAction;

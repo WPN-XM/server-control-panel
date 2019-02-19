@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     // Application Meta Data and Settings
     QApplication::setApplicationName(APP_NAME);
     QApplication::setApplicationVersion(APP_VERSION);
-    QApplication::setOrganizationName("Jens-André Koch");
+    QApplication::setOrganizationName("Jens A. Koch");
     QApplication::setOrganizationDomain("https://wpn-xm.org/");
     QApplication::setWindowIcon(QIcon(":/wpnxm.ico"));
 
@@ -95,6 +95,11 @@ int main(int argc, char *argv[])
     splash.setProgress(0);
     splash.show();
     //#endif
+
+    splash.setMessage("Loading Plugins...", 5);
+    QApplication::addLibraryPath("./plugins");
+    PluginManager *pluginManager = new PluginManager();
+    mainWindow.setPluginManagerInstance(pluginManager);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
     QObject().thread()->usleep(1000 * 1000 * 1);
@@ -164,7 +169,7 @@ namespace ServerControlPanel
         static QSharedMemory shared("004d54f6-7d00-4478-b612-f242f081b023");
 
         // already running
-        if (!shared.create(512, QSharedMemory::ReadWrite)) {
+        if (!shared.create(64, QSharedMemory::ReadWrite)) {
             QMessageBox msgBox;
             msgBox.setWindowTitle(APP_NAME);
             msgBox.setText(QObject::tr("WPN-XM is already running."));

@@ -7,6 +7,9 @@
 #include "file/json.h"
 #include "file/yml.h"
 
+#include "plugins/plugins.h"
+#include "plugins/pluginmanager.h"
+
 namespace Configuration
 {
     ConfigurationDialog::ConfigurationDialog(QWidget *parent) : QDialog(parent), ui(new Ui::ConfigurationDialog)
@@ -35,6 +38,30 @@ namespace Configuration
         createPHPExtensionListWidget();
         QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+
+        // plugins
+        PluginManager *pManager                  = new PluginManager();
+        const QList<Plugins::Plugin> &allPlugins = pManager->getAvailablePlugins();
+        foreach (const Plugins::Plugin &plugin, allPlugins) {
+
+            QListWidgetItem *item = new QListWidgetItem(ui->listWidget_plugins);
+            // QIcon icon = QIcon(desc.icon);
+            // item->setIcon(icon);
+            QString pluginInfo = QString("<b>%1</b> %2<br/><i>%3</i><br/>")
+                                     .arg(plugin.metaData.name, plugin.metaData.version, plugin.metaData.author);
+            item->setToolTip(pluginInfo);
+
+            item->setText(plugin.metaData.name);
+            item->setData(Qt::UserRole, plugin.metaData.version);
+            item->setData(Qt::UserRole + 1, plugin.metaData.author);
+            item->setData(Qt::UserRole + 2, plugin.metaData.description);
+
+            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
+            item->setCheckState(plugin.isLoaded() ? Qt::Checked : Qt::Unchecked);
+            item->setData(Qt::UserRole + 10, QVariant::fromValue(plugin));
+
+            ui->listWidget_plugins->addItem(item);
+        }
 
         connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
 

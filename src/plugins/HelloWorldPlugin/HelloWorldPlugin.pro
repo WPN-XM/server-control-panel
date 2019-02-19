@@ -14,15 +14,14 @@ SOURCES += \
 HEADERS += \
         HelloWorldPlugin.h
         
-# Build Folder
+# Target Folder
 
 DESTDIR = $${PLUGINS_DIR}
 
 # Deploy Plugin Description
 
-# target path = place in the plugins folder
-json.path = $${PLUGINS_DIR}
-json.files += HelloWorldPlugin.json
+plugin_description.path = $${PLUGINS_DIR}
+plugin_description.files += HelloWorldPlugin.json
 
-INSTALLS += json
-COPIES += json
+INSTALLS += plugin_description
+COPIES += plugin_description
