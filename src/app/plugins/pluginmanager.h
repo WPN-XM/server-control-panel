@@ -15,7 +15,6 @@ private:
     QList<Plugins::Plugin> availablePlugins;
 
     void loadAvailablePlugins();
-    Plugins::Plugin loadSharedLibraryPlugin(const QString &name);
 };
 
 #endif // PLUGINMANAGER_H

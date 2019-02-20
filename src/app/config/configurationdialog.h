@@ -43,6 +43,9 @@ namespace Configuration
 
         ~ConfigurationDialog();
 
+        void addItemToMenu();
+        void addWidgetToStack(QWidget *widget);
+
         void setRunOnStartUp(bool run = true);
         bool runOnStartUp() const;
 
@@ -167,6 +170,8 @@ namespace Configuration
 
         static bool sortByPhpVersion(const PhpVersions &d1, const PhpVersions &d2);
         QString getPHPVersionOfExe(QString pathToPHPExecutable);
+
+        void setupPluginListWidget();
     };
 } // namespace Configuration
 

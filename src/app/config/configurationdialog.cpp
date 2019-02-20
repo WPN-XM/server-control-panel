@@ -17,6 +17,8 @@ namespace Configuration
 
         hideComponentsNotInstalledInMenuTree();
 
+        addItemToMenu();
+
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
         toggleAutostartServerCheckboxes(ui->checkbox_autostartServers->isChecked());
@@ -30,6 +32,31 @@ namespace Configuration
         QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
+        setupPluginListWidget();
+
+        connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
+
+        ui->configMenuTreeWidget->expandAll();
+    }
+
+    ConfigurationDialog::~ConfigurationDialog() { delete ui; }
+
+    void ConfigurationDialog::addItemToMenu()
+    {
+        // get tree item "Components"
+        QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
+        QTreeWidgetItem *components   = list.at(0);
+
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setText(0, "SomeChild");
+
+        components->addChild(child);
+    }
+
+    void ConfigurationDialog::addWidgetToStack(QWidget *widget) { ui->stackedWidget->addWidget(widget); }
+
+    void ConfigurationDialog::setupPluginListWidget()
+    {
         // plugins
         ui->listWidget_plugins->setLayoutDirection(Qt::LeftToRight);
         ui->listWidget_plugins->setItemDelegate(new PluginListDelegate(ui->listWidget_plugins));
@@ -66,13 +93,7 @@ namespace Configuration
 
             ui->listWidget_plugins->addItem(item);
         }
-
-        connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
-
-        ui->configMenuTreeWidget->expandAll();
     }
-
-    ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
     QStringList ConfigurationDialog::getAvailablePHPExtensions()
     {
