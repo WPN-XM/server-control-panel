@@ -368,7 +368,7 @@ namespace Updater
 
         // software
         url.append("?s=");
-        if (WindowsAPI::QtWin::running_on_64_bits_os()) {
+        if (WindowsAPI::QtWin::running_on_64bit_os()) {
             url.append("wpnxm-scp-x64");
         } else {
             url.append("wpnxm-scp");

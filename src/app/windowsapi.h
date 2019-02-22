@@ -3,17 +3,28 @@
 
 // this is needed for "createShellLink"
 #include <objbase.h>
-#include <ShlObj.h> // type defintion for IShellLink
+#include <ShlObj.h> // type definition for IShellLink
 #include <Windows.h>
-//#include <Shobjidl.h>
 
 #include <QtCore>
 
 namespace WindowsAPI
 {
+    class Console
+    {
+        static HANDLE hConsole;
+        static WORD oldConsoleAttributes;
+        static WORD GetConsoleTextAttribute(HANDLE hConsole);
+
+    public:
+        static const char *printColoredMsg(int prefix, int color, const char *msg);
+    };
+
     class QtWin : public QObject
     {
         Q_OBJECT
+
+        typedef BOOL(WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 
     public:
         static IShellLink *CreateShellLink(const QString &target_app_path,
@@ -25,8 +36,9 @@ namespace WindowsAPI
                                            const QString &linkShortcut);
 
         static BOOL IsWow64();
-        static bool running_on_64_bits_os();
+        static bool running_on_64bit_os();
     };
+
 } // namespace WindowsAPI
 
 #endif // WINDOWSAPI_H

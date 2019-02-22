@@ -1,4 +1,5 @@
 #include "cli.h"
+#include "windowsapi.h"
 
 namespace ServerControlPanel
 {
@@ -233,59 +234,6 @@ namespace ServerControlPanel
         exit(0);
     }
 
-    namespace WindowsAPI
-    {
-        static HANDLE hConsole;
-        static WORD oldConsoleAttributes = 0;
-
-        WORD GetConsoleTextAttribute(HANDLE hConsole)
-        {
-            CONSOLE_SCREEN_BUFFER_INFO info;
-            GetConsoleScreenBufferInfo(hConsole, &info);
-            return info.wAttributes;
-        }
-
-        static const char *qWinColoredMsg(int prefix, int color, const char *msg)
-        {
-            if (hConsole == nullptr) {
-                hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-            }
-
-            if (!hConsole) {
-                return msg;
-            }
-
-            oldConsoleAttributes = GetConsoleTextAttribute(hConsole);
-
-            WORD attr = (oldConsoleAttributes & 0x0f0);
-
-            if (prefix)
-                attr |= FOREGROUND_INTENSITY;
-            if (color == 0)
-                attr |= 0; // black
-            if (color == 31)
-                attr |= FOREGROUND_RED; // red
-            if (color == 32)
-                attr |= FOREGROUND_GREEN; // green
-            if (color == 33)
-                attr |= FOREGROUND_GREEN | FOREGROUND_RED; // yellow
-            if (color == 34)
-                attr |= FOREGROUND_BLUE; // blue
-            if (color == 35)
-                attr |= FOREGROUND_BLUE | FOREGROUND_RED; // purple/magenta
-            if (color == 36)
-                attr |= FOREGROUND_BLUE | FOREGROUND_GREEN; // cyan
-            if (color == 37)
-                attr |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // white
-
-            SetConsoleTextAttribute(hConsole, attr);
-            printf(msg);
-
-            SetConsoleTextAttribute(hConsole, oldConsoleAttributes);
-            return "";
-        }
-    } // namespace WindowsAPI
-
     // sorry, i don't like color numbers
     void CLI::colorPrint(QString msg, QString colorName)
     {
@@ -358,24 +306,24 @@ namespace ServerControlPanel
             color  = 37;
         }
 
-        WindowsAPI::qWinColoredMsg(prefix, color, msg.toLocal8Bit().constData());
+        WindowsAPI::Console::printColoredMsg(prefix, color, msg.toLocal8Bit().constData());
     }
 
     void CLI::colorTest()
     {
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 31, "1-31"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 31, "0-31"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 32, "1-33"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 32, "0-33"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 33, "1-33"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 33, "0-33"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 34, "1-34"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 34, "0-34"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 35, "1-35"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 35, "0-35"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 36, "1-35"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 36, "0-36"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(1, 37, "1-37"));
-        printf("%s/n", WindowsAPI::qWinColoredMsg(0, 37, "0-37"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 31, "1-31"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 31, "0-31"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 32, "1-33"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 32, "0-33"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 33, "1-33"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 33, "0-33"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 34, "1-34"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 34, "0-34"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 35, "1-35"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 35, "0-35"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 36, "1-35"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 36, "0-36"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 37, "1-37"));
+        printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 37, "0-37"));
     }
 } // namespace ServerControlPanel

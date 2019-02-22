@@ -482,4 +482,30 @@ namespace Processes
         }
     }
 
+    /*QString ServerControlPanel::QtWin::getProcessPathByPid(QString pid)
+{
+    // get process handle
+    DWORD pidwin = pid.toLongLong(); // dword = unsigned long
+    GetWindowThreadProcessId(foregroundWindow, &pidwin);
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
+FALSE, pidwin);
+
+    // GetModuleFileNameEx(hProcess, 0, PChar(result), Length(result)) > 0 then
+
+    // get process path
+    WCHAR szProcessPath[MAX_PATH];
+    DWORD bufSize = MAX_PATH;
+    QueryFullProcessImageName pQueryFullProcessImageName = NULL;
+    pQueryFullProcessImageName = (QueryFullProcessImageName)
+QLibrary::resolve("kernel32", "QueryFullProcessImageNameW");
+    QString processPath;
+    if(pQueryFullProcessImageName != NULL) {
+        pQueryFullProcessImageName(hProcess, 0, (LPWSTR) &szProcessPath,
+&bufSize);
+        processPath = QString::fromUtf16((ushort*)szProcessPath, bufSize);
+    }
+
+    return processPath;
+}*/
+
 } // namespace Processes

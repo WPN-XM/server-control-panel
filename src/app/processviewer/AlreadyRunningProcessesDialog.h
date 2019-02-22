@@ -3,7 +3,6 @@
 
 #include "../processviewer/processes.h"
 #include "../servers.h"
-#include "../version.h"
 
 #include <QApplication>
 #include <QCheckBox>

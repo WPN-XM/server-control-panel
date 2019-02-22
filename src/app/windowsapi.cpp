@@ -54,8 +54,6 @@ namespace WindowsAPI
         return shell_link;
     }
 
-    typedef BOOL(WINAPI *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
-
     BOOL QtWin::IsWow64()
     {
         BOOL bIsWow64                        = FALSE;
@@ -71,7 +69,7 @@ namespace WindowsAPI
         return bIsWow64;
     }
 
-    bool QtWin::running_on_64_bits_os()
+    bool QtWin::running_on_64bit_os()
     {
 #if defined(_M_X64) || defined(x86_64)
         return true;
@@ -80,29 +78,55 @@ namespace WindowsAPI
 #endif
     }
 
-    /*QString QtWin::getProcessPathByPid(QString pid)
-{
-    // get process handle
-    DWORD pidwin = pid.toLongLong(); // dword = unsigned long
-    GetWindowThreadProcessId(foregroundWindow, &pidwin);
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
-FALSE, pidwin);
+    // initalization of static variables
+    HANDLE Console::hConsole;
+    WORD Console::oldConsoleAttributes = 0;
 
-    // GetModuleFileNameEx(hProcess, 0, PChar(result), Length(result)) > 0 then
-
-    // get process path
-    WCHAR szProcessPath[MAX_PATH];
-    DWORD bufSize = MAX_PATH;
-    QueryFullProcessImageName pQueryFullProcessImageName = NULL;
-    pQueryFullProcessImageName = (QueryFullProcessImageName)
-QLibrary::resolve("kernel32", "QueryFullProcessImageNameW");
-    QString processPath;
-    if(pQueryFullProcessImageName != NULL) {
-        pQueryFullProcessImageName(hProcess, 0, (LPWSTR) &szProcessPath,
-&bufSize);
-        processPath = QString::fromUtf16((ushort*)szProcessPath, bufSize);
+    WORD Console::GetConsoleTextAttribute(HANDLE hConsole)
+    {
+        CONSOLE_SCREEN_BUFFER_INFO info;
+        GetConsoleScreenBufferInfo(hConsole, &info);
+        return info.wAttributes;
     }
 
-    return processPath;
-}*/
+    const char *Console::printColoredMsg(int prefix, int color, const char *msg)
+    {
+        if (hConsole == nullptr) {
+            hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        }
+
+        if (!hConsole) {
+            return msg;
+        }
+
+        oldConsoleAttributes = GetConsoleTextAttribute(hConsole);
+
+        WORD attr = (oldConsoleAttributes & 0x0f0);
+
+        if (prefix)
+            attr |= FOREGROUND_INTENSITY;
+        if (color == 0)
+            attr |= 0; // black
+        if (color == 31)
+            attr |= FOREGROUND_RED; // red
+        if (color == 32)
+            attr |= FOREGROUND_GREEN; // green
+        if (color == 33)
+            attr |= FOREGROUND_GREEN | FOREGROUND_RED; // yellow
+        if (color == 34)
+            attr |= FOREGROUND_BLUE; // blue
+        if (color == 35)
+            attr |= FOREGROUND_BLUE | FOREGROUND_RED; // purple/magenta
+        if (color == 36)
+            attr |= FOREGROUND_BLUE | FOREGROUND_GREEN; // cyan
+        if (color == 37)
+            attr |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // white
+
+        SetConsoleTextAttribute(hConsole, attr);
+        printf("%s", msg);
+
+        SetConsoleTextAttribute(hConsole, oldConsoleAttributes);
+        return "";
+    }
+
 } // namespace WindowsAPI
