@@ -95,9 +95,9 @@ namespace ServerControlPanel
 
     MainWindow *MainWindow::getMainWindow() { return this; }
 
-    void MainWindow::setProcessesInstance(Processes::Processes *oProcesses) { processes = oProcesses; }
+    void MainWindow::setProcessesInstance(Processes::ProcessUtil *oProcesses) { processes = oProcesses; }
 
-    Processes::Processes *MainWindow::getProcessesObject() { return processes; }
+    Processes::ProcessUtil *MainWindow::getProcessesObject() { return processes; }
 
     void MainWindow::setPluginManagerInstance(Plugins::PluginManager *oPluginManager)
     {
@@ -113,7 +113,7 @@ namespace ServerControlPanel
 
         QStringList alreadyUpdated;
 
-        foreach (const Processes::Processes::Process &process, processes->monitoredProcessesList) {
+        foreach (const Processes::ProcessUtil::Process &process, processes->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
             // qDebug() << Q_FUNC_INFO << processName;
 

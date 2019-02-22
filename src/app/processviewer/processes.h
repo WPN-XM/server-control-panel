@@ -18,7 +18,7 @@
 namespace Processes
 {
 
-    class Processes : public QObject
+    class ProcessUtil : public QObject
     {
         Q_OBJECT
 
@@ -41,9 +41,9 @@ namespace Processes
         };
 
         // singleton
-        static Processes *getInstance();
+        static ProcessUtil *getInstance();
         static void release();
-        static Processes *theInstance;
+        static ProcessUtil *theInstance;
 
         static QList<Process> getMonitoredProcessesList();
         static QList<Process> getRunningProcesses();
@@ -59,7 +59,7 @@ namespace Processes
         static Process findByName(const QString &name);
         static Process findByPid(const QString &pid);
 
-        static bool areThereAlreadyRunningProcesses();
+        static bool getAlreadyRunningProcesses();
 
         static bool isSystemProcess(const QString &processName);
 
@@ -90,7 +90,7 @@ namespace Processes
 
     private:
         // constructor is private, because singleton
-        explicit Processes();
+        explicit ProcessUtil();
 
         static QStringList getProcessDetails(DWORD processID);
         static QString getSizeHumanReadable(float bytes);

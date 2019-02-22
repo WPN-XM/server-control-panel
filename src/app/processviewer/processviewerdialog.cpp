@@ -38,7 +38,7 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) : QDialog(parent), ui(
     setFocus();
 }
 
-void ProcessViewerDialog::setProcessesInstance(Processes::Processes *p) { processes = p; }
+void ProcessViewerDialog::setProcessesInstance(Processes::ProcessUtil *p) { processes = p; }
 
 void ProcessViewerDialog::setChecked_ShowOnlyWpnxmProcesses()
 {
@@ -55,13 +55,13 @@ void ProcessViewerDialog::refreshProcesses()
 
 void ProcessViewerDialog::renderProcesses()
 {
-    foreach (Processes::Processes::Process process, processes->getRunningProcesses()) {
+    foreach (Processes::ProcessUtil::Process process, processes->getRunningProcesses()) {
         // find parentItem in the tree by looking for parentId recursivley
         QList<QTreeWidgetItem *> parentItem =
             ui->treeWidget->findItems(process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
 
         // lookup port for this pid and add it to the process struct
-        foreach (const Processes::Processes::PidAndPort &p, processes->getPorts()) {
+        foreach (const Processes::ProcessUtil::PidAndPort &p, processes->getPorts()) {
             if (p.pid == process.pid) {
                 process.port = p.port;
                 break;
@@ -147,7 +147,7 @@ void ProcessViewerDialog::filter(const QString &filterByItem, const QString &que
 
 ProcessViewerDialog::~ProcessViewerDialog() { delete ui; }
 
-QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::Processes::Process process)
+QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::ProcessUtil::Process process)
 {
     auto *item = new QTreeWidgetItem(ui->treeWidget);
     item->setText(0, process.name);
@@ -160,7 +160,7 @@ QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::Processes::Process proc
     return item;
 }
 
-void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Processes::Processes::Process process)
+void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Processes::ProcessUtil::Process process)
 {
     auto *item = new QTreeWidgetItem();
     item->setText(0, process.name);
@@ -181,7 +181,7 @@ void ProcessViewerDialog::on_pushButton_KillProcess_released()
     }
 
     qint64 pid = item->text(1).toLong();
-    if (Processes::Processes::killProcess(pid)) {
+    if (Processes::ProcessUtil::killProcess(pid)) {
         QObject().thread()->usleep(1000 * 1000 * 0.5); // 0,5sec
         refreshProcesses();
     }

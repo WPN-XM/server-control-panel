@@ -42,9 +42,9 @@ namespace Servers
 
     public:
         Servers(QObject *parent = nullptr);
-        Servers(Processes::Processes *processes, QObject *parent = nullptr);
+        Servers(Processes::ProcessUtil *processes, QObject *parent = nullptr);
 
-        Processes::Processes *processes;
+        Processes::ProcessUtil *processes;
         Settings::SettingsManager *settings;
 
         QList<Server *> servers() const;

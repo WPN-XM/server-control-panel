@@ -106,12 +106,12 @@ int main(int argc, char *argv[])
     QApplication::processEvents();
 
     splash.setMessage("Getting System Processes ..", 30);
-    Processes::Processes *processes = Processes::Processes::getInstance();
+    Processes::ProcessUtil *processes = Processes::ProcessUtil::getInstance();
     mainWindow.setProcessesInstance(processes);
     QApplication::processEvents();
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
-    if (Processes::Processes::areThereAlreadyRunningProcesses()) {
+    if (Processes::ProcessUtil::getAlreadyRunningProcesses()) {
         // this fills monitoredProcessesList
         splash.hide();
         // displayShutdownAlreadyRunningProcessesOrContinueDialog

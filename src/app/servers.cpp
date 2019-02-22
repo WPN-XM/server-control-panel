@@ -269,7 +269,7 @@ namespace Servers
     void Servers::startNginx()
     {
         // already running
-        if (processes->getProcessState(getServer("Nginx")->exe) == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState(getServer("Nginx")->exe) == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("Nginx"), tr("Nginx already running."));
             return;
         }
@@ -285,12 +285,12 @@ namespace Servers
 
         qDebug() << "[Nginx] Starting...\n";
 
-        Processes::Processes::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
+        Processes::ProcessUtil::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
 
-        Processes::Processes::delay(250);
+        Processes::ProcessUtil::delay(250);
 
         // catch startup failures
-        if (processes->getProcessState("nginx.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::Running) {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
         } else {
             emit signalMainWindow_ServerStatusChange("Nginx", false);
@@ -300,7 +300,7 @@ namespace Servers
     void Servers::stopNginx()
     {
         // if not running, skip
-        if (processes->getProcessState("nginx.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[Nginx] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("Nginx", false);
             return;
@@ -340,7 +340,7 @@ namespace Servers
 */
 
         // you know what: process multi kill. fuck off.
-        while (processes->getProcessState("nginx.exe") == Processes::Processes::ProcessState::Running) {
+        while (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::Running) {
             qDebug() << "[Nginx] Stopped using process kill!";
             processes->killProcessTree("nginx.exe");
             processes->delay(100);
@@ -360,7 +360,7 @@ namespace Servers
 
         qDebug() << "[Nginx] Reloading...\n" << reloadNginx;
 
-        Processes::Processes::startDetached(reloadNginx, args, getServer("Nginx")->workingDirectory);
+        Processes::ProcessUtil::startDetached(reloadNginx, args, getServer("Nginx")->workingDirectory);
     }
 
     void Servers::restartNginx()
@@ -382,7 +382,7 @@ namespace Servers
         }
 
         // already running
-        if (processes->getProcessState("postgres.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("postgres.exe") == Processes::ProcessUtil::ProcessState::Running) {
             // if(QFile::exists(QDir::currentPath() +
             // "/bin/pgsql/data/postmaster.pid")) {
             QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
@@ -400,7 +400,7 @@ namespace Servers
 
         qDebug() << "[PostgreSQL] Starting...\n" << startCmd;
 
-        Processes::Processes::start(startCmd, args, getServer("PostgreSQL")->workingDirectory);
+        Processes::ProcessUtil::start(startCmd, args, getServer("PostgreSQL")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("PostgreSQL", true);
     }
@@ -417,7 +417,7 @@ namespace Servers
 
         // if not running, skip
         QString file = QDir::toNativeSeparators(QDir::currentPath() + "/bin/pgsql/data/postmaster.pid");
-        if (processes->getProcessState("postgres.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("postgres.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             // if(!QFile::exists(file)) {
             qDebug() << "[PostgreSQL] Not running.. Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("PostgreSQL", false);
@@ -435,9 +435,9 @@ namespace Servers
 
         qDebug() << "[PostgreSQL] Stopping...";
 
-        Processes::Processes::start(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
+        Processes::ProcessUtil::start(stopCommand, args, getServer("PostgreSQL")->workingDirectory);
 
-        Processes::Processes::delay(1250); // delay PID file check, PostgreSQL must shutdown first
+        Processes::ProcessUtil::delay(1250); // delay PID file check, PostgreSQL must shutdown first
 
         // do we have a failed shutdown? if so, delete PID file, to allow a restart
         if (QFile::exists(file)) {
@@ -461,13 +461,13 @@ namespace Servers
     void Servers::startPHP()
     {
         // already running: PHP
-        if (processes->getProcessState("php-cgi.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("PHP"), tr("PHP is already running."));
             return;
         }
 
         // already running: Spawner
-        if (processes->getProcessState("php-cgi-spawner.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("php-cgi-spawner.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(0, tr("PHP"), tr("Process Spawner for PHP is already running (php-cgi-spawner.exe)."));
             return;
         }
@@ -598,7 +598,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("php-cgi.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("php-cgi.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[PHP] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("PHP", false);
             return;
@@ -617,12 +617,12 @@ namespace Servers
          *
          */
 
-        while (processes->getProcessState("php-cgi-spawner.exe") == Processes::Processes::ProcessState::Running) {
+        while (processes->getProcessState("php-cgi-spawner.exe") == Processes::ProcessUtil::ProcessState::Running) {
             processes->killProcessTree("php-cgi-spawner.exe");
             processes->delay(100);
         }
 
-        while (processes->getProcessState("php-cgi.exe") == Processes::Processes::ProcessState::Running) {
+        while (processes->getProcessState("php-cgi.exe") == Processes::ProcessUtil::ProcessState::Running) {
             processes->killProcessTree("php-cgi.exe");
             processes->delay(100);
         }
@@ -642,7 +642,7 @@ namespace Servers
     void Servers::startMariaDb()
     {
         // if already running, skip
-        if (processes->getProcessState("mysqld.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("mysqld.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("MariaDB"), tr("MariaDB already running."));
             return;
         }
@@ -658,13 +658,13 @@ namespace Servers
 
         qDebug() << "[MariaDB] Starting...\n";
 
-        Processes::Processes::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
+        Processes::ProcessUtil::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
 
         // wait for process started
-        Processes::Processes::delay(500);
+        Processes::ProcessUtil::delay(500);
 
         // check for startup failure (immediate shutdown)
-        if (processes->getProcessState("mysqld.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("mysqld.exe") == Processes::ProcessUtil::ProcessState::Running) {
             emit signalMainWindow_ServerStatusChange("MariaDb", true);
         } else {
             emit signalMainWindow_ServerStatusChange("MariaDb", false);
@@ -680,7 +680,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("mysqld.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("mysqld.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[MariaDb] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("MariaDb", false);
             return;
@@ -712,9 +712,9 @@ namespace Servers
 
         qDebug() << "[MariaDB] Stopping...";
 
-        Processes::Processes::start(stopCommand, args, getServer("MariaDb")->workingDirectory);
+        Processes::ProcessUtil::start(stopCommand, args, getServer("MariaDb")->workingDirectory);
 
-        Processes::Processes::delay(1000);
+        Processes::ProcessUtil::delay(1000);
 
         emit signalMainWindow_ServerStatusChange("MariaDb", false);
     }
@@ -737,7 +737,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("mongod.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("mongod.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("MongoDb"), tr("MongoDb already running."));
             return;
         }
@@ -767,10 +767,10 @@ namespace Servers
 
         qDebug() << "[MongoDb] Starting...\n";
 
-        Processes::Processes::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
+        Processes::ProcessUtil::startDetached(mongoStartCommand, args, getServer("MongoDb")->workingDirectory);
 
         // catch startup failures
-        if (processes->getProcessState("mongod.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("mongod.exe") == Processes::ProcessUtil::ProcessState::Running) {
             emit signalMainWindow_ServerStatusChange("MongoDb", true);
         } else {
             emit signalMainWindow_ServerStatusChange("MongoDb", false);
@@ -786,7 +786,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("mongod.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("mongod.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[MongoDb] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("MongoDb", false);
             return;
@@ -805,9 +805,9 @@ namespace Servers
 
         qDebug() << "[MongoDb] Stopping...\n";
 
-        Processes::Processes::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
+        Processes::ProcessUtil::start(mongoStopCommand, args, getServer("MongoDb")->workingDirectory);
 
-        Processes::Processes::delay(1000);
+        Processes::ProcessUtil::delay(1000);
 
         emit signalMainWindow_ServerStatusChange("MongoDb", false);
     }
@@ -842,14 +842,14 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("memcached.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("memcached.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("Memcached"), tr("Memcached already running."));
             return;
         }
 
         qDebug() << "[Memcached] Starting...\n";
 
-        Processes::Processes::startDetached(memcachedStartCommand, args, getServer("Memcached")->workingDirectory);
+        Processes::ProcessUtil::startDetached(memcachedStartCommand, args, getServer("Memcached")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Memcached", true);
     }
@@ -863,7 +863,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("memcached.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("memcached.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[Memcached] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("Memcached", false);
             return;
@@ -875,7 +875,7 @@ namespace Servers
 
         qDebug() << "[Memcached] Stopping...\n";
 
-        Processes::Processes::killProcess("memcached.exe");
+        Processes::ProcessUtil::killProcess("memcached.exe");
 
         emit signalMainWindow_ServerStatusChange("Memcached", false);
     }
@@ -900,7 +900,7 @@ namespace Servers
         }
 
         // if already running, skip
-        if (processes->getProcessState("redis-server.exe") == Processes::Processes::ProcessState::Running) {
+        if (processes->getProcessState("redis-server.exe") == Processes::ProcessUtil::ProcessState::Running) {
             QMessageBox::warning(nullptr, tr("Redis"), tr("Redis already running."));
             return;
         }
@@ -909,7 +909,7 @@ namespace Servers
 
         qDebug() << "[Redis] Starting...\n" << redisStartCommand;
 
-        Processes::Processes::startDetached(redisStartCommand, args, getServer("Redis")->workingDirectory);
+        Processes::ProcessUtil::startDetached(redisStartCommand, args, getServer("Redis")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Redis", true);
     }
@@ -923,7 +923,7 @@ namespace Servers
         }
 
         // if not running, skip
-        if (processes->getProcessState("redis-server.exe") == Processes::Processes::ProcessState::NotRunning) {
+        if (processes->getProcessState("redis-server.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[Redis] Not running... Skipping stop command.";
             emit signalMainWindow_ServerStatusChange("Redis", false);
             return;
@@ -940,7 +940,7 @@ namespace Servers
 
         qDebug() << "[Redis] Stopping...\n";
 
-        Processes::Processes::start(redisStopCommand, args, getServer("Redis")->workingDirectory);
+        Processes::ProcessUtil::start(redisStopCommand, args, getServer("Redis")->workingDirectory);
 
         emit signalMainWindow_ServerStatusChange("Redis", false);
     }

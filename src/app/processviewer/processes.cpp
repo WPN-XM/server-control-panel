@@ -8,29 +8,29 @@ namespace Processes
 {
 
     // initialize static members
-    Processes *Processes::theInstance = nullptr;
+    ProcessUtil *ProcessUtil::theInstance = nullptr;
 
-    QList<Processes::Process> Processes::monitoredProcessesList;
+    QList<ProcessUtil::Process> ProcessUtil::monitoredProcessesList;
 
-    Processes *Processes::getInstance()
+    ProcessUtil *ProcessUtil::getInstance()
     {
         if (theInstance == nullptr) {
-            theInstance = new Processes();
+            theInstance = new ProcessUtil();
         }
 
         return theInstance;
     }
 
-    void Processes::release()
+    void ProcessUtil::release()
     {
         delete theInstance;
 
         theInstance = nullptr;
     }
 
-    Processes::Processes() = default;
+    ProcessUtil::ProcessUtil() = default;
 
-    Processes::Process Processes::findByName(const QString &name)
+    ProcessUtil::Process ProcessUtil::findByName(const QString &name)
     {
         QList<Process> processes = getRunningProcesses();
         Process p;
@@ -46,7 +46,7 @@ namespace Processes
         return p;
     }
 
-    Processes::Process Processes::findByPid(const QString &pid)
+    ProcessUtil::Process ProcessUtil::findByPid(const QString &pid)
     {
         QList<Process> processes = getRunningProcesses();
         Process p;
@@ -60,7 +60,7 @@ namespace Processes
     }
 
     // process whitelist
-    QStringList Processes::getProcessNamesToSearchFor()
+    QStringList ProcessUtil::getProcessNamesToSearchFor()
     {
         QStringList p;
 
@@ -77,7 +77,7 @@ namespace Processes
         return p;
     }
 
-    bool Processes::areThereAlreadyRunningProcesses()
+    bool ProcessUtil::getAlreadyRunningProcesses()
     {
         qDebug() << "[Processes] Check for already running processes.";
 
@@ -86,7 +86,7 @@ namespace Processes
         // foreach processesToSearch take a look in the runningProcessesList
         for (int i = 0; i < processesToSearch.size(); ++i) {
             qDebug() << "Searching for process:" << processesToSearch.at(i).toLocal8Bit().constData();
-            foreach (Process process, getRunningProcesses()) {
+            foreach (ProcessUtil::Process process, getRunningProcesses()) {
                 if (isSystemProcess(process.name)) {
                     continue;
                 }
@@ -102,7 +102,7 @@ namespace Processes
     }
 
     // static, process blacklist
-    bool Processes::isSystemProcess(const QString &processName)
+    bool ProcessUtil::isSystemProcess(const QString &processName)
     {
         if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
             processName == "wininit" || processName == "winlogon" || processName == "dllhost" ||
@@ -114,7 +114,7 @@ namespace Processes
     }
 
     // static
-    QList<Processes::Process> Processes::getRunningProcesses()
+    QList<ProcessUtil::Process> ProcessUtil::getRunningProcesses()
     {
         QList<Process> processes;
 
@@ -161,7 +161,7 @@ namespace Processes
     }
 
     // static
-    QStringList Processes::getProcessDetails(DWORD processID)
+    QStringList ProcessUtil::getProcessDetails(DWORD processID)
     {
         QStringList processInfos;
 
@@ -196,7 +196,7 @@ namespace Processes
     }
 
     // static
-    QList<Processes::PidAndPort> Processes::getPorts()
+    QList<ProcessUtil::PidAndPort> ProcessUtil::getPorts()
     {
         QList<PidAndPort> ports;
 
@@ -234,7 +234,7 @@ namespace Processes
         return ports;
     }
 
-    Processes::ProcessState Processes::getProcessState(const QString &name) const
+    ProcessUtil::ProcessState ProcessUtil::getProcessState(const QString &name) const
     {
         Process p = findByName(name);
 
@@ -245,7 +245,7 @@ namespace Processes
     }
 
     // static
-    bool Processes::killProcess(qint64 pid)
+    bool ProcessUtil::killProcess(qint64 pid)
     {
         // qDebug() << "going to kill process of pid:" << pid;
 
@@ -271,7 +271,7 @@ namespace Processes
     }
 
     // static
-    bool Processes::killProcessTree(qint64 pid)
+    bool ProcessUtil::killProcessTree(qint64 pid)
     {
         // qDebug() << "going to kill process tree of pid:" << pid;
 
@@ -311,7 +311,7 @@ namespace Processes
     }
 
     // static
-    bool Processes::killProcess(const QString &name)
+    bool ProcessUtil::killProcess(const QString &name)
     {
         Process p = findByName(name);
 
@@ -320,7 +320,7 @@ namespace Processes
         return killProcess(pid);
     }
 
-    bool Processes::killProcessTree(const QString &name)
+    bool ProcessUtil::killProcessTree(const QString &name)
     {
         Process p = findByName(name);
 
@@ -328,7 +328,7 @@ namespace Processes
     }
 
     // static
-    QString Processes::getSizeHumanReadable(float bytes)
+    QString ProcessUtil::getSizeHumanReadable(float bytes)
     {
         QStringList list;
         list << "KB"
@@ -347,7 +347,7 @@ namespace Processes
     // needed for Processes::startDetached.
     // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
     // whenever that happens.
-    QString Processes::qt_create_commandline(const QString &program, const QStringList &arguments)
+    QString ProcessUtil::qt_create_commandline(const QString &program, const QStringList &arguments)
     {
         QString cmd;
 
@@ -361,7 +361,7 @@ namespace Processes
     }
 
     // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
-    bool Processes::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
+    bool ProcessUtil::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
     {
         bool success                              = false;
         static const DWORD errorElevationRequired = 740;
@@ -425,7 +425,7 @@ namespace Processes
         return success;
     }
 
-    bool Processes::start(const QString &program, const QStringList &arguments, const QString &workingDir)
+    bool ProcessUtil::start(const QString &program, const QStringList &arguments, const QString &workingDir)
     {
         bool success = false;
 
@@ -474,7 +474,7 @@ namespace Processes
         return success;
     }
 
-    void Processes::delay(int millisecondsToWait)
+    void ProcessUtil::delay(int millisecondsToWait)
     {
         QTime dieTime = QTime::currentTime().addMSecs(millisecondsToWait);
         while (QTime::currentTime() < dieTime) {
