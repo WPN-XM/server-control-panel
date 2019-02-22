@@ -3,10 +3,10 @@
 
 #include "../../app/plugins/plugininterface.h"
 
-class HelloWorldPlugin : public QObject, public PluginInterface
+class HelloWorldPlugin : public QObject, public Plugins::PluginInterface
 {
     Q_OBJECT
-    Q_INTERFACES(PluginInterface)
+    Q_INTERFACES(Plugins::PluginInterface)
     Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld" FILE "HelloWorldPlugin.json")
 
 public:
