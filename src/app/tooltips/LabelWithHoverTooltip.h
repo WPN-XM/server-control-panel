@@ -5,24 +5,29 @@
 
 #include "BalloonTip.h"
 
-class LabelWithHoverTooltip : public QLabel
+namespace Tooltips
 {
-    Q_OBJECT
 
-public:
-    explicit LabelWithHoverTooltip(QWidget *parent = nullptr);
-    void enableToolTip(bool enabled);
-    void setTooltipText(const QString &value);
+    class LabelWithHoverTooltip : public QLabel
+    {
+        Q_OBJECT
 
-private:
-    void openBalloonTipForPHP(const QString &message);
-    BalloonTip *balloonTip = nullptr;
-    QString myText;
-    bool tooltipEnabled{};
+    public:
+        explicit LabelWithHoverTooltip(QWidget *parent = nullptr);
+        void enableToolTip(bool enabled);
+        void setTooltipText(const QString &value);
 
-protected:
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
-};
+    private:
+        void openBalloonTipForPHP(const QString &message);
+        BalloonTip *balloonTip = nullptr;
+        QString myText;
+        bool tooltipEnabled{};
+
+    protected:
+        void enterEvent(QEvent *event);
+        void leaveEvent(QEvent *event);
+    };
+
+} // namespace Tooltips
 
 #endif // LABELWITHHOVERTOOLTIP_H

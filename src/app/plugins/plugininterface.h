@@ -5,41 +5,46 @@
 
 //#include "../settings.h"
 
-class PluginInterface
+namespace Plugins
 {
 
-public:
-    PluginInterface() {}
-    virtual ~PluginInterface() {}
+    class PluginInterface
+    {
 
-    virtual void onLoad() = 0;
+    public:
+        PluginInterface() {}
+        virtual ~PluginInterface() {}
 
-    // slot which should cause emission of `name` signal
-    virtual QString getName() const = 0;
-    // virtual QString getShortName() const;
-    // virtual QString getVersion() const;
-    // virtual QString getIcon() const;
-    // virtual QString getDescription() const;
-    // virtual QString getAuthor() const;
-    // virtual QString getEmail() const;
+        virtual void onLoad() = 0;
 
-    // virtual bool enable();
-    // virtual bool disable();
+        // slot which should cause emission of `name` signal
+        virtual QString getName() const = 0;
+        // virtual QString getShortName() const;
+        // virtual QString getVersion() const;
+        // virtual QString getIcon() const;
+        // virtual QString getDescription() const;
+        // virtual QString getAuthor() const;
+        // virtual QString getEmail() const;
 
-    // settings related
-    virtual void showSettings(QWidget *parent = nullptr) = 0;
-    // virtual bool loadDefaultSettings(Settings::SettingsManager *settings) = 0;
-    // virtual bool saveSettings(Settings::SettingsManager *settings)        = 0;
-    // virtual bool loadSettings();
-    // virtual void onSettingChanged(const QString &setting);
+        // virtual bool enable();
+        // virtual bool disable();
 
-signals:
-    // Signal to be emitted in getName()
-    // void name(QString);
+        // settings related
+        virtual void showSettings(QWidget *parent = nullptr) = 0;
+        // virtual bool loadDefaultSettings(Settings::SettingsManager *settings) = 0;
+        // virtual bool saveSettings(Settings::SettingsManager *settings)        = 0;
+        // virtual bool loadSettings();
+        // virtual void onSettingChanged(const QString &setting);
 
-public slots:
-};
+    signals:
+        // Signal to be emitted in getName()
+        // void name(QString);
 
-Q_DECLARE_INTERFACE(PluginInterface, "WPN-XM.ServerControlPanel.PluginInterface/1.0")
+    public slots:
+    };
+
+} // namespace Plugins
+
+Q_DECLARE_INTERFACE(Plugins::PluginInterface, "WPN-XM.ServerControlPanel.PluginInterface/1.0")
 
 #endif // PLUGININTERFACE_H

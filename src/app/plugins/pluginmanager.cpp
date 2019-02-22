@@ -1,71 +1,8 @@
 #include "pluginmanager.h"
 
-#include <QString>
-#include <QCoreApplication>
-#include <QDir>
-#include <QDebug>
-#include <QPluginLoader>
-
-PluginManager::PluginManager() {}
-
-QList<Plugins::Plugin> PluginManager::getAvailablePlugins()
+namespace Plugins
 {
-    loadAvailablePlugins();
 
-    return availablePlugins;
-}
+    PluginManager::PluginManager() {}
 
-void PluginManager::loadAvailablePlugins()
-{
-    if (pluginsLoaded) {
-        return;
-    } else {
-        pluginsLoaded = true;
-    }
-
-    // find SharedLibrary Plugins
-    const QDir pluginsDir(QCoreApplication::applicationDirPath() + QDir::separator() + "plugins");
-
-    QStringList nameFilters;
-    nameFilters << "*.dll"; // << "*.so";
-
-    const auto files = pluginsDir.entryInfoList(nameFilters, QDir::Files);
-
-    for (const QFileInfo &file : files) {
-        const QString fileName = file.absoluteFilePath();
-        qWarning() << fileName;
-
-        QPluginLoader *pluginLoader = new QPluginLoader(fileName);
-
-        if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
-            qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
-            continue;
-        }
-
-        QJsonObject pluginMetaData = pluginLoader->metaData();
-
-        QObject *pluginInstance = pluginLoader->instance();
-        if (!pluginInstance) {
-            qDebug() << "Error loading plugin:" << fileName << pluginLoader->errorString();
-            continue;
-        } else {
-            qDebug() << "Plugin loaded:" << fileName;
-        }
-
-        PluginInterface *pluginObject = qobject_cast<PluginInterface *>(pluginInstance);
-
-        // const QMetaObject *pluginMeta = pluginInstance->metaObject();
-
-        Plugins::Plugin plugin;
-        plugin.id          = pluginMetaData.value("name").toString();
-        plugin.instance    = pluginObject;
-        plugin.libraryPath = fileName;
-        plugin.loader      = pluginLoader;
-        plugin.metaData    = Plugins::getMetaData(pluginMetaData);
-
-        // add plugin to list
-        if (!availablePlugins.contains(plugin)) {
-            availablePlugins.append(plugin);
-        }
-    }
-}
+} // namespace Plugins

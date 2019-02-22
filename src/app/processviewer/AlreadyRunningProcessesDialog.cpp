@@ -25,11 +25,11 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
     QVBoxLayout *vbox   = new QVBoxLayout;
 
-    QList<Processes::Process> runningProcessesList = Processes::getRunningProcesses();
+    QList<Processes::Processes::Process> runningProcessesList = Processes::Processes::getRunningProcesses();
 
     // iterate over proccesFoundList and draw a "process shutdown" checkbox for
     // each one
-    foreach (Processes::Process p, runningProcessesList) {
+    foreach (Processes::Processes::Process p, runningProcessesList) {
         // create checkbox
         QCheckBox *checkbox = new QCheckBox(p.name);
         checkbox->setChecked(true);
@@ -112,7 +112,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
         }
 
         // delay, after process kills
-        Processes::delay(250);
+        Processes::Processes::delay(250);
 
         //}
 

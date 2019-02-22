@@ -22,6 +22,8 @@ namespace Settings
         QStringList getKeys(const QString &groupPrefix) const;
         QString file() const;
         void set(const QString &key, const QVariant &value);
+
+        QSettings getSettingsObject();
     };
 } // namespace Settings
 

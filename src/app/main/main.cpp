@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 
     splash.setMessage("Loading Plugins...", 5);
     QApplication::addLibraryPath("./plugins");
-    PluginManager *pluginManager = new PluginManager();
+    Plugins::PluginManager *pluginManager = new Plugins::PluginManager();
     mainWindow.setPluginManagerInstance(pluginManager);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
@@ -106,12 +106,12 @@ int main(int argc, char *argv[])
     QApplication::processEvents();
 
     splash.setMessage("Getting System Processes ..", 30);
-    Processes *processes = Processes::getInstance();
+    Processes::Processes *processes = Processes::Processes::getInstance();
     mainWindow.setProcessesInstance(processes);
     QApplication::processEvents();
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
-    if (Processes::areThereAlreadyRunningProcesses()) {
+    if (Processes::Processes::areThereAlreadyRunningProcesses()) {
         // this fills monitoredProcessesList
         splash.hide();
         // displayShutdownAlreadyRunningProcessesOrContinueDialog

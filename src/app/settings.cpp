@@ -30,4 +30,5 @@ namespace Settings
         settings.beginGroup(groupPrefix);
         return settings.allKeys();
     }
-}
+
+} // namespace Settings

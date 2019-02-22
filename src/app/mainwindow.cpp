@@ -95,13 +95,16 @@ namespace ServerControlPanel
 
     MainWindow *MainWindow::getMainWindow() { return this; }
 
-    void MainWindow::setProcessesInstance(Processes *oProcesses) { processes = oProcesses; }
+    void MainWindow::setProcessesInstance(Processes::Processes *oProcesses) { processes = oProcesses; }
 
-    Processes *MainWindow::getProcessesObject() { return processes; }
+    Processes::Processes *MainWindow::getProcessesObject() { return processes; }
 
-    void MainWindow::setPluginManagerInstance(PluginManager *oPluginManager) { pluginManager = oPluginManager; }
+    void MainWindow::setPluginManagerInstance(Plugins::PluginManager *oPluginManager)
+    {
+        pluginManager = oPluginManager;
+    }
 
-    PluginManager *MainWindow::getPluginManager() { return pluginManager; }
+    Plugins::PluginManager *MainWindow::getPluginManager() { return pluginManager; }
 
     void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
@@ -110,7 +113,7 @@ namespace ServerControlPanel
 
         QStringList alreadyUpdated;
 
-        foreach (const Processes::Process &process, processes->monitoredProcessesList) {
+        foreach (const Processes::Processes::Process &process, processes->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
             // qDebug() << Q_FUNC_INFO << processName;
 
@@ -1309,7 +1312,7 @@ namespace ServerControlPanel
 
             // Port
             if (server->name == "PHP") {
-                LabelWithHoverTooltip *labelPort = new LabelWithHoverTooltip();
+                Tooltips::LabelWithHoverTooltip *labelPort = new Tooltips::LabelWithHoverTooltip();
                 labelPort->setObjectName(QString("label_PHP_Port"));
                 // labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
@@ -1538,7 +1541,7 @@ namespace ServerControlPanel
                     label->setText("Pool*");
                 }
                 // enable hover tooltip + show PHP ports and childs text
-                auto *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(true);
                     tip->setTooltipText(getPHPPort());
@@ -1550,7 +1553,7 @@ namespace ServerControlPanel
                     label->setText("");
                 }
                 // deactivate hover tooltip
-                auto *tip = ui->centralWidget->findChild<LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(false);
                     tip->setTooltipText("");

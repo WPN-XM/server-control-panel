@@ -4,17 +4,14 @@
 #include "plugins.h"
 #include "plugininterface.h"
 
-class PluginManager
+namespace Plugins
 {
-public:
-    PluginManager();
-    QList<Plugins::Plugin> getAvailablePlugins();
+    class PluginManager
+    {
+    public:
+        PluginManager();
+    };
 
-private:
-    bool pluginsLoaded = false;
-    QList<Plugins::Plugin> availablePlugins;
-
-    void loadAvailablePlugins();
-};
+} // namespace Plugins
 
 #endif // PLUGINMANAGER_H

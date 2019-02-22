@@ -17,7 +17,7 @@ namespace Configuration
 
         hideComponentsNotInstalledInMenuTree();
 
-        addItemToMenu();
+        addComponentToMenu();
 
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
@@ -32,6 +32,7 @@ namespace Configuration
         QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
+        Plugins::PluginManager *pluginManager = new Plugins::PluginManager();
         setupPluginListWidget();
 
         connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
@@ -41,7 +42,7 @@ namespace Configuration
 
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
-    void ConfigurationDialog::addItemToMenu()
+    void ConfigurationDialog::addComponentToMenu()
     {
         // get tree item "Components"
         QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
@@ -59,12 +60,12 @@ namespace Configuration
     {
         // plugins
         ui->listWidget_plugins->setLayoutDirection(Qt::LeftToRight);
-        ui->listWidget_plugins->setItemDelegate(new PluginListDelegate(ui->listWidget_plugins));
+        ui->listWidget_plugins->setItemDelegate(new Plugins::PluginListDelegate(ui->listWidget_plugins));
 
-        PluginManager *pManager                  = new PluginManager();
-        const QList<Plugins::Plugin> &allPlugins = pManager->getAvailablePlugins();
+        Plugins::Plugins *plugins                         = new Plugins::Plugins();
+        const QList<Plugins::Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
 
-        foreach (const Plugins::Plugin &plugin, allPlugins) {
+        foreach (const Plugins::Plugins::Plugin &plugin, allPlugins) {
 
             QListWidgetItem *item = new QListWidgetItem(ui->listWidget_plugins);
 
@@ -1180,7 +1181,7 @@ namespace Configuration
         if (w != nullptr)
             ui->stackedWidget->setCurrentWidget(w);
         else
-            qDebug() << "[Config Menu] There is no page " << widgetname << " in the stack widget.";
+            qDebug() << "[Config Menu] There is no widget" << widgetname << "in the stack widget.";
     }
 
     void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddUpstream_clicked()

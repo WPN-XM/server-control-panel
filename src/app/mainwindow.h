@@ -115,11 +115,11 @@ namespace ServerControlPanel
         MainWindow *getMainWindow();
         void setup();
 
-        void setProcessesInstance(Processes *oProcesses);
-        Processes *getProcessesObject();
+        void setProcessesInstance(Processes::Processes *oProcesses);
+        Processes::Processes *getProcessesObject();
 
-        void setPluginManagerInstance(PluginManager *oPluginManger);
-        PluginManager *getPluginManager();
+        void setPluginManagerInstance(Plugins::PluginManager *oPluginManger);
+        Plugins::PluginManager *getPluginManager();
 
     private:
         Ui::MainWindow *ui;
@@ -127,8 +127,8 @@ namespace ServerControlPanel
         ServerControlPanel::Tray *tray;
         Servers::Servers *servers;
         Updater::SelfUpdater *selfUpdater;
-        Processes *processes;
-        PluginManager *pluginManager;
+        Processes::Processes *processes;
+        Plugins::PluginManager *pluginManager;
 
         QAction *minimizeAction;
         QAction *restoreAction;

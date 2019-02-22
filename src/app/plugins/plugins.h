@@ -9,52 +9,74 @@
 #include <QDir>
 #include <QJsonArray>
 #include <QMap>
+#include <QCoreApplication>
+#include <QDebug>
 
 #include "plugininterface.h"
+#include "settings.h"
 
-class PluginMetaData
+namespace Plugins
 {
-public:
-    QString iid;
-    QString name;
-    QString description;
-    QString version;
-    QMap<QString, QString> authors;
-    QString type;
-    bool core;
 
-    // bool dependencies;
-    // QJsonArray dependenciesPath;
-
-    QString path;
-};
-
-class Plugins : public QObject
-{
-    Q_OBJECT
-public:
-    struct Plugin
+    class PluginMetaData
     {
-        QString id;
-        QString libraryPath;
-        PluginMetaData metaData;
-        PluginInterface *instance = nullptr;
+    public:
+        QString iid;
+        QString name;
+        QString description;
+        QString version;
+        QMap<QString, QString> authors;
+        QString type;
+        QString icon;
+        bool core;
+        bool hasSettings;
 
-        QPluginLoader *loader = nullptr;
+        // bool dependencies;
+        // QJsonArray dependenciesPath;
 
-        bool isLoaded() const { return instance; }
-
-        bool operator==(const Plugin &other) const { return this->id == other.id; }
+        QString path;
     };
 
-    explicit Plugins(QObject *parent = nullptr);
-    static PluginMetaData getMetaData(const QJsonObject &metaData);
+    class Plugins : public QObject
+    {
+        Q_OBJECT
+    public:
+        struct Plugin
+        {
+            QString id;
+            QString libraryPath;
+            PluginMetaData metaData;
+            PluginInterface *instance = nullptr;
 
-signals:
+            QPluginLoader *loader = nullptr;
 
-public slots:
-};
+            bool isLoaded() const { return instance; }
 
-Q_DECLARE_METATYPE(Plugins::Plugin)
+            bool operator==(const Plugin &other) const { return this->id == other.id; }
+        };
+
+        explicit Plugins(QObject *parent = nullptr);
+        QList<Plugins::Plugin> getAvailablePlugins();
+
+        void loadSettings();
+
+    private:
+        bool pluginsLoaded = false;
+        QList<Plugins::Plugin> availablePlugins;
+
+        void loadAvailablePlugins();
+
+        QStringList enabledPlugins;
+
+        static PluginMetaData getMetaData(const QJsonObject &metaData);
+
+    signals:
+
+    public slots:
+    };
+
+} // namespace Plugins
+
+Q_DECLARE_METATYPE(Plugins::Plugins::Plugin)
 
 #endif // PLUGINS_H

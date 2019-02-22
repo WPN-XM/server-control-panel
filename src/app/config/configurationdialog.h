@@ -43,7 +43,7 @@ namespace Configuration
 
         ~ConfigurationDialog();
 
-        void addItemToMenu();
+        void addComponentToMenu();
         void addWidgetToStack(QWidget *widget);
 
         void setRunOnStartUp(bool run = true);
