@@ -17,8 +17,6 @@ namespace Configuration
 
         hideComponentsNotInstalledInMenuTree();
 
-        addComponentToMenu();
-
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
         toggleAutostartServerCheckboxes(ui->checkbox_autostartServers->isChecked());
@@ -32,8 +30,9 @@ namespace Configuration
         QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
-        Plugins::PluginManager *pluginManager = new Plugins::PluginManager();
-        setupPluginListWidget();
+        pluginManager = new Plugins::PluginManager(this);
+        addWidgetToStack(pluginManager);
+        addItemToTreeMenu(pluginManager->getConfigTreeMenuItem());
 
         connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
 
@@ -42,59 +41,61 @@ namespace Configuration
 
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
-    void ConfigurationDialog::addComponentToMenu()
+    void ConfigurationDialog::addComponentItemToTreeMenu(const QString &text)
     {
         // get tree item "Components"
         QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
         QTreeWidgetItem *components   = list.at(0);
 
         QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, "SomeChild");
+        child->setText(0, text);
 
         components->addChild(child);
     }
 
-    void ConfigurationDialog::addWidgetToStack(QWidget *widget) { ui->stackedWidget->addWidget(widget); }
-
-    void ConfigurationDialog::setupPluginListWidget()
+    void ConfigurationDialog::addComponentItemToTreeMenu(const QStringList &list)
     {
-        // plugins
-        ui->listWidget_plugins->setLayoutDirection(Qt::LeftToRight);
-        ui->listWidget_plugins->setItemDelegate(new Plugins::PluginListDelegate(ui->listWidget_plugins));
+        QString displayName     = list.at(0);
+        QString stackWidgetName = list.at(1);
 
-        Plugins::Plugins *plugins                         = new Plugins::Plugins();
-        const QList<Plugins::Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
+        // get tree item "Components"
+        /*QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
+        QTreeWidgetItem *components   = list.at(0);
 
-        foreach (const Plugins::Plugins::Plugin &plugin, allPlugins) {
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setText(0, text);
 
-            QListWidgetItem *item = new QListWidgetItem(ui->listWidget_plugins);
-
-            // QIcon icon = QIcon(desc.icon);
-            // item->setIcon(icon);
-
-            QStringList authorsList;
-            QMapIterator<QString, QString> i(plugin.metaData.authors);
-            while (i.hasNext()) {
-                authorsList << i.next().key();
-            }
-            QString authors = authorsList.join(", ");
-
-            QString pluginInfo =
-                QString("<b>%1</b> %2<br/><i>%3</i><br/>").arg(plugin.metaData.name, plugin.metaData.version, authors);
-            item->setToolTip(pluginInfo);
-
-            item->setText(plugin.metaData.name);
-            item->setData(Qt::UserRole, plugin.metaData.version);
-            item->setData(Qt::UserRole + 1, authors);
-            item->setData(Qt::UserRole + 2, plugin.metaData.description);
-
-            item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-            item->setCheckState(plugin.isLoaded() ? Qt::Checked : Qt::Unchecked);
-            item->setData(Qt::UserRole + 10, QVariant::fromValue(plugin));
-
-            ui->listWidget_plugins->addItem(item);
-        }
+        components->addChild(child);*/
     }
+
+    /*void ConfigurationDialog::addItemToTreeMenu(const QString &text)
+    {
+        QTreeWidgetItem *item = new QTreeWidgetItem();
+        item->setText(0, text);
+
+        ui->configMenuTreeWidget->addTopLevelItem(item);
+    }*/
+
+    void ConfigurationDialog::addItemToTreeMenu(const QStringList &list)
+    {
+        QString displayName     = list.at(0);
+        QString stackWidgetName = list.at(1);
+
+        QTreeWidgetItem *item = new QTreeWidgetItem();
+        item->setText(0, displayName);
+        item->setData(0, Qt::UserRole, stackWidgetName);
+
+        ui->configMenuTreeWidget->addTopLevelItem(item);
+    }
+
+    void ConfigurationDialog::addWidgetToStack(QWidget *widget)
+    {
+        //
+        ui->stackedWidget->addWidget(widget);
+        qDebug() << ui->stackedWidget->children();
+    }
+
+    void ConfigurationDialog::setupPluginListWidget() {}
 
     QStringList ConfigurationDialog::getAvailablePHPExtensions()
     {
@@ -1168,9 +1169,16 @@ namespace Configuration
     void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
     {
         // a click on a menu item returns the name of the item
-        // switches to the matching page in the stacked widget
-        QString menuitem = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
-        setCurrentStackWidget(menuitem);
+        // switches to the matching page in the stackedWidget
+        QString item;
+
+        item = ui->configMenuTreeWidget->model()->data(index, Qt::UserRole).toString();
+
+        if (item.isEmpty()) {
+            item = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
+        }
+
+        setCurrentStackWidget(item);
 
         // TODO implement per page config loading/saving
     }

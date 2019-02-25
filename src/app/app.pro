@@ -137,7 +137,8 @@ FORMS += \
     config/nginxaddupstreamdialog.ui \
     mainwindow.ui \
     processviewer/processviewerdialog.ui \   
-    updater/updaterdialog.ui
+    updater/updaterdialog.ui \
+    config/pluginlist.ui
 
 # WINDOWS RC-FILE (sets the executable attributes)
 exists(C:\Windows\System32\cmd.exe) {
