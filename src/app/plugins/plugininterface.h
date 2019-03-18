@@ -15,7 +15,14 @@ namespace Plugins
         PluginInterface() {}
         virtual ~PluginInterface() {}
 
-        virtual void onLoad() = 0;
+        enum InitState
+        {
+            StartupInitState,
+            LateInitState
+        };
+
+        virtual void init(InitState state) = 0;
+        virtual void unload()              = 0;
 
         // slot which should cause emission of `name` signal
         virtual QString getName() const = 0;

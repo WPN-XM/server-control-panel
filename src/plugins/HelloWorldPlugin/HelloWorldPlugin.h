@@ -13,8 +13,12 @@ public:
     // the class has to implement all pure virtual methods from PluginInterface
     ~HelloWorldPlugin() {}
 
-    void onLoad() override;
+    void init(InitState state) override;
+    void unload() override;
+
     QString getName() const override;
+
+    QString getConfigDialogTreeMenuEntry();
 
     void showSettings(QWidget *parent = nullptr) override;
     // bool loadDefaultSettings(Settings::SettingsManager *settings) override;

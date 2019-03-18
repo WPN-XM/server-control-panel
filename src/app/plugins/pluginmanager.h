@@ -2,6 +2,7 @@
 #define PLUGINMANAGER_H
 
 #include <QWidget>
+#include <QMessageBox>
 
 class QListWidgetItem;
 
@@ -26,11 +27,14 @@ namespace Plugins
         QStringList getConfigTreeMenuItem();
 
     private slots:
+        void settingsClicked();
+        void currentChanged(QListWidgetItem *item);
+        void itemChanged(QListWidgetItem *item);
         void refresh();
 
     private:
+        void sortItems();
         bool loaded;
-
         Ui::PluginList *ui;
     };
 } // namespace Plugins

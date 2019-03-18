@@ -3,7 +3,7 @@
 namespace Plugins
 {
 
-    Plugins::Plugins(QObject *parent) : QObject(parent) { loadSettings(); }
+    Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false) { loadSettings(); }
 
     QList<Plugins::Plugin> Plugins::getAvailablePlugins()
     {
@@ -12,13 +12,47 @@ namespace Plugins
         return availablePlugins;
     }
 
+    bool Plugins::loadPlugin(Plugins::Plugin *plugin)
+    {
+        if (plugin->isLoaded()) {
+            return true;
+        }
+
+        if (!initPlugin(PluginInterface::LateInitState, plugin)) {
+            return false;
+        }
+
+        availablePlugins.removeOne(*plugin);
+        availablePlugins.prepend(*plugin);
+
+        refreshLoadedPlugins();
+
+        return plugin->isLoaded();
+    }
+
+    void Plugins::unloadPlugin(Plugins::Plugin *plugin)
+    {
+        if (!plugin->isLoaded()) {
+            return;
+        }
+
+        plugin->loader->unload();
+        emit pluginUnloaded(plugin->instance);
+        plugin->instance = nullptr;
+
+        availablePlugins.removeOne(*plugin);
+        availablePlugins.append(*plugin);
+
+        refreshLoadedPlugins();
+    }
+
     void Plugins::loadAvailablePlugins()
     {
         if (pluginsLoaded) {
             return;
-        } else {
-            pluginsLoaded = true;
         }
+
+        pluginsLoaded = true;
 
         // find SharedLibrary Plugins
         const QDir pluginsDir(QCoreApplication::applicationDirPath() + QDir::separator() + "plugins");
@@ -39,22 +73,22 @@ namespace Plugins
             }
 
             QJsonObject pluginMetaData = pluginLoader->metaData();
+            /*
+                        QObject *pluginInstance = pluginLoader->instance();
+                        if (!pluginInstance) {
+                            qDebug() << "Error loading plugin:" << fileName << pluginLoader->errorString();
+                            continue;
+                        } else {
+                            qDebug() << "Plugin loaded:" << fileName;
+                        }
 
-            QObject *pluginInstance = pluginLoader->instance();
-            if (!pluginInstance) {
-                qDebug() << "Error loading plugin:" << fileName << pluginLoader->errorString();
-                continue;
-            } else {
-                qDebug() << "Plugin loaded:" << fileName;
-            }
-
-            PluginInterface *pluginObject = qobject_cast<PluginInterface *>(pluginInstance);
+                        PluginInterface *pluginObject = qobject_cast<PluginInterface *>(pluginInstance);*/
 
             // const QMetaObject *pluginMeta = pluginInstance->metaObject();
 
             Plugins::Plugin plugin;
-            plugin.id          = pluginMetaData.value("name").toString();
-            plugin.instance    = pluginObject;
+            plugin.id = pluginMetaData.value("MetaData").toObject().value("name").toString();
+            // plugin.instance    = pluginObject;
             plugin.libraryPath = fileName;
             plugin.loader      = pluginLoader;
             plugin.metaData    = Plugins::getMetaData(pluginMetaData);
@@ -64,6 +98,19 @@ namespace Plugins
                 availablePlugins.append(plugin);
             }
         }
+    }
+
+    void Plugins::refreshLoadedPlugins()
+    {
+        loadedPlugins.clear();
+
+        foreach (const Plugin &plugin, availablePlugins) {
+            if (plugin.isLoaded()) {
+                loadedPlugins.append(plugin.instance);
+            }
+        }
+
+        emit refreshedLoadedPlugins();
     }
 
     PluginMetaData Plugins::getMetaData(const QJsonObject &metaData)
@@ -104,6 +151,30 @@ namespace Plugins
         settings.beginGroup("Plugin-Settings");
         enabledPlugins = settings.value("EnabledPlugins", defaultEnabledPlugins).toStringList();
         settings.endGroup();
+    }
+
+    bool Plugins::initPlugin(PluginInterface::InitState state, Plugin *plugin)
+    {
+        if (!plugin) {
+            return false;
+        }
+
+        plugin->instance = qobject_cast<PluginInterface *>(plugin->loader->instance());
+
+        if (!plugin->instance) {
+            return false;
+        }
+
+        plugin->instance->init(state);
+
+        return true;
+    }
+
+    void Plugins::shutdown()
+    {
+        foreach (PluginInterface *iPlugin, loadedPlugins) {
+            iPlugin->unload();
+        }
     }
 
 } // namespace Plugins

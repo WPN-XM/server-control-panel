@@ -4,11 +4,23 @@
 
 // HelloWorldPlugin::~HelloWorldPlugin() {}
 
-void HelloWorldPlugin::onLoad() { qDebug() << "HelloWorld OnLoad"; }
+void HelloWorldPlugin::init(InitState state)
+{
+    if (state == InitState::StartupInitState) {
+        qDebug() << "HelloWorld StartupInitState";
+    }
+    if (state == InitState::LateInitState) {
+        qDebug() << "HelloWorld LateInitState";
+    }
+}
+
+void HelloWorldPlugin::unload() { qDebug() << __FUNCTION__ << "called"; }
 
 QString HelloWorldPlugin::getName() const { return "Hello World from Plugin!"; }
 
 // QWidget HelloWorldPlugin::getConfigPage() { return new HelloWorldConfigForm(); }
+
+QString HelloWorldPlugin::getConfigDialogTreeMenuEntry() { return "HelloWorld"; }
 
 void HelloWorldPlugin::showSettings(QWidget *parent) { Q_UNUSED(parent) }
 

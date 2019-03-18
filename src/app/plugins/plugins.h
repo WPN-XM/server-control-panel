@@ -34,7 +34,7 @@ namespace Plugins
         // bool dependencies;
         // QJsonArray dependenciesPath;
 
-        QString path;
+        // QString path;
     };
 
     class Plugins : public QObject
@@ -56,23 +56,36 @@ namespace Plugins
         };
 
         explicit Plugins(QObject *parent = nullptr);
-        QList<Plugins::Plugin> getAvailablePlugins();
 
-        void loadSettings();
+        QList<Plugin> getAvailablePlugins();
+
+        bool loadPlugin(Plugin *plugin);
+        void unloadPlugin(Plugin *plugin);
+
+        void shutdown();
+
+    protected:
+        QList<PluginInterface *> loadedPlugins;
 
     private:
         bool pluginsLoaded = false;
-        QList<Plugins::Plugin> availablePlugins;
+
+        QList<Plugin> availablePlugins;
+        QStringList enabledPlugins;
 
         void loadAvailablePlugins();
+        void refreshLoadedPlugins();
 
-        QStringList enabledPlugins;
+        bool initPlugin(PluginInterface::InitState state, Plugin *plugin);
 
         static PluginMetaData getMetaData(const QJsonObject &metaData);
 
     signals:
+        void pluginUnloaded(PluginInterface *plugin);
+        void refreshedLoadedPlugins();
 
     public slots:
+        void loadSettings();
     };
 
 } // namespace Plugins
