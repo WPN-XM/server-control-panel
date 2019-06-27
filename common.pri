@@ -67,6 +67,13 @@ win32-msvc* {
     QMAKE_CXXFLAGS *= /std:c++17
     QMAKE_CXXFLAGS *= /O2
 }
+win32-clang-msvc* {
+    message("using win32 clang msvc")
+    #QMAKE_CXXFLAGS *= /MP
+    QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS
+    QMAKE_CXXFLAGS *= /std:c++17
+    QMAKE_CXXFLAGS *= /O2
+}
 *-g++-32 {
     message("using g++-32, adding -msse2 flag")
     QMAKE_CXXFLAGS *= -msse2
