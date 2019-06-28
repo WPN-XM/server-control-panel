@@ -9,10 +9,12 @@ QT += core gui widgets
 TARGET = $$qtLibraryTarget(HelloWorldPlugin)
 
 SOURCES += \
-        HelloWorldPlugin.cpp 
+        HelloWorldPlugin.cpp \
+    configdialog.cpp
 
 HEADERS += \
-        HelloWorldPlugin.h
+        HelloWorldPlugin.h \
+    configdialog.h
         
 # Target Folder
 
@@ -25,3 +27,6 @@ plugin_description.files += HelloWorldPlugin.json
 
 INSTALLS += plugin_description
 COPIES += plugin_description
+
+FORMS += \
+    configdialog.ui

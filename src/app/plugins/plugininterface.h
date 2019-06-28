@@ -38,9 +38,8 @@ namespace Plugins
 
         // settings related
         virtual void showSettings(QWidget *parent = nullptr) = 0;
-        // virtual bool loadDefaultSettings(Settings::SettingsManager *settings) = 0;
-        // virtual bool saveSettings(Settings::SettingsManager *settings)        = 0;
-        // virtual bool loadSettings();
+        // virtual bool loadSettings(Settings::SettingsManager *settings) = 0;
+        // virtual bool saveSettings(Settings::SettingsManager *settings) = 0;
         // virtual void onSettingChanged(const QString &setting);
 
     signals:

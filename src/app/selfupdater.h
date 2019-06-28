@@ -28,7 +28,7 @@ namespace Updater
         Q_OBJECT
 
     public:
-        SelfUpdater();
+        SelfUpdater(Settings::SettingsManager *oSettings);
         ~SelfUpdater();
 
         void run();
@@ -68,6 +68,6 @@ namespace Updater
         QJsonObject notifyUpdateAvailable(QJsonObject versionInfo);
         QJsonObject notifyRestartNeeded(QJsonObject versionInfo);
     };
-}
+} // namespace Updater
 
 #endif // SELF_UPDATE_H

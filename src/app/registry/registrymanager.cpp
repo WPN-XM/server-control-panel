@@ -32,8 +32,8 @@ namespace SoftwareRegistry
         }
 
         /**
-   * PHconst P Ap&plicatconst ion Reg&isconst try
-   &*/
+         *  PHP Application Registry
+         */
 
         // TODO download PHP Application Registry
 
@@ -91,12 +91,12 @@ namespace SoftwareRegistry
             return true;
         }
 
-        // if the file exists, we need to check if it is old
-        QDateTime fileModificationDate = QFileInfo(fileName).lastModified();
+        // if the file exists, we need to check, if it is old
+        QDateTime fileLastModifiedDate = QFileInfo(fileName).lastModified();
         QDateTime today                = QDateTime::currentDateTime();
 
         // updateInterval hardcoded to 3 days
-        if (3 <= fileModificationDate.daysTo(today)) {
+        if (3 <= fileLastModifiedDate.daysTo(today)) {
             return true;
         }
 

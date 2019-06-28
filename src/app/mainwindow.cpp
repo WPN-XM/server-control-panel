@@ -4,7 +4,8 @@
 namespace ServerControlPanel
 {
 
-    MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new ServerControlPanel::Ui::MainWindow)
+    MainWindow::MainWindow(QWidget *parent)
+        : QMainWindow(parent), ui(new ServerControlPanel::Ui::MainWindow), settings(new Settings::SettingsManager)
     {
         ui->setupUi(this);
 
@@ -20,7 +21,7 @@ namespace ServerControlPanel
         setDefaultSettings();
 
         // start minimized to tray
-        if (settings->get("global/startminimized").toBool()) {
+        if (settings->getBool("global/startminimized")) {
             setWindowState(Qt::WindowMinimized);
         } else {
             // maximize and move window to the top
@@ -64,7 +65,7 @@ namespace ServerControlPanel
                 SLOT(updateServerStatusIndicators(QString, bool)));
 
         // server autostart
-        if (settings->get("global/autostartservers").toBool()) {
+        if (settings->getBool("global/autostartservers")) {
             qDebug() << "[Servers] Autostart enabled";
             autostartServers();
         };
@@ -73,18 +74,19 @@ namespace ServerControlPanel
         updateToolsPushButtons();
 
 #ifdef QT_DEBUG
-        if (settings->get("selfupdater/runonstartup").toBool()) {
+        if (settings->getBool("selfupdater/runonstartup")) {
             runSelfUpdate();
         }
 
-// ui->pushButton_Updater->setEnabled(true);
+        ui->pushButton_Updater->setEnabled(true);
+        ui->pushButton_Updater->show();
 #endif
     }
 
     MainWindow::~MainWindow()
     {
         // stop all servers, when quitting the tray application
-        if (settings->get("global/stopserversonquit").toBool()) {
+        if (settings->getBool("global/stopserversonquit")) {
             qDebug() << "[Servers] Stopping All Servers on Quit...";
             stopAllServers();
         }
@@ -95,16 +97,24 @@ namespace ServerControlPanel
 
     MainWindow *MainWindow::getMainWindow() { return this; }
 
-    void MainWindow::setProcessesInstance(Processes::ProcessUtil *oProcesses) { processes = oProcesses; }
+    void MainWindow::setProcessUtil(Processes::ProcessUtil *oProcessUtil) { processes = oProcessUtil; }
 
-    Processes::ProcessUtil *MainWindow::getProcessesObject() { return processes; }
+    Processes::ProcessUtil *MainWindow::getProcessUtil() { return processes; }
 
-    void MainWindow::setPluginManagerInstance(Plugins::PluginManager *oPluginManager)
+    Settings::SettingsManager *MainWindow::getSettings() { return settings; }
+
+    void MainWindow::setPlugins(Plugins::Plugins *oPlugins) { plugins = oPlugins; }
+
+    Plugins::Plugins *MainWindow::getPlugins() { return plugins; }
+
+    void MainWindow::handlePlugin(QObject *plugin)
     {
-        pluginManager = oPluginManager;
+        Q_UNUSED(plugin);
+        // Plugins::PluginInterface *iPlugin = qobject_cast<Plugins::PluginInterface *>(plugin);
+        // if (iPlugin) {
+        // addToMenu();
+        //}
     }
-
-    Plugins::PluginManager *MainWindow::getPluginManager() { return pluginManager; }
 
     void MainWindow::updateServerStatusIndicatorsForAlreadyRunningServers()
     {
@@ -130,7 +140,7 @@ namespace ServerControlPanel
 
     void MainWindow::runSelfUpdate()
     {
-        selfUpdater = new Updater::SelfUpdater();
+        selfUpdater = new Updater::SelfUpdater(settings);
         connect(selfUpdater, SIGNAL(notifyUpdateAvailable(QJsonObject)), this,
                 SLOT(show_SelfUpdater_UpdateNotification(QJsonObject)));
         connect(selfUpdater, SIGNAL(notifyRestartNeeded(QJsonObject)), this,
@@ -145,7 +155,7 @@ namespace ServerControlPanel
         // - false, ask the user, if he wants to update (dialogbox)
         // - true, show tray notification (that update is in progress)
 
-        if (!settings->get("selfupdater/autoupdate").toBool()) {
+        if (!settings->getBool("selfupdater/autoupdate")) {
             // the timer is used to wait, until the SplashScreen is gone
             QTimer::singleShot(2000, selfUpdater, SLOT(askForUpdate()));
             return;
@@ -338,7 +348,7 @@ namespace ServerControlPanel
             ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowLog_\\w"));
 
         for (auto &allShowLogPushButton : allShowLogPushButtons) {
-            allShowLogPushButton->setEnabled(QFile::exists(this->getLogfile(allShowLogPushButton->objectName())));
+            allShowLogPushButton->setEnabled(QFile::exists(getLogfile(allShowLogPushButton->objectName())));
         }
 
         // Set enabled/disabled state for all "pushButton_ShowErrorLog_*" buttons
@@ -346,8 +356,7 @@ namespace ServerControlPanel
             ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowErrorLog_\\w"));
 
         for (auto &allShowErrorLogPushButton : allShowErrorLogPushButtons) {
-            allShowErrorLogPushButton->setEnabled(
-                QFile::exists(this->getLogfile(allShowErrorLogPushButton->objectName())));
+            allShowErrorLogPushButton->setEnabled(QFile::exists(getLogfile(allShowErrorLogPushButton->objectName())));
         }
     }
 
@@ -361,7 +370,7 @@ namespace ServerControlPanel
     {
         if (tray->isVisible()) {
 
-            bool doNotAskAgainCloseToTray = settings->get("global/donotaskagainclosetotray").toBool();
+            bool doNotAskAgainCloseToTray = settings->getBool("global/donotaskagainclosetotray", false);
 
             if (!doNotAskAgainCloseToTray) {
                 QCheckBox *checkbox = new QCheckBox(tr("Do not show this message again."), this);
@@ -794,11 +803,11 @@ namespace ServerControlPanel
         servers->startPostgreSQL();
         servers->startRedis();
 
-        if (settings->get("global/OnStartAllOpenWebinterface").toBool()) {
+        if (settings->getBool("global/OnStartAllOpenWebinterface")) {
             openWebinterface();
         }
 
-        if (settings->get("global/OnStartAllMinimize").toBool()) {
+        if (settings->getBool("global/OnStartAllMinimize")) {
             setWindowState(Qt::WindowMinimized);
         }
     }
@@ -849,7 +858,7 @@ namespace ServerControlPanel
     void MainWindow::openProjectFolderInBrowser()
     {
         // we have to take the NGINX port into account
-        QString nginxPort = settings->get("nginx/port").toString();
+        QString nginxPort = settings->getString("nginx/port");
 
         QString url = "http://localhost";
 
@@ -967,7 +976,7 @@ namespace ServerControlPanel
         QString serverName  = this->getServerNameFromPushButton(button);
 
         // fetch config file for server from the ini
-        QString cfgFile = QDir(settings->get(serverName + "/config").toString()).absolutePath();
+        QString cfgFile = QDir(settings->getString(serverName + "/config")).absolutePath();
 
         if (!QFile::exists(cfgFile)) {
             QMessageBox::warning(this, tr("Warning"), tr("Config file not found: \n") + cfgFile, QMessageBox::Yes);
@@ -982,8 +991,8 @@ namespace ServerControlPanel
     QString MainWindow::getLogfile(const QString &objectName)
     {
         // map objectName to fileName
-
-        QString logsDir = QDir(settings->get("paths/logs").toString()).absolutePath();
+        QString dir     = settings->getString("paths/logs");
+        QString logsDir = QDir(dir).absolutePath();
         QString logFile = "";
 
         if (objectName == "pushButton_ShowLog_Nginx") {
@@ -1029,7 +1038,8 @@ namespace ServerControlPanel
 
     void MainWindow::execEditor(const QUrl &logfile)
     {
-        QString program = settings->get("global/editor").toString();
+        QString program = settings->getString("global/editor");
+
         qDebug() << logfile.toLocalFile();
 
         QProcess::startDetached(program, QStringList() << logfile.toLocalFile());
@@ -1101,19 +1111,19 @@ namespace ServerControlPanel
     void MainWindow::autostartServers()
     {
         qDebug() << "[Servers] Autostarting...";
-        if (settings->get("autostart/nginx").toBool())
+        if (settings->getBool("autostart/nginx"))
             servers->startNginx();
-        if (settings->get("autostart/php").toBool())
+        if (settings->getBool("autostart/php"))
             servers->startPHP();
-        if (settings->get("autostart/mariadb").toBool())
+        if (settings->getBool("autostart/mariadb"))
             servers->startMariaDb();
-        if (settings->get("autostart/mongodb").toBool())
+        if (settings->getBool("autostart/mongodb"))
             servers->startMongoDb();
-        if (settings->get("autostart/memcached").toBool())
+        if (settings->getBool("autostart/memcached"))
             servers->startMemcached();
-        if (settings->get("autostart/postgresql").toBool())
+        if (settings->getBool("autostart/postgresql"))
             servers->startPostgreSQL();
-        if (settings->get("autostart/redis").toBool())
+        if (settings->getBool("autostart/redis"))
             servers->startRedis();
     }
 
@@ -1573,13 +1583,13 @@ namespace ServerControlPanel
         }
     }
 
-    QString MainWindow::getNginxPort() { return settings->get("nginx/port").toString(); }
+    QString MainWindow::getNginxPort() { return settings->getString("nginx/port"); }
 
-    QString MainWindow::getMemcachedPort() { return settings->get("memcached/tcpport").toString(); }
+    QString MainWindow::getMemcachedPort() { return settings->getString("memcached/tcpport"); }
 
     QString MainWindow::getMongoPort()
     {
-        QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
+        QString file = QDir(settings->getString("mongodb/config")).absolutePath();
 
         if (!QFile(file).exists()) {
             qDebug() << "[Error]" << file << "not found";
@@ -1591,7 +1601,7 @@ namespace ServerControlPanel
         return QString::fromStdString(config["net"]["port"].as<std::string>());
     }
 
-    QString MainWindow::getMariaPort() { return settings->get("mariadb/port").toString(); }
+    QString MainWindow::getMariaPort() { return settings->getString("mariadb/port"); }
 
     QString MainWindow::getPHPPort()
     {
@@ -1620,9 +1630,9 @@ namespace ServerControlPanel
         return result;
     }
 
-    QString MainWindow::getPostgresqlPort() { return settings->get("postgresql/port").toString(); }
+    QString MainWindow::getPostgresqlPort() { return settings->getString("postgresql/port"); }
 
-    QString MainWindow::getRedisPort() { return settings->get("redis/port").toString(); }
+    QString MainWindow::getRedisPort() { return settings->getString("redis/port"); }
 
     void MainWindow::on_pushButton_Updater_clicked() { this->openUpdaterDialog(); }
 

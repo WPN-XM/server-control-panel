@@ -4,6 +4,7 @@
     "description"       : "This is the description of the Hello World plugin.",
     "type"              : "SharedLibraryPlugin",
     "core"              : true,
+    "hasSettings"       : true,
     "authors": [
         {
             "name"      : "Jens A. Koch",

@@ -92,7 +92,7 @@ namespace Servers
     {
         QString s = serverName.toLower();
 
-        QString logsDir = QDir(settings->get("paths/logs").toString()).absolutePath();
+        QString logsDir = QDir(settings->getString("paths/logs")).absolutePath();
 
         QStringList logfiles;
 
@@ -251,7 +251,7 @@ namespace Servers
 
     void Servers::clearLogFile(const QString &serverName) const
     {
-        if (settings->get("global/clearlogsonstart").toBool()) {
+        if (settings->getBool("global/clearlogsonstart")) {
             QStringList logfiles = getLogFiles(serverName);
 
             foreach (QString logfile, logfiles) {
@@ -829,11 +829,11 @@ namespace Servers
         QString const memcachedStartCommand = getServer("Memcached")->exe;
 
         QStringList args;
-        args << "-p " + settings->get("memcached/tcpport").toString();
-        args << " -U " + settings->get("memcached/udpport").toString();
-        args << " -t " + settings->get("memcached/threads").toString();
-        args << " -c " + settings->get("memcached/maxconnections").toString();
-        args << " -m " + settings->get("memcached/maxmemory").toString();
+        args << "-p " + settings->getString("memcached/tcpport");
+        args << " -U " + settings->getString("memcached/udpport");
+        args << " -t " + settings->getString("memcached/threads");
+        args << " -c " + settings->getString("memcached/maxconnections");
+        args << " -m " + settings->getString("memcached/maxmemory");
 
         // if not installed, skip
         if (!QFile::exists(getServer("Memcached")->exe)) {
@@ -934,8 +934,8 @@ namespace Servers
         QString const redisStopCommand = QDir::currentPath() + "/bin/redis/redis-cli.exe";
 
         QStringList args;
-        args << "-h " + settings->get("redis/bind", QVariant("127.0.0.1")).toString();
-        args << "-p " + settings->get("redis/port").toString(); // , QVariant(QString('6379')).toString()
+        args << "-h " + settings->getString("redis/bind", QVariant("127.0.0.1"));
+        args << "-p " + settings->getString("redis/port"); // , QVariant(QString('6379'))
         args << "shutdown";
 
         qDebug() << "[Redis] Stopping...\n";
@@ -953,7 +953,7 @@ namespace Servers
 
     QString Servers::getMongoPort()
     {
-        QString file = QDir(settings->get("mongodb/config").toString()).absolutePath();
+        QString file = QDir(settings->getString("mongodb/config")).absolutePath();
 
         if (!QFile(file).exists()) {
             qDebug() << "[Error]" << file << "not found";

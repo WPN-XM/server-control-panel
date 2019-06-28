@@ -72,7 +72,7 @@ HEADERS += \
     splashscreen.h \
     tooltips/BalloonTip.h \
     tooltips/LabelWithHoverTooltip.h \
-    tooltips/TrayTooltip.h \
+    tooltips/TrayToolTip.h \
     tray.h \
     updater/actioncolumnitemdelegate.h \
     updater/downloadmanager.h \

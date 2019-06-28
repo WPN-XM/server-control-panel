@@ -14,6 +14,14 @@ namespace Plugins
         ui->list->setLayoutDirection(Qt::LeftToRight);
         // ui->butSettings->setIcon(IconProvider::settingsIcon());
 
+        // load Settings section for Plugins and enable them
+        /*Settings settings;
+        settings.beginGroup("Plugin-Settings");
+        bool enabledPlugins = settings.value("EnablePlugins", true).toBool();
+        settings.endGroup();
+
+        ui->list->setEnabled(enabledPlugins);*/
+
         connect(ui->butSettings, &QAbstractButton::clicked, this, &PluginManager::settingsClicked);
         connect(ui->list, &QListWidget::currentItemChanged, this, &PluginManager::currentChanged);
         connect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);

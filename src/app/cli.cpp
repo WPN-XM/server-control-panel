@@ -147,10 +147,10 @@ namespace ServerControlPanel
      * @param clioption
      * @param args
      */
-    [[noreturn]] void CLI::execServers(const QString &command,
-                                       QCommandLineOption &clioption,
-                                       QStringList args,
-                                       QCommandLineParser &parser)
+    /*[[noreturn]]*/ void CLI::execServers(const QString &command,
+                                           QCommandLineOption &clioption,
+                                           QStringList args,
+                                           QCommandLineParser &parser)
     {
         // the value of the key "--start|--stop|--restart" is the first server
         QString server = parser.value(clioption);
@@ -186,7 +186,7 @@ namespace ServerControlPanel
         exit(0);
     }
 
-    [[noreturn]] void CLI::printHelpText(QString errorMessage)
+    /*[[noreturn]]*/ void CLI::printHelpText(QString errorMessage)
     {
         colorPrint("WPN-XM Server Stack - Server Control Panel " APP_VERSION "\n", "brightwhite");
 

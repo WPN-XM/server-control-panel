@@ -17,7 +17,7 @@
 #include "tray.h"
 #include "updater/updaterdialog.h"
 #include "file/yml.h"
-#include "plugins/pluginmanager.h"
+#include "plugins/plugins.h"
 
 namespace ServerControlPanel
 {
@@ -53,8 +53,6 @@ namespace ServerControlPanel
         QString getRedisPort();
 
         QString parseVersionNumber(const QString &stringWithVersion);
-
-        Settings::SettingsManager *settings;
 
     public slots:
 
@@ -115,11 +113,13 @@ namespace ServerControlPanel
         MainWindow *getMainWindow();
         void setup();
 
-        void setProcessesInstance(Processes::ProcessUtil *oProcesses);
-        Processes::ProcessUtil *getProcessesObject();
+        void setProcessUtil(Processes::ProcessUtil *oProcesses);
+        Processes::ProcessUtil *getProcessUtil();
 
-        void setPluginManagerInstance(Plugins::PluginManager *oPluginManger);
-        Plugins::PluginManager *getPluginManager();
+        void setPlugins(Plugins::Plugins *oPlugins);
+        Plugins::Plugins *getPlugins();
+
+        Settings::SettingsManager *getSettings();
 
     private:
         Ui::MainWindow *ui;
@@ -128,7 +128,8 @@ namespace ServerControlPanel
         Servers::Servers *servers;
         Updater::SelfUpdater *selfUpdater;
         Processes::ProcessUtil *processes;
-        Plugins::PluginManager *pluginManager;
+        Plugins::Plugins *plugins;
+        Settings::SettingsManager *settings;
 
         QAction *minimizeAction;
         QAction *restoreAction;
@@ -158,7 +159,6 @@ namespace ServerControlPanel
 
     private slots:
         void iconActivated(QSystemTrayIcon::ActivationReason reason);
-        // void execEditor(QUrl logfile);
 
         void on_pushButton_Updater_clicked();
         void MainWindow_ShowEvent();
@@ -167,6 +167,8 @@ namespace ServerControlPanel
         void show_SelfUpdater_RestartNeededNotification(QJsonObject versionInfo);
 
         void updateServerStatusIndicatorsForAlreadyRunningServers();
+
+        void handlePlugin(QObject *plugin);
 
     protected:
         void closeEvent(QCloseEvent *event);

@@ -96,10 +96,13 @@ int main(int argc, char *argv[])
     splash.show();
     //#endif
 
-    splash.setMessage("Loading Plugins...", 5);
+    splash.setMessage("Loading Settings...", 5);
+    Settings::SettingsManager *settings = mainWindow.getSettings();
+
+    splash.setMessage("Loading Plugins...", 10);
     QApplication::addLibraryPath("./plugins");
-    Plugins::PluginManager *pluginManager = new Plugins::PluginManager();
-    mainWindow.setPluginManagerInstance(pluginManager);
+    Plugins::Plugins *plugins = new Plugins::Plugins();
+    mainWindow.setPlugins(plugins);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
     QObject().thread()->usleep(1000 * 1000 * 1);
@@ -107,7 +110,7 @@ int main(int argc, char *argv[])
 
     splash.setMessage("Getting System Processes ..", 30);
     Processes::ProcessUtil *processes = Processes::ProcessUtil::getInstance();
-    mainWindow.setProcessesInstance(processes);
+    mainWindow.setProcessUtil(processes);
     QApplication::processEvents();
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
@@ -135,7 +138,7 @@ int main(int argc, char *argv[])
     mainWindow.setup();
 
     // Finally, show the MainWindow
-    if (!mainWindow.settings->get("global/startminimized").toBool()) {
+    if (!settings->getBool("global/startminimized")) {
         mainWindow.show();
     }
 
@@ -147,6 +150,10 @@ int main(int argc, char *argv[])
     //#ifndef QT_DEBUG
     splash.finish(&mainWindow);
     //#endif
+
+    /*delete processes;
+    delete settings;
+    delete plugins;*/
 
     // enter the Qt Event loop here
     return QApplication::exec();

@@ -3,15 +3,15 @@
 
 #include "../cli.h"
 #include "../mainwindow.h"
-#include "../settings.h"
 #include "../splashscreen.h"
 #include "../version.h"
 
+#include "../settings.h"
 #include "../processviewer/processes.h"
-//#include "../processviewer/processviewerdialog.h"
-#include "../processviewer/AlreadyRunningProcessesDialog.h"
+#include "../plugins/plugins.h"
 
-#include "../plugins/pluginmanager.h"
+//#include "../processviewer/processviewerdialog.h"
+//#include "../processviewer/AlreadyRunningProcessesDialog.h"
 
 #include <QSharedMemory>
 #include <QtCore>

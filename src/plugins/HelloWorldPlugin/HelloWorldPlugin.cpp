@@ -2,36 +2,89 @@
 #include <QDebug>
 #include "HelloWorldPlugin.h"
 
-// HelloWorldPlugin::~HelloWorldPlugin() {}
-
-void HelloWorldPlugin::init(InitState state)
+namespace Plugin_HelloWorld_NS
 {
-    if (state == InitState::StartupInitState) {
-        qDebug() << "HelloWorld StartupInitState";
+    // HelloWorldPlugin::~HelloWorldPlugin() {}
+
+    void Plugin_HelloWorld::init(InitState state)
+    {
+        if (state == InitState::StartupInitState) {
+            qDebug() << "HelloWorld StartupInitState";
+        }
+        if (state == InitState::LateInitState) {
+            qDebug() << "HelloWorld LateInitState";
+        }
     }
-    if (state == InitState::LateInitState) {
-        qDebug() << "HelloWorld LateInitState";
+
+    void Plugin_HelloWorld::unload()
+    {
+        // unload
+        qDebug() << __FUNCTION__ << "called";
     }
-}
 
-void HelloWorldPlugin::unload() { qDebug() << __FUNCTION__ << "called"; }
+    QString Plugin_HelloWorld::getName() const
+    {
+        // the name
+        return "Hello World from Plugin!";
+    }
 
-QString HelloWorldPlugin::getName() const { return "Hello World from Plugin!"; }
+    // register page with addWidgetToStack()
+    QWidget *Plugin_HelloWorld::getConfigDialog()
+    {
+        // returns the config dialog page
+        return new Plugin_HelloWorld_ConfigDialog();
+    }
 
-// QWidget HelloWorldPlugin::getConfigPage() { return new HelloWorldConfigForm(); }
+    // register menu item with addItemToTreeMenu()
+    QString Plugin_HelloWorld::getConfigDialogTreeMenuEntry()
+    {
+        // return the name of the menu item for the config tree menu
+        return "HelloWorld";
+    }
 
-QString HelloWorldPlugin::getConfigDialogTreeMenuEntry() { return "HelloWorld"; }
+    /*
+     * Shows the Settings Dialog for this plugin,
+     * when the Button "Settings" is clicked
+     * in the "Configuration > Plugins" dialog.
+     */
+    void Plugin_HelloWorld::showSettings(QWidget *parent)
+    {
+        if (!settings) {
+            settings = new QDialog(parent);
+            settings.data()->setWindowFlags(settings.data()->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-void HelloWorldPlugin::showSettings(QWidget *parent) { Q_UNUSED(parent) }
+            QPushButton *b           = new QPushButton("Hello World Plugin v1.0.0");
+            QPushButton *closeButton = new QPushButton(tr("Close"));
+            /*QLabel *label            = new QLabel();
+            label->setPixmap(QPixmap(":icons/other/about.svg"));*/
 
-/*bool HelloWorldPlugin::saveSettings(Settings::SettingsManager *settings)
-{
-    m_settings = settings;
-    return true;
-}
+            QVBoxLayout *l = new QVBoxLayout(settings.data());
+            // l->addWidget(label);
+            l->addWidget(b);
+            l->addWidget(closeButton);
+            settings.data()->setLayout(l);
 
-bool HelloWorldPlugin::loadDefaultSettings(Settings::SettingsManager *settings)
-{
-    m_settings = settings;
-    return true;
-}*/
+            settings.data()->setMinimumSize(200, 200);
+            settings.data()->setAttribute(Qt::WA_DeleteOnClose);
+            settings.data()->setWindowTitle(tr("Hello World Plugin Settings"));
+            // settings.data()->setWindowIcon(QIcon(":icons/falkon.svg"));
+            connect(closeButton, SIGNAL(clicked()), settings.data(), SLOT(close()));
+        }
+
+        settings.data()->show();
+        settings.data()->raise();
+    }
+
+    /*bool Plugin_HelloWorld::saveSettings(Settings::SettingsManager *settings)
+    {
+        m_settings = settings;
+        return true;
+    }
+
+    bool Plugin_HelloWorldn::loadDefaultSettings(Settings::SettingsManager *settings)
+    {
+        m_settings = settings;
+        return true;
+    }*/
+
+} // namespace Plugin_HelloWorld_NS

@@ -3,29 +3,46 @@
 
 #include "../../app/plugins/plugininterface.h"
 
-class HelloWorldPlugin : public QObject, public Plugins::PluginInterface
+#include "configdialog.h"
+
+#include <QPointer>
+#include <QDialog>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QPushButton>
+
+namespace Plugin_HelloWorld_NS
 {
-    Q_OBJECT
-    Q_INTERFACES(Plugins::PluginInterface)
-    Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld" FILE "HelloWorldPlugin.json")
+    class Plugin_HelloWorld : public QObject, public Plugins::PluginInterface
+    {
+        Q_OBJECT
+        Q_INTERFACES(Plugins::PluginInterface)
+        Q_PLUGIN_METADATA(IID "WPN-XM.ServerControlPanel.Plugin.HelloWorld" FILE "HelloWorldPlugin.json")
 
-public:
-    // the class has to implement all pure virtual methods from PluginInterface
-    ~HelloWorldPlugin() {}
+    public:
+        // the class has to implement all pure virtual methods from PluginInterface
+        ~Plugin_HelloWorld() {}
 
-    void init(InitState state) override;
-    void unload() override;
+        void init(InitState state) override;
+        void unload() override;
 
-    QString getName() const override;
+        QString getName() const override;
 
-    QString getConfigDialogTreeMenuEntry();
+        QWidget *getConfigDialog();
+        QString getConfigDialogTreeMenuEntry();
 
-    void showSettings(QWidget *parent = nullptr) override;
-    // bool loadDefaultSettings(Settings::SettingsManager *settings) override;
-    // bool saveSettings(Settings::SettingsManager *settings) override;
+        void showSettings(QWidget *parent = nullptr) override;
 
-private:
-    // Settings::SettingsManager *m_settings;
-};
+        // bool loadDefaultSettings(Settings::SettingsManager *settings) override;
+
+        // when the custom config dialog is closed with ok. you can read the parameters from your custom dialog.
+        // bool saveSettings(Settings::SettingsManager *settings) override;
+
+    private:
+        QPointer<QDialog> settings;
+        // Settings::SettingsManager *m_settings;
+    };
+
+} // namespace Plugin_HelloWorld_NS
 
 #endif // HELLOWORLDPLUGIN_H

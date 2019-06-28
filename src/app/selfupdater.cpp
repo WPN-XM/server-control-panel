@@ -19,14 +19,16 @@ namespace Updater
      *      - start new version as detached Process
      *      - exit this version
      */
-    SelfUpdater::SelfUpdater()
+    SelfUpdater::SelfUpdater(Settings::SettingsManager *oSettings)
     {
         qDebug() << "[SelfUpdater] Started...";
+
+        settings = oSettings;
 
         userRequestedUpdate = false;
     }
 
-    SelfUpdater::~SelfUpdater() {}
+    SelfUpdater::~SelfUpdater() { delete settings; }
 
     void SelfUpdater::run()
     {
@@ -37,7 +39,7 @@ namespace Updater
 
         // check, if interval was set in INI
         // if not set, the interval defaults to "notset"
-        QString intervalString = settings->get("selfupdater/interval", QVariant(QString("notset"))).toString();
+        QString intervalString = settings->getString("selfupdater/interval", QVariant(QString("notset")));
 
         qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
 
@@ -81,7 +83,7 @@ namespace Updater
 
             if (updateAvailable()) {
                 emit notifyUpdateAvailable(versionInfo);
-                if (settings->get("selfupdater/autoupdate").toBool()) {
+                if (settings->getBool("selfupdater/autoupdate")) {
                     doUpdate();
                 }
             }
@@ -232,7 +234,7 @@ namespace Updater
 
         qDebug() << "[SelfUpdater] Extract: OK.";
 
-        if (settings->get("selfupdater/autorestart").toBool()) {
+        if (settings->getBool("selfupdater/autorestart")) {
             emit notifyRestartNeeded(versionInfo);
         } else {
             askForRestart();
