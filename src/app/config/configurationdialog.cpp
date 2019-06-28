@@ -19,6 +19,8 @@ namespace Configuration
 
         // setup autostart section
         hideAutostartCheckboxesOfNotInstalledServers();
+
+        // "start these servers, when starting wpn-xm" checkbox
         toggleAutostartServerCheckboxes(ui->checkbox_autostartServers->isChecked());
         connect(ui->checkbox_autostartServers, SIGNAL(clicked(bool)), this,
                 SLOT(toggleAutostartServerCheckboxes(bool)));
@@ -27,8 +29,8 @@ namespace Configuration
         loadNginxUpstreams();
 
         createPHPExtensionListWidget();
-        QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
-                         SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+        connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
+                SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
         pluginManager = new Plugins::PluginManager(this);
         addWidgetToStack(pluginManager);
@@ -76,6 +78,10 @@ namespace Configuration
         ui->configMenuTreeWidget->addTopLevelItem(item);
     }*/
 
+    /**
+     * @brief ConfigurationDialog::addItemToTreeMenu
+     * @param list: 0 = displayName, 1 = stackWidgetName
+     */
     void ConfigurationDialog::addItemToTreeMenu(const QStringList &list)
     {
         QString displayName     = list.at(0);
@@ -90,12 +96,10 @@ namespace Configuration
 
     void ConfigurationDialog::addWidgetToStack(QWidget *widget)
     {
-        //
         ui->stackedWidget->addWidget(widget);
+
         qDebug() << ui->stackedWidget->children();
     }
-
-    void ConfigurationDialog::setupPluginListWidget() {}
 
     QStringList ConfigurationDialog::getAvailablePHPExtensions()
     {
@@ -271,43 +275,44 @@ namespace Configuration
      */
     void ConfigurationDialog::readSettings()
     {
-        ui->checkbox_runOnStartUp->setChecked(getSettingBool("global/runonstartup", false));
-        ui->checkbox_autostartServers->setChecked(getSettingBool("global/autostartservers", false));
-        ui->checkbox_startMinimized->setChecked(getSettingBool("global/startminimized", false));
+        ui->checkbox_runOnStartUp->setChecked(settings->getBool("global/runonstartup", false));
+        ui->checkbox_autostartServers->setChecked(settings->getBool("global/autostartservers", false));
+        ui->checkbox_startMinimized->setChecked(settings->getBool("global/startminimized", false));
 
-        ui->checkbox_autostart_PHP->setChecked(getSettingBool("autostart/php", true));
-        ui->checkbox_autostart_Nginx->setChecked(getSettingBool("autostart/nginx", true));
-        ui->checkbox_autostart_MariaDb->setChecked(getSettingBool("autostart/mariadb", true));
+        ui->checkbox_autostart_PHP->setChecked(settings->getBool("autostart/php", true));
+        ui->checkbox_autostart_Nginx->setChecked(settings->getBool("autostart/nginx", true));
+        ui->checkbox_autostart_MariaDb->setChecked(settings->getBool("autostart/mariadb", true));
         if (isServerInstalled("mongodb")) {
-            ui->checkbox_autostart_MongoDb->setChecked(getSettingBool("autostart/mongodb", false));
+            ui->checkbox_autostart_MongoDb->setChecked(settings->getBool("autostart/mongodb", false));
         }
         if (isServerInstalled("memcached")) {
-            ui->checkbox_autostart_Memcached->setChecked(getSettingBool("autostart/memcached", false));
+            ui->checkbox_autostart_Memcached->setChecked(settings->getBool("autostart/memcached", false));
         }
         if (isServerInstalled("postgresql")) {
-            ui->checkbox_autostart_Postgresql->setChecked(getSettingBool("autostart/postgresql", false));
+            ui->checkbox_autostart_Postgresql->setChecked(settings->getBool("autostart/postgresql", false));
         }
         if (isServerInstalled("redis")) {
-            ui->checkbox_autostart_Redis->setChecked(getSettingBool("autostart/redis", false));
+            ui->checkbox_autostart_Redis->setChecked(settings->getBool("autostart/redis", false));
         }
 
-        ui->checkbox_clearLogsOnStart->setChecked(getSettingBool("global/clearlogsonstart", false));
-        ui->checkbox_stopServersOnQuit->setChecked(getSettingBool("global/stopServersonquit", false));
+        ui->checkbox_clearLogsOnStart->setChecked(settings->getBool("global/clearlogsonstart", false));
+        ui->checkbox_stopServersOnQuit->setChecked(settings->getBool("global/stopServersonquit", false));
 
-        ui->checkbox_onStartAllMinimize->setChecked(getSettingBool("global/onstartallminimize", false));
-        ui->checkbox_onStartAllOpenWebinterface->setChecked(getSettingBool("global/onstartallopenwebinterface", false));
+        ui->checkbox_onStartAllMinimize->setChecked(settings->getBool("global/onstartallminimize", false));
+        ui->checkbox_onStartAllOpenWebinterface->setChecked(
+            settings->getBool("global/onstartallopenwebinterface", false));
 
-        ui->lineEdit_SelectedEditor->setText(getSettingString("global/editor", QString("notepad.exe")));
+        ui->lineEdit_SelectedEditor->setText(settings->getString("global/editor", QString("notepad.exe")));
 
         //
         // Configuration > Updater > Self Updater
         //
 
-        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(getSettingBool("selfupdater/runonstartup", false));
-        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(getSettingBool("selfupdater/autoupdate", false));
-        ui->checkBox_SelfUpdater_AutoRestart->setChecked(getSettingBool("selfupdater/autorestart", false));
+        ui->checkBox_SelfUpdater_RunOnStartUp->setChecked(settings->getBool("selfupdater/runonstartup", false));
+        ui->checkBox_SelfUpdater_AutoUpdate->setChecked(settings->getBool("selfupdater/autoupdate", false));
+        ui->checkBox_SelfUpdater_AutoRestart->setChecked(settings->getBool("selfupdater/autorestart", false));
 
-        ui->comboBox_SelfUpdater_Interval->setCurrentText(getSettingString("selfupdater/interval", QString("1")));
+        ui->comboBox_SelfUpdater_Interval->setCurrentText(settings->getString("selfupdater/interval", QString("1")));
         ui->dateTimeEdit_SelfUpdater_Last_Time_Checked->setDateTime(
             settings->get("selfupdater/last_time_checked", QVariant(0)).toDateTime());
 
@@ -316,32 +321,32 @@ namespace Configuration
         //
 
         // remote
-        ui->checkBox_xdebug_remote_enable->setChecked(getSettingBool("xdebug/remote_enable", true));
-        ui->lineEdit_xdebug_remote_host->setText(getSettingString("xdebug/remote_host", QString("127.0.0.1")));
-        ui->lineEdit_xdebug_remote_port->setText(getSettingString("xdebug/remote_port", QString("9100")));
-        ui->checkBox_xdebug_remote_autostart->setChecked(getSettingBool("xdebug/remote_autostart", true));
-        ui->lineEdit_xdebug_remote_handler->setText(getSettingString("xdebug/remote_handler", QString("dbgp")));
-        ui->comboBox_xdebug_remote_mode->setCurrentText(getSettingString("xdebug/remote_mode", QString("req")));
+        ui->checkBox_xdebug_remote_enable->setChecked(settings->getBool("xdebug/remote_enable", true));
+        ui->lineEdit_xdebug_remote_host->setText(settings->getString("xdebug/remote_host", QString("127.0.0.1")));
+        ui->lineEdit_xdebug_remote_port->setText(settings->getString("xdebug/remote_port", QString("9100")));
+        ui->checkBox_xdebug_remote_autostart->setChecked(settings->getBool("xdebug/remote_autostart", true));
+        ui->lineEdit_xdebug_remote_handler->setText(settings->getString("xdebug/remote_handler", QString("dbgp")));
+        ui->comboBox_xdebug_remote_mode->setCurrentText(settings->getString("xdebug/remote_mode", QString("req")));
         // profiler
-        ui->checkBox_xdebug_enable_profiler->setChecked(getSettingBool("xdebug/enable_profiler", true));
-        ui->checkBox_xdebug_remove_old_logs->setChecked(getSettingBool("xdebug/remove_old_logs", true));
+        ui->checkBox_xdebug_enable_profiler->setChecked(settings->getBool("xdebug/enable_profiler", true));
+        ui->checkBox_xdebug_remove_old_logs->setChecked(settings->getBool("xdebug/remove_old_logs", true));
 
-        ui->lineEdit_xdebug_idekey->setText(getSettingString("xdebug/idekey", QString("netbeans-xdebug")));
+        ui->lineEdit_xdebug_idekey->setText(settings->getString("xdebug/idekey", QString("netbeans-xdebug")));
 
         //
         // Configuration > Components > MariaDB
         //
 
-        ui->lineEdit_mariadb_port->setText(getSettingString("mariadb/port", QString("3306")));
+        ui->lineEdit_mariadb_port->setText(settings->getString("mariadb/port", QString("3306")));
 
         //
         // Configuration > Components > MongoDb
         //
 
         if (isServerInstalled("mongodb")) {
-            ui->lineEdit_mongodb_port->setText(getSettingString("mongodb/port", QString("27017")));
+            ui->lineEdit_mongodb_port->setText(settings->getString("mongodb/port", QString("27017")));
 
-            ui->lineEdit_mongodb_dbpath->setText(getSettingString(
+            ui->lineEdit_mongodb_dbpath->setText(settings->getString(
                 "mongodb/dbpath", QDir::toNativeSeparators(QDir::currentPath() + "/bin/mongodb/data/db")));
         }
 
@@ -350,7 +355,7 @@ namespace Configuration
         //
 
         if (isServerInstalled("postgresql")) {
-            ui->lineEdit_postgresql_port->setText(getSettingString("postgresql/port", QString("3306")));
+            ui->lineEdit_postgresql_port->setText(settings->getString("postgresql/port", QString("3306")));
         }
 
         //
@@ -358,15 +363,15 @@ namespace Configuration
         //
         /*
                 if (servers->isInstalled("memcached")) {
-                    ui->lineEdit_memcached_tcpport->setText(getSettingString("memcached/tcpport",
+                    ui->lineEdit_memcached_tcpport->setText(settings->getString("memcached/tcpport",
            QString("11211")));
-                    ui->lineEdit_memcached_udpport->setText(getSettingString("memcached/udpport",
+                    ui->lineEdit_memcached_udpport->setText(settings->getString("memcached/udpport",
            QString("0")));
-                    ui->lineEdit_memcached_threads->setText(getSettingString("memcached/threads",
+                    ui->lineEdit_memcached_threads->setText(settings->getString("memcached/threads",
            QString("2"))); ui->lineEdit_memcached_maxconnections->setText(
-                        getSettingString("memcached/maxconnections",
+                        settings->getString("memcached/maxconnections",
            QString("2048")));
-                    ui->lineEdit_memcached_maxmemory->setText(getSettingString("memcached/maxmemory",
+                    ui->lineEdit_memcached_maxmemory->setText(settings->getString("memcached/maxmemory",
            QString("2048")));
                 }
         */
@@ -375,7 +380,7 @@ namespace Configuration
         //
 
         if (isServerInstalled("redis")) {
-            ui->lineEdit_redis_port->setText(getSettingString("redis/port", QString("6379")));
+            ui->lineEdit_redis_port->setText(settings->getString("redis/port", QString("6379")));
         }
     }
 
@@ -633,6 +638,7 @@ namespace Configuration
 
         if (!QFile(file).exists()) {
             qDebug() << "[Error][" << Q_FUNC_INFO << "]" << file << "not found";
+            return;
         }
 
         File::INI *ini = new File::INI(file.toLatin1());
@@ -833,17 +839,11 @@ namespace Configuration
 
     void ConfigurationDialog::toggleAutostartServerCheckboxes(bool run)
     {
-        // Note: layout doesn't "inject" itself in the parent-child tree, so
-        // findChildren() doesn't work
-
-        // left box
         for (int i = 0; i < ui->autostartServersFormLayout->count(); ++i) {
-            ui->autostartServersFormLayout->itemAt(i)->widget()->setEnabled(run);
-        }
-
-        // right box
-        for (int i = 0; i < ui->autostartServersFormLayout2->count(); ++i) {
-            ui->autostartServersFormLayout2->itemAt(i)->widget()->setEnabled(run);
+            QWidget *w = ui->autostartServersFormLayout->itemAt(i)->widget();
+            if (w != NULL) {
+                w->setEnabled(run);
+            }
         }
     }
 
@@ -891,18 +891,14 @@ namespace Configuration
 
         for (auto box : boxes) {
             // return last part of "checkbox_autostart_*"
-            QString name      = box->objectName().section("_", -1).toLower();
-            QString labelName = this->servers->getCamelCasedServerName(name) + "Label";
-            QLabel *label     = ui->tabWidget->findChild<QLabel *>(labelName);
+            QString name = box->objectName().section("_", -1).toLower();
 
             if (installed.contains(name)) {
                 qDebug() << "[" + name + "] Autostart Checkbox visible.";
                 box->setVisible(true);
-                // label->setVisible(true);
             } else {
                 qDebug() << "[" + name + "] Autostart Checkbox hidden.";
                 box->setVisible(false);
-                label->setVisible(false);
             }
         }
     }
@@ -977,7 +973,7 @@ namespace Configuration
 
     void ConfigurationDialog::on_pushButton_Redis_Reset_Port_clicked() { ui->lineEdit_mariadb_port->setText("6379"); }
 
-    void ConfigurationDialog::on_pushButton_Nginx_Reset_Upstreams_clicked()
+    void ConfigurationDialog::on_pushButton_Nginx_Upstream_ResetUpstreams_clicked()
     {
         // reset table content
         ui->tableWidget_Nginx_Upstreams->clearContents();
@@ -993,7 +989,7 @@ namespace Configuration
         ui->tableWidget_Nginx_Upstreams->resizeColumnToContents(0);
     }
 
-    void ConfigurationDialog::on_pushButton_Nginx_Reset_Servers_clicked()
+    void ConfigurationDialog::on_pushButton_Nginx_Upstream_ResetServers_clicked()
     {
         // reset table content
         ui->tableWidget_Nginx_Servers->clearContents();
@@ -1216,6 +1212,14 @@ namespace Configuration
         delete dialog;
     }
 
+    void ConfigurationDialog::on_pushButton_Nginx_Upstream_DeleteUpstream_clicked()
+    {
+        ui->tableWidget_Nginx_Upstreams->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->tableWidget_Nginx_Upstreams->setSelectionMode(QAbstractItemView::SingleSelection);
+
+        ui->tableWidget_Nginx_Upstreams->removeRow(ui->tableWidget_Nginx_Upstreams->currentRow());
+    }
+
     void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddServer_clicked()
     {
         int result;
@@ -1246,6 +1250,14 @@ namespace Configuration
         }
 
         delete dialog;
+    }
+
+    void ConfigurationDialog::on_pushButton_Nginx_Upstream_DeleteServer_clicked()
+    {
+        ui->tableWidget_Nginx_Servers->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->tableWidget_Nginx_Servers->setSelectionMode(QAbstractItemView::SingleSelection);
+
+        ui->tableWidget_Nginx_Servers->removeRow(ui->tableWidget_Nginx_Servers->currentRow());
     }
 
     void ConfigurationDialog::loadNginxUpstreams()
@@ -1363,33 +1375,4 @@ namespace Configuration
         return QJsonObject();
     }
 
-    bool ConfigurationDialog::getSettingBool(const QString &key, const QVariant &defaultValue)
-    {
-        return settings->get(key, defaultValue).toBool();
-    }
-
-    int ConfigurationDialog::getSettingInt(const QString &key, const QVariant &defaultValue)
-    {
-        return settings->get(key, defaultValue).toInt();
-    }
-
-    QString ConfigurationDialog::getSettingString(const QString &key, const QVariant &defaultValue)
-    {
-        return settings->get(key, defaultValue).toString();
-    }
-
-    bool ConfigurationDialog::getSettingBool(const QString &key, const bool &defaultValue)
-    {
-        return settings->get(key, QVariant(defaultValue)).toBool();
-    }
-
-    int ConfigurationDialog::getSettingInt(const QString &key, const int &defaultValue)
-    {
-        return settings->get(key, QVariant(defaultValue)).toInt();
-    }
-
-    QString ConfigurationDialog::getSettingString(const QString &key, const QString &defaultValue)
-    {
-        return settings->get(key, QVariant(defaultValue)).toString();
-    }
 } // namespace Configuration
