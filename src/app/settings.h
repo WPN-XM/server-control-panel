@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QSettings>
+#include <QPointer>
 
 namespace Settings
 {
@@ -23,7 +24,17 @@ namespace Settings
         QString file() const;
         void set(const QString &key, const QVariant &value);
 
-        QSettings getSettingsObject();
+        bool getBool(const QString &key, const QVariant &defaultValue = QVariant()) const;
+        bool getBool(const QString &key, const bool &defaultValue) const;
+
+        int getInt(const QString &key, const QVariant &defaultValue = QVariant()) const;
+        int getInt(const QString &key, const int &defaultValue) const;
+
+        QString getString(const QString &key, const QVariant &defaultValue = QVariant()) const;
+        QString getString(const QString &key, const QString &defaultValue) const;
+
+        QPointer<QSettings> getQSettings();
+        QSettings *settings;
     };
 } // namespace Settings
 
