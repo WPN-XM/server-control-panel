@@ -14,9 +14,12 @@ namespace File
     void JSON::save(const QJsonDocument &document, const QString &fileName)
     {
         QFile file(fileName);
-        file.open(QIODevice::WriteOnly);
-        file.write(document.toJson());
-        file.close();
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(document.toJson());
+            file.close();
+        } else {
+            // qDebug() << "Could not write JSON file:" << fileName;
+        }
     }
 
     QString Text::load(const QString &fileName)
