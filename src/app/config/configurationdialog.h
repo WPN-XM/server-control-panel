@@ -112,7 +112,7 @@ namespace Configuration
         void on_pushButton_Nginx_Upstream_DeleteServer_clicked();
         void on_pushButton_Nginx_Upstream_ResetServers_clicked();
 
-        void on_tableWidget_Upstream_itemSelectionChanged();
+        void on_tableWidget_Nginx_Upstreams_itemSelectionChanged();
 
         // bind PushButtons for resetting ports
         void on_pushButton_MariaDb_Reset_Port_clicked();

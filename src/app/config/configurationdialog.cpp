@@ -1297,7 +1297,7 @@ namespace Configuration
         updateServersTable(jsonPoolFirst);
     }
 
-    void ConfigurationDialog::on_tableWidget_Upstream_itemSelectionChanged()
+    void ConfigurationDialog::on_tableWidget_Nginx_Upstreams_itemSelectionChanged()
     {
         // there is a selection, but its not a row selection
         if (ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows(0).size() <= 0) {
