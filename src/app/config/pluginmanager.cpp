@@ -5,6 +5,10 @@
 #include "plugininterface.h"
 #include "pluginlistdelegate.h"
 
+#include "settings.h"
+
+#include <QDebug>
+
 namespace Plugins
 {
 
@@ -13,14 +17,6 @@ namespace Plugins
         ui->setupUi(this);
         ui->list->setLayoutDirection(Qt::LeftToRight);
         // ui->butSettings->setIcon(IconProvider::settingsIcon());
-
-        // load Settings section for Plugins and enable them
-        /*Settings settings;
-        settings.beginGroup("Plugin-Settings");
-        bool enabledPlugins = settings.value("EnablePlugins", true).toBool();
-        settings.endGroup();
-
-        ui->list->setEnabled(enabledPlugins);*/
 
         connect(ui->butSettings, &QAbstractButton::clicked, this, &PluginManager::settingsClicked);
         connect(ui->list, &QListWidget::currentItemChanged, this, &PluginManager::currentChanged);
@@ -48,23 +44,37 @@ namespace Plugins
         }
 
         QStringList enabledPlugins;
+
         for (int i = 0; i < ui->list->count(); i++) {
             QListWidgetItem *item = ui->list->item(i);
 
             if (item->checkState() == Qt::Checked) {
                 const Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<Plugins::Plugin>();
-                enabledPlugins.append(plugin.id);
+                enabledPlugins.append(plugin.pluginId);
             }
         }
 
-        /*Settings settings;
-        settings.beginGroup("Plugin-Settings");
-        settings.setValue("EnabledPlugins", enabledPlugins);
-        settings.endGroup();*/
+        if (enabledPlugins.empty()) {
+            enabledPlugins << "HelloWorldPlugin";
+        }
+
+        Settings::SettingsManager settings;
+        // settings.set("Plugin-Settings/LoadPlugins", true);
+        settings.set("Plugin-Settings/EnabledPlugins", enabledPlugins);
+
+        qDebug() << "[PluginManager][Settings][Save] Saved EnabledPlugins list to Settings.";
     }
 
     void PluginManager::refresh()
     {
+        // stop list handling
+        // clear list, deactivate settings button, disconnect item change handling
+        ui->list->clear();
+        ui->butSettings->setEnabled(false);
+        disconnect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+
+        // iterate plugins
+
         auto *plugins = new Plugins();
 
         const QList<Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
@@ -180,6 +190,7 @@ namespace Plugins
     void PluginManager::settingsClicked()
     {
         QListWidgetItem *item = ui->list->currentItem();
+
         if (!item || item->checkState() == Qt::Unchecked) {
             return;
         }
@@ -197,15 +208,6 @@ namespace Plugins
         if (plugin.isLoaded() && plugin.metaData.hasSettings) {
             plugin.instance->showSettings(this);
         }
-    }
-
-    QStringList PluginManager::getConfigTreeMenuItem()
-    {
-        QStringList list;
-        list << "Plugins";
-        list << this->objectName();
-
-        return list;
     }
 
 } // namespace Plugins

@@ -24,18 +24,18 @@ namespace Plugins
         void load();
         void save();
 
-        QStringList getConfigTreeMenuItem();
-
     private slots:
         void settingsClicked();
         void currentChanged(QListWidgetItem *item);
         void itemChanged(QListWidgetItem *item);
+
         void refresh();
 
     private:
         void sortItems();
-        bool loaded;
+
         Ui::PluginList *ui;
+        bool loaded;
     };
 } // namespace Plugins
 
