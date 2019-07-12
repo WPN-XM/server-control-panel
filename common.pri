@@ -38,6 +38,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # disable all deprecated APIs before the following version
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051100
 
+# shut the fuck up, you unmaintained "yaml-cpp"
+DEFINES += _SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING
+
 # disable the creation of debug/release folders in shadow build folders
 # https://bugreports.qt.io/browse/QTCREATORBUG-13807
 #CONFIG -= debug_and_release
@@ -70,7 +73,7 @@ win32-msvc* {
 win32-clang-msvc* {
     message("using win32 clang msvc")
     #QMAKE_CXXFLAGS *= /MP
-    QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS
+    QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS    
     QMAKE_CXXFLAGS *= /std:c++17
     QMAKE_CXXFLAGS *= /O2
 }
