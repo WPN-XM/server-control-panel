@@ -25,4 +25,4 @@ namespace Configuration
     QString NginxAddServerDialog::timeout() { return ui->lineEdit_Timeout->text().trimmed(); }
 
     QString NginxAddServerDialog::phpchildren() { return ui->lineEdit_PHPChildren->text().trimmed(); }
-}
+} // namespace Configuration

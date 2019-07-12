@@ -1,28 +1,30 @@
-#ifndef PLUGINMANAGER_H
-#define PLUGINMANAGER_H
+#ifndef PLUGINSMANAGER_H
+#define PLUGINSMANAGER_H
 
 #include <QWidget>
 #include <QMessageBox>
 
 class QListWidgetItem;
 
-namespace Ui
+namespace Configuration
 {
-    class PluginList;
-}
+    namespace Ui
+    {
+        class PluginsManager;
+    }
 
-namespace Plugins
-{
-    class PluginManager : public QWidget
+    class PluginsManager : public QWidget
     {
         Q_OBJECT
 
     public:
-        explicit PluginManager(QWidget *parent = 0);
-        ~PluginManager();
+        explicit PluginsManager(QWidget *parent = 0);
+        ~PluginsManager();
 
         void load();
         void save();
+
+        QString menuName = "Plugins";
 
     private slots:
         void settingsClicked();
@@ -34,9 +36,9 @@ namespace Plugins
     private:
         void sortItems();
 
-        Ui::PluginList *ui;
+        Ui::PluginsManager *ui;
         bool loaded;
     };
-} // namespace Plugins
+} // namespace Configuration
 
-#endif // PLUGINMANAGER_H
+#endif // PLUGINSMANAGER_H

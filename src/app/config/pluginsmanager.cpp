@@ -1,35 +1,36 @@
-#include "pluginmanager.h"
-#include "ui_pluginlist.h"
+#include "pluginsmanager.h"
+#include "ui_pluginsmanager.h"
 
-#include "plugins.h"
-#include "plugininterface.h"
-#include "pluginlistdelegate.h"
+#include "plugins/plugins.h"
+#include "plugins/plugininterface.h"
+#include "plugins/pluginlistdelegate.h"
 
 #include "settings.h"
 
 #include <QDebug>
 
-namespace Plugins
+namespace Configuration
 {
 
-    PluginManager::PluginManager(QWidget *parent) : QWidget(parent), ui(new Ui::PluginList), loaded(false)
+    PluginsManager::PluginsManager(QWidget *parent)
+        : QWidget(parent), ui(new Configuration::Ui::PluginsManager), loaded(false)
     {
         ui->setupUi(this);
         ui->list->setLayoutDirection(Qt::LeftToRight);
         // ui->butSettings->setIcon(IconProvider::settingsIcon());
 
-        connect(ui->butSettings, &QAbstractButton::clicked, this, &PluginManager::settingsClicked);
-        connect(ui->list, &QListWidget::currentItemChanged, this, &PluginManager::currentChanged);
-        connect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+        connect(ui->butSettings, &QAbstractButton::clicked, this, &PluginsManager::settingsClicked);
+        connect(ui->list, &QListWidget::currentItemChanged, this, &PluginsManager::currentChanged);
+        connect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
 
-        ui->list->setItemDelegate(new PluginListDelegate(ui->list));
+        ui->list->setItemDelegate(new PluginsNS::PluginListDelegate(ui->list));
 
         load();
     }
 
-    PluginManager::~PluginManager() { delete ui; }
+    PluginsManager::~PluginsManager() { delete ui; }
 
-    void PluginManager::load()
+    void PluginsManager::load()
     {
         if (!loaded) {
             refresh();
@@ -37,7 +38,7 @@ namespace Plugins
         }
     }
 
-    void PluginManager::save()
+    void PluginsManager::save()
     {
         if (!loaded) {
             return;
@@ -49,7 +50,8 @@ namespace Plugins
             QListWidgetItem *item = ui->list->item(i);
 
             if (item->checkState() == Qt::Checked) {
-                const Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<Plugins::Plugin>();
+                const PluginsNS::Plugins::Plugin plugin =
+                    item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
                 enabledPlugins.append(plugin.pluginId);
             }
         }
@@ -65,25 +67,25 @@ namespace Plugins
         qDebug() << "[PluginManager][Settings][Save] Saved EnabledPlugins list to Settings.";
     }
 
-    void PluginManager::refresh()
+    void PluginsManager::refresh()
     {
         // stop list handling
         // clear list, deactivate settings button, disconnect item change handling
         ui->list->clear();
         ui->butSettings->setEnabled(false);
-        disconnect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+        disconnect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
 
         // iterate plugins
 
-        auto *plugins = new Plugins();
+        auto *plugins = new PluginsNS::Plugins();
 
-        const QList<Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
+        const QList<PluginsNS::Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
 
-        foreach (const Plugins::Plugin &plugin, allPlugins) {
+        foreach (const PluginsNS::Plugins::Plugin &plugin, allPlugins) {
 
             QListWidgetItem *item = new QListWidgetItem(ui->list);
 
-            PluginMetaData metaData = plugin.metaData;
+            PluginsNS::PluginMetaData metaData = plugin.metaData;
 
             // QIcon icon = QIcon(desc.icon);
             // item->setIcon(icon);
@@ -113,10 +115,10 @@ namespace Plugins
 
         sortItems();
 
-        connect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+        connect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
     }
 
-    void PluginManager::sortItems()
+    void PluginsManager::sortItems()
     {
         ui->list->sortItems();
 
@@ -139,13 +141,13 @@ namespace Plugins
         } while (itemMoved);
     }
 
-    void PluginManager::currentChanged(QListWidgetItem *item)
+    void PluginsManager::currentChanged(QListWidgetItem *item)
     {
         if (!item) {
             return;
         }
 
-        const Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<Plugins::Plugin>();
+        const PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
         bool showSettings = plugin.metaData.hasSettings;
 
@@ -156,15 +158,15 @@ namespace Plugins
         ui->butSettings->setEnabled(showSettings);
     }
 
-    void PluginManager::itemChanged(QListWidgetItem *item)
+    void PluginsManager::itemChanged(QListWidgetItem *item)
     {
         if (!item) {
             return;
         }
 
-        Plugins *plugins = new Plugins();
+        PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
 
-        Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<Plugins::Plugin>();
+        PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
         if (item->checkState() == Qt::Checked) {
             plugins->loadPlugin(&plugin);
@@ -172,7 +174,7 @@ namespace Plugins
             plugins->unloadPlugin(&plugin);
         }
 
-        disconnect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+        disconnect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
 
         if (item->checkState() == Qt::Checked && !plugin.isLoaded()) {
             item->setCheckState(Qt::Unchecked);
@@ -182,12 +184,12 @@ namespace Plugins
 
         item->setData(Qt::UserRole + 10, QVariant::fromValue(plugin));
 
-        connect(ui->list, &QListWidget::itemChanged, this, &PluginManager::itemChanged);
+        connect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
 
         currentChanged(ui->list->currentItem());
     }
 
-    void PluginManager::settingsClicked()
+    void PluginsManager::settingsClicked()
     {
         QListWidgetItem *item = ui->list->currentItem();
 
@@ -195,9 +197,9 @@ namespace Plugins
             return;
         }
 
-        Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<Plugins::Plugin>();
+        PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
-        Plugins *plugins = new Plugins;
+        PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
 
         if (!plugin.isLoaded()) {
             plugins->loadPlugin(&plugin);
@@ -210,4 +212,4 @@ namespace Plugins
         }
     }
 
-} // namespace Plugins
+} // namespace Configuration

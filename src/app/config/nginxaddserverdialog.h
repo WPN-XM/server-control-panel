@@ -36,7 +36,7 @@ namespace Configuration
         };
 
     private:
-        Configuration::Ui::NginxAddServerDialog *ui;
+        Ui::NginxAddServerDialog *ui;
     };
 } // namespace Configuration
 

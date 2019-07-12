@@ -4,7 +4,9 @@
 
 namespace Plugin_HelloWorld_NS
 {
-    // HelloWorldPlugin::~HelloWorldPlugin() {}
+    Plugin_HelloWorld::Plugin_HelloWorld() : QObject(){};
+
+    Plugin_HelloWorld::~Plugin_HelloWorld(){};
 
     void Plugin_HelloWorld::init(InitState state)
     {
@@ -44,8 +46,7 @@ namespace Plugin_HelloWorld_NS
 
     /*
      * Shows the Settings Dialog for this plugin,
-     * when the Button "Settings" is clicked
-     * in the "Configuration > Plugins" dialog.
+     * when the Button "Settings" is clicked in the "Configuration > Plugins" dialog.
      */
     void Plugin_HelloWorld::showSettings(QWidget *parent)
     {

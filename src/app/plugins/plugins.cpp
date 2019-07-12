@@ -1,15 +1,58 @@
 #include "plugins.h"
 
-namespace Plugins
+namespace PluginsNS
 {
 
-    Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false) { loadSettings(); }
+    Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false)
+    {
+        // load Settings
+        loadSettings();
+    }
 
     QList<Plugins::Plugin> Plugins::getAvailablePlugins()
     {
         loadAvailablePlugins();
 
         return availablePlugins;
+    }
+
+    void Plugins::loadPlugins()
+    {
+        // find SharedLibrary Plugins
+        const QDir pluginsDir(QCoreApplication::applicationDirPath() + QDir::separator() + "plugins");
+
+        QStringList nameFilters;
+        nameFilters << "*.dll"; // << "*.so";
+
+        const auto files = pluginsDir.entryInfoList(nameFilters, QDir::Files);
+
+        // TODO from files only enabledPlugins;
+
+        for (const QFileInfo &file : files) {
+            const QString fileName = file.absoluteFilePath();
+
+            QPluginLoader *pluginLoader = new QPluginLoader(fileName);
+
+            if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
+                qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
+                continue;
+            }
+
+            QJsonObject pluginMetaData = pluginLoader->metaData();
+
+            Plugins::Plugin plugin;
+            plugin.pluginId = pluginMetaData.value("MetaData").toObject().value("name").toString();
+            // plugin.instance    = pluginObject;
+            plugin.libraryPath = fileName;
+            plugin.loader      = pluginLoader;
+            plugin.metaData    = Plugins::getMetaData(pluginMetaData);
+
+            // plugin.instance = initPlugin(PluginInterface::StartupInitState, plugin);
+        }
+
+        refreshLoadedPlugins();
+
+        qDebug() << "[Plugins] Loaded..";
     }
 
     bool Plugins::loadPlugin(Plugins::Plugin *plugin)
@@ -87,7 +130,7 @@ namespace Plugins
             // const QMetaObject *pluginMeta = pluginInstance->metaObject();
 
             Plugins::Plugin plugin;
-            plugin.id = pluginMetaData.value("MetaData").toObject().value("name").toString();
+            plugin.pluginId = pluginMetaData.value("MetaData").toObject().value("name").toString();
             // plugin.instance    = pluginObject;
             plugin.libraryPath = fileName;
             plugin.loader      = pluginLoader;
@@ -146,11 +189,10 @@ namespace Plugins
     {
         QStringList defaultEnabledPlugins = {"HelloWorldPlugin"};
 
-        Settings::SettingsManager settingsManager;
-        QSettings settings(settingsManager.file(), QSettings::IniFormat);
-        settings.beginGroup("Plugin-Settings");
-        enabledPlugins = settings.value("EnabledPlugins", defaultEnabledPlugins).toStringList();
-        settings.endGroup();
+        enabledPlugins << defaultEnabledPlugins;
+
+        Settings::SettingsManager settings;
+        enabledPlugins = settings.get("Plugin-Settings/EnabledPlugins", enabledPlugins).toStringList();
     }
 
     bool Plugins::initPlugin(PluginInterface::InitState state, Plugin *plugin)

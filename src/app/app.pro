@@ -49,6 +49,7 @@ HEADERS += \
     config/configurationdialog.h \
     config/nginxaddserverdialog.h \
     config/nginxaddupstreamdialog.h \
+    config/pluginsmanager.h \
     file/filehandling.h \
     file/csv.h \
     file/ini.h \
@@ -82,7 +83,6 @@ HEADERS += \
     version.h \
     windowsapi.h \
     plugins\plugininterface.h \
-    plugins\pluginmanager.h \
     plugins/plugins.h \
     plugins/pluginlistdelegate.h
 
@@ -92,6 +92,7 @@ SOURCES += \
     config/configurationdialog.cpp \
     config/nginxaddserverdialog.cpp \
     config/nginxaddupstreamdialog.cpp \
+    config/pluginsmanager.cpp \
     file/csv.cpp \    
     file/filehandling.cpp \
     file/ini.cpp \
@@ -124,7 +125,6 @@ SOURCES += \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
     windowsapi.cpp \
-    plugins\pluginmanager.cpp \
     plugins/plugins.cpp \
     plugins/pluginlistdelegate.cpp
 
@@ -135,10 +135,10 @@ FORMS += \
     config/configurationdialog.ui \
     config/nginxaddserverdialog.ui \
     config/nginxaddupstreamdialog.ui \
+    config/pluginsmanager.ui \
     mainwindow.ui \
     processviewer/processviewerdialog.ui \   
-    updater/updaterdialog.ui \
-    config/pluginlist.ui
+    updater/updaterdialog.ui
 
 # WINDOWS RC-FILE (sets the executable attributes)
 exists(C:\Windows\System32\cmd.exe) {

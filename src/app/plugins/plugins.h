@@ -15,7 +15,7 @@
 #include "plugininterface.h"
 #include "settings.h"
 
-namespace Plugins
+namespace PluginsNS
 {
 
     class PluginMetaData
@@ -29,12 +29,9 @@ namespace Plugins
         QString type;
         QString icon;
         bool core;
-        bool hasSettings;
-
-        // bool dependencies;
-        // QJsonArray dependenciesPath;
-
-        // QString path;
+        bool hasSettings = false;
+        // QPixmap icon;
+        // @TODO plugin dependencies?
     };
 
     class Plugins : public QObject
@@ -43,16 +40,16 @@ namespace Plugins
     public:
         struct Plugin
         {
-            QString id;
-            QString libraryPath;
+            QString pluginId;
             PluginMetaData metaData;
             PluginInterface *instance = nullptr;
 
+            QString libraryPath;
             QPluginLoader *loader = nullptr;
 
             bool isLoaded() const { return instance; }
 
-            bool operator==(const Plugin &other) const { return this->id == other.id; }
+            bool operator==(const Plugin &other) const { return this->pluginId == other.pluginId; }
         };
 
         explicit Plugins(QObject *parent = nullptr);
@@ -64,14 +61,22 @@ namespace Plugins
 
         void shutdown();
 
+    public slots:
+        void loadSettings();
+        void loadPlugins();
+
     protected:
         QList<PluginInterface *> loadedPlugins;
+
+    signals:
+        void pluginUnloaded(PluginInterface *plugin);
+        void refreshedLoadedPlugins();
 
     private:
         bool pluginsLoaded = false;
 
         QList<Plugin> availablePlugins;
-        QStringList enabledPlugins;
+        QStringList enabledPlugins{};
 
         void loadAvailablePlugins();
         void refreshLoadedPlugins();
@@ -79,17 +84,10 @@ namespace Plugins
         bool initPlugin(PluginInterface::InitState state, Plugin *plugin);
 
         static PluginMetaData getMetaData(const QJsonObject &metaData);
-
-    signals:
-        void pluginUnloaded(PluginInterface *plugin);
-        void refreshedLoadedPlugins();
-
-    public slots:
-        void loadSettings();
     };
 
-} // namespace Plugins
+} // namespace PluginsNS
 
-Q_DECLARE_METATYPE(Plugins::Plugins::Plugin)
+Q_DECLARE_METATYPE(PluginsNS::Plugins::Plugin)
 
 #endif // PLUGINS_H

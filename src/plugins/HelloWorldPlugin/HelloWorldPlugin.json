@@ -1,5 +1,5 @@
 {
-    "name"              : "Hello World Plugin",
+    "name"              : "HelloWorldPlugin",
     "version"           : "1.0.0",
     "description"       : "This is the description of the Hello World plugin.",
     "type"              : "SharedLibraryPlugin",

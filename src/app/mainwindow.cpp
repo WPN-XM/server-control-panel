@@ -103,9 +103,9 @@ namespace ServerControlPanel
 
     Settings::SettingsManager *MainWindow::getSettings() { return settings; }
 
-    void MainWindow::setPlugins(Plugins::Plugins *oPlugins) { plugins = oPlugins; }
+    void MainWindow::setPlugins(PluginsNS::Plugins *oPlugins) { plugins = oPlugins; }
 
-    Plugins::Plugins *MainWindow::getPlugins() { return plugins; }
+    PluginsNS::Plugins *MainWindow::getPlugins() { return plugins; }
 
     void MainWindow::handlePlugin(QObject *plugin)
     {
@@ -913,7 +913,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(servers);
-        cfgDlg.setCurrentStackWidget("nginx");
+        cfgDlg.showPage("nginx");
         cfgDlg.exec();
     }
 
@@ -921,7 +921,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("php");
+        cfgDlg.showPage("php");
         cfgDlg.exec();
     }
 
@@ -929,7 +929,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("mariadb");
+        cfgDlg.showPage("mariadb");
         cfgDlg.exec();
     }
 
@@ -937,7 +937,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("mongodb");
+        cfgDlg.showPage("mongodb");
         cfgDlg.exec();
     }
 
@@ -945,7 +945,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("postgresql");
+        cfgDlg.showPage("postgresql");
         cfgDlg.exec();
     }
 
@@ -953,7 +953,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("redis");
+        cfgDlg.showPage("redis");
         cfgDlg.exec();
     }
 
@@ -961,7 +961,7 @@ namespace ServerControlPanel
     {
         Configuration::ConfigurationDialog cfgDlg;
         cfgDlg.setServers(this->servers);
-        cfgDlg.setCurrentStackWidget("memcached");
+        cfgDlg.showPage("memcached");
         cfgDlg.exec();
     }
 

@@ -20,11 +20,11 @@
 
 #include "nginxaddserverdialog.h"
 #include "nginxaddupstreamdialog.h"
+#include "pluginsmanager.h"
+
 #include "file/ini.h"
 #include "file/json.h"
 #include "file/yml.h"
-
-#include "plugins/pluginmanager.h"
 
 namespace Configuration
 {
@@ -39,15 +39,16 @@ namespace Configuration
 
     public:
         explicit ConfigurationDialog(QWidget *parent = nullptr);
-
         ~ConfigurationDialog();
 
-        // void addItemToTreeMenu(const QString &text);
-        void addItemToTreeMenu(const QStringList &list);
-        void addComponentItemToTreeMenu(const QString &text);
-        void addComponentItemToTreeMenu(const QStringList &list);
-        void addWidgetToStack(QWidget *widget);
+        // page related
+        void addPage(QWidget *widget);
+        void showPage(const QString &widgetname);
 
+        // menu related
+        void addMenuItem(QWidget *widget);
+
+        // config directive related
         void setRunOnStartUp(bool run = true);
         bool runOnStartUp() const;
 
@@ -66,8 +67,6 @@ namespace Configuration
 
         void hideComponentsNotInstalledInMenuTree();
         void hideAutostartCheckboxesOfNotInstalledServers();
-
-        void setCurrentStackWidget(const QString &widgetname);
 
         // TODO move config stuff into own class per component
 
@@ -94,13 +93,16 @@ namespace Configuration
         QStringList getEnabledPHPExtensions();
 
     private slots:
+        // page + menu related
+        void on_configMenuTreeWidget_clicked(const QModelIndex &index);
+        void on_configMenuSearchLineEdit_textChanged(const QString &string);
+
+        // config directive related
         void toggleAutostartServerCheckboxes(bool run = true);
-        void onClickedButtonBoxOk();
+        void on_pushButton_ButtonBox_Clicked(QAbstractButton *button);
 
         void on_toolButton_SelectEditor_clicked();
         void on_toolButton_ResetEditor_clicked();
-
-        void on_configMenuTreeWidget_clicked(const QModelIndex &index);
 
         // bind PushButtons of Nginx Config Tab
         // upstreams table
@@ -124,8 +126,6 @@ namespace Configuration
         void on_pushButton_searchPHPInstallations_clicked();
         void on_pushButton_setPHPVersionForBinFolder_clicked();
 
-        void on_configMenuSearchLineEdit_textChanged(const QString &string);
-
         void PHPExtensionListWidgetHighlightChecked(QListWidgetItem *item);
         void savePHPExtensionState(QString ext, bool enable);
 
@@ -136,7 +136,7 @@ namespace Configuration
 
         Settings::SettingsManager *settings;
         Servers::Servers *servers;
-        Plugins::PluginManager *pluginManager;
+        Configuration::PluginsManager *pluginsManager;
 
         QCheckBox *checkbox_runOnStartUp;
         QCheckBox *checkbox_autostartServers;
@@ -160,8 +160,8 @@ namespace Configuration
         QStringList installedServersList;
         bool isServerInstalled(const QString &serverName) const;
 
-        void readSettings();
-        void writeSettings();
+        void loadSettings();
+        void saveSettings();
 
         void toggleRunOnStartup();
 
@@ -169,6 +169,12 @@ namespace Configuration
 
         static bool sortByPhpVersion(const PhpVersions &d1, const PhpVersions &d2);
         QString getPHPVersionOfExe(QString pathToPHPExecutable);
+
+        // menu related
+        void addItemToTreeMenu(const QString &topLevelItemName, const QString &stackWidgetName);
+        void addItemToTreeMenu(const QString &topLevelItemName,
+                               const QString &itemName,
+                               const QString &stackWidgetName);
     };
 } // namespace Configuration
 

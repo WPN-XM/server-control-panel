@@ -4,7 +4,7 @@
 #include <QListWidget>
 #include <QApplication>
 
-namespace Plugins
+namespace PluginsNS
 {
 
     PluginListDelegate::PluginListDelegate(QListWidget *parent)

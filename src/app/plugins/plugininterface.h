@@ -5,21 +5,21 @@
 
 //#include "../settings.h"
 
-namespace Plugins
+namespace PluginsNS
 {
 
     class PluginInterface
     {
 
     public:
-        PluginInterface() {}
-        virtual ~PluginInterface() {}
-
         enum InitState
         {
             StartupInitState,
             LateInitState
         };
+
+        // PluginInterface() {}
+        virtual ~PluginInterface() {}
 
         virtual void init(InitState state) = 0;
         virtual void unload()              = 0;
@@ -33,24 +33,15 @@ namespace Plugins
         // virtual QString getAuthor() const;
         // virtual QString getEmail() const;
 
-        // virtual bool enable();
-        // virtual bool disable();
-
         // settings related
         virtual void showSettings(QWidget *parent = nullptr) = 0;
         // virtual bool loadSettings(Settings::SettingsManager *settings) = 0;
         // virtual bool saveSettings(Settings::SettingsManager *settings) = 0;
         // virtual void onSettingChanged(const QString &setting);
-
-    signals:
-        // Signal to be emitted in getName()
-        // void name(QString);
-
-    public slots:
     };
 
-} // namespace Plugins
+} // namespace PluginsNS
 
-Q_DECLARE_INTERFACE(Plugins::PluginInterface, "WPN-XM.ServerControlPanel.PluginInterface/1.0")
+Q_DECLARE_INTERFACE(PluginsNS::PluginInterface, "WPN-XM.ServerControlPanel.PluginInterface/1.0")
 
 #endif // PLUGININTERFACE_H

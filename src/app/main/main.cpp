@@ -101,7 +101,9 @@ int main(int argc, char *argv[])
 
     splash.setMessage("Loading Plugins...", 10);
     QApplication::addLibraryPath("./plugins");
-    Plugins::Plugins *plugins = new Plugins::Plugins();
+    PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
+    // @TODO load plugins
+    // plugins->load
     mainWindow.setPlugins(plugins);
 
     splash.setMessage("Initial scan of installed applications ..", 15);

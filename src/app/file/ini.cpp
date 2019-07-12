@@ -14,8 +14,7 @@ namespace File
 //#define log qDebug
 #define log
 
-    INI::INI(const char *fileNameWithPath, bool _autoCreate)
-        : data(nullptr), fStream(nullptr), autoSave(false), autoCreate(_autoCreate)
+    INI::INI(const char *fileNameWithPath) : data(nullptr), fStream(nullptr), autoSave(false)
     {
         strcpy(iniFileName, fileNameWithPath);
         loadConfigFile();
@@ -28,16 +27,16 @@ namespace File
 
         fStream.open(p, ios::in);
         if (!fStream) {
-            if (!autoCreate) {
+            /*if (!autoCreate) {
                 log("[INI] config file [%s] does not exist", iniFileName);
             } else {
                 log("[INI] config file [%s] not found. Creating new file (auto-create "
                     "on)",
                     iniFileName);
-            }
+            }*/
             return;
         } else {
-            log("[INI] Reading config file [%s]", iniFileName);
+            // log("[INI] Reading config file [%s]", iniFileName);
         }
 
         char line[4096];
@@ -57,7 +56,7 @@ namespace File
                 // entry.index = str;
                 entry.isEmptyLine = true;
                 datas.push_back(entry);
-                log("[INI] entry: empty line");
+                // log("[INI] entry: empty line");
                 continue;
             }
 
@@ -88,7 +87,7 @@ namespace File
                     continue;
                 line[i] = '\0';
                 str     = string(line);
-                log("[INI] read line: %s", str.c_str());
+                // log("[INI] read line: %s", str.c_str());
                 // [section] start
                 if (line[0] == '[') {
                     index = str;
@@ -103,8 +102,8 @@ namespace File
                     entry.value = trim(entry.value);
                     // insert
                     datas.push_back(entry);
-                    log("[INI] entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
-                        entry.value.c_str());
+                    // log("[INI] entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
+                    // entry.value.c_str());
                 }
                 i = 0;
             }
@@ -121,8 +120,8 @@ namespace File
             entry.value = trim(entry.value);
             // insert
             datas.push_back(entry);
-            log("[INI] last add entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
-                entry.value.c_str());
+            // log("[INI] last add entry: section[%s]\t name[%s]\t value[%s]", entry.index.c_str(), entry.name.c_str(),
+            // entry.value.c_str());
         }
         fStream.close();
     }
@@ -130,7 +129,7 @@ namespace File
     INI::~INI()
     {
         if (autoSave) {
-            log("[INI] Deconstructor. AutoSaving config file: [%s]", iniFileName);
+            // log("[INI] Deconstructor. AutoSaving config file: [%s]", iniFileName);
             writeConfigFile();
         }
     }
@@ -151,7 +150,7 @@ namespace File
             fileName = iniFileName;
         fstream fStream;
         fStream.open(fileName, ios_base::out | ios_base::trunc);
-        log("[INI] start writing file[%s]", fileName);
+        // log("[INI] start writing file[%s]", fileName);
         string index     = string("");
         bool withComment = false;
         bool isStart     = true;
@@ -159,7 +158,7 @@ namespace File
             INIEntry entry = *it;
             if (entry.isEmptyLine) {
                 fStream << "\n";
-                log("[INI] write empty line");
+                // log("[INI] write empty line");
                 continue;
             }
             if (entry.isComment) {
@@ -170,11 +169,11 @@ namespace File
                     fStream << entry.comment.c_str() << endl;
                 isStart = false;
 
-                log("[INI] write comment: %s", entry.comment.c_str());
+                // log("[INI] write comment: %s", entry.comment.c_str());
                 continue;
             }
             if (strlen(entry.name.c_str()) == 0 || strlen(entry.value.c_str()) == 0) {
-                log("[INI] skip invalid entry");
+                // log("[INI] skip invalid entry");
                 continue;
             }
             if (strcmp(index.c_str(), entry.index.c_str()) != 0) {
@@ -183,18 +182,18 @@ namespace File
                     fStream << '[' << entry.index << ']' << endl;
                     withComment = false;
                     isStart     = false;
-                    log("[INI] write section [%s]", entry.index.c_str());
+                    // log("[INI] write section [%s]", entry.index.c_str());
                 } else {
                     fStream << endl << '[' << entry.index << ']' << endl;
-                    log("[INI] write section [%s]", entry.index.c_str());
+                    // log("[INI] write section [%s]", entry.index.c_str());
                 }
             }
             fStream << entry.name << " = " << entry.value << endl;
-            log("[INI] write value | %s = %s", entry.name.c_str(), entry.value.c_str());
+            // log("[INI] write value | %s = %s", entry.name.c_str(), entry.value.c_str());
         }
         fStream << endl;
         fStream.close();
-        log("[INI] Saved config file [%s]. Done.", fileName);
+        // log("[INI] Saved config file [%s]. Done.", fileName);
     }
 
     void INI::setStringValueWithIndex(const char *index, const char *name, const char *value)
@@ -208,9 +207,9 @@ namespace File
             datas.push_back(entry);
             return;
         }
-        auto it = datas.begin();
-        bool findIndex                = false;
-        bool findName                 = false;
+        auto it        = datas.begin();
+        bool findIndex = false;
+        bool findName  = false;
         vector<INIEntry>::iterator itInsertPos;
         for (it = datas.begin(); it != datas.end(); it++) {
             if (!findIndex) {
@@ -246,7 +245,7 @@ namespace File
     {
         const char *str = getStringValue(index, name);
         if (str == nullptr) {
-            log("notfound for [%s]-[%s]", index, name);
+            // log("notfound for [%s]-[%s]", index, name);
             return false;
         }
         if (strcmp(str, "true") == 0)
@@ -277,10 +276,10 @@ namespace File
 
     const char *INI::getStringValue(const char *index, const char *name)
     {
-        log("find section[%s]-name[%s]", index, name);
+        // log("find section[%s]-name[%s]", index, name);
         for (unsigned int i = 0; i < datas.size(); i++) {
             if (strcmp(datas[i].index.c_str(), index) == 0) {
-                log("find section[%s]", datas[i].index.c_str());
+                // log("find section[%s]", datas[i].index.c_str());
                 for (; i < datas.size(); i++) {
                     if (strcmp(datas[i].name.c_str(), name) == 0)
                         return datas[i].value.c_str();
@@ -323,14 +322,14 @@ namespace File
     {
         for (vector<INIEntry>::iterator it = datas.begin(); it != datas.end(); it++) {
             INIEntry entry = *it;
-            log(" ------------ INI item of [%s] ------------ ", iniFileName);
+            // log(" ------------ INI item of [%s] ------------ ", iniFileName);
             if (entry.isComment) {
                 cout << entry.comment << endl;
                 continue;
             }
-            log("  index : %s", entry.index.c_str());
-            log("  name  : %s", entry.name.c_str());
-            log("  value : %s", entry.value.c_str());
+            // log("  index : %s", entry.index.c_str());
+            // log("  name  : %s", entry.name.c_str());
+            // log("  value : %s", entry.value.c_str());
         }
     }
 }; // namespace File

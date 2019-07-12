@@ -116,8 +116,8 @@ namespace ServerControlPanel
         void setProcessUtil(Processes::ProcessUtil *oProcesses);
         Processes::ProcessUtil *getProcessUtil();
 
-        void setPlugins(Plugins::Plugins *oPlugins);
-        Plugins::Plugins *getPlugins();
+        void setPlugins(PluginsNS::Plugins *oPlugins);
+        PluginsNS::Plugins *getPlugins();
 
         Settings::SettingsManager *getSettings();
 
@@ -128,7 +128,7 @@ namespace ServerControlPanel
         Servers::Servers *servers;
         Updater::SelfUpdater *selfUpdater;
         Processes::ProcessUtil *processes;
-        Plugins::Plugins *plugins;
+        PluginsNS::Plugins *plugins;
         Settings::SettingsManager *settings;
 
         QAction *minimizeAction;

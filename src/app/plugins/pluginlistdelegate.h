@@ -4,7 +4,7 @@
 #include <QStyledItemDelegate>
 #include <QListWidget>
 
-namespace Plugins
+namespace PluginsNS
 {
 
     class PluginListDelegate : public QStyledItemDelegate

@@ -28,7 +28,7 @@ namespace Configuration
         };
 
     private:
-        Configuration::Ui::NginxAddPoolDialog *ui;
+        Ui::NginxAddPoolDialog *ui;
     };
 } // namespace Configuration
 #endif // NGINXADDUPSTREAMDIALOG_H

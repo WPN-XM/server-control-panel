@@ -25,33 +25,33 @@ namespace File
     };
 
     /**
-* INI - A reader and writer for the INI configuration file format.
-*
-* QSettings with QSettings::IniFormat doesn't work with comments.
-* Not supporting INI comments (starting with ; or #) is stupid.
-*
-* // Writer
-*
-* INI *ini = new INI("test.ini");
-*
-* ini->setIntValue("section1", "intValue", 1);
-* ini->setFloatValue("section1", "floatValue", 0.1);
-* ini->setStringValue("section2", "stringValue", "hello, world");
-* ini->setBoolValue("section2", "boolValue", true);
-*
-* ini->writeConfigFile();
-*
-* // Reader
-*
-* int intValue = ini->getIntValue("section1", "intValue");
-* float floatValue = ini->getFloatValue("section1", "floatValue");
-* const char *stringValue = ini->getStringValue("section2", "stringValue");
-* bool boolValue = ini->getBoolValue("section2", "boolValue");
-*/
+     * INI - A reader and writer for the INI configuration file format.
+     *
+     * QSettings with QSettings::IniFormat doesn't work with comments.
+     * Not supporting INI comments (starting with ; or #) is stupid.
+     *
+     * // Writer
+     *
+     * INI *ini = new INI("test.ini");
+     *
+     * ini->setIntValue("section1", "intValue", 1);
+     * ini->setFloatValue("section1", "floatValue", 0.1);
+     * ini->setStringValue("section2", "stringValue", "hello, world");
+     * ini->setBoolValue("section2", "boolValue", true);
+     *
+     * ini->writeConfigFile();
+     *
+     * // Reader
+     *
+     * int intValue = ini->getIntValue("section1", "intValue");
+     * float floatValue = ini->getFloatValue("section1", "floatValue");
+     * const char *stringValue = ini->getStringValue("section2", "stringValue");
+     * bool boolValue = ini->getBoolValue("section2", "boolValue");
+     */
     class INI
     {
     public:
-        INI(const char *fileName, bool autoCreate = false);
+        INI(const char *fileName);
         ~INI();
 
         void writeConfigFile(const char *fileName = NULL);
@@ -83,8 +83,7 @@ namespace File
         void loadConfigFile();
         fstream *fStream;
         bool autoSave;
-        bool autoCreate;
     };
-};
+}; // namespace File
 
 #endif // INI_H

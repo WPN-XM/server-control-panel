@@ -13,7 +13,8 @@ namespace Configuration
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
         settings = new Settings::SettingsManager;
-        readSettings();
+
+        loadSettings();
 
         hideComponentsNotInstalledInMenuTree();
 
@@ -32,73 +33,108 @@ namespace Configuration
         connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
                 SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
-        pluginManager = new Plugins::PluginManager(this);
-        addWidgetToStack(pluginManager);
-        addItemToTreeMenu(pluginManager->getConfigTreeMenuItem());
+        // @TODO plugin loading
+        pluginsManager = new PluginsManager(this);
+        addPage(pluginsManager);
 
-        connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onClickedButtonBoxOk()));
+        connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &ConfigurationDialog::on_pushButton_ButtonBox_Clicked);
+
+        /*connect(m_list, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this,
+                SLOT(showStackedPage(QListWidgetItem *)));*/
 
         ui->configMenuTreeWidget->expandAll();
     }
 
     ConfigurationDialog::~ConfigurationDialog() { delete ui; }
 
-    void ConfigurationDialog::addComponentItemToTreeMenu(const QString &text)
+    void ConfigurationDialog::addPage(QWidget *widget)
     {
-        // get tree item "Components"
-        QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
-        QTreeWidgetItem *components   = list.at(0);
+        // add a new configuration page into the stacked widget
+        ui->stackedWidget->addWidget(widget);
 
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, text);
-
-        components->addChild(child);
+        addMenuItem(widget);
     }
-
-    void ConfigurationDialog::addComponentItemToTreeMenu(const QStringList &list)
-    {
-        QString displayName     = list.at(0);
-        QString stackWidgetName = list.at(1);
-
-        // get tree item "Components"
-        /*QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems("Components", Qt::MatchFixedString, 0);
-        QTreeWidgetItem *components   = list.at(0);
-
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setText(0, text);
-
-        components->addChild(child);*/
-    }
-
-    /*void ConfigurationDialog::addItemToTreeMenu(const QString &text)
-    {
-        QTreeWidgetItem *item = new QTreeWidgetItem();
-        item->setText(0, text);
-
-        ui->configMenuTreeWidget->addTopLevelItem(item);
-    }*/
 
     /**
-     * @brief ConfigurationDialog::addItemToTreeMenu
-     * @param list: 0 = displayName, 1 = stackWidgetName
+     * @brief ConfigurationDialog::showPage Sets the current stackWidget.
+     * @param widgetname
      */
-    void ConfigurationDialog::addItemToTreeMenu(const QStringList &list)
+    void ConfigurationDialog::showPage(const QString &widgetname)
     {
-        QString displayName     = list.at(0);
-        QString stackWidgetName = list.at(1);
+        QWidget *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
+        if (w != nullptr)
+            ui->stackedWidget->setCurrentWidget(w);
+        else
+            qDebug() << "[Config Menu] There is no widget" << widgetname << "in the stack widget.";
+    }
 
+    /**
+     * a click on a menu item returns the name of the item
+     * switches to the matching page in the stackedWidget
+     *
+     * @param index
+     */
+    void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
+    {
+        QString item;
+
+        item = ui->configMenuTreeWidget->model()->data(index, Qt::UserRole).toString();
+
+        if (item.isEmpty()) {
+            item = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
+        }
+
+        showPage(item);
+    }
+
+    void ConfigurationDialog::addItemToTreeMenu(const QString &topLevelItemName, const QString &stackWidgetName)
+    {
         QTreeWidgetItem *item = new QTreeWidgetItem();
-        item->setText(0, displayName);
+        item->setText(0, topLevelItemName);
         item->setData(0, Qt::UserRole, stackWidgetName);
 
         ui->configMenuTreeWidget->addTopLevelItem(item);
     }
 
-    void ConfigurationDialog::addWidgetToStack(QWidget *widget)
+    void ConfigurationDialog::addItemToTreeMenu(const QString &topLevelItemName,
+                                                const QString &itemName,
+                                                const QString &stackWidgetName)
     {
-        ui->stackedWidget->addWidget(widget);
+        // get tree item "TopLevelItemName"
+        QList<QTreeWidgetItem *> list = ui->configMenuTreeWidget->findItems(topLevelItemName, Qt::MatchFixedString, 0);
 
-        qDebug() << ui->stackedWidget->children();
+        // add childs to top level item
+        QTreeWidgetItem *topLevelItem = list.at(0);
+
+        int idx = ui->configMenuTreeWidget->indexOfTopLevelItem(topLevelItem);
+
+        QTreeWidgetItem *item = new QTreeWidgetItem();
+        item->setText(0, itemName);
+        item->setData(0, Qt::UserRole, stackWidgetName);
+
+        topLevelItem->addChild(item);
+
+        ui->configMenuTreeWidget->insertTopLevelItem(idx, topLevelItem);
+    }
+
+    void ConfigurationDialog::addMenuItem(QWidget *widget)
+    {
+        QString menuItem = widget->objectName();
+
+        // normalize object name, e.g. "Configuration__PluginsManager" to "Plugins"
+        if (menuItem.contains("Configuration__")) {
+            menuItem = menuItem.remove("Configuration__").remove("Manager");
+        }
+
+        // handle separator, e.g. "Components_Nginx"
+        // this enables two-level menu entries from the objectName / ui root element name
+        if (menuItem.contains("_")) {
+            QStringList list = menuItem.split("_");
+
+            addItemToTreeMenu(list.at(0), list.at(1), widget->objectName());
+        }
+
+        addItemToTreeMenu(menuItem, widget->objectName());
     }
 
     QStringList ConfigurationDialog::getAvailablePHPExtensions()
@@ -273,7 +309,7 @@ namespace Configuration
      *
      * Reads settings from INI and prefills config dialog items with default values.
      */
-    void ConfigurationDialog::readSettings()
+    void ConfigurationDialog::loadSettings()
     {
         ui->checkbox_runOnStartUp->setChecked(settings->getBool("global/runonstartup", false));
         ui->checkbox_autostartServers->setChecked(settings->getBool("global/autostartservers", false));
@@ -394,7 +430,7 @@ namespace Configuration
         return false;
     }
 
-    void ConfigurationDialog::writeSettings()
+    void ConfigurationDialog::saveSettings()
     {
         // we convert the type "boolean" from isChecked() to "int".
         // because i like having a simple 0/1 in the INI file, instead of true/false.
@@ -474,6 +510,18 @@ namespace Configuration
         settings->set("xdebug/idekey", QString(ui->lineEdit_xdebug_idekey->text()));
 
         QApplication::processEvents();
+
+        /**
+         * @TODO Iterate over all enabled plugins and save their settings.
+         */
+        /*foreach (const Plugins::Plugin &plugin, allPlugins) {
+            if (plugin->hasSettings) {
+                plugin->saveSettings();
+            }
+            QApplication::processEvents();
+        }*/
+
+        pluginsManager->save();
 
         //
         // Configuration > Components > MariaDBTab > Tab "Configuration"
@@ -744,7 +792,7 @@ namespace Configuration
             }
             file.close();
 
-            qDebug() << "[Nginx][Upstream Config] Saved: " << filename;
+            qDebug() << "[Nginx][Config] Upstream Config Saved: " << filename;
         }
     }
 
@@ -820,10 +868,24 @@ namespace Configuration
         return QJsonValue(jsonServers);
     }
 
-    void ConfigurationDialog::onClickedButtonBoxOk()
+    void ConfigurationDialog::on_pushButton_ButtonBox_Clicked(QAbstractButton *button)
     {
-        writeSettings();
-        toggleRunOnStartup();
+        switch (ui->buttonBox->buttonRole(button)) {
+        case QDialogButtonBox::ApplyRole:
+            saveSettings();
+            toggleRunOnStartup();
+            break;
+        case QDialogButtonBox::AcceptRole:
+            saveSettings();
+            toggleRunOnStartup();
+            close();
+            break;
+        case QDialogButtonBox::RejectRole:
+            close();
+            break;
+        default:
+            break;
+        }
     }
 
     bool ConfigurationDialog::runOnStartUp() const { return (ui->checkbox_runOnStartUp->checkState() == Qt::Checked); }
@@ -883,6 +945,7 @@ namespace Configuration
         }
     }
 
+    // @TODO move to core/plugins/general_settings?
     void ConfigurationDialog::hideAutostartCheckboxesOfNotInstalledServers()
     {
         QStringList installed = this->servers->getInstalledServerNames();
@@ -1160,32 +1223,6 @@ namespace Configuration
         // qDebug() << regex.capturedTexts();
 
         return regex.cap(1).trimmed();
-    }
-
-    void ConfigurationDialog::on_configMenuTreeWidget_clicked(const QModelIndex &index)
-    {
-        // a click on a menu item returns the name of the item
-        // switches to the matching page in the stackedWidget
-        QString item;
-
-        item = ui->configMenuTreeWidget->model()->data(index, Qt::UserRole).toString();
-
-        if (item.isEmpty()) {
-            item = ui->configMenuTreeWidget->model()->data(index).toString().toLower().remove(" ");
-        }
-
-        setCurrentStackWidget(item);
-
-        // TODO implement per page config loading/saving
-    }
-
-    void ConfigurationDialog::setCurrentStackWidget(const QString &widgetname)
-    {
-        auto *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
-        if (w != nullptr)
-            ui->stackedWidget->setCurrentWidget(w);
-        else
-            qDebug() << "[Config Menu] There is no widget" << widgetname << "in the stack widget.";
     }
 
     void ConfigurationDialog::on_pushButton_Nginx_Upstream_AddUpstream_clicked()
