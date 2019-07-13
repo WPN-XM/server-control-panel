@@ -49,6 +49,7 @@ HEADERS += \
     config/configurationdialog.h \
     config/nginxaddserverdialog.h \
     config/nginxaddupstreamdialog.h \
+    config/pluginlistdelegate.h \
     config/pluginsmanager.h \
     file/filehandling.h \
     file/csv.h \
@@ -83,8 +84,7 @@ HEADERS += \
     version.h \
     windowsapi.h \
     plugins\plugininterface.h \
-    plugins/plugins.h \
-    plugins/pluginlistdelegate.h
+    plugins/plugins.h
 
 SOURCES += \
     main/main.cpp \
@@ -92,6 +92,7 @@ SOURCES += \
     config/configurationdialog.cpp \
     config/nginxaddserverdialog.cpp \
     config/nginxaddupstreamdialog.cpp \
+    config/pluginlistdelegate.cpp \
     config/pluginsmanager.cpp \
     file/csv.cpp \    
     file/filehandling.cpp \
@@ -125,8 +126,7 @@ SOURCES += \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
     windowsapi.cpp \
-    plugins/plugins.cpp \
-    plugins/pluginlistdelegate.cpp
+    plugins/plugins.cpp
 
 RESOURCES += \
     resources/resources.qrc
