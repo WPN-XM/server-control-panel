@@ -61,7 +61,6 @@ namespace Configuration
         }
 
         Settings::SettingsManager settings;
-        // settings.set("Plugin-Settings/LoadPlugins", true);
         settings.set("Plugin-Settings/EnabledPlugins", enabledPlugins);
 
         qDebug() << "[PluginManager][Settings][Save] Saved EnabledPlugins list to Settings.";

@@ -24,8 +24,6 @@ namespace Configuration
         void load();
         void save();
 
-        QString menuName = "Plugins";
-
     private slots:
         void settingsClicked();
         void currentChanged(QListWidgetItem *item);
