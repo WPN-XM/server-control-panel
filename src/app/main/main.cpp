@@ -5,36 +5,34 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(resources);
 
     /*
-     * On Windows an application is either a GUI application or Console
-     * application.
+     * On Windows an application is either a GUI application or Console application.
      * This application is a rare GUI and CLI application hybrid.
      *
-     * The application is compiled with "CONFIG += CONSOLE" to support the native
-     * console mode.
-     * When the app is executed without command line args, it will start a console
-     * in GUI mode.
+     * The application is compiled with "CONFIG += CONSOLE" to support the native console mode.
+     * When the app is executed without command line args, it will start a console in GUI mode.
      *
      * If CLI args are found, the application reacts as a console application.
-     * else it runs as a normal QtGUI application.
+     * In this case QCoreApplication is used instead of QApplication to
+     * avoid unnecessarily initializing resources.
+     *
+     * Else, it runs as a normal QtGUI application.
      */
-
     if (argc > 1) { // first arg is the executable itself
-        QApplication app(argc, argv);
-        QApplication::setApplicationName(APP_NAME);
-        QApplication::setApplicationVersion(APP_VERSION);
+        QCoreApplication app(argc, argv);
+        QCoreApplication::setApplicationName(APP_NAME);
+        QCoreApplication::setApplicationVersion(APP_VERSION);
 
         auto *cli = new ServerControlPanel::CLI;
         cli->handleCommandLineArguments();
 
-        return QApplication::exec();
+        return QCoreApplication::exec();
     }
 
     // Initialize Qt application
     QApplication app(argc, argv);
 
     /*
-     * By calling FreeConsole(), we close this console immediately after starting
-     * the GUI.
+     * By calling FreeConsole(), we close this console immediately after starting the GUI.
      * That results in a short console flickering.
      *
      * Yes, it's annoying - but feel free to contribute a better solution.
@@ -48,6 +46,9 @@ int main(int argc, char *argv[])
 
     // Single Instance Check
     ServerControlPanel::Main::exitIfAlreadyRunning();
+
+    // Executable Placement Check
+    ServerControlPanel::Main::exitIfNotInAppFolder();
 
     // Setup Translator for Localization
     /*QTranslator translator;
@@ -73,6 +74,7 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     /**
+     * TODO application style / dark style
      * @brief Set Style: "Fusion Dark"
      */
     // app.setStyle(QStyleFactory::create("Fusion"));
@@ -86,15 +88,13 @@ int main(int argc, char *argv[])
   app.setPalette(p);*/
 
     // Initialize Application MainWindow
-    // so that we can inject data. but do not show it, yet.
+    // So that we can inject data. But do not show it, yet.
     ServerControlPanel::MainWindow mainWindow;
 
     // Activate SplashScreen
-    //#ifndef QT_DEBUG
     ServerControlPanel::SplashScreen splash(QPixmap(), Qt::WindowStaysOnTopHint);
     splash.setProgress(0);
     splash.show();
-    //#endif
 
     splash.setMessage("Loading Settings...", 5);
     Settings::SettingsManager *settings = mainWindow.getSettings();
@@ -102,18 +102,15 @@ int main(int argc, char *argv[])
     splash.setMessage("Loading Plugins...", 10);
     QApplication::addLibraryPath("./plugins");
     PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
-    // @TODO load plugins
-    // plugins->load
+    plugins->loadPlugins();
     mainWindow.setPlugins(plugins);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
     QObject().thread()->usleep(1000 * 1000 * 1);
-    QApplication::processEvents();
 
     splash.setMessage("Getting System Processes ..", 30);
     Processes::ProcessUtil *processes = Processes::ProcessUtil::getInstance();
     mainWindow.setProcessUtil(processes);
-    QApplication::processEvents();
 
     splash.setMessage("Searching for already running processes and blocked ports ..", 40);
     if (Processes::ProcessUtil::getAlreadyRunningProcesses()) {
@@ -129,14 +126,11 @@ int main(int argc, char *argv[])
         pvd->exec();*/
         splash.show();
     }
-    QApplication::processEvents();
 
-    //#ifndef QT_DEBUG
     splash.setProgress(50);
     QObject().thread()->usleep(1000 * 1000 * 1);
-    //#endif
 
-    // setup the env: trayicon, actions, servers, process monitoring
+    // Setup the environment: trayicon, actions, servers, process monitoring
     mainWindow.setup();
 
     // Finally, show the MainWindow
@@ -144,18 +138,11 @@ int main(int argc, char *argv[])
         mainWindow.show();
     }
 
-    //#ifndef QT_DEBUG
+    // be nice and jump to 100% on the progress bar :P
     splash.setMessage("", 100);
-    //#endif
 
     // Deactivate SplashScreen
-    //#ifndef QT_DEBUG
     splash.finish(&mainWindow);
-    //#endif
-
-    /*delete processes;
-    delete settings;
-    delete plugins;*/
 
     // enter the Qt Event loop here
     return QApplication::exec();
@@ -182,6 +169,38 @@ namespace ServerControlPanel
             QMessageBox msgBox;
             msgBox.setWindowTitle(APP_NAME);
             msgBox.setText(QObject::tr("WPN-XM is already running."));
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
+
+            exit(0);
+        }
+    }
+
+    /*
+     * Check Placement of Executable
+     *
+     * Ensure that "wpn-xm.exe" is placed in the application root folder.
+     * Disallow starts outside the wpn-xm installation folder (e.g. from the desktop).
+     */
+    void Main::exitIfNotInAppFolder()
+    {
+        QString appDir = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
+
+        // handle development environment
+        // After a build the executable resides in the "build-*-Release|Debug" folder.
+        // It is started via QtCreator using the work directory directive, which points to a server stack folder.
+        if (appDir.contains("build-")) {
+            return;
+        }
+
+        QString phpFolder = appDir + "/bin/php";
+
+        if (!QDir(phpFolder).exists()) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(APP_NAME);
+            msgBox.setText("The WPN-XM executable must be placed in the root folder of the server stack.");
+            msgBox.setDetailedText(
+                QString("[Error] The directory that currently contains the executable is: \n").append(appDir));
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
 

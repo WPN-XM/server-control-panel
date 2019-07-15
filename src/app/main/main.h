@@ -26,6 +26,7 @@ namespace ServerControlPanel
     public:
         explicit Main(QObject *parent = 0);
         static void exitIfAlreadyRunning();
+        static void exitIfNotInAppFolder();
     };
 } // namespace ServerControlPanel
 
