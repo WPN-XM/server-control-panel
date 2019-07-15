@@ -41,15 +41,14 @@ namespace PluginsNS
         struct Plugin
         {
             QString pluginId;
+            QString pluginPath;
             PluginMetaData metaData;
             PluginInterface *instance = nullptr;
+            QPluginLoader *loader     = nullptr;
 
-            QString libraryPath;
-            QPluginLoader *loader = nullptr;
-
-            bool isLoaded() const { return instance; }
-
-            bool operator==(const Plugin &other) const { return this->pluginId == other.pluginId; }
+            bool isLoaded() const;
+            bool isRemovable() const;
+            bool operator==(const Plugin &other) const;
         };
 
         explicit Plugins(QObject *parent = nullptr);
@@ -58,6 +57,9 @@ namespace PluginsNS
 
         bool loadPlugin(Plugin *plugin);
         void unloadPlugin(Plugin *plugin);
+        void removePlugin(Plugin *plugin);
+
+        bool addPlugin(const QString &id);
 
         void shutdown();
 
@@ -70,7 +72,7 @@ namespace PluginsNS
 
     signals:
         void pluginUnloaded(PluginInterface *plugin);
-        void refreshedLoadedPlugins();
+        void availablePluginsChanged();
 
     private:
         bool pluginsLoaded = false;
@@ -78,9 +80,12 @@ namespace PluginsNS
         QList<Plugin> availablePlugins;
         QStringList enabledPlugins{};
 
-        void loadAvailablePlugins();
-        void refreshLoadedPlugins();
+        void registerAvailablePlugin(const Plugin &plugin);
 
+        void refreshLoadedPlugins();
+        void loadAvailablePlugins();
+
+        Plugin loadPlugin(const QString &fileName);
         bool initPlugin(PluginInterface::InitState state, Plugin *plugin);
 
         static PluginMetaData getMetaData(const QJsonObject &metaData);

@@ -3,7 +3,7 @@
 
 #include "plugins/plugins.h"
 #include "plugins/plugininterface.h"
-#include "plugins/pluginlistdelegate.h"
+#include "config/pluginlistdelegate.h"
 
 #include "settings.h"
 
@@ -54,10 +54,6 @@ namespace Configuration
                     item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
                 enabledPlugins.append(plugin.pluginId);
             }
-        }
-
-        if (enabledPlugins.empty()) {
-            enabledPlugins << "HelloWorldPlugin";
         }
 
         Settings::SettingsManager settings;

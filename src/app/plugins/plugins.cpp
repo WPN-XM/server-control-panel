@@ -2,6 +2,14 @@
 
 namespace PluginsNS
 {
+    bool Plugins::Plugin::isLoaded() const { return instance; }
+
+    bool Plugins::Plugin::isRemovable() const { return !pluginPath.isEmpty() && QFileInfo(pluginPath).isWritable(); }
+
+    bool Plugins::Plugin::operator==(const Plugin &other) const
+    {
+        return /*type == other.type &&*/ pluginId == other.pluginId;
+    }
 
     Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false)
     {
@@ -15,44 +23,20 @@ namespace PluginsNS
 
         return availablePlugins;
     }
-
     void Plugins::loadPlugins()
     {
-        // find SharedLibrary Plugins
-        const QDir pluginsDir(QCoreApplication::applicationDirPath() + QDir::separator() + "plugins");
-
-        QStringList nameFilters;
-        nameFilters << "*.dll"; // << "*.so";
-
-        const auto files = pluginsDir.entryInfoList(nameFilters, QDir::Files);
-
-        // TODO from files only enabledPlugins;
-
-        for (const QFileInfo &file : files) {
-            const QString fileName = file.absoluteFilePath();
-
-            QPluginLoader *pluginLoader = new QPluginLoader(fileName);
-
-            if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
-                qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
+        foreach (const QString &pluginName, enabledPlugins) {
+            Plugin plugin = loadPlugin(pluginName);
+            if (!initPlugin(PluginInterface::StartupInitState, &plugin)) {
+                qWarning() << "Failed to init" << pluginName << "plugin";
                 continue;
             }
-
-            QJsonObject pluginMetaData = pluginLoader->metaData();
-
-            Plugins::Plugin plugin;
-            plugin.pluginId = pluginMetaData.value("MetaData").toObject().value("name").toString();
-            // plugin.instance    = pluginObject;
-            plugin.libraryPath = fileName;
-            plugin.loader      = pluginLoader;
-            plugin.metaData    = Plugins::getMetaData(pluginMetaData);
-
-            // plugin.instance = initPlugin(PluginInterface::StartupInitState, plugin);
+            registerAvailablePlugin(plugin);
         }
 
         refreshLoadedPlugins();
 
-        qDebug() << "[Plugins] Loaded..";
+        qDebug() << "[Plugins]" << loadedPlugins.count() << " extensions loaded";
     }
 
     bool Plugins::loadPlugin(Plugins::Plugin *plugin)
@@ -89,6 +73,86 @@ namespace PluginsNS
         refreshLoadedPlugins();
     }
 
+    bool Plugins::addPlugin(const QString &fileName)
+    {
+        Plugin plugin = loadPlugin(fileName);
+        registerAvailablePlugin(plugin);
+        emit availablePluginsChanged();
+        return true;
+    }
+
+    Plugins::Plugin Plugins::loadPlugin(const QString &fileName)
+    {
+        QString file = fileName;
+
+#ifdef QT_DEBUG
+        if (!file.contains("d.dll")) {
+            file.append("d.dll"); // "ADebugPlugind.dll"
+        }
+#endif
+
+#ifdef QT_NO_DEBUG
+        if (!fileName.contains(".dll")) {
+            file.append(".dll"); // "AReleasePlugin.dll"
+        }
+#endif
+
+        const QDir pluginsDir(QCoreApplication::applicationDirPath() + QDir::separator() + "plugins");
+
+        const QString fullPath = QDir(pluginsDir).absoluteFilePath(file);
+
+        if (QFileInfo::exists(fullPath)) {
+            QString file = fullPath;
+        } else {
+            qDebug() << "[Plugins] Plugin file not found:" << file;
+        }
+
+        QPluginLoader *pluginLoader = new QPluginLoader(file);
+
+        /*if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
+            qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
+            continue;
+        }*/
+
+        QJsonObject pluginMetaData = pluginLoader->metaData();
+
+        Plugin plugin;
+        plugin.pluginId   = pluginMetaData.value("MetaData").toObject().value("name").toString();
+        plugin.pluginPath = file;
+        plugin.loader     = new QPluginLoader(file);
+        plugin.metaData   = Plugins::getMetaData(pluginMetaData);
+
+        return plugin;
+    }
+
+    void Plugins::removePlugin(Plugins::Plugin *plugin)
+    {
+        if (!plugin->isRemovable()) {
+            return;
+        }
+
+        if (plugin->isLoaded()) {
+            unloadPlugin(plugin);
+        }
+
+        bool result = false;
+
+        QFileInfo info(plugin->pluginPath);
+        if (info.isDir()) {
+            result = QDir(plugin->pluginPath).removeRecursively();
+        } else if (info.isFile()) {
+            result = QFile::remove(plugin->pluginPath);
+        }
+
+        if (!result) {
+            qWarning() << "Failed to remove" << plugin->metaData.name;
+            return;
+        }
+
+        availablePlugins.removeOne(*plugin);
+        emit availablePluginsChanged();
+    }
+
     void Plugins::loadAvailablePlugins()
     {
         if (pluginsLoaded) {
@@ -108,38 +172,21 @@ namespace PluginsNS
         for (const QFileInfo &file : files) {
             const QString fileName = file.absoluteFilePath();
 
-            QPluginLoader *pluginLoader = new QPluginLoader(fileName);
-
-            if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
-                qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
+            if (!QLibrary::isLibrary(fileName)) {
+                qDebug() << "Invalid plugin (not a library):" << fileName;
                 continue;
             }
 
-            QJsonObject pluginMetaData = pluginLoader->metaData();
-            /*
-                        QObject *pluginInstance = pluginLoader->instance();
-                        if (!pluginInstance) {
-                            qDebug() << "Error loading plugin:" << fileName << pluginLoader->errorString();
-                            continue;
-                        } else {
-                            qDebug() << "Plugin loaded:" << fileName;
-                        }
+            Plugin plugin = loadPlugin(fileName);
 
-                        PluginInterface *pluginObject = qobject_cast<PluginInterface *>(pluginInstance);*/
+            registerAvailablePlugin(plugin);
+        }
+    }
 
-            // const QMetaObject *pluginMeta = pluginInstance->metaObject();
-
-            Plugins::Plugin plugin;
-            plugin.pluginId = pluginMetaData.value("MetaData").toObject().value("name").toString();
-            // plugin.instance    = pluginObject;
-            plugin.libraryPath = fileName;
-            plugin.loader      = pluginLoader;
-            plugin.metaData    = Plugins::getMetaData(pluginMetaData);
-
-            // add plugin to list
-            if (!availablePlugins.contains(plugin)) {
-                availablePlugins.append(plugin);
-            }
+    void Plugins::registerAvailablePlugin(const Plugin &plugin)
+    {
+        if (!availablePlugins.contains(plugin)) {
+            availablePlugins.append(plugin);
         }
     }
 
@@ -153,7 +200,7 @@ namespace PluginsNS
             }
         }
 
-        emit refreshedLoadedPlugins();
+        emit availablePluginsChanged();
     }
 
     PluginMetaData Plugins::getMetaData(const QJsonObject &metaData)
@@ -189,13 +236,11 @@ namespace PluginsNS
     {
         QStringList defaultEnabledPlugins = {"HelloWorldPlugin"};
 
-        enabledPlugins << defaultEnabledPlugins;
-
         Settings::SettingsManager settings;
-        enabledPlugins = settings.get("Plugin-Settings/EnabledPlugins", enabledPlugins).toStringList();
+        enabledPlugins = settings.get("Plugin-Settings/EnabledPlugins", defaultEnabledPlugins).toStringList();
     }
 
-    bool Plugins::initPlugin(PluginInterface::InitState state, Plugin *plugin)
+    bool Plugins::initPlugin(PluginInterface::InitState state, Plugins::Plugins::Plugin *plugin)
     {
         if (!plugin) {
             return false;
@@ -204,10 +249,15 @@ namespace PluginsNS
         plugin->instance = qobject_cast<PluginInterface *>(plugin->loader->instance());
 
         if (!plugin->instance) {
+            qDebug() << "[Plugins] Error loading plugin:" << plugin->pluginPath << "(" << plugin->loader->errorString()
+                     << ")";
+
             return false;
         }
 
         plugin->instance->init(state);
+
+        qDebug() << "Plugin loaded:" << plugin->pluginPath;
 
         return true;
     }
@@ -219,4 +269,4 @@ namespace PluginsNS
         }
     }
 
-} // namespace Plugins
+} // namespace PluginsNS
