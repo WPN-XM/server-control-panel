@@ -56,6 +56,11 @@ namespace Configuration
             }
         }
 
+        if (enabledPlugins.empty()) {
+            QStringList defaultEnabledPlugins = {"HelloWorldPlugin"};
+            enabledPlugins << defaultEnabledPlugins;
+        }
+
         Settings::SettingsManager settings;
         settings.set("Plugin-Settings/EnabledPlugins", enabledPlugins);
 
@@ -78,7 +83,7 @@ namespace Configuration
 
         foreach (const PluginsNS::Plugins::Plugin &plugin, allPlugins) {
 
-            QListWidgetItem *item = new QListWidgetItem(ui->list);
+            auto *item = new QListWidgetItem(ui->list);
 
             PluginsNS::PluginMetaData metaData = plugin.metaData;
 
@@ -159,9 +164,9 @@ namespace Configuration
             return;
         }
 
-        PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
+        auto *plugins = new PluginsNS::Plugins();
 
-        PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
+        auto plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
         if (item->checkState() == Qt::Checked) {
             plugins->loadPlugin(&plugin);
@@ -192,9 +197,9 @@ namespace Configuration
             return;
         }
 
-        PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
+        auto plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
-        PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
+        auto *plugins = new PluginsNS::Plugins();
 
         if (!plugin.isLoaded()) {
             plugins->loadPlugin(&plugin);

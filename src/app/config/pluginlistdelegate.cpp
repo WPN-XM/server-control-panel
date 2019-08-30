@@ -112,7 +112,7 @@ namespace PluginsNS
 
             const QWidget *w    = opt.widget;
             const QStyle *style = w ? w->style() : QApplication::style();
-            const int padding   = style->pixelMetric(QStyle::PM_FocusFrameHMargin, 0) + 1;
+            const int padding   = style->pixelMetric(QStyle::PM_FocusFrameHMargin, nullptr) + 1;
 
             QFont titleFont = opt.font;
             titleFont.setBold(true);
@@ -129,4 +129,4 @@ namespace PluginsNS
         return QSize(200, m_rowHeight);
     }
 
-} // namespace Plugins
+} // namespace PluginsNS

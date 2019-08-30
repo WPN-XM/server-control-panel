@@ -19,7 +19,7 @@ namespace Configuration
 
     public:
         explicit PluginsManager(QWidget *parent = 0);
-        ~PluginsManager();
+        ~PluginsManager() override;
 
         void load();
         void save();
