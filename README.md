@@ -66,7 +66,7 @@ Breaking changes, new features, deprecations and bug fixes are tracked in the [C
   - INI
   - JSON  
 - Developed on Github
-- Continously Integrated using Travis-CI
+- Continously Integrated using Appveyor
 - Released to Github Releases
   - releases to Github Releases, when pushing a new "git tag"
 - Published Build Artifacts
@@ -98,7 +98,7 @@ You should be able to find everything at http://download.qt.io/official_releases
 
 * Qt Creator
 
-  http://download.qt.io/official_releases/qtcreator/4.9/4.9.1/qt-creator-opensource-windows-x86_64-4.9.1.exe
+  http://download.qt.io/official_releases/qtcreator/4.9/4.9.2/qt-creator-opensource-windows-x86_64-4.9.2.exe
 
 ### Installation Steps and Requirements for Qt
 
