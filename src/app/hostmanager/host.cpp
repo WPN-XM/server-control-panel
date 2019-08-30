@@ -103,7 +103,7 @@ namespace HostsFileManager
             free(buf);
         }
 
-        return windir + "\\System32\\drivers\\etc\\hosts";
+        return windir + R"(\System32\drivers\etc\hosts)";
     }
 
     //--------------------------------

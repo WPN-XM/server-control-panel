@@ -65,8 +65,8 @@ namespace HostsFileManager
             QString name    = aDialog.name();
             QString address = aDialog.address();
 
-            auto *model = dynamic_cast<HostsTableModel *>(tableView->model());
-            QList<Host *> list     = model->getList();
+            auto *model        = dynamic_cast<HostsTableModel *>(tableView->model());
+            QList<Host *> list = model->getList();
 
             // do the add
             Host host(name, address);
@@ -85,7 +85,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::editEntry()
     {
-        auto *model              = dynamic_cast<HostsTableModel *>(tableView->model());
+        auto *model                         = dynamic_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -122,7 +122,7 @@ namespace HostsFileManager
 
     void HostsManagerDialog::removeEntry()
     {
-        HostsTableModel *model              = dynamic_cast<HostsTableModel *>(tableView->model());
+        auto *model                         = dynamic_cast<HostsTableModel *>(tableView->model());
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
@@ -139,4 +139,4 @@ namespace HostsFileManager
         Host::SetHosts(model->getList());
         QDialog::accept();
     }
-}
+} // namespace HostsFileManager

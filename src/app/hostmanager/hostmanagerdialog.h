@@ -25,14 +25,14 @@ namespace HostsFileManager
 
     public:
         explicit HostsManagerDialog(QWidget *parent = nullptr);
-        ~HostsManagerDialog();
+        ~HostsManagerDialog() override;
     signals:
         void selectionChanged(const QItemSelection &selected);
     public slots:
         void addEntry();
         void editEntry();
         void removeEntry();
-        void accept();
+        void accept() override;
 
     private:
         QTableView *tableView;
