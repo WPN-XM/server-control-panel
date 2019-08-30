@@ -6,10 +6,7 @@ namespace PluginsNS
 
     bool Plugins::Plugin::isRemovable() const { return !pluginPath.isEmpty() && QFileInfo(pluginPath).isWritable(); }
 
-    bool Plugins::Plugin::operator==(const Plugin &other) const
-    {
-        return /*type == other.type &&*/ pluginId == other.pluginId;
-    }
+    bool Plugins::Plugin::operator==(const Plugin &other) const { return pluginId == other.pluginId; }
 
     Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false)
     {
@@ -107,7 +104,7 @@ namespace PluginsNS
             qDebug() << "[Plugins] Plugin file not found:" << file;
         }
 
-        QPluginLoader *pluginLoader = new QPluginLoader(file);
+        auto *pluginLoader = new QPluginLoader(file);
 
         /*if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
             qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();

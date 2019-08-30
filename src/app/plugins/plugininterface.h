@@ -19,7 +19,7 @@ namespace PluginsNS
         };
 
         // PluginInterface() {}
-        virtual ~PluginInterface() {}
+        virtual ~PluginInterface() = default;
 
         virtual void init(InitState state) = 0;
         virtual void unload()              = 0;

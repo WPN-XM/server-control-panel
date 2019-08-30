@@ -59,7 +59,7 @@ namespace PluginsNS
         void unloadPlugin(Plugin *plugin);
         void removePlugin(Plugin *plugin);
 
-        bool addPlugin(const QString &id);
+        bool addPlugin(const QString &fileName);
 
         void shutdown();
 
@@ -71,7 +71,7 @@ namespace PluginsNS
         QList<PluginInterface *> loadedPlugins;
 
     signals:
-        void pluginUnloaded(PluginInterface *plugin);
+        void pluginUnloaded(PluginsNS::PluginInterface *plugin);
         void availablePluginsChanged();
 
     private:
