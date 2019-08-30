@@ -17,7 +17,7 @@ namespace Downloader
         void startGetRequest();
     signals:
         void downloadProgress(QMap<QString, QVariant>);
-        void transferFinished(TransferItem *self);
+        void transferFinished(Downloader::TransferItem *self);
     public slots:
         void updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     private slots:
@@ -42,8 +42,8 @@ namespace Downloader
         Q_OBJECT
     public:
         DownloadItem(const QNetworkRequest &r, QNetworkAccessManager &nam);
-        ~DownloadItem();
-        void setDownloadFolder(QString folder);
+        ~DownloadItem() override;
+        void setDownloadFolder(const QString &folder);
         enum DownloadMode
         {
             SkipIfExists,
@@ -67,7 +67,7 @@ namespace Downloader
         Q_OBJECT
     public:
         DownloadManager();
-        ~DownloadManager();
+        ~DownloadManager() override;
         void get(QNetworkRequest &request, QString dlFolder, DownloadItem::DownloadMode dlMode);
         void get(QNetworkRequest &request);
         enum QueueMode
@@ -89,20 +89,20 @@ namespace Downloader
 #ifndef QT_NO_SSL
         void sslErrors(QNetworkReply *reply, const QList<QSslError> &errors);
 #endif
-        void downloadFinished(TransferItem *item);
+        void downloadFinished(Downloader::TransferItem *item);
 
     private:
         TransferItem *findTransfer(QNetworkReply *reply);
 
         QNetworkAccessManager nam;
         QList<TransferItem *> transfers;
-        QueueMode queueMode;
+        QueueMode queueMode{Parallel};
         QString downloadFolder;
         DownloadItem::DownloadMode downloadMode = DownloadItem::DownloadMode::SkipIfExists;
 
     public:
-        int FilesDownloadedCounter;
-        int FilesToDownloadCounter;
+        int FilesDownloadedCounter = 0;
+        int FilesToDownloadCounter = 0;
     };
 } // namespace Downloader
 

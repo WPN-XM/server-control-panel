@@ -36,7 +36,7 @@ namespace Downloader
         request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
 
         // set download item
-        DownloadItem *dl = new DownloadItem(request, nam);
+        auto *dl = new DownloadItem(request, nam);
         dl->setDownloadFolder(downloadFolder);
         dl->setDownloadMode(downloadMode);
 

@@ -7,7 +7,7 @@ class Package : public QObject
 {
     Q_OBJECT
 public:
-    explicit Package(QObject *parent = 0);
+    explicit Package(QObject *parent = nullptr);
 
     QList<QString> listUpgrades();
 

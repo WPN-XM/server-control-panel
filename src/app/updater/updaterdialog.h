@@ -35,7 +35,7 @@ namespace Updater
 
     public:
         explicit UpdaterDialog(QWidget *parent = nullptr);
-        ~UpdaterDialog();
+        ~UpdaterDialog() override;
         void initModel(QJsonObject json);
         void initView();
         enum Columns

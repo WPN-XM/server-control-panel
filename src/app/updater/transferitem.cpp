@@ -65,7 +65,7 @@ namespace Downloader
     {
     }
 
-    DownloadItem::~DownloadItem() {}
+    DownloadItem::~DownloadItem() = default;
 
     void DownloadItem::readyRead()
     {
@@ -195,7 +195,7 @@ namespace Downloader
         emit transferFinished(this);
     }
 
-    void DownloadItem::setDownloadFolder(QString folder) { downloadFolder = folder; }
+    void DownloadItem::setDownloadFolder(const QString &folder) { downloadFolder = folder; }
 
     void DownloadItem::setDownloadMode(DownloadItem::DownloadMode mode) { downloadMode = mode; }
 } // namespace Downloader

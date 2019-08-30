@@ -73,8 +73,8 @@ namespace Updater
             rowItems.append(websiteURL);
 
             // Installed Version (= Your current version)
-            QString installedVersionString  = "1.2.3"; // TODO: detect currently installed versions
-            QStandardItem *installedVersion = new QStandardItem(installedVersionString);
+            QString installedVersionString = "1.2.3"; // TODO: detect currently installed versions
+            auto *installedVersion         = new QStandardItem(installedVersionString);
             installedVersion->setTextAlignment(Qt::AlignCenter);
             rowItems.append(installedVersion);
 
@@ -234,7 +234,7 @@ namespace Updater
 
         // setup progressbar
         Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
-        ProgressBarUpdater *progressBar    = new ProgressBarUpdater(this, index.row());
+        auto *progressBar                  = new ProgressBarUpdater(this, index.row());
         connect(transfer, SIGNAL(downloadProgress(QMap<QString, QVariant>)), progressBar,
                 SLOT(updateProgress(QMap<QString, QVariant>)));
         connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem * t)), progressBar,
@@ -251,7 +251,7 @@ namespace Updater
         index = model->index(currentRow, UpdaterDialog::Columns::Action);
     }
 
-    void ProgressBarUpdater::updateProgress(const QMap<QString, QVariant>& progress)
+    void ProgressBarUpdater::updateProgress(const QMap<QString, QVariant> &progress)
     {
         // update the "progress" data in the model
         model->setData(index, progress);
@@ -271,7 +271,7 @@ namespace Updater
         }
 
         // when we reach 100%, "hide" progressBar and "show" Install Button
-        else if (progress["bytesReceived"] == progress["bytesTotal"]) {
+        if (progress["bytesReceived"] == progress["bytesTotal"]) {
             model->setData(index, ActionColumnItemDelegate::InstallPushButton, ActionColumnItemDelegate::WidgetRole);
         }
 

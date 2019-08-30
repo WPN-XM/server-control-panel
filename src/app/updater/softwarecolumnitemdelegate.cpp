@@ -65,7 +65,7 @@ namespace Updater
         if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick) {
             emit onClickedOpenURL(index);
         }
-        return 0;
+        return false;
     }
 
     void SoftwareColumnItemDelegate::onClickedOpenURL(const QModelIndex &index)

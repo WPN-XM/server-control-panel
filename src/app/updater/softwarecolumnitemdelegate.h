@@ -16,13 +16,13 @@ namespace Updater
         Q_OBJECT
     public:
         explicit SoftwareColumnItemDelegate(QObject *parent = 0);
-        ~SoftwareColumnItemDelegate();
+        ~SoftwareColumnItemDelegate() override;
 
-        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
         bool editorEvent(QEvent *event,
                          QAbstractItemModel *model,
                          const QStyleOptionViewItem &option,
-                         const QModelIndex &index);
+                         const QModelIndex &index) override;
 
     private:
         QLabel *label;
