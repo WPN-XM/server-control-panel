@@ -11,10 +11,10 @@ namespace Plugin_HelloWorld_NS
     void Plugin_HelloWorld::init(InitState state)
     {
         if (state == InitState::StartupInitState) {
-            qDebug() << "HelloWorld StartupInitState";
+            qDebug() << "[Plugin: HelloWorld] StartupInitState";
         }
         if (state == InitState::LateInitState) {
-            qDebug() << "HelloWorld LateInitState";
+            qDebug() << "[Plugin: HelloWorld] LateInitState";
         }
     }
 
@@ -59,11 +59,11 @@ namespace Plugin_HelloWorld_NS
             /*QLabel *label            = new QLabel();
             label->setPixmap(QPixmap(":icons/other/about.svg"));*/
 
-            QVBoxLayout *l = new QVBoxLayout(settings.data());
-            // l->addWidget(label);
-            l->addWidget(b);
-            l->addWidget(closeButton);
-            settings.data()->setLayout(l);
+            auto *boxLayout = new QVBoxLayout(settings.data());
+            // boxLayout->addWidget(label);
+            boxLayout->addWidget(b);
+            boxLayout->addWidget(closeButton);
+            settings.data()->setLayout(boxLayout);
 
             settings.data()->setMinimumSize(200, 200);
             settings.data()->setAttribute(Qt::WA_DeleteOnClose);

@@ -3,7 +3,7 @@
 
 #include "../../app/plugins/plugininterface.h"
 
-#include "configdialog.h"
+#include "ConfigDialog.h"
 
 #include <QPointer>
 #include <QDialog>
@@ -40,16 +40,19 @@ namespace Plugin_HelloWorld_NS
         Plugin_HelloWorld();
 
         /*! Deconstructor. */
-        ~Plugin_HelloWorld();
+        ~Plugin_HelloWorld() override;
 
         /*!
          * The is called right after the plugin is loaded.
          *
          * State can be either StartupInitState or LateInitState.
-         * Tt indicates when the plugin has been loaded.
-         * Currently, it can be from the Configuration Dialog "Plugins" or automatically at startup.
+         * It indicates when the plugin has been loaded.
          *
-         * Automatically at startup means that Plugins are loaded before MainWindow is created.
+         * When a plugin is automatically loaded at startup (before MainWindow is created),
+         * then it's initialized with StartupInitState.
+         *
+         * When a plugin is manually loaded in the "Configuration > Plugins" dialog,
+         * then it's initialized with LateInitState.
          *
          * @param state Indicate when the plugin have been loaded (at startup or after).
          */
@@ -65,9 +68,10 @@ namespace Plugin_HelloWorld_NS
         QString getConfigDialogTreeMenuEntry();
 
         /*!
-         * This function will be called from the Plugin Configuration Dialog,
+         * This function will be called from the Plugins Configuration Dialog,
          * after clicking on the Settings button.
-         * The Settings button will be enabled, when PluginProperties.hasSettings == true.
+         *
+         * The Settings button will be enabled, when PluginMetaData.hasSettings == true.
          *
          * @param parent Parent widget.
          */
