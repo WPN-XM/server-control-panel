@@ -30,7 +30,7 @@ namespace ServerControlPanel
         QString message = "Loading ..";
 
     protected:
-        void drawContents(QPainter *painter);
+        void drawContents(QPainter *painter) override;
     };
 } // namespace ServerControlPanel
 

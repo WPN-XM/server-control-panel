@@ -38,7 +38,7 @@ namespace Tooltips
             my_role = role;
         }
 
-        void paintEvent(QPaintEvent *)
+        void paintEvent(QPaintEvent *) override
         {
             if (my_role == TipButton::NoButton) {
                 return;
@@ -106,17 +106,17 @@ namespace Tooltips
         TipButton *my_closeButton;
         TipButton *my_configButton;
 
-        void paintEvent(QPaintEvent *event);
+        void paintEvent(QPaintEvent *event) override;
 
         QRect relativePopupRect();
         QRect relativeTextRect();
 
-        void enterEvent(QEvent *event);
-        void leaveEvent(QEvent *event);
+        void enterEvent(QEvent *event) override;
+        void leaveEvent(QEvent *event) override;
         void init();
         void defineArrowPosition();
         void createRects();
-        bool eventFilter(QObject *, QEvent *);
+        bool eventFilter(QObject *, QEvent *) override;
 
     public:
         explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
@@ -125,7 +125,7 @@ namespace Tooltips
         explicit BalloonTip(
             QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
 
-        ~BalloonTip();
+        ~BalloonTip() override;
         ArrowPosition arrowPosition();
         void setArrowPosition(ArrowPosition pos);
         void move(QPoint pos);

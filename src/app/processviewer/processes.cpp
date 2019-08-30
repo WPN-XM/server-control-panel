@@ -351,7 +351,7 @@ namespace Processes
     {
         QString cmd;
 
-        cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
+        cmd = R"(C:\windows\system32\cmd.exe /c )" + program + QLatin1Char(' ');
 
         for (int i = 0; i < arguments.size(); ++i) {
             cmd += QLatin1Char(' ') + arguments.at(i);
@@ -394,7 +394,7 @@ namespace Processes
                                     nullptr,
                                     nullptr};
 
-        QString cmd = "C:\\windows\\system32\\cmd.exe /c " + program + QLatin1Char(' ');
+        QString cmd = R"(C:\windows\system32\cmd.exe /c )" + program + QLatin1Char(' ');
 
         for (int i = 0; i < arguments.size(); ++i) {
             cmd += QLatin1Char(' ') + arguments.at(i);
@@ -402,7 +402,7 @@ namespace Processes
 
         qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
-        success = CreateProcess(0, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+        success = CreateProcess(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
                                 workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
 
         if (success) {

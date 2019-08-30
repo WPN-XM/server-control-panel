@@ -48,8 +48,8 @@ namespace YAML
 
     QVariant yamlScalarToVariant(const YAML::Node &scalarNode)
     {
-        std::string stdScalar = scalarNode.as<std::string>();
-        QString scalarString  = QString::fromStdString(stdScalar);
+        auto stdScalar       = scalarNode.as<std::string>();
+        QString scalarString = QString::fromStdString(stdScalar);
         if (_yamlScalarTrueValues.exactMatch(scalarString))
             return QVariant(true);
         if (_yamlScalarFalseValues.exactMatch(scalarString))

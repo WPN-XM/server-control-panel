@@ -29,7 +29,7 @@ namespace Updater
 
     public:
         SelfUpdater(Settings::SettingsManager *oSettings);
-        ~SelfUpdater();
+        ~SelfUpdater() override;
 
         void run();
         bool updateAvailable();

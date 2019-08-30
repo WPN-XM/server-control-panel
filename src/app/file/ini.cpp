@@ -14,9 +14,9 @@ namespace File
 //#define log qDebug
 #define log
 
-    INI::INI(const char *fileNameWithPath) : data(nullptr), fStream(nullptr), autoSave(false)
+    INI::INI(const char *fileName) : autoSave(false)
     {
-        strcpy(iniFileName, fileNameWithPath);
+        strcpy(iniFileName, fileName);
         loadConfigFile();
     }
 
@@ -320,7 +320,7 @@ namespace File
     // debug
     void INI::debug()
     {
-        for (vector<INIEntry>::iterator it = datas.begin(); it != datas.end(); it++) {
+        for (auto it = datas.begin(); it != datas.end(); it++) {
             INIEntry entry = *it;
             // log(" ------------ INI item of [%s] ------------ ", iniFileName);
             if (entry.isComment) {

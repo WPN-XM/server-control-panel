@@ -23,7 +23,7 @@ public slots:
 
 private:
     QLabel *labelGroupBoxTitle;
-    QFrame *hLine;
+    QFrame *hLine{};
     QLabel *labelIcon;
     QLabel *labelTitle;
     QLabel *labelMessage;

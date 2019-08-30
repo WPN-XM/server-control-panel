@@ -12,7 +12,7 @@ namespace Servers
 
         // build server objects
         foreach (QString serverName, installedServers) {
-            Server *server = new Server();
+            auto *server = new Server();
 
             server->lowercaseName    = serverName;
             server->name             = getCamelCasedServerName(serverName);
@@ -21,7 +21,7 @@ namespace Servers
             server->workingDirectory = getServerBinPath(serverName);
             server->exe              = getExecutablePath(server->name);
 
-            QMenu *menu = new QMenu(server->name);
+            auto *menu = new QMenu(server->name);
             menu->setObjectName(QString("menu").append(server->name));
             menu->setIcon(server->icon);
 
@@ -244,8 +244,8 @@ namespace Servers
         }
 
         // anti "control reaches end of non-void function" faked return
-        Server *server = new Server();
-        server->name   = QString("Not Installed");
+        auto *server = new Server();
+        server->name = QString("Not Installed");
         return server;
     }
 
@@ -256,7 +256,7 @@ namespace Servers
 
             foreach (QString logfile, logfiles) {
                 File::truncate(logfile);
-                qDebug() << ("[ %s ][ %s ] Log was cleared.\n", serverName, logfile);
+                // qDebug() << ("[ %s ][ %s ] Log was cleared.\n", serverName, logfile);
             }
         }
     }
@@ -385,7 +385,7 @@ namespace Servers
         if (processes->getProcessState("postgres.exe") == Processes::ProcessUtil::ProcessState::Running) {
             // if(QFile::exists(QDir::currentPath() +
             // "/bin/pgsql/data/postmaster.pid")) {
-            QMessageBox::warning(0, tr("PostgreSQL"), tr("PostgreSQL is already running."));
+            QMessageBox::warning(nullptr, tr("PostgreSQL"), tr("PostgreSQL is already running."));
             return;
         }
 
@@ -468,7 +468,8 @@ namespace Servers
 
         // already running: Spawner
         if (processes->getProcessState("php-cgi-spawner.exe") == Processes::ProcessUtil::ProcessState::Running) {
-            QMessageBox::warning(0, tr("PHP"), tr("Process Spawner for PHP is already running (php-cgi-spawner.exe)."));
+            QMessageBox::warning(
+                nullptr, tr("PHP"), tr("Process Spawner for PHP is already running (php-cgi-spawner.exe)."));
             return;
         }
 
@@ -959,7 +960,7 @@ namespace Servers
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml    = new File::Yml();
+        auto *yml         = new File::Yml();
         YAML::Node config = yml->load(file);
 
         return QString::fromStdString(config["net"]["port"].as<std::string>());

@@ -33,7 +33,7 @@ namespace Servers
         QStringList logFiles;
         QString exe;
 
-        QMenu *trayMenu;
+        QMenu *trayMenu{};
     };
 
     class Servers : public QObject

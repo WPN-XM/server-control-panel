@@ -24,7 +24,7 @@ namespace ServerControlPanel
         Q_OBJECT
 
     public:
-        explicit Main(QObject *parent = 0);
+        explicit Main(QObject *parent = nullptr);
         static void exitIfAlreadyRunning();
         static void exitIfNotInAppFolder();
     };

@@ -91,7 +91,7 @@ namespace ServerControlPanel
                 printHelpText(QString("Error: no <server> specified."));
             }
 
-            Servers::Servers *servers = new Servers::Servers();
+            auto *servers = new Servers::Servers();
 
             // check if server is whitelisted
             if (!servers->getListOfServerNames().contains(server)) {
@@ -149,7 +149,7 @@ namespace ServerControlPanel
      */
     /*[[noreturn]]*/ void CLI::execServers(const QString &command,
                                            QCommandLineOption &clioption,
-                                           QStringList args,
+                                           const QStringList &args,
                                            QCommandLineParser &parser)
     {
         // the value of the key "--start|--stop|--restart" is the first server
@@ -168,7 +168,7 @@ namespace ServerControlPanel
             serversList << args;
         }
 
-        Servers::Servers *servers = new Servers::Servers();
+        auto *servers = new Servers::Servers();
 
         for (int i = 0; i < serversList.size(); ++i) {
             QString server = serversList.at(i);
@@ -235,7 +235,7 @@ namespace ServerControlPanel
     }
 
     // sorry, i don't like color numbers
-    void CLI::colorPrint(QString msg, QString colorName)
+    void CLI::colorPrint(const QString &msg, const QString &colorName)
     {
         int prefix = 0;
         int color  = 0;
@@ -309,7 +309,7 @@ namespace ServerControlPanel
         WindowsAPI::Console::printColoredMsg(prefix, color, msg.toLocal8Bit().constData());
     }
 
-    void CLI::colorTest()
+    /*void CLI::colorTest()
     {
         printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 31, "1-31"));
         printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 31, "0-31"));
@@ -325,5 +325,5 @@ namespace ServerControlPanel
         printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 36, "0-36"));
         printf("%s/n", WindowsAPI::Console::printColoredMsg(1, 37, "1-37"));
         printf("%s/n", WindowsAPI::Console::printColoredMsg(0, 37, "0-37"));
-    }
+    }*/
 } // namespace ServerControlPanel

@@ -18,10 +18,11 @@ namespace ServerControlPanel
         void printHelpText(QString errorMessage = QString());
         void execServers(const QString &command,
                          QCommandLineOption &clioption,
-                         QStringList args,
+                         const QStringList &args,
                          QCommandLineParser &parser);
-        void colorTest();
-        void colorPrint(QString msg, QString colorName = "gray");
+        void colorPrint(const QString &msg, const QString &colorName = "gray");
+
+        // void colorTest();
     };
 } // namespace ServerControlPanel
 

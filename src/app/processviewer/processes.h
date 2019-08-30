@@ -9,7 +9,7 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <Psapi.h>
-#include <stdio.h>
+#include "cstdio"
 
 // Need to link with Iphlpapi.lib for GetExtendedTcpTable() used in getPorts()
 #include <iphlpapi.h>

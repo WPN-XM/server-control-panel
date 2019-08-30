@@ -1,6 +1,6 @@
 #include "networkutils.h"
 
-NetworkUtils::NetworkUtils() {}
+NetworkUtils::NetworkUtils() = default;
 
 /**
  * Note: this method depends on "QT += network" in the .pro file

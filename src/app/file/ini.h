@@ -74,15 +74,14 @@ namespace File
         vector<INIEntry> datas;
 
     private:
-        string trim(string &str);
-        char str[4096]; // for temporary string data
         void setStringValueWithIndex(const char *index, const char *name, const char *value);
-        char iniFileName[4096];
-        char *data;
-        const char (*lineData)[4096];
         void loadConfigFile();
-        fstream *fStream;
+
+        string trim(string &str);
+
         bool autoSave;
+        char iniFileName[4096];
+        char str[4096]; // for temporary string data
     };
 }; // namespace File
 

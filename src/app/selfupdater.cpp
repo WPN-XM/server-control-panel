@@ -43,19 +43,20 @@ namespace Updater
 
         qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
 
-        qint64 interval = QDateTime::currentDateTime().currentMSecsSinceEpoch();
+        QDateTime currentDateTime = QDateTime::currentDateTime();
+        qint64 interval           = currentDateTime.currentMSecsSinceEpoch();
 
         if (intervalString == "daily") {
-            interval = QDateTime::currentDateTime().addDays(Interval::Daily).currentMSecsSinceEpoch();
+            interval = currentDateTime.addDays(Interval::Daily).currentMSecsSinceEpoch();
         }
         if (intervalString == "weekly") {
-            interval = QDateTime::currentDateTime().addDays(Interval::Weekly).currentMSecsSinceEpoch();
+            interval = currentDateTime.addDays(Interval::Weekly).currentMSecsSinceEpoch();
         }
         if (intervalString == "monthly") {
-            interval = QDateTime::currentDateTime().addDays(Interval::Monthly).currentMSecsSinceEpoch();
+            interval = currentDateTime.addDays(Interval::Monthly).currentMSecsSinceEpoch();
         }
 
-        qint64 now = QDateTime::currentDateTime().currentMSecsSinceEpoch();
+        qint64 now = QDateTime::currentMSecsSinceEpoch();
 
         bool timeForUpdateCheck = false;
         if (now - interval > lastTimeChecked) {
@@ -73,7 +74,7 @@ namespace Updater
         if (userRequestedUpdate || lastTimeChecked == 0 || timeForUpdateCheck) {
 
             // set the last time check flag
-            settings->set("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
+            settings->set("selfupdater/last_time_checked", currentDateTime.toString(Qt::ISODate));
 
             // setup download folder
             downloadFolder = QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";

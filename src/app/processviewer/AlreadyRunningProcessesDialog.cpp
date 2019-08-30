@@ -23,7 +23,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     //{
     QLabel *labelA      = new QLabel(tr("The following processes are already running:"));
     QGroupBox *groupBox = new QGroupBox(tr("Running Processes"));
-    QVBoxLayout *vbox   = new QVBoxLayout;
+    auto *vbox          = new QVBoxLayout;
 
     QList<Processes::ProcessUtil::Process> runningProcessesList = Processes::ProcessUtil::getRunningProcesses();
 
@@ -31,7 +31,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     // each one
     foreach (Processes::ProcessUtil::Process p, runningProcessesList) {
         // create checkbox
-        QCheckBox *checkbox = new QCheckBox(p.name);
+        auto *checkbox = new QCheckBox(p.name);
         checkbox->setChecked(true);
         checkbox->setCheckable(true);
         // add checkbox to view
@@ -50,18 +50,18 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     QPushButton *ContinueButton = new QPushButton(tr("Continue"));
     ShutdownButton->setDefault(true);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(Qt::Horizontal);
+    auto *buttonBox = new QDialogButtonBox(Qt::Horizontal);
     buttonBox->addButton(ShutdownButton, QDialogButtonBox::ActionRole);
     buttonBox->addButton(ContinueButton, QDialogButtonBox::ActionRole);
 
     // build dialog to inform user about running processes
-    QGridLayout *grid = new QGridLayout;
+    auto *grid = new QGridLayout;
     grid->addWidget(labelA);
     grid->addWidget(groupBox);
     grid->addWidget(labelB);
     grid->addWidget(buttonBox);
 
-    QDialog *dlg = new QDialog(this);
+    auto *dlg = new QDialog(this);
     dlg->setWindowModality(Qt::WindowModal);
     dlg->setLayout(grid);
     dlg->resize(250, 100);

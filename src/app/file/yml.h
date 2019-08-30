@@ -28,8 +28,8 @@ namespace YAML
                 return false;
             }
 
-            std::string sstr = node.as<std::string>();
-            rhs              = QString(sstr.c_str());
+            auto string = node.as<std::string>();
+            rhs         = QString(string.c_str());
 
             return true;
         }

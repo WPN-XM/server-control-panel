@@ -91,6 +91,8 @@ int main(int argc, char *argv[])
     // So that we can inject data. But do not show it, yet.
     ServerControlPanel::MainWindow mainWindow;
 
+    auto *thread = QObject().thread();
+
     // Activate SplashScreen
     ServerControlPanel::SplashScreen splash(QPixmap(), Qt::WindowStaysOnTopHint);
     splash.setProgress(0);
@@ -101,12 +103,12 @@ int main(int argc, char *argv[])
 
     splash.setMessage("Loading Plugins...", 10);
     QApplication::addLibraryPath("./plugins");
-    PluginsNS::Plugins *plugins = new PluginsNS::Plugins();
+    auto *plugins = new PluginsNS::Plugins();
     plugins->loadPlugins();
     mainWindow.setPlugins(plugins);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
-    QObject().thread()->usleep(1000 * 1000 * 1);
+    thread->msleep(500);
 
     splash.setMessage("Getting System Processes ..", 30);
     Processes::ProcessUtil *processes = Processes::ProcessUtil::getInstance();
@@ -128,7 +130,7 @@ int main(int argc, char *argv[])
     }
 
     splash.setProgress(50);
-    QObject().thread()->usleep(1000 * 1000 * 1);
+    thread->msleep(500);
 
     // Setup the environment: trayicon, actions, servers, process monitoring
     mainWindow.setup();
