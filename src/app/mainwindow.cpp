@@ -1,6 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "widgets/qclosedockwidget.h"
+
+#include <QDockWidget>
+#include <QPlainTextEdit>
+#include <QStatusBar>
+#include <QToolButton>
+#include <QLabel>
+
 namespace ServerControlPanel
 {
 
@@ -33,7 +41,7 @@ namespace ServerControlPanel
         setWindowFlags((windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
 
         // set window size fixed
-        setFixedSize(width(), height());
+        // setFixedSize(width(), height() - ui->statusBar->heigth());
 
         // TODO unhide scheduler - feature not ready yet. hide button for now
         ui->pushButton_Scheduler->hide();
@@ -42,6 +50,132 @@ namespace ServerControlPanel
         ui->pushButton_Updater->hide();
 
         connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
+    }
+
+    void MainWindow::createConsole()
+    {
+        /** Create a StatusBar with a toggle button for a debug console. **/
+
+        auto *toolButton = new QToolButton();
+        toolButton->setObjectName("Console");
+        toolButton->setArrowType(Qt::DownArrow);
+        toolButton->setToolTip("Open Debug Console");
+
+        auto *labelPlaceholderRightSide = new QLabel();
+        labelPlaceholderRightSide->setText(" ");
+
+        auto *statusBar = new QStatusBar();
+        statusBar->setSizeGripEnabled(false);
+        statusBar->addPermanentWidget(toolButton);
+        statusBar->addPermanentWidget(labelPlaceholderRightSide);
+        statusBar->setStyleSheet("QStatusBar { border-top: 1px solid #ccc; } QStatusBar::item { border: 0px; } ");
+        setStatusBar(statusBar);
+
+        // Toggle Console with ToolButton in the StatusBar
+        connect(toolButton, SIGNAL(clicked()), this, SLOT(toolButton_Console_clicked()));
+
+        /** Create a box for the debuglog text and add it to a BottomDockWidget. **/
+
+        auto *plainTextEdit = new QPlainTextEdit();
+        plainTextEdit->setPlainText("Debug Log Stream");
+        plainTextEdit->setObjectName("DebugConsolePlainTextEdit");
+        plainTextEdit->setReadOnly(true);
+        plainTextEdit->setFixedHeight(100);
+        plainTextEdit->setFixedWidth(621);
+
+        auto *dockWidget = new Widgets::QCloseDockWidget("Debug Console", this);
+        dockWidget->setObjectName("DebugConsole");
+        dockWidget->setWidget(plainTextEdit);
+        dockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+        dockWidget->setFloating(false);
+
+        // hide console when starting
+        dockWidget->hide();
+
+        setMainWindowDefaultSize();
+
+        addDockWidget(Qt::BottomDockWidgetArea, dockWidget);
+
+        connect(dockWidget, &Widgets::QCloseDockWidget::closed, this, &MainWindow::dockWidgetCloseClicked);
+
+        // let the floating dockwidget window return to it's mainwindow position, when clicking close
+        connect(dockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::dockWidgetVisibilityChanged);
+
+        // resize mainwindow, when the dockwidget goes into floating mode
+        connect(dockWidget, &QDockWidget::topLevelChanged, this, &MainWindow::dockWidgetTopLevelChanged);
+    }
+
+    void MainWindow::dockWidgetCloseClicked()
+    {
+        setMainWindowDefaultSize();
+
+        // disallow dockwidget window to be resized
+        auto *textedit = findChild<QPlainTextEdit *>("DebugConsolePlainTextEdit");
+        textedit->setMaximumHeight(100);
+
+        // after clicking close on the dockwidget, switch to "open" on the toggle button
+        auto *toolButton = findChild<QToolButton *>("Console");
+        toolButton->setArrowType(Qt::DownArrow);
+        toolButton->setToolTip("Open Debug Console");
+    }
+
+    void MainWindow::setMainWindowDefaultSize() { setFixedSize(defaultWidth, defaultHeight); }
+
+    void MainWindow::dockWidgetTopLevelChanged(bool topLevelChanged)
+    {
+        auto *dockWidget = findChild<QDockWidget *>("DebugConsole");
+
+        if (dockWidget->isFloating() && topLevelChanged) {
+            setMainWindowDefaultSize();
+
+            // allow dockwidget window to be resized (expand policy)
+            dockWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+            // set new max height only on the inner textedit widget
+            auto *textedit = findChild<QPlainTextEdit *>("DebugConsolePlainTextEdit");
+            textedit->setMinimumHeight(100);
+            textedit->setMaximumHeight(600);
+        }
+    }
+
+    void MainWindow::dockWidgetVisibilityChanged(bool visible)
+    {
+        auto *dockWidget = findChild<QDockWidget *>("DebugConsole");
+
+        if (dockWidget->isFloating() && !visible) {
+            QTimer::singleShot(100, this, &MainWindow::restoreDock);
+        }
+    }
+
+    void MainWindow::restoreDock()
+    {
+        auto *dockWidget = findChild<QDockWidget *>("DebugConsole");
+
+        dockWidget->setFloating(false);
+        dockWidget->setVisible(false);
+    }
+
+    void MainWindow::toolButton_Console_clicked()
+    {
+        auto *toolButton = findChild<QToolButton *>("Console");
+        auto *dockWidget = findChild<QDockWidget *>("DebugConsole");
+
+        if (toolButton->arrowType() == Qt::DownArrow) {
+            // when open console was clicked, do this:
+            dockWidget->show();
+            setFixedSize(defaultWidth, defaultHeight + dockWidget->height() - 5);
+            toolButton->setArrowType(Qt::UpArrow);
+            toolButton->setToolTip("Close Debug Console");
+        } else {
+            // when close console was clicked, do this:
+            if (dockWidget->isFloating()) {
+                dockWidget->setFloating(false);
+            }
+            dockWidget->hide();
+            setMainWindowDefaultSize();
+            toolButton->setArrowType(Qt::DownArrow);
+            toolButton->setToolTip("Open Debug Console");
+        }
     }
 
     void MainWindow::setup()
@@ -81,6 +215,8 @@ namespace ServerControlPanel
         ui->pushButton_Updater->setEnabled(true);
         ui->pushButton_Updater->show();
 #endif
+
+        createConsole();
     }
 
     MainWindow::~MainWindow()
@@ -97,7 +233,7 @@ namespace ServerControlPanel
 
     MainWindow *MainWindow::getMainWindow() { return this; }
 
-    void MainWindow::setProcessUtil(Processes::ProcessUtil *oProcessUtil) { processes = oProcessUtil; }
+    void MainWindow::setProcessUtil(Processes::ProcessUtil *oProcessesUtil) { processes = oProcessesUtil; }
 
     Processes::ProcessUtil *MainWindow::getProcessUtil() { return processes; }
 
@@ -237,19 +373,20 @@ namespace ServerControlPanel
         connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers, SLOT(stopPHP()));
         connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(stopMariaDb()));
-        QPushButton *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
+
+        auto *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
         if (buttonStopMongoDb != nullptr) {
             connect(buttonStopMongoDb, SIGNAL(clicked()), servers, SLOT(stopMongoDb()));
         }
-        QPushButton *buttonStopMemcached = cWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
+        auto *buttonStopMemcached = cWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
         if (buttonStopMemcached != nullptr) {
             connect(buttonStopMemcached, SIGNAL(clicked()), servers, SLOT(stopMemcached()));
         }
-        QPushButton *buttonStopPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
+        auto *buttonStopPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
         if (buttonStopPostgreSQL != nullptr) {
             connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers, SLOT(stopPostgreSQL()));
         }
-        QPushButton *buttonStopRedis = cWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
+        auto *buttonStopRedis = cWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
         if (buttonStopRedis != nullptr) {
             connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis()));
         }
@@ -296,22 +433,22 @@ namespace ServerControlPanel
         connect(cWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), SIGNAL(clicked()), this,
                 SLOT(openConfigurationDialogMariaDb()));
 
-        QPushButton *btnConfigureMongoDb = cWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
+        auto *btnConfigureMongoDb = cWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
         if (btnConfigureMongoDb != nullptr) {
             connect(btnConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
         }
 
-        QPushButton *btnConfigureMemcached = cWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
+        auto *btnConfigureMemcached = cWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
         if (btnConfigureMemcached != nullptr) {
             connect(btnConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
         }
 
-        QPushButton *btnConfigurePostgresql = cWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
+        auto *btnConfigurePostgresql = cWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
         if (btnConfigurePostgresql != nullptr) {
             connect(btnConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
         }
 
-        QPushButton *btnConfigureRedis = cWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
+        auto *btnConfigureRedis = cWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
         if (btnConfigureRedis != nullptr) {
             connect(btnConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
         }
@@ -1259,21 +1396,21 @@ namespace ServerControlPanel
         label_Version->setEnabled(false);
         ServersGridLayout->addWidget(label_Version, 1, 3);
 
-        QLabel *label_Config = new QLabel();
+        auto *label_Config = new QLabel();
         label_Config->setText(QApplication::translate("MainWindow", "Config", nullptr));
         label_Config->setAlignment(Qt::AlignCenter);
         label_Config->setFont(font1);
         label_Config->setEnabled(false);
         ServersGridLayout->addWidget(label_Config, 1, 4, 1, 2); // two columns (gear and gear-pencil)
 
-        QLabel *label_Logs = new QLabel();
+        auto *label_Logs = new QLabel();
         label_Logs->setText(QApplication::translate("MainWindow", "Logs", nullptr));
         label_Logs->setAlignment(Qt::AlignCenter);
         label_Logs->setFont(font1);
         label_Logs->setEnabled(false);
         ServersGridLayout->addWidget(label_Logs, 1, 6, 1, 2); // two columns (log and log-warning)
 
-        QLabel *label_Actions = new QLabel();
+        auto *label_Actions = new QLabel();
         label_Actions->setText(QApplication::translate("MainWindow", "Actions"));
         label_Actions->setAlignment(Qt::AlignCenter);
         label_Actions->setFont(font1);
@@ -1313,7 +1450,7 @@ namespace ServerControlPanel
              */
 
             // Status
-            QLabel *labelStatus = new QLabel();
+            auto *labelStatus = new QLabel();
             labelStatus->setObjectName(QString("label_" + server->name + "_Status"));
             labelStatus->setPixmap(QPixmap(QString::fromUtf8(":/status_run_big")));
             labelStatus->setAlignment(Qt::AlignCenter);
@@ -1328,7 +1465,7 @@ namespace ServerControlPanel
                 labelPort->setFont(fontNotBold);
                 ServersGridLayout->addWidget(labelPort, rowCounter, 1);
             } else {
-                QLabel *labelPort = new QLabel();
+                auto *labelPort = new QLabel();
                 labelPort->setObjectName(QString("label_" + server->name + "_Port"));
                 // labelPort->setText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
@@ -1336,7 +1473,7 @@ namespace ServerControlPanel
             }
 
             // Server
-            QLabel *labelServer = new QLabel();
+            auto *labelServer = new QLabel();
             labelServer->setObjectName(QString("label_" + server->name + "_Name"));
             labelServer->setAlignment(Qt::AlignCenter);
             labelServer->setText(QApplication::translate("MainWindow",
@@ -1346,7 +1483,7 @@ namespace ServerControlPanel
             ServersGridLayout->addWidget(labelServer, rowCounter, 2);
 
             // Version
-            QLabel *labelVersion = new QLabel();
+            auto *labelVersion = new QLabel();
             labelVersion->setObjectName(QString("label_" + server->name + "_Version"));
             labelVersion->setAlignment(Qt::AlignCenter);
             labelVersion->setText(getVersion(server->lowercaseName));
@@ -1356,7 +1493,7 @@ namespace ServerControlPanel
             // Config
 
             // Configuration via Webinterface
-            QPushButton *pushButton_Configure = new QPushButton();
+            auto *pushButton_Configure = new QPushButton();
             pushButton_Configure->setObjectName(QString("pushButton_Configure_" + server->name + ""));
             pushButton_Configure->setIcon(iconConfig);
             pushButton_Configure->setFlat(true);
@@ -1367,7 +1504,7 @@ namespace ServerControlPanel
             if (server->name != "Memcached") { // memcached doesn't have a config file
 
                 // Configuration via Editor
-                QPushButton *pushButton_ConfigureEdit = new QPushButton();
+                auto *pushButton_ConfigureEdit = new QPushButton();
                 pushButton_ConfigureEdit->setObjectName(QString("pushButton_ConfigurationEditor_" + server->name + ""));
                 pushButton_ConfigureEdit->setIcon(iconConfigEdit);
                 pushButton_ConfigureEdit->setFlat(true);
@@ -1410,7 +1547,7 @@ namespace ServerControlPanel
             }
 
             // Actions
-            QPushButton *pushButton_Stop = new QPushButton();
+            auto *pushButton_Stop = new QPushButton();
             pushButton_Stop->setObjectName(QString("pushButton_Stop_" + server->name + ""));
 
             pushButton_Stop->setIcon(iconStop);
@@ -1419,7 +1556,7 @@ namespace ServerControlPanel
                 QApplication::translate("MainWindow", "Stop " + server->name.toLocal8Bit() + ""));
             ServersGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
 
-            QPushButton *pushButton_Start = new QPushButton();
+            auto *pushButton_Start = new QPushButton();
             pushButton_Start->setObjectName(QString("pushButton_Start_" + server->name + ""));
             pushButton_Start->setIcon(iconStart);
             pushButton_Start->setFlat(true);
@@ -1452,14 +1589,14 @@ namespace ServerControlPanel
         int ServersBoxBottomY = ServersBox.bottom() + 5;
 
         /*qDebug() << ServerStatusGroupBox->frameGeometry();
-  qDebug() << ServerStatusGroupBox->geometry().x();
-  qDebug() << ServerStatusGroupBox->geometry().y();
-  qDebug() << ServerStatusGroupBox->geometry().height();
-  qDebug() << ServerStatusGroupBox->geometry().bottom();
-  qDebug() << ServersBoxBottomY;
+    qDebug() << ServerStatusGroupBox->geometry().x();
+    qDebug() << ServerStatusGroupBox->geometry().y();
+    qDebug() << ServerStatusGroupBox->geometry().height();
+    qDebug() << ServerStatusGroupBox->geometry().bottom();
+    qDebug() << ServersBoxBottomY;
 
-  qDebug() << ui->BottomWidget->frameGeometry();
-  qDebug() << ui->ToolsGroupBox->contentsRect();*/
+    qDebug() << ui->BottomWidget->frameGeometry();
+    qDebug() << ui->ToolsGroupBox->contentsRect();*/
 
         QRect BottomWidget = ui->BottomWidget->frameGeometry();
 
@@ -1502,7 +1639,7 @@ namespace ServerControlPanel
 
     void MainWindow::updateVersion(const QString &server)
     {
-        QLabel *label = QApplication::activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
+        auto *label = QApplication::activeWindow()->findChild<QLabel *>("label_" + server + "_Version");
         if (label != nullptr) {
             QString version = getVersion(server);
             label->setText(version);
@@ -1595,7 +1732,7 @@ namespace ServerControlPanel
             qDebug() << "[Error]" << file << "not found";
         }
 
-        File::Yml *yml    = new File::Yml();
+        auto *yml         = new File::Yml();
         YAML::Node config = yml->load(file);
 
         return QString::fromStdString(config["net"]["port"].as<std::string>());
@@ -1634,7 +1771,7 @@ namespace ServerControlPanel
 
     QString MainWindow::getRedisPort() { return settings->getString("redis/port"); }
 
-    void MainWindow::on_pushButton_Updater_clicked() { this->openUpdaterDialog(); }
+    void MainWindow::pushButton_Updater_clicked() { this->openUpdaterDialog(); }
 
     void MainWindow::openUpdaterDialog()
     {

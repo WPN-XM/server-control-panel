@@ -32,9 +32,9 @@ namespace ServerControlPanel
 
     public:
         explicit MainWindow(QWidget *parent = nullptr);
-        ~MainWindow();
+        ~MainWindow() override;
 
-        void setVisible(bool visible);
+        void setVisible(bool visible) override;
 
         QString getPHPVersion();
         QString getNginxVersion();
@@ -113,7 +113,7 @@ namespace ServerControlPanel
         MainWindow *getMainWindow();
         void setup();
 
-        void setProcessUtil(Processes::ProcessUtil *oProcesses);
+        void setProcessUtil(Processes::ProcessUtil *oProcessesUtil);
         Processes::ProcessUtil *getProcessUtil();
 
         void setPlugins(PluginsNS::Plugins *oPlugins);
@@ -138,11 +138,14 @@ namespace ServerControlPanel
         void checkPorts();
         void createActions();
         void createTrayIcon();
+        void createConsole();
 
         void setDefaultSettings();
         void autostartServers();
 
         void renderServerStatusPanel();
+
+        void setMainWindowDefaultSize();
 
         QString getRootFolder() const;
         QString getProjectFolder() const;
@@ -154,13 +157,26 @@ namespace ServerControlPanel
         QString getLogfile(const QString &objectName);
         QString getServerNameFromPushButton(QPushButton *button);
 
+        // MainWindow Default Size
+        int defaultWidth  = 621;
+        int defaultHeight = 424;
+
     signals:
         void mainwindow_show();
 
     private slots:
         void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
-        void on_pushButton_Updater_clicked();
+        // console dockWidget related
+        void toolButton_Console_clicked();
+        void dockWidgetCloseClicked();
+        void dockWidgetTopLevelChanged(bool);
+        void dockWidgetVisibilityChanged(bool);
+        void restoreDock();
+
+        // updater
+        void pushButton_Updater_clicked();
+
         void MainWindow_ShowEvent();
 
         void show_SelfUpdater_UpdateNotification(QJsonObject versionInfo);
@@ -171,9 +187,9 @@ namespace ServerControlPanel
         void handlePlugin(QObject *plugin);
 
     protected:
-        void closeEvent(QCloseEvent *event);
-        void changeEvent(QEvent *event);
-        void showEvent(QShowEvent *event);
+        void closeEvent(QCloseEvent *event) override;
+        void changeEvent(QEvent *event) override;
+        void showEvent(QShowEvent *event) override;
     };
 } // namespace ServerControlPanel
 

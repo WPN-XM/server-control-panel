@@ -83,8 +83,9 @@ HEADERS += \
     updater/updaterdialog.h \
     version.h \
     windowsapi.h \
-    plugins\plugininterface.h \
-    plugins/plugins.h
+    plugins/plugininterface.h \
+    plugins/plugins.h \
+    widgets/qclosedockwidget.h
 
 SOURCES += \
     main/main.cpp \
@@ -126,7 +127,8 @@ SOURCES += \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
     windowsapi.cpp \
-    plugins/plugins.cpp
+    plugins/plugins.cpp \
+    widgets/qclosedockwidget.cpp
 
 RESOURCES += \
     resources/resources.qrc
