@@ -61,7 +61,8 @@ namespace Configuration
      */
     void ConfigurationDialog::showPage(const QString &widgetname)
     {
-        QWidget *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
+        auto *w = ui->stackedWidget->findChild<QWidget *>(widgetname);
+
         if (w != nullptr)
             ui->stackedWidget->setCurrentWidget(w);
         else
@@ -89,7 +90,7 @@ namespace Configuration
 
     void ConfigurationDialog::addItemToTreeMenu(const QString &topLevelItemName, const QString &stackWidgetName)
     {
-        QTreeWidgetItem *item = new QTreeWidgetItem();
+        auto *item = new QTreeWidgetItem();
         item->setText(0, topLevelItemName);
         item->setData(0, Qt::UserRole, stackWidgetName);
 
@@ -108,7 +109,7 @@ namespace Configuration
 
         int idx = ui->configMenuTreeWidget->indexOfTopLevelItem(topLevelItem);
 
-        QTreeWidgetItem *item = new QTreeWidgetItem();
+        auto *item = new QTreeWidgetItem();
         item->setText(0, itemName);
         item->setData(0, Qt::UserRole, stackWidgetName);
 
@@ -224,7 +225,7 @@ namespace Configuration
                          SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
     }
 
-    void ConfigurationDialog::savePHPExtensionState(QString ext, bool enable)
+    void ConfigurationDialog::savePHPExtensionState(const QString &ext, bool enable)
     {
         QString filename = QDir::toNativeSeparators(QDir::currentPath() + "/bin/php/php.ini");
         QFile f(filename);
@@ -696,7 +697,7 @@ namespace Configuration
         ini->writeConfigFile();
     }
 
-    QString toString(std::string s) { return QString(s.c_str()); }
+    // QString toString(std::string s) { return QString(s.c_str()); }
 
     void ConfigurationDialog::saveSettings_MongoDB_Configuration()
     {
@@ -903,7 +904,7 @@ namespace Configuration
     {
         for (int i = 0; i < ui->autostartServersFormLayout->count(); ++i) {
             QWidget *w = ui->autostartServersFormLayout->itemAt(i)->widget();
-            if (w != NULL) {
+            if (w != nullptr) {
                 w->setEnabled(run);
             }
         }
@@ -1337,7 +1338,7 @@ namespace Configuration
     void ConfigurationDialog::on_tableWidget_Nginx_Upstreams_itemSelectionChanged()
     {
         // there is a selection, but its not a row selection
-        if (ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows(0).size() <= 0) {
+        if (ui->tableWidget_Nginx_Upstreams->selectionModel()->selectedRows(0).empty()) {
             return;
         }
 

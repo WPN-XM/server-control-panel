@@ -39,7 +39,7 @@ namespace Configuration
 
     public:
         explicit ConfigurationDialog(QWidget *parent = nullptr);
-        ~ConfigurationDialog();
+        ~ConfigurationDialog() override;
 
         // page related
         void addPage(QWidget *widget);
@@ -127,7 +127,7 @@ namespace Configuration
         void on_pushButton_setPHPVersionForBinFolder_clicked();
 
         void PHPExtensionListWidgetHighlightChecked(QListWidgetItem *item);
-        void savePHPExtensionState(QString ext, bool enable);
+        void savePHPExtensionState(const QString &ext, bool enable);
 
     private:
         Ui::ConfigurationDialog *ui;

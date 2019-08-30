@@ -16,7 +16,7 @@ namespace Configuration
 
     public:
         explicit NginxAddUpstreamDialog(QWidget *parent = nullptr);
-        ~NginxAddUpstreamDialog();
+        ~NginxAddUpstreamDialog() override;
 
         QString pool();
         QString method();

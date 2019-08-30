@@ -16,7 +16,7 @@ namespace Configuration
 
     public:
         explicit NginxAddServerDialog(QWidget *parent = nullptr);
-        ~NginxAddServerDialog();
+        ~NginxAddServerDialog() override;
 
         QString address();
         QString port();
