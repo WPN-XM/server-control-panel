@@ -119,11 +119,11 @@ namespace Tooltips
         bool eventFilter(QObject *, QEvent *) override;
 
     public:
+        explicit BalloonTip(
+            const QPixmap &icon, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
+        explicit BalloonTip(
+            QStyle::StandardPixmap icon, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
         explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
-        explicit BalloonTip(
-            const QPixmap &pix, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
-        explicit BalloonTip(
-            QStyle::StandardPixmap pix, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
 
         ~BalloonTip() override;
         ArrowPosition arrowPosition();
