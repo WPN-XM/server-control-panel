@@ -44,15 +44,14 @@ INCLUDEPATH += $${LIBS_DIR}/yaml-cpp/include
 LIBS += -L$${LIBS_DIR}/yaml-cpp/lib -llibyaml-cppmd$${DEBUG_EXT}
 
 HEADERS += \
-    main/main.h \
     cli.h \
     config/configurationdialog.h \
     config/nginxaddserverdialog.h \
     config/nginxaddupstreamdialog.h \
     config/pluginlistdelegate.h \
     config/pluginsmanager.h \
-    file/filehandling.h \
     file/csv.h \
+    file/filehandling.h \
     file/ini.h \
     file/json.h \
     file/yml.h \
@@ -61,8 +60,11 @@ HEADERS += \
     hostmanager/hostmanagerdialog.h \
     hostmanager/hosttablemodel.h \
     jobscheduler.h \
+    main/main.h \
     mainwindow.h \
     networkutils.h \
+    plugins/plugininterface.h \
+    plugins/plugins.h \
     processviewer/AlreadyRunningProcessesDialog.h \
     processviewer/processes.h \
     processviewer/processviewerdialog.h \
@@ -82,14 +84,12 @@ HEADERS += \
     updater/softwarecolumnitemdelegate.h \
     updater/updaterdialog.h \
     version.h \
+    widgets/consoledockwidget.h \
+    widgets/qclosedockwidget.h \
     windowsapi.h \
-    plugins/plugininterface.h \
-    plugins/plugins.h \
-    widgets/qclosedockwidget.h
 
 SOURCES += \
-    main/main.cpp \
-    cli.cpp \   
+    cli.cpp \
     config/configurationdialog.cpp \
     config/nginxaddserverdialog.cpp \
     config/nginxaddupstreamdialog.cpp \
@@ -105,8 +105,10 @@ SOURCES += \
     hostmanager/hostmanagerdialog.cpp \
     hostmanager/hosttablemodel.cpp \
     jobscheduler.cpp \
+    main/main.cpp \
     mainwindow.cpp \
     networkutils.cpp \
+    plugins/plugins.cpp \
     processviewer/AlreadyRunningProcessesDialog.cpp \
     processviewer/processes.cpp \
     processviewer/processviewerdialog.cpp \
@@ -126,9 +128,9 @@ SOURCES += \
     updater/softwarecolumnitemdelegate.cpp \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
+    widgets/consoledockwidget.cpp \
+    widgets/qclosedockwidget.cpp \
     windowsapi.cpp \
-    plugins/plugins.cpp \
-    widgets/qclosedockwidget.cpp
 
 RESOURCES += \
     resources/resources.qrc

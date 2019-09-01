@@ -6,18 +6,20 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 
+#include "tray.h"
+#include "servers.h"
+#include "settings.h"
+#include "selfupdater.h"
+
+#include "file/yml.h"
 #include "config/configurationdialog.h"
 #include "processviewer/processes.h"
 #include "processviewer/processviewerdialog.h"
-#include "selfupdater.h"
-#include "servers.h"
-#include "settings.h"
 #include "tooltips/BalloonTip.h"
 #include "tooltips/LabelWithHoverTooltip.h"
-#include "tray.h"
 #include "updater/updaterdialog.h"
-#include "file/yml.h"
 #include "plugins/plugins.h"
+#include "widgets/consoledockwidget.h"
 
 namespace ServerControlPanel
 {
@@ -166,13 +168,6 @@ namespace ServerControlPanel
 
     private slots:
         void iconActivated(QSystemTrayIcon::ActivationReason reason);
-
-        // console dockWidget related
-        void toolButton_Console_clicked();
-        void dockWidgetCloseClicked();
-        void dockWidgetTopLevelChanged(bool);
-        void dockWidgetVisibilityChanged(bool);
-        void restoreDock();
 
         // updater
         void pushButton_Updater_clicked();
