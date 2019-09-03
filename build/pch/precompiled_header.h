@@ -15,61 +15,61 @@
 
     *WARNING*: Do not include this file explicitly in your project.
 */
-    #include <QFileDialog>
-    #include <QPushButton>
-    #include <QLabel>
-    #include <QCheckBox>
-    #include <QComboBox>
-    #include <QVBoxLayout>
-    #include <QHBoxLayout>
-    #include <QDrag>
-    #include <QMimeData>
-    #include <QToolButton>
-    #include <QFrame>
-    #include <QValidator>
     #include <QAction>
     #include <QButtonGroup>
+    #include <QCheckBox>
+    #include <QComboBox>
+    #include <QDrag>
+    #include <QFileDialog>
+    #include <QFrame>
+    #include <QHBoxLayout>
     #include <QHeaderView>
+    #include <QLabel>
     #include <QLineEdit>
+    #include <QMimeData>
+    #include <QMouseEvent>
+    #include <QPushButton>
+    #include <QRadioButton>
     #include <QSpacerItem>
     #include <QStackedWidget>
-    #include <QRadioButton>
-    #include <QTabWidget>
-    #include <QToolTip>
-    #include <QMouseEvent>
     #include <QStyle>
+    #include <QTabWidget>
     #include <QTimer>
+    #include <QToolButton>
+    #include <QToolTip>
+    #include <QValidator>
+    #include <QVBoxLayout>
 
     #include <QApplication>
-    #include <QVariant>
-    #include <QMap>
-    #include <QVector>
-    #include <QStringList>
-    #include <QDir>
-    #include <QPointer>
     #include <QColor>
+    #include <QDir>
+    #include <QMap>
+    #include <QPointer>
+    #include <QStringList>
+    #include <QVariant>
+    #include <QVector>
 
-    #include <string>
-    #include <set>
-    #include <map>
-    #include <memory>
-    #include <vector>
-    #include <unordered_map>
+    #include <algorithm>
     #include <array>
     #include <bitset>
-    #include <initializer_list>
-    #include <functional>
-    #include <algorithm>
-    #include <numeric>
-    #include <iterator>
-    #include <type_traits>
-    #include <cmath>
     #include <cassert>
     #include <cfloat>
+    #include <cmath>
     #include <complex>
+    #include <condition_variable>
     #include <cstddef>
     #include <cstdint>
     #include <cstdlib>
+    #include <functional>
+    #include <initializer_list>
+    #include <iterator>
+    #include <map>
+    #include <memory>
     #include <mutex>
+    #include <numeric>
+    #include <set>
+    #include <string>
     #include <thread>
-    #include <condition_variable>
+    #include <type_traits>
+    #include <unordered_map>
+    #include <vector>

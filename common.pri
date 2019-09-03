@@ -78,7 +78,7 @@ win32-msvc* {
 }
 win32-clang-msvc* {
     message("using win32 clang msvc")
-    QMAKE_CXXFLAGS += /MP    
+    #QMAKE_CXXFLAGS += /MP
     QMAKE_CXXFLAGS_RELEASE += /Zi
     QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS    
     QMAKE_CXXFLAGS *= /std:c++17
@@ -89,5 +89,3 @@ win32-clang-msvc* {
     QMAKE_CFLAGS *= -msse -msse2
     QMAKE_CXXFLAGS *= -msse -msse2
 }
-
-
