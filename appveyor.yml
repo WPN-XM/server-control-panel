@@ -22,8 +22,9 @@ environment:
 
     # MSVC x64
     - bitsize:    x64
-      #qt:        latest\msvc2017_64
-      qt:         5.13\msvc2017_64
+      #qt:         latest\msvc2017_64
+      #qt:         5.13\msvc2017_64
+      qt:         5.12.4\msvc2017_64     
       suffix:     msvc2017
       generator:  "Visual Studio 15 2017 Win64"
 
