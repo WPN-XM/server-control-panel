@@ -951,7 +951,9 @@ namespace Configuration
     {
         QStringList installed = this->servers->getInstalledServerNames();
 
-        QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(QRegExp("checkbox_autostart_\\w"));
+        const auto regexp = QRegularExpression("checkbox_autostart_\\w");
+
+        QList<QCheckBox *> boxes = ui->tabWidget->findChildren<QCheckBox *>(regexp);
 
         for (auto box : boxes) {
             // return last part of "checkbox_autostart_*"
