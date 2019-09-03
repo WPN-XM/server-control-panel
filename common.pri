@@ -91,4 +91,3 @@ win32-clang-msvc* {
 }
 
 
-message("QMAKE_CXXFLAGS is $${QMAKE_CXXFLAGS}")

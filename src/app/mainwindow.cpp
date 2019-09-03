@@ -352,19 +352,23 @@ namespace ServerControlPanel
          */
 
         // Set enabled/disabled state for all "pushButton_ShowLog_*" buttons
-        QList<QPushButton *> allShowLogPushButtons =
-            ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowLog_\\w"));
 
-        for (auto &allShowLogPushButton : allShowLogPushButtons) {
-            allShowLogPushButton->setEnabled(QFile::exists(getLogfile(allShowLogPushButton->objectName())));
+        auto LogButtons = QRegExp("pushButton_ShowLog_\\w");
+
+        QList<QPushButton *> allLogPushButtons = ui->centralWidget->findChildren<QPushButton *>(LogButtons);
+
+        for (auto &allLogPushButton : allLogPushButtons) {
+            allLogPushButton->setEnabled(QFile::exists(getLogfile(allLogPushButton->objectName())));
         }
 
         // Set enabled/disabled state for all "pushButton_ShowErrorLog_*" buttons
-        QList<QPushButton *> allShowErrorLogPushButtons =
-            ui->centralWidget->findChildren<QPushButton *>(QRegExp("pushButton_ShowErrorLog_\\w"));
 
-        for (auto &allShowErrorLogPushButton : allShowErrorLogPushButtons) {
-            allShowErrorLogPushButton->setEnabled(QFile::exists(getLogfile(allShowErrorLogPushButton->objectName())));
+        auto ErrorLogButtons = QRegExp("pushButton_ShowErrorLog_\\w");
+
+        QList<QPushButton *> allErrorLogPushButtons = ui->centralWidget->findChildren<QPushButton *>(ErrorLogButtons);
+
+        for (auto &allErrorLogPushButton : allErrorLogPushButtons) {
+            allErrorLogPushButton->setEnabled(QFile::exists(getLogfile(allErrorLogPushButton->objectName())));
         }
     }
 
