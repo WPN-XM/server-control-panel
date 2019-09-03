@@ -78,7 +78,6 @@ namespace File
 
         bool autoSave;
         char iniFileName[4096]{};
-        char str[4096]{}; // for temporary string data
     };
 }; // namespace File
 
