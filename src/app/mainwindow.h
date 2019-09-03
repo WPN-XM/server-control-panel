@@ -5,6 +5,7 @@
 #include <QDialogButtonBox>
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QRegularExpression>
 
 #include "tray.h"
 #include "servers.h"
