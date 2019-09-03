@@ -98,8 +98,7 @@ namespace PluginsNS
         const QString description = opt.fontMetrics.elidedText(index.data(Qt::UserRole + 2).toString(), Qt::ElideRight,
                                                                descriptionRect.width());
         painter->setFont(opt.font);
-        style->drawItemText(painter, descriptionRect, Qt::TextSingleLine | Qt::AlignLeft, textPalette, true,
-                            description, colorRole);
+        style->drawItemText(painter, descriptionRect, Qt::AlignLeft, textPalette, true, description, colorRole);
     }
 
     QSize PluginListDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const

@@ -65,7 +65,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     dlg->setWindowModality(Qt::WindowModal);
     dlg->setLayout(grid);
     dlg->resize(250, 100);
-    dlg->setWindowTitle(qApp->applicationName());
+    dlg->setWindowTitle(QCoreApplication::applicationName());
     dlg->setWindowFlags(dlg->windowFlags() | Qt::WindowStaysOnTopHint);
 
     // Set signal and slot for "Buttons"

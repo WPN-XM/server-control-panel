@@ -7,7 +7,7 @@
  * API functions to check the status of a windows service and modify Windows
  * Services.
  */
-Services::Services() {}
+Services::Services() = default;
 
 void Services::status(QString serviceName) { Q_UNUSED(serviceName); }
 

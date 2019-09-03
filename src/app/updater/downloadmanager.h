@@ -54,7 +54,7 @@ namespace Downloader
 
     private:
         QString downloadFolder;
-        bool downloadSkipped;
+        bool downloadSkipped = false;
     signals:
         void transferFinished(Downloader::TransferItem *self);
     private slots:
@@ -68,7 +68,7 @@ namespace Downloader
     public:
         DownloadManager();
         ~DownloadManager() override;
-        void get(QNetworkRequest &request, QString dlFolder, DownloadItem::DownloadMode dlMode);
+        void get(QNetworkRequest &request, const QString &dlFolder, DownloadItem::DownloadMode dlMode);
         void get(QNetworkRequest &request);
         enum QueueMode
         {
@@ -78,7 +78,7 @@ namespace Downloader
         void setQueueMode(QueueMode mode);
         TransferItem *findTransfer(const QUrl &url);
 
-        void setDownloadFolder(QString downloadFolder);
+        void setDownloadFolder(const QString &downloadFolder);
         void setDownloadMode(DownloadItem::DownloadMode mode);
 
     public slots:

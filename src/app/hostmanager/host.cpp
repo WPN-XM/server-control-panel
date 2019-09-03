@@ -112,7 +112,7 @@ namespace HostsFileManager
         // m_bIsEnable = true;
     }
 
-    Host::Host(QString name, QString address)
+    Host::Host(const QString &name, const QString &address)
     {
         hostname  = name.trimmed();
         ipaddress = address.trimmed();

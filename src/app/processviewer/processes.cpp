@@ -104,13 +104,9 @@ namespace Processes
     // static, process blacklist
     bool ProcessUtil::isSystemProcess(const QString &processName)
     {
-        if (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
-            processName == "wininit" || processName == "winlogon" || processName == "dllhost" ||
-            processName == "csrss" || processName == "conhost" || processName == "wpn-xm") {
-            return true;
-        }
-
-        return false;
+        return (processName == "[System Process]" || processName == "svchost.exe" || processName == "System" ||
+                processName == "wininit" || processName == "winlogon" || processName == "dllhost" ||
+                processName == "csrss" || processName == "conhost" || processName == "wpn-xm");
     }
 
     // static

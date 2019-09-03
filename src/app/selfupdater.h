@@ -28,7 +28,8 @@ namespace Updater
         Q_OBJECT
 
     public:
-        SelfUpdater(Settings::SettingsManager *oSettings);
+        explicit SelfUpdater(Settings::SettingsManager *oSettings);
+        explicit SelfUpdater(Settings::SettingsManager &oSettings) = delete;
         ~SelfUpdater() override;
 
         void run();

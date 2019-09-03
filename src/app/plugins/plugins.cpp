@@ -8,7 +8,7 @@ namespace PluginsNS
 
     bool Plugins::Plugin::operator==(const Plugin &other) const { return pluginId == other.pluginId; }
 
-    Plugins::Plugins(QObject *parent) : QObject(parent), pluginsLoaded(false)
+    Plugins::Plugins(QObject *parent) : QObject(parent)
     {
         // load Settings
         loadSettings();
@@ -254,7 +254,7 @@ namespace PluginsNS
 
         plugin->instance->init(state);
 
-        qDebug() << "Plugin loaded:" << plugin->pluginPath;
+        qDebug() << "[Plugins] Plugin loaded:" << plugin->pluginPath;
 
         return true;
     }

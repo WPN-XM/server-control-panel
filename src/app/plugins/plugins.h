@@ -28,7 +28,7 @@ namespace PluginsNS
         QMap<QString, QString> authors;
         QString type;
         QString icon;
-        bool core;
+        bool core        = false;
         bool hasSettings = false;
         // QPixmap icon;
         // @TODO plugin dependencies?

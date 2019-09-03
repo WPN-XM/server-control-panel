@@ -127,7 +127,7 @@ namespace HostsFileManager
 
     void HostsTableModel::setList(QList<Host *> hosts)
     {
-        listHosts        = hosts;
+        listHosts        = std::move(hosts);
         QModelIndex root = index(0, 0);
         emit(dataChanged(root, index(rowCount(QModelIndex()), columnCount(QModelIndex()))));
     }

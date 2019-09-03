@@ -3,7 +3,7 @@
 
 namespace ServerControlPanel
 {
-    Tray::Tray(QApplication *parent, Servers::Servers *servers)
+    Tray::Tray(QCoreApplication *parent, Servers::Servers *servers)
         : QSystemTrayIcon(QIcon(":/wpnxm"), parent), servers(servers)
     {
         createTrayMenu();

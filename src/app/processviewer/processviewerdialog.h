@@ -21,6 +21,7 @@ class ProcessViewerDialog : public QDialog
 
 public:
     explicit ProcessViewerDialog(QWidget *parent);
+    explicit ProcessViewerDialog(QWidget &parent) = delete;
     ~ProcessViewerDialog() override;
 
     QTreeWidgetItem *addRoot(Processes::ProcessUtil::Process process);
@@ -31,7 +32,7 @@ public:
 
 private:
     Ui::ProcessViewerDialog *ui;
-    Processes::ProcessUtil *processes;
+    Processes::ProcessUtil *processes{};
 
     QList<Processes::ProcessUtil::Process> runningProcesses;
     QList<Processes::ProcessUtil::PidAndPort> ports;

@@ -96,11 +96,7 @@ namespace SoftwareRegistry
         QDateTime today                = QDateTime::currentDateTime();
 
         // updateInterval hardcoded to 3 days
-        if (3 <= fileLastModifiedDate.daysTo(today)) {
-            return true;
-        }
-
-        return false;
+        return (3 <= fileLastModifiedDate.daysTo(today));
     }
 
     QJsonObject Manager::getServerStackSoftwareRegistry() { return stackSoftwareRegistry.object(); }

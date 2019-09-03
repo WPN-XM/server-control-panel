@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QStyle>
 #include <QTimer>
+#include <utility>
 
 namespace Tooltips
 {
@@ -17,8 +18,8 @@ namespace Tooltips
         : QWidget(parent)
     {
         my_closeButton = new TipButton(TipButton::NoButton, this);
-        my_title       = title;
-        my_text        = text;
+        my_title       = std::move(title);
+        my_text        = std::move(text);
         my_duration    = duration;
         my_icon        = QApplication::style()->standardIcon(icon).pixmap(QSize(15, 15));
         init();
@@ -28,8 +29,8 @@ namespace Tooltips
         : QWidget(parent)
     {
         my_closeButton = new TipButton(TipButton::NoButton, this);
-        my_title       = title;
-        my_text        = text;
+        my_title       = std::move(title);
+        my_text        = std::move(text);
         my_duration    = duration;
         my_icon        = icon.scaled(QSize(15, 15), Qt::KeepAspectRatio);
         init();
@@ -38,8 +39,8 @@ namespace Tooltips
     BalloonTip::BalloonTip(QString title, QString text, int duration, QWidget *parent) : QWidget(parent)
     {
         my_closeButton = new TipButton(TipButton::NoButton, this);
-        my_title       = title;
-        my_text        = text;
+        my_title       = std::move(title);
+        my_text        = std::move(text);
         my_duration    = duration;
         init();
     }
@@ -154,9 +155,9 @@ namespace Tooltips
                           << QPoint(popupRect.width() - 90, 30);
             break;
         case LeftTop:
-            arrowTriangle << QPoint(popupRect.left() - 10, popupRect.height() * 0.6)
-                          << QPoint(popupRect.left(), popupRect.height() * 0.6 + 5)
-                          << QPoint(popupRect.left(), popupRect.height() * 0.6 - 5);
+            int height = static_cast<int>(popupRect.height() * 0.6);
+            arrowTriangle << QPoint(popupRect.left() - 10, height) << QPoint(popupRect.left(), height + 5)
+                          << QPoint(popupRect.left(), height - 5);
             break;
         }
 

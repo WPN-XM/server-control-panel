@@ -26,7 +26,7 @@ namespace Tooltips
             NoButton
         };
         Q_DECLARE_FLAGS(TipButtonRole, TipButtonRoles)
-        Q_ENUMS(TipButtonRoles)
+        Q_ENUM(TipButtonRoles)
 
     protected:
         TipButtonRole my_role;
@@ -91,7 +91,7 @@ namespace Tooltips
             LeftTop     = 4
         };
         Q_DECLARE_FLAGS(ArrowPosition, ArrowPositions)
-        Q_ENUMS(ArrowPositions)
+        Q_ENUM(ArrowPositions)
 
     protected:
         QPixmap my_icon;
@@ -104,7 +104,8 @@ namespace Tooltips
         int my_duration;
 
         TipButton *my_closeButton;
-        TipButton *my_configButton;
+        // TODO add a configure button to the balloon tooltip
+        // TipButton *my_configButton;
 
         void paintEvent(QPaintEvent *event) override;
 

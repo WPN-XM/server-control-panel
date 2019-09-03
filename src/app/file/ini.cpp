@@ -22,10 +22,10 @@ namespace File
 
     void INI::loadConfigFile()
     {
-        fstream fStream;
-        string p = iniFileName;
+        std::fstream fStream;
+        std::string p = iniFileName;
 
-        fStream.open(p, ios::in);
+        fStream.open(p, std::ios::in);
         if (!fStream) {
             /*if (!autoCreate) {
                 log("[INI] config file [%s] does not exist", iniFileName);
@@ -42,8 +42,8 @@ namespace File
         char line[4096];
         char ch;
         int i = 0;
-        string index;
-        string str;
+        std::string index;
+        std::string str;
         bool isComment = false;
 
         while (!fStream.eof()) {
@@ -86,7 +86,7 @@ namespace File
                 if (i == 0)
                     continue;
                 line[i] = '\0';
-                str     = string(line);
+                str     = std::string(line);
                 // log("[INI] read line: %s", str.c_str());
                 // [section] start
                 if (line[0] == '[') {
@@ -134,10 +134,10 @@ namespace File
         }
     }
 
-    string INI::trim(string &str)
+    std::string INI::trim(std::string &str)
     {
         size_t first = str.find_first_not_of(' ');
-        if (first == string::npos)
+        if (first == std::string::npos)
             return "";
         size_t last = str.find_last_not_of(' ');
         return str.substr(first, (last - first + 1));
@@ -148,12 +148,12 @@ namespace File
         autoSave = false;
         if (fileName == nullptr)
             fileName = iniFileName;
-        fstream fStream;
-        fStream.open(fileName, ios_base::out | ios_base::trunc);
+        std::fstream fStream;
+        fStream.open(fileName, std::ios_base::out | std::ios_base::trunc);
         // log("[INI] start writing file[%s]", fileName);
-        string index     = string("");
-        bool withComment = false;
-        bool isStart     = true;
+        std::string index = std::string("");
+        bool withComment  = false;
+        bool isStart      = true;
         for (auto it = datas.begin(); it != datas.end(); it++) {
             INIEntry entry = *it;
             if (entry.isEmptyLine) {
@@ -164,9 +164,9 @@ namespace File
             if (entry.isComment) {
                 withComment = true;
                 if (isStart)
-                    fStream << entry.comment.c_str() << endl;
+                    fStream << entry.comment.c_str() << std::endl;
                 else
-                    fStream << entry.comment.c_str() << endl;
+                    fStream << entry.comment.c_str() << std::endl;
                 isStart = false;
 
                 // log("[INI] write comment: %s", entry.comment.c_str());
@@ -179,19 +179,19 @@ namespace File
             if (strcmp(index.c_str(), entry.index.c_str()) != 0) {
                 index = entry.index;
                 if (withComment || isStart) {
-                    fStream << '[' << entry.index << ']' << endl;
+                    fStream << '[' << entry.index << ']' << std::endl;
                     withComment = false;
                     isStart     = false;
                     // log("[INI] write section [%s]", entry.index.c_str());
                 } else {
-                    fStream << endl << '[' << entry.index << ']' << endl;
+                    fStream << std::endl << '[' << entry.index << ']' << std::endl;
                     // log("[INI] write section [%s]", entry.index.c_str());
                 }
             }
-            fStream << entry.name << " = " << entry.value << endl;
+            fStream << entry.name << " = " << entry.value << std::endl;
             // log("[INI] write value | %s = %s", entry.name.c_str(), entry.value.c_str());
         }
-        fStream << endl;
+        fStream << std::endl;
         fStream.close();
         // log("[INI] Saved config file [%s]. Done.", fileName);
     }
@@ -210,7 +210,7 @@ namespace File
         auto it        = datas.begin();
         bool findIndex = false;
         bool findName  = false;
-        vector<INIEntry>::iterator itInsertPos;
+        std::vector<INIEntry>::iterator itInsertPos;
         for (it = datas.begin(); it != datas.end(); it++) {
             if (!findIndex) {
                 if (strcmp(it->index.c_str(), index) == 0) {
@@ -233,7 +233,7 @@ namespace File
             itInsertPos = it;
         }
         if (findIndex && findName) {
-            itInsertPos->value = string(value);
+            itInsertPos->value = std::string(value);
             return;
         }
 
@@ -245,13 +245,9 @@ namespace File
     {
         const char *str = getStringValue(index, name);
         if (str == nullptr) {
-            // log("notfound for [%s]-[%s]", index, name);
             return false;
         }
-        if (strcmp(str, "true") == 0)
-            return true;
-        else
-            return false;
+        return (strcmp(str, "true") == 0);
     }
 
     int INI::getIntValue(const char *index, const char *name)
@@ -268,7 +264,6 @@ namespace File
     {
         const char *str = getStringValue(index, name);
         if (str == nullptr) {
-            cout << "notfound" << endl;
             return -1.0;
         }
         return atof(str);
@@ -286,30 +281,32 @@ namespace File
                 }
             }
         }
-        cout << "DEBUG: [" << index << "] of--[" << name << "] not found" << endl;
+        std::cout << "DEBUG: [" << index << "] of--[" << name << "] not found" << std::endl;
         return nullptr;
     }
 
     // setter
     void INI::setBoolValue(const char *index, const char *name, bool value)
     {
-        if (value)
-            sprintf(str, "true");
-        else
-            sprintf(str, "false");
-        setStringValueWithIndex(index, name, str);
+        const char *string = (value) ? "true" : "false";
+
+        setStringValueWithIndex(index, name, string);
     }
 
     void INI::setIntValue(const char *index, const char *name, int value)
     {
-        sprintf(str, "%d", value);
-        setStringValueWithIndex(index, name, str);
+        std::stringstream stream;
+        stream << static_cast<int>(value);
+
+        setStringValueWithIndex(index, name, stream.str().c_str());
     }
 
     void INI::setFloatValue(const char *index, const char *name, float value)
     {
-        sprintf(str, "%f", value);
-        setStringValueWithIndex(index, name, str);
+        std::stringstream stream;
+        stream << static_cast<float>(value);
+
+        setStringValueWithIndex(index, name, stream.str().c_str());
     }
 
     void INI::setStringValue(const char *index, const char *name, const char *value)
@@ -324,7 +321,7 @@ namespace File
             INIEntry entry = *it;
             // log(" ------------ INI item of [%s] ------------ ", iniFileName);
             if (entry.isComment) {
-                cout << entry.comment << endl;
+                std::cout << entry.comment << std::endl;
                 continue;
             }
             // log("  index : %s", entry.index.c_str());

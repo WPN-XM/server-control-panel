@@ -12,8 +12,7 @@
 namespace Configuration
 {
 
-    PluginsManager::PluginsManager(QWidget *parent)
-        : QWidget(parent), ui(new Configuration::Ui::PluginsManager), loaded(false)
+    PluginsManager::PluginsManager(QWidget *parent) : QWidget(parent), ui(new Configuration::Ui::PluginsManager)
     {
         ui->setupUi(this);
         ui->list->setLayoutDirection(Qt::LeftToRight);

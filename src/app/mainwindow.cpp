@@ -172,10 +172,8 @@ namespace ServerControlPanel
 
         QString softwareNameAndLatestVersion =
             QString("%1 v%2").arg(versionInfo["software_name"].toString(), versionInfo["latest_version"].toString());
-        QString title("Update available:\n");
-        QString msg(softwareNameAndLatestVersion);
 
-        tray->showMessage(title, msg);
+        tray->showMessage("Update available:\n", softwareNameAndLatestVersion);
     }
 
     // TODO move to Notification Class
@@ -189,7 +187,7 @@ namespace ServerControlPanel
 
     void MainWindow::createTrayIcon()
     {
-        tray = new ServerControlPanel::Tray(qApp, servers);
+        tray = new ServerControlPanel::Tray(QCoreApplication::instance(), servers);
 
         // handle clicks on the tray icon
         connect(tray, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this,
@@ -223,19 +221,19 @@ namespace ServerControlPanel
                 SLOT(startPHP()));
         connect(cWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
                 SLOT(startMariaDb()));
-        QPushButton *buttonStartMongoDb = cWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
+        auto *buttonStartMongoDb = cWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
         if (buttonStartMongoDb != nullptr) {
             connect(buttonStartMongoDb, SIGNAL(clicked()), servers, SLOT(startMongoDb()));
         }
-        QPushButton *buttonStartMemcached = cWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
+        auto *buttonStartMemcached = cWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
         if (buttonStartMemcached != nullptr) {
             connect(buttonStartMemcached, SIGNAL(clicked()), servers, SLOT(startMemcached()));
         }
-        QPushButton *buttonStartPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
+        auto *buttonStartPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
         if (buttonStartPostgreSQL != nullptr) {
             connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers, SLOT(startPostgreSQL()));
         }
-        QPushButton *buttonStartRedis = cWidget->findChild<QPushButton *>("pushButton_Start_Redis");
+        auto *buttonStartRedis = cWidget->findChild<QPushButton *>("pushButton_Start_Redis");
         if (buttonStartRedis != nullptr) {
             connect(buttonStartRedis, SIGNAL(clicked()), servers, SLOT(startRedis()));
         }
@@ -697,7 +695,8 @@ namespace ServerControlPanel
         // - grab inside "PHP x (cli)"
         // - "\\d.\\d.\\d." = grab "1.2.3"
         // - "(\\w+\\d+)?" = grab optional "alpha2" version
-        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)");
+        const QString r = R"(PHP\s(\d.\d.\d.(\w+\d+)?))";
+        QRegExp regex(r);
         regex.indexIn(p_stdout);
 
         // qDebug() << regex.capturedTexts();
@@ -761,7 +760,7 @@ namespace ServerControlPanel
         // notes: --version doesn't work
         QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
-        QString redisExe = getRootFolder() + "\\bin\\redis\\redis-cli.exe --help";
+        QString redisExe = getRootFolder() + R"(\bin\redis\redis-cli.exe --help)";
         process.start(redisExe);
 
         if (!process.waitForFinished()) {
@@ -779,9 +778,9 @@ namespace ServerControlPanel
 
     QString MainWindow::parseVersionNumber(const QString &stringWithVersion)
     {
-        // This RegExp matches version numbers: (\d+\.)?(\d+\.)?(\d+\.)?(\*|\d+)
-        // This is the same, but escaped:
-        QRegExp regex("(\\d+\\.)?(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)");
+        const QString r = R"((\d+\.)?(\d+\.)?(\d+\.)?(\*|\d+))";
+
+        QRegExp regex(r);
 
         regex.indexIn(stringWithVersion);
 
@@ -982,8 +981,8 @@ namespace ServerControlPanel
 
     void MainWindow::openConfigurationInEditor()
     {
-        QPushButton *button = static_cast<QPushButton *>(sender());
-        QString serverName  = this->getServerNameFromPushButton(button);
+        auto *button       = dynamic_cast<QPushButton *>(sender());
+        QString serverName = this->getServerNameFromPushButton(button);
 
         // fetch config file for server from the ini
         QString cfgFile = QDir(settings->getString(serverName + "/config")).absolutePath();
@@ -1033,8 +1032,8 @@ namespace ServerControlPanel
     void MainWindow::openLog()
     {
         // get log file from objectName of the Signal
-        QPushButton *button = static_cast<QPushButton *>(sender());
-        QString logfile     = this->getLogfile(button->objectName());
+        auto *button    = dynamic_cast<QPushButton *>(sender());
+        QString logfile = this->getLogfile(button->objectName());
 
         if (!QFile::exists(logfile)) {
             QMessageBox::warning(this, tr("Warning"), tr("Log file not found: \n") + logfile, QMessageBox::Yes);
@@ -1219,7 +1218,7 @@ namespace ServerControlPanel
         QFont fontNotBold = font1;
         fontNotBold.setBold(false);
 
-        QGroupBox *ServerStatusGroupBox = new QGroupBox(ui->centralWidget);
+        auto *ServerStatusGroupBox = new QGroupBox(ui->centralWidget);
         ServerStatusGroupBox->setObjectName(QStringLiteral("ServerStatusGroupBox"));
         ServerStatusGroupBox->setEnabled(true);
         ServerStatusGroupBox->setGeometry(QRect(10, 70, 471, 121));
@@ -1229,7 +1228,7 @@ namespace ServerControlPanel
         ServerStatusGroupBox->setAlignment(Qt::AlignLeading | Qt::AlignLeft | Qt::AlignTop);
         ServerStatusGroupBox->setFlat(false);
 
-        QGridLayout *ServersGridLayout = new QGridLayout(ServerStatusGroupBox);
+        auto *ServersGridLayout = new QGridLayout(ServerStatusGroupBox);
         ServersGridLayout->setSpacing(10);
         ServersGridLayout->setObjectName(QStringLiteral("ServersGridLayout"));
         // ServersGridLayout->setSizeConstraint(QLayout::SetMinimumSize);
@@ -1240,14 +1239,14 @@ namespace ServerControlPanel
          * Status | Port | Server | Version | Config | Logs (2) | Actions (2)
          */
 
-        QLabel *label_Status = new QLabel();
+        auto *label_Status = new QLabel();
         label_Status->setText(QApplication::translate("MainWindow", "Status", nullptr));
         label_Status->setAlignment(Qt::AlignCenter);
         label_Status->setFont(font1);
         label_Status->setEnabled(false);
         ServersGridLayout->addWidget(label_Status, 1, 0);
 
-        QLabel *label_Port = new QLabel();
+        auto *label_Port = new QLabel();
         label_Port->setText(QApplication::translate("MainWindow", "Port", nullptr));
         label_Port->setMinimumWidth(38);
         label_Port->setAlignment(Qt::AlignCenter);
@@ -1255,14 +1254,14 @@ namespace ServerControlPanel
         label_Port->setEnabled(false);
         ServersGridLayout->addWidget(label_Port, 1, 1);
 
-        QLabel *label_Server = new QLabel();
+        auto *label_Server = new QLabel();
         label_Server->setText(QApplication::translate("MainWindow", "Server", nullptr));
         label_Server->setAlignment(Qt::AlignCenter);
         label_Server->setFont(font1);
         label_Server->setEnabled(false);
         ServersGridLayout->addWidget(label_Server, 1, 2);
 
-        QLabel *label_Version = new QLabel();
+        auto *label_Version = new QLabel();
         label_Version->setText(QApplication::translate("MainWindow", "Version", nullptr));
         label_Version->setAlignment(Qt::AlignCenter);
         label_Version->setFont(font1);
@@ -1332,7 +1331,7 @@ namespace ServerControlPanel
 
             // Port
             if (server->name == "PHP") {
-                Tooltips::LabelWithHoverTooltip *labelPort = new Tooltips::LabelWithHoverTooltip();
+                auto *labelPort = new Tooltips::LabelWithHoverTooltip();
                 labelPort->setObjectName(QString("label_PHP_Port"));
                 // labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
@@ -1393,12 +1392,11 @@ namespace ServerControlPanel
                 if (!logfile.isEmpty()) {
                     // normal log
                     if (!logfile.contains("error")) {
-                        QPushButton *pushButton_ShowLog = new QPushButton();
+                        auto *pushButton_ShowLog = new QPushButton();
                         pushButton_ShowLog->setObjectName(QString("pushButton_ShowLog_" + server->name + ""));
                         pushButton_ShowLog->setIcon(iconLog);
                         pushButton_ShowLog->setFlat(true);
-                        pushButton_ShowLog->setToolTip(
-                            QApplication::translate("MainWindow", "Open " + server->name.toLocal8Bit() + " Log"));
+                        pushButton_ShowLog->setToolTip(tr("MainWindow", "Open " + server->name.toLocal8Bit() + " Log"));
                         ServersGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
 
                         connect(pushButton_ShowLog, SIGNAL(clicked()), this, SLOT(openLog()));
@@ -1406,12 +1404,12 @@ namespace ServerControlPanel
 
                     // error log
                     if (logfile.contains("error")) {
-                        QPushButton *pushButton_ShowErrorLog = new QPushButton();
+                        auto *pushButton_ShowErrorLog = new QPushButton();
                         pushButton_ShowErrorLog->setObjectName(QString("pushButton_ShowErrorLog_" + server->name + ""));
                         pushButton_ShowErrorLog->setIcon(iconErrorLog);
                         pushButton_ShowErrorLog->setFlat(true);
                         pushButton_ShowErrorLog->setToolTip(
-                            QApplication::translate("MainWindow", "Open " + server->name.toLocal8Bit() + " Error Log"));
+                            tr("MainWindow", "Open " + server->name.toLocal8Bit() + " Error Log"));
                         ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
                         connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));
@@ -1425,16 +1423,14 @@ namespace ServerControlPanel
 
             pushButton_Stop->setIcon(iconStop);
             pushButton_Stop->setFlat(true);
-            pushButton_Stop->setToolTip(
-                QApplication::translate("MainWindow", "Stop " + server->name.toLocal8Bit() + ""));
+            pushButton_Stop->setToolTip(tr("MainWindow", "Stop " + server->name.toLocal8Bit() + ""));
             ServersGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
 
             auto *pushButton_Start = new QPushButton();
             pushButton_Start->setObjectName(QString("pushButton_Start_" + server->name + ""));
             pushButton_Start->setIcon(iconStart);
             pushButton_Start->setFlat(true);
-            pushButton_Start->setToolTip(
-                QApplication::translate("MainWindow", "Start " + server->name.toLocal8Bit() + ""));
+            pushButton_Start->setToolTip(tr("MainWindow", "Start " + server->name.toLocal8Bit() + ""));
             ServersGridLayout->addWidget(pushButton_Start, rowCounter, 9);
 
             rowCounter++;
@@ -1625,14 +1621,14 @@ namespace ServerControlPanel
         auto end = PHPServers.cend();
         for (auto item = PHPServers.cbegin(); item != end; ++item) {
             // item.key   = pool_name
-            QString poolName = item.key();
+            const QString &poolName = item.key();
 
             // item.value = QMap (port, num childs)
             QMap<QString, QVariant> m = item.value().toMap();
             auto end2                 = m.cend();
             for (auto item2 = m.cbegin(); item2 != end2; ++item2) {
-                QString port   = item2.key();
-                QString childs = item2.value().toString();
+                const QString &port = item2.key();
+                QString childs      = item2.value().toString();
                 result += portStringTemplate.arg(poolName, port, childs);
             }
         }

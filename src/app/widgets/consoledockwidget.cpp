@@ -11,31 +11,25 @@ namespace Widgets
 
         createStatusBar();
 
-        connect(this, &Widgets::QCloseDockWidget::closed, this, &ConsoleDockWidget::dockWidgetCloseClicked);
-
         // let the floating dockwidget window return to it's mainwindow position, when clicking close
         connect(this, &QDockWidget::visibilityChanged, this, &ConsoleDockWidget::dockWidgetVisibilityChanged);
 
         // resize mainwindow, when the dockwidget goes into floating mode
         connect(this, &QDockWidget::topLevelChanged, this, &ConsoleDockWidget::dockWidgetTopLevelChanged);
+
+        connect(this, &Widgets::QCloseDockWidget::closed, this, &ConsoleDockWidget::dockWidgetCloseClicked);
     }
 
     void ConsoleDockWidget::createDockWidget()
     {
         /** Create a box for the debuglog text and add it to a BottomDockWidget. **/
 
-        auto *plainTextEdit = new QPlainTextEdit();
+        plainTextEdit = new QPlainTextEdit();
         plainTextEdit->setPlainText("Debug Log Stream");
         plainTextEdit->setObjectName("DebugConsolePlainTextEdit");
         plainTextEdit->setReadOnly(true);
         plainTextEdit->setFixedHeight(100);
         plainTextEdit->setFixedWidth(621);
-
-        /*auto *dockWidget = new Widgets::QCloseDockWidget("Debug Console", this);
-        dockWidget->setObjectName("DebugConsole");
-        dockWidget->setWidget(plainTextEdit);
-        dockWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-        dockWidget->setFloating(false);*/
 
         setObjectName("DebugConsole");
         setWidget(plainTextEdit);
@@ -53,7 +47,7 @@ namespace Widgets
     {
         /** Create a StatusBar with a toggle button for a debug console. **/
 
-        auto *toolButton = new QToolButton();
+        toolButton = new QToolButton();
         toolButton->setObjectName("Console");
         toolButton->setArrowType(Qt::DownArrow);
         toolButton->setToolTip("Open Debug Console");
@@ -75,14 +69,13 @@ namespace Widgets
 
     void ConsoleDockWidget::dockWidgetCloseClicked()
     {
+        // TODO resizing causes a short flickering.... WTF
         setMainWindowDefaultSize();
 
         // disallow dockwidget window to be resized
-        auto *textedit = mainWindow->findChild<QPlainTextEdit *>("DebugConsolePlainTextEdit");
-        textedit->setMaximumHeight(100);
+        plainTextEdit->setMaximumHeight(100);
 
         // after clicking close on the dockwidget, switch to "open" on the toggle button
-        auto *toolButton = mainWindow->findChild<QToolButton *>("Console");
         toolButton->setArrowType(Qt::DownArrow);
         toolButton->setToolTip("Open Debug Console");
     }
@@ -104,28 +97,23 @@ namespace Widgets
             dockWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
             // set new max height only on the inner textedit widget
-            auto *textedit = mainWindow->findChild<QPlainTextEdit *>("DebugConsolePlainTextEdit");
-            textedit->setMinimumHeight(100);
-            textedit->setMaximumHeight(600);
+            // auto *textedit = mainWindow->findChild<QPlainTextEdit *>("DebugConsolePlainTextEdit");
+            plainTextEdit->setMinimumHeight(100);
+            plainTextEdit->setMaximumHeight(600);
         }
     }
 
     void ConsoleDockWidget::dockWidgetVisibilityChanged(bool visible)
     {
-        auto *dockWidget = qobject_cast<QDockWidget *>(sender());
-
-        if (dockWidget->isFloating() && !visible) {
+        if (this->isFloating() && !visible) {
             QTimer::singleShot(100, this, &ConsoleDockWidget::restoreDock);
         }
     }
 
     void ConsoleDockWidget::restoreDock()
     {
-        // auto *dockWidget = qobject_cast<QDockWidget *>(sender());
-        auto *dockWidget = mainWindow->findChild<QDockWidget *>("DebugConsole");
-
-        dockWidget->setFloating(false);
-        dockWidget->setVisible(false);
+        this->setFloating(false);
+        this->setVisible(false);
     }
 
     void ConsoleDockWidget::toolButton_Console_clicked()
@@ -144,7 +132,7 @@ namespace Widgets
             if (dockWidget->isFloating()) {
                 dockWidget->setFloating(false);
             }
-            dockWidget->hide();
+            this->hide();
             setMainWindowDefaultSize();
             toolButton->setArrowType(Qt::DownArrow);
             toolButton->setToolTip("Open Debug Console");

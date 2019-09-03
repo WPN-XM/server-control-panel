@@ -182,7 +182,7 @@ void ProcessViewerDialog::on_pushButton_KillProcess_released()
 
     qint64 pid = item->text(1).toLong();
     if (Processes::ProcessUtil::killProcess(pid)) {
-        QObject().thread()->usleep(1000 * 1000 * 0.5); // 0,5sec
+        QThread::msleep(500); // 0,5sec
         refreshProcesses();
     }
 }

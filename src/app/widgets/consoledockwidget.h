@@ -26,6 +26,9 @@ namespace Widgets
         void setMainWindowDefaultSize();
 
         QMainWindow *mainWindow;
+        QToolButton *toolButton{};
+        QPlainTextEdit *plainTextEdit{};
+
         // MainWindow Default Size
         int defaultWidth  = 621;
         int defaultHeight = 424;

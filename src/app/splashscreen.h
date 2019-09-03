@@ -3,6 +3,8 @@
 
 #include "version.h"
 
+#include <utility>
+
 #include <QApplication>
 #include <QDateTime>
 #include <QPainter>
@@ -26,7 +28,7 @@ namespace ServerControlPanel
         void setMessage(QString msg, int progress);
 
     private:
-        int progress;
+        int progress    = 0;
         QString message = "Loading ..";
 
     protected:

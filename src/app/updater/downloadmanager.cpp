@@ -2,10 +2,11 @@
 
 #include <QCoreApplication>
 #include <QSslError>
+#include <utility>
 
 namespace Downloader
 {
-    DownloadManager::DownloadManager() : queueMode(Parallel), FilesDownloadedCounter(0), FilesToDownloadCounter(0)
+    DownloadManager::DownloadManager()
     {
         connect(&nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(finished(QNetworkReply *)));
 
@@ -15,9 +16,9 @@ namespace Downloader
 #endif
     }
 
-    DownloadManager::~DownloadManager() {}
+    DownloadManager::~DownloadManager() = default;
 
-    void DownloadManager::get(QNetworkRequest &request, QString dlFolder, DownloadItem::DownloadMode dlMode)
+    void DownloadManager::get(QNetworkRequest &request, const QString &dlFolder, DownloadItem::DownloadMode dlMode)
     {
         setDownloadFolder(dlFolder);
         setDownloadMode(dlMode);
@@ -116,7 +117,7 @@ namespace Downloader
 
     void DownloadManager::setQueueMode(QueueMode mode) { queueMode = mode; }
 
-    void DownloadManager::setDownloadFolder(QString folder) { downloadFolder = folder; }
+    void DownloadManager::setDownloadFolder(const QString &folder) { downloadFolder = folder; }
 
     void DownloadManager::setDownloadMode(DownloadItem::DownloadMode mode) { downloadMode = mode; }
 } // namespace Downloader

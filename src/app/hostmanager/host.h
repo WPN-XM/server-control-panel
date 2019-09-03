@@ -4,7 +4,7 @@
 // Windows / C++
 #include <Windows.h>
 #include <shellapi.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 
 #include <QDir>
@@ -22,7 +22,7 @@ namespace HostsFileManager
     {
     public:
         explicit Host();
-        explicit Host(QString name, QString address);
+        explicit Host(const QString &name, const QString &address);
 
         static QList<Host *> GetHosts();
         static void SetHosts(QList<Host *> listHosts);

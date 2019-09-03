@@ -343,7 +343,7 @@ namespace Servers
         while (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::Running) {
             qDebug() << "[Nginx] Stopped using process kill!";
             processes->killProcessTree("nginx.exe");
-            processes->delay(100);
+            Processes::ProcessUtil::delay(100);
         }
 
         emit signalMainWindow_ServerStatusChange("Nginx", false);
@@ -501,13 +501,13 @@ namespace Servers
 
         auto end = PHPServersToStart.cend();
         for (auto item = PHPServersToStart.cbegin(); item != end; ++item) {
-            QString poolName = item.key();
+            const QString &poolName = item.key();
 
             // item.value = QMap (port, num childs)
             QMap<QString, QVariant> m = item.value().toMap();
             auto end2                 = m.cend();
             for (auto item2 = m.cbegin(); item2 != end2; ++item2) {
-                QString port        = item2.key();
+                const QString &port = item2.key();
                 QString phpchildren = item2.value().toString();
 
                 QString startPHPCGI;
@@ -529,7 +529,7 @@ namespace Servers
                 qDebug() << "        Pool:" << poolName;
                 qDebug() << "        php-cgi:" << startPHPCGI;
 
-                QProcess *process = new QProcess;
+                auto *process = new QProcess;
                 process->setEnvironment(env.toStringList());
                 process->startDetached(startPHPCGI);
                 qDebug() << "        Process PID:" << process->pid() << "\n";
@@ -619,13 +619,13 @@ namespace Servers
          */
 
         while (processes->getProcessState("php-cgi-spawner.exe") == Processes::ProcessUtil::ProcessState::Running) {
-            processes->killProcessTree("php-cgi-spawner.exe");
-            processes->delay(100);
+            Processes::ProcessUtil::killProcessTree("php-cgi-spawner.exe");
+            Processes::ProcessUtil::delay(100);
         }
 
         while (processes->getProcessState("php-cgi.exe") == Processes::ProcessUtil::ProcessState::Running) {
-            processes->killProcessTree("php-cgi.exe");
-            processes->delay(100);
+            Processes::ProcessUtil::killProcessTree("php-cgi.exe");
+            Processes::ProcessUtil::delay(100);
         }
 
         emit signalMainWindow_ServerStatusChange("PHP", false);

@@ -19,7 +19,7 @@ namespace Updater
         Q_OBJECT
 
     public:
-        explicit ActionColumnItemDelegate(QObject *parent = 0);
+        explicit ActionColumnItemDelegate(QObject *parent = nullptr);
         ~ActionColumnItemDelegate() override;
 
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -30,9 +30,9 @@ namespace Updater
 
     signals:
         /**
-   *  Signal that is emitted when the button has been clicked.
-   *  @param index - index whose button was clicked
-   */
+         *  Signal that is emitted when the button has been clicked.
+         *  @param index - index whose button was clicked
+         */
         void downloadButtonClicked(const QModelIndex &index);
         void installButtonClicked(const QModelIndex &index);
 
@@ -64,6 +64,6 @@ namespace Updater
             InstallPushButton
         };
     };
-}
+} // namespace Updater
 
 #endif // ACTIONCOLUMNITEMDELEGATE_H

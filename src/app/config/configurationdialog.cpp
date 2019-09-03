@@ -199,7 +199,7 @@ namespace Configuration
 
             if (enabledList.contains(item->text())) {
                 item->setCheckState(Qt::Checked);
-                item->setBackgroundColor(QColor("#90ee90"));
+                item->setBackgroundColor(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
             } else {
                 item->setCheckState(Qt::Unchecked);
             }
@@ -214,10 +214,10 @@ namespace Configuration
                             SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
         if (item->checkState() == Qt::Checked) {
-            item->setBackgroundColor(QColor("#90ee90"));
+            item->setBackgroundColor(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
             savePHPExtensionState(item->text(), true);
         } else {
-            item->setBackgroundColor(QColor("#ffffff"));
+            item->setBackgroundColor(QColor(100, 100, 100));
             savePHPExtensionState(item->text(), false);
         }
 
@@ -1108,7 +1108,9 @@ namespace Configuration
                 qDebug() << "Current PHP version: " << currentPHPversion;
                 ui->lineEdit_currentPHPVersion->setText(v.version);
                 continue;
-            } else if (phpDirName == expectedPhpDirName) {
+            }
+
+            if (phpDirName == expectedPhpDirName) {
                 qDebug() << "PHP Folder already correctly versionized.";
             } else {
                 QString dest(binFolder);
@@ -1218,7 +1220,8 @@ namespace Configuration
         // - grab inside "PHP x (cli)"
         // - "\\d.\\d.\\d." = grab "1.2.3"
         // - "(\\w+\\d+)?" = grab optional "alpha2" version
-        QRegExp regex("PHP\\s(\\d.\\d.\\d.(\\w+\\d+)?)");
+        const QString r = R"(PHP\s(\d.\d.\d.(\w+\d+)?))";
+        QRegExp regex(r);
         regex.indexIn(p_stdout);
 
         // qDebug() << regex.capturedTexts();

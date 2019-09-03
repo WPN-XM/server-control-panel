@@ -1,6 +1,6 @@
 #include "jobscheduler.h"
 
-JobScheduler::JobScheduler() {}
+JobScheduler::JobScheduler() = default;
 
 /**
  * Get list of active jobs (JobStatus::Active).

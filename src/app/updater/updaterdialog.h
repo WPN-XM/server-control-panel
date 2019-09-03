@@ -51,16 +51,16 @@ namespace Updater
         Ui::UpdaterDialog *ui;
 
     protected:
-        QStandardItemModel *model;
-        QSortFilterProxyModel *sortFilterProxyModel;
-        SoftwareRegistry::Manager *softwareRegistry;
+        QStandardItemModel *model{};
+        QSortFilterProxyModel *sortFilterProxyModel{};
+        SoftwareRegistry::Manager *softwareRegistry{};
         Downloader::DownloadManager downloadManager;
 
     private:
         QUrl getDownloadUrl(const QModelIndex &index);
         bool validateURL(const QUrl &url);
-        Updater::SoftwareColumnItemDelegate *softwareDelegate;
-        Updater::ActionColumnItemDelegate *actionDelegate;
+        Updater::SoftwareColumnItemDelegate *softwareDelegate{};
+        Updater::ActionColumnItemDelegate *actionDelegate{};
     signals:
         void clicked(const QString &websiteLink);
     public slots:
@@ -75,7 +75,7 @@ namespace Updater
     {
         Q_OBJECT
     public:
-        explicit ProgressBarUpdater(UpdaterDialog *parent = nullptr, int currentRow = 0);
+        explicit ProgressBarUpdater(UpdaterDialog *parent = nullptr, int indexRow = 0);
     public slots:
         void updateProgress(const QMap<QString, QVariant> &progress);
         void downloadFinished(Downloader::TransferItem *transfer);

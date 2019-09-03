@@ -104,17 +104,16 @@ namespace Updater
         // get progress
         QMap<QString, QVariant> progress = index.model()->data(index).toMap();
 
-        QString text = QString::fromLatin1(" %1 %2 %3 ")
-                           .arg(progress["percentage"].toString())
-                           .arg(progress["size"].toString())
-                           .arg(progress["speed"].toString());
-        //.arg(progress["time"].toString());
-        //.arg(progress["eta"].toString());
+        QString text =
+            QString::fromLatin1(" %1 %2 %3 ")
+                .arg(progress["percentage"].toString(), progress["size"].toString(), progress["speed"].toString());
+        // progress["time"].toString()
+        // progress["eta"].toString()
 
         // set progress
         opt.minimum  = 0;
-        opt.maximum  = progress["bytesTotal"].toFloat();
-        opt.progress = progress["bytesReceived"].toFloat();
+        opt.maximum  = progress["bytesTotal"].toInt();
+        opt.progress = progress["bytesReceived"].toInt();
         opt.text     = text;
 
         bar->style()->drawControl(QStyle::CE_ProgressBar, &opt, painter, bar);

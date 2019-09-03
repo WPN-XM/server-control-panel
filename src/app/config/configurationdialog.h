@@ -95,7 +95,7 @@ namespace Configuration
     private slots:
         // page + menu related
         void on_configMenuTreeWidget_clicked(const QModelIndex &index);
-        void on_configMenuSearchLineEdit_textChanged(const QString &string);
+        void on_configMenuSearchLineEdit_textChanged(const QString &query);
 
         // config directive related
         void toggleAutostartServerCheckboxes(bool run = true);
@@ -132,24 +132,24 @@ namespace Configuration
     private:
         Ui::ConfigurationDialog *ui;
 
-        QSortFilterProxyModel *configMenuFilterProxyModel;
+        QSortFilterProxyModel *configMenuFilterProxyModel{};
 
         Settings::SettingsManager *settings;
-        Servers::Servers *servers;
+        Servers::Servers *servers{};
         Configuration::PluginsManager *pluginsManager;
 
-        QCheckBox *checkbox_runOnStartUp;
-        QCheckBox *checkbox_autostartServers;
-        QCheckBox *checkbox_clearLogsOnStart;
-        QCheckBox *checkbox_stopServersOnQuit;
+        QCheckBox *checkbox_runOnStartUp{};
+        QCheckBox *checkbox_autostartServers{};
+        QCheckBox *checkbox_clearLogsOnStart{};
+        QCheckBox *checkbox_stopServersOnQuit{};
 
-        QCheckBox *checkbox_autostart_MariaDb;
-        QCheckBox *checkbox_autostart_MongoDb;
-        QCheckBox *checkbox_autostart_PHP;
-        QCheckBox *checkbox_autostart_Nginx;
-        QCheckBox *checkbox_autostart_Memcached;
-        QCheckBox *checkbox_autostart_PostgreSQL;
-        QCheckBox *checkbox_autostart_Redis;
+        QCheckBox *checkbox_autostart_MariaDb{};
+        QCheckBox *checkbox_autostart_MongoDb{};
+        QCheckBox *checkbox_autostart_PHP{};
+        QCheckBox *checkbox_autostart_Nginx{};
+        QCheckBox *checkbox_autostart_Memcached{};
+        QCheckBox *checkbox_autostart_PostgreSQL{};
+        QCheckBox *checkbox_autostart_Redis{};
 
         struct PhpVersions
         {

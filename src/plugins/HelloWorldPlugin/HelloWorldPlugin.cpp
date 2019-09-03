@@ -6,7 +6,7 @@ namespace Plugin_HelloWorld_NS
 {
     Plugin_HelloWorld::Plugin_HelloWorld() : QObject(){};
 
-    Plugin_HelloWorld::~Plugin_HelloWorld(){};
+    Plugin_HelloWorld::~Plugin_HelloWorld() = default;
 
     void Plugin_HelloWorld::init(InitState state)
     {

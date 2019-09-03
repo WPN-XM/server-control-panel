@@ -114,7 +114,7 @@ namespace ServerControlPanel
 
     void SplashScreen::setMessage(QString msg, int progress)
     {
-        message = msg;
+        message = std::move(msg);
         setProgress(progress);
     }
 } // namespace ServerControlPanel

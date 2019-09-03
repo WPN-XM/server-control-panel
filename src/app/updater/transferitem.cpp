@@ -60,8 +60,8 @@ namespace Downloader
         return QString::fromLatin1("%1 %2").arg(num, 3, 'f', 1).arg(unit);
     }
 
-    DownloadItem::DownloadItem(const QNetworkRequest &r, QNetworkAccessManager &manager)
-        : TransferItem(r, manager), downloadFolder()
+    DownloadItem::DownloadItem(const QNetworkRequest &r, QNetworkAccessManager &nam)
+        : TransferItem(r, nam), downloadFolder()
     {
     }
 

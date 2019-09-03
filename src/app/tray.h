@@ -37,7 +37,7 @@ namespace ServerControlPanel
         Q_OBJECT
 
     public:
-        explicit Tray(QApplication *parent, Servers::Servers *servers);
+        explicit Tray(QCoreApplication *parent, Servers::Servers *servers);
 
         void setMessage(const QString &title);
         void setMessage(const QString &title, const QString &msg);

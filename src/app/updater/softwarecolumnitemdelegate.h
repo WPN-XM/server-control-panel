@@ -15,7 +15,7 @@ namespace Updater
     {
         Q_OBJECT
     public:
-        explicit SoftwareColumnItemDelegate(QObject *parent = 0);
+        explicit SoftwareColumnItemDelegate(QObject *parent = nullptr);
         ~SoftwareColumnItemDelegate() override;
 
         void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -30,6 +30,6 @@ namespace Updater
     public slots:
         void onClickedOpenURL(const QModelIndex &index);
     };
-}
+} // namespace Updater
 
 #endif // SOFTWARECOLUMNITEMDELEGATE_H

@@ -18,7 +18,8 @@ namespace Configuration
         Q_OBJECT
 
     public:
-        explicit PluginsManager(QWidget *parent = 0);
+        explicit PluginsManager(QWidget *parent = nullptr);
+        explicit PluginsManager(QWidget &parent) = delete;
         ~PluginsManager() override;
 
         void load();
@@ -35,7 +36,7 @@ namespace Configuration
         void sortItems();
 
         Ui::PluginsManager *ui;
-        bool loaded;
+        bool loaded = false;
     };
 } // namespace Configuration
 

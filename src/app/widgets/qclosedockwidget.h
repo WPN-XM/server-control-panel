@@ -14,7 +14,7 @@ namespace Widgets
         QCloseDockWidget(const QString &title = "", QWidget *parent = nullptr);
 
     protected:
-        void closeEvent(QCloseEvent *event);
+        void closeEvent(QCloseEvent *event) override;
     signals:
         void closed();
     };

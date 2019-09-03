@@ -34,6 +34,7 @@ namespace ServerControlPanel
 
     public:
         explicit MainWindow(QWidget *parent = nullptr);
+        explicit MainWindow(QWidget &parent) = delete;
         ~MainWindow() override;
 
         void setVisible(bool visible) override;
@@ -126,16 +127,16 @@ namespace ServerControlPanel
     private:
         Ui::MainWindow *ui;
 
-        ServerControlPanel::Tray *tray;
-        Servers::Servers *servers;
-        Updater::SelfUpdater *selfUpdater;
-        Processes::ProcessUtil *processes;
-        PluginsNS::Plugins *plugins;
-        Settings::SettingsManager *settings;
+        ServerControlPanel::Tray *tray{};
+        Servers::Servers *servers{};
+        Updater::SelfUpdater *selfUpdater{};
+        Processes::ProcessUtil *processes{};
+        PluginsNS::Plugins *plugins{};
+        Settings::SettingsManager *settings{};
 
-        QAction *minimizeAction;
-        QAction *restoreAction;
-        QAction *quitAction;
+        QAction *minimizeAction{};
+        QAction *restoreAction{};
+        QAction *quitAction{};
 
         void checkPorts();
         void createActions();

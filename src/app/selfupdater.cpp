@@ -37,26 +37,21 @@ namespace Updater
             return;
         }
 
-        // check, if interval was set in INI
-        // if not set, the interval defaults to "notset"
+        // check, if interval was set in INI, else it defaults to "notset"
         QString intervalString = settings->getString("selfupdater/interval", QVariant(QString("notset")));
 
-        qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
-
-        QDateTime currentDateTime = QDateTime::currentDateTime();
-        qint64 interval           = currentDateTime.currentMSecsSinceEpoch();
+        qint64 interval = 0;
 
         if (intervalString == "daily") {
-            interval = currentDateTime.addDays(Interval::Daily).currentMSecsSinceEpoch();
-        }
-        if (intervalString == "weekly") {
-            interval = currentDateTime.addDays(Interval::Weekly).currentMSecsSinceEpoch();
-        }
-        if (intervalString == "monthly") {
-            interval = currentDateTime.addDays(Interval::Monthly).currentMSecsSinceEpoch();
+            interval = QDateTime::currentDateTime().addDays(Interval::Daily).currentMSecsSinceEpoch();
+        } else if (intervalString == "weekly") {
+            interval = QDateTime::currentDateTime().addDays(Interval::Weekly).currentMSecsSinceEpoch();
+        } else if (intervalString == "monthly") {
+            interval = QDateTime::currentDateTime().addDays(Interval::Monthly).currentMSecsSinceEpoch();
         }
 
-        qint64 now = QDateTime::currentMSecsSinceEpoch();
+        qint64 now             = QDateTime::currentMSecsSinceEpoch();
+        qint64 lastTimeChecked = settings->get("selfupdater/last_time_checked").toLongLong();
 
         bool timeForUpdateCheck = false;
         if (now - interval > lastTimeChecked) {
@@ -74,7 +69,7 @@ namespace Updater
         if (userRequestedUpdate || lastTimeChecked == 0 || timeForUpdateCheck) {
 
             // set the last time check flag
-            settings->set("selfupdater/last_time_checked", currentDateTime.toString(Qt::ISODate));
+            settings->set("selfupdater/last_time_checked", QDateTime::currentDateTime().toString(Qt::ISODate));
 
             // setup download folder
             downloadFolder = QCoreApplication::applicationDirPath() + QDir::separator() + "downloads";
@@ -200,7 +195,7 @@ namespace Updater
 
             zippedFile.open(QIODevice::ReadOnly);
 
-            QString name = QString("%1/%2").arg(targetPath).arg(fileToExtract);
+            QString name = QString("%1/%2").arg(targetPath, fileToExtract);
 
             if (zippedFile.getZipError() != UNZ_OK) {
                 qWarning("Cannot get actual file name, error: %d", zippedFile.getZipError());

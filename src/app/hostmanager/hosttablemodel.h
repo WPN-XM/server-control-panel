@@ -1,6 +1,8 @@
 #ifndef HOSTTABLEMODEL_H
 #define HOSTTABLEMODEL_H
 
+#include <utility>
+
 #include <QAbstractTableModel>
 #include <QList>
 

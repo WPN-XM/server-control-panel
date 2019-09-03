@@ -25,9 +25,12 @@ namespace HostsFileManager
 
     public:
         explicit HostsManagerDialog(QWidget *parent = nullptr);
+        explicit HostsManagerDialog(QWidget &parent) = delete;
         ~HostsManagerDialog() override;
+
     signals:
         void selectionChanged(const QItemSelection &selected);
+
     public slots:
         void addEntry();
         void editEntry();

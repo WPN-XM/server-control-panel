@@ -10,18 +10,15 @@
 
 namespace File
 {
-
-    using namespace std;
-
     struct INIEntry
     {
-        INIEntry() : isComment(false), isEmptyLine(false) {}
-        string index;
-        string name;
-        string value;
-        string comment;
-        bool isComment;
-        bool isEmptyLine;
+        INIEntry() = default;
+        std::string index;
+        std::string name;
+        std::string value;
+        std::string comment;
+        bool isComment   = false;
+        bool isEmptyLine = false;
     };
 
     /**
@@ -51,10 +48,10 @@ namespace File
     class INI
     {
     public:
-        INI(const char *fileName);
+        explicit INI(const char *fileName);
         ~INI();
 
-        void writeConfigFile(const char *fileName = NULL);
+        void writeConfigFile(const char *fileName = nullptr);
 
         // getter
         bool getBoolValue(const char *index, const char *name);
@@ -71,17 +68,17 @@ namespace File
         void debug();
 
         // get all Entry
-        vector<INIEntry> datas;
+        std::vector<INIEntry> datas;
 
     private:
         void setStringValueWithIndex(const char *index, const char *name, const char *value);
         void loadConfigFile();
 
-        string trim(string &str);
+        std::string trim(std::string &str);
 
         bool autoSave;
-        char iniFileName[4096];
-        char str[4096]; // for temporary string data
+        char iniFileName[4096]{};
+        char str[4096]{}; // for temporary string data
     };
 }; // namespace File
 

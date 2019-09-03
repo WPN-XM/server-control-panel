@@ -123,6 +123,7 @@ namespace WindowsAPI
             attr |= FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE; // white
 
         SetConsoleTextAttribute(hConsole, attr);
+
         printf("%s", msg);
 
         SetConsoleTextAttribute(hConsole, oldConsoleAttributes);
