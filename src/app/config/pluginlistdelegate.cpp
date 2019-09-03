@@ -29,9 +29,9 @@ namespace PluginsNS
 
         const QFontMetrics titleMetrics(titleFont);
         const QPalette::ColorRole colorRole =
-            opt.state & QStyle::State_Selected ? QPalette::HighlightedText : QPalette::Text;
+            (opt.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text;
 
-        QPalette::ColorGroup cg = opt.state & QStyle::State_Enabled ? QPalette::Normal : QPalette::Disabled;
+        QPalette::ColorGroup cg = (opt.state & QStyle::State_Enabled) ? QPalette::Normal : QPalette::Disabled;
         if (cg == QPalette::Normal && !(opt.state & QStyle::State_Active)) {
             cg = QPalette::Inactive;
         }
