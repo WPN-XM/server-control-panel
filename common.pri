@@ -65,22 +65,30 @@ win32-g++ {
 }
 win32-msvc* {
     message("using win32 msvc")
-    #QMAKE_CXXFLAGS *= /MP
+    QMAKE_CXXFLAGS += /MP    
+    QMAKE_CXXFLAGS_RELEASE += /Zi
     QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS
     QMAKE_CXXFLAGS *= /std:c++17
     QMAKE_CXXFLAGS *= /O2
+
+    # Increase PCH heap to 150MB: 
+    # https://docs.microsoft.com/en-us/cpp/build/reference/zm-specify-precompiled-header-memory-allocation-limit?view=vs-2019
+    QMAKE_CFLAGS *= -Zm200
+    QMAKE_CXXFLAGS *= -Zm200
 }
 win32-clang-msvc* {
     message("using win32 clang msvc")
-    #QMAKE_CXXFLAGS *= /MP
+    QMAKE_CXXFLAGS += /MP    
+    QMAKE_CXXFLAGS_RELEASE += /Zi
     QMAKE_CXXFLAGS *= /D_CRT_SECURE_NO_WARNINGS    
     QMAKE_CXXFLAGS *= /std:c++17
     QMAKE_CXXFLAGS *= /O2
 }
 *-g++-32 {
-    message("using g++-32, adding -msse2 flag")
-    QMAKE_CXXFLAGS *= -msse2
-    QMAKE_CFLAGS   *= -msse2
+    message("using g++-32, adding -msse2 flag")    
+    QMAKE_CFLAGS *= -msse -msse2
+    QMAKE_CXXFLAGS *= -msse -msse2
 }
+
 
 message("QMAKE_CXXFLAGS is $${QMAKE_CXXFLAGS}")

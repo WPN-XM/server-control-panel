@@ -24,6 +24,10 @@ include(../../version.pri)
 
 CONFIG += qt console c++17
 
+# use a precompiled header file for faster compilation
+PRECOMPILED_HEADER = ../../build/pch/precompiled_header.h
+CONFIG += precompile_header
+
 QT += core network widgets
 
 # needed for "createShellLink", see ConfigurationDialog
