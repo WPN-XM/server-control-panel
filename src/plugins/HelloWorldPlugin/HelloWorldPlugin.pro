@@ -10,7 +10,7 @@ TARGET = $$qtLibraryTarget(HelloWorldPlugin)
 
 SOURCES += \
     HelloWorldPlugin.cpp \
-    Configdialog.cpp
+    ConfigDialog.cpp
 
 HEADERS += \
     HelloWorldPlugin.h \
