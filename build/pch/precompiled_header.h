@@ -19,6 +19,7 @@
     #include <QButtonGroup>
     #include <QCheckBox>
     #include <QComboBox>
+    #include <QDialogButtonBox>
     #include <QDrag>
     #include <QFileDialog>
     #include <QFrame>
@@ -30,9 +31,11 @@
     #include <QMouseEvent>
     #include <QPushButton>
     #include <QRadioButton>
+    #include <QRegularExpression>
     #include <QSpacerItem>
     #include <QStackedWidget>
     #include <QStyle>
+    #include <QSystemTrayIcon>
     #include <QTabWidget>
     #include <QTimer>
     #include <QToolButton>
