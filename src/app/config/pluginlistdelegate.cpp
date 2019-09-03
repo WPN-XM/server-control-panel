@@ -1,9 +1,5 @@
 #include "pluginlistdelegate.h"
 
-#include <QPainter>
-#include <QListWidget>
-#include <QApplication>
-
 namespace PluginsNS
 {
 

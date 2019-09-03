@@ -1,8 +1,13 @@
 #ifndef PLUGINLISTDELEGATE_H
 #define PLUGINLISTDELEGATE_H
 
+#include <QStyle>
 #include <QStyledItemDelegate>
+#include <QStyleOption>
 #include <QListWidget>
+#include <QPainter>
+#include <QListWidget>
+#include <QApplication>
 
 namespace PluginsNS
 {
