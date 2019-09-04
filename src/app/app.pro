@@ -78,9 +78,6 @@ HEADERS += \
     services.h \
     settings.h \
     splashscreen.h \
-    tooltips/BalloonTip.h \
-    tooltips/LabelWithHoverTooltip.h \
-    tooltips/TrayToolTip.h \
     tray.h \
     updater/actioncolumnitemdelegate.h \
     updater/downloadmanager.h \
@@ -88,8 +85,11 @@ HEADERS += \
     updater/softwarecolumnitemdelegate.h \
     updater/updaterdialog.h \
     version.h \
-    widgets/consoledockwidget.h \
-    widgets/qclosedockwidget.h \
+    widgets/dockwidgets/consoledockwidget.h \
+    widgets/dockwidgets/qclosedockwidget.h \
+    widgets/tooltips/BalloonTip.h \
+    widgets/tooltips/LabelWithHoverTooltip.h \
+    widgets/tooltips/TrayToolTip.h \
     windowsapi.h \
 
 SOURCES += \
@@ -122,9 +122,6 @@ SOURCES += \
     services.cpp \
     settings.cpp \
     splashscreen.cpp \
-    tooltips/BalloonTip.cpp \
-    tooltips/LabelWithHoverTooltip.cpp \
-    tooltips/TrayTooltip.cpp \
     tray.cpp \
     updater/actioncolumnitemdelegate.cpp \
     updater/downloadmanager.cpp \
@@ -132,8 +129,11 @@ SOURCES += \
     updater/softwarecolumnitemdelegate.cpp \
     updater/transferitem.cpp \
     updater/updaterdialog.cpp \
-    widgets/consoledockwidget.cpp \
-    widgets/qclosedockwidget.cpp \
+    widgets/dockwidgets/consoledockwidget.cpp \
+    widgets/dockwidgets/qclosedockwidget.cpp \
+    widgets/tooltips/BalloonTip.cpp \
+    widgets/tooltips/LabelWithHoverTooltip.cpp \
+    widgets/tooltips/TrayTooltip.cpp \
     windowsapi.cpp \
 
 RESOURCES += \
