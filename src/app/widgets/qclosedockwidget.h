@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 
-namespace Widgets
+namespace Widgets::DockWidgets
 {
 
     class QCloseDockWidget : public QDockWidget
@@ -19,6 +19,6 @@ namespace Widgets
         void closed();
     };
 
-} // namespace Widgets
+} // namespace Widgets::DockWidgets
 
 #endif // QCLOSEDOCKWIDGET_H

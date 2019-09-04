@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <utility>
 
-namespace Tooltips
+namespace Widgets::Tooltips
 {
 
     BalloonTip::BalloonTip(QStyle::StandardPixmap icon, QString title, QString text, int duration, QWidget *parent)
@@ -277,4 +277,4 @@ namespace Tooltips
         update();
     }
 
-} // namespace Tooltips
+} // namespace Widgets::Tooltips

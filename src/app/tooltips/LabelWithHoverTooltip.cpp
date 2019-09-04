@@ -1,7 +1,7 @@
 #include "LabelWithHoverTooltip.h"
 #include "BalloonTip.h"
 
-namespace Tooltips
+namespace Widgets::Tooltips
 {
 
     LabelWithHoverTooltip::LabelWithHoverTooltip(QWidget *parent) : QLabel(parent)

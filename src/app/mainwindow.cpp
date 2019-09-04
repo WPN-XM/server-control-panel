@@ -46,7 +46,7 @@ namespace ServerControlPanel
 
     void MainWindow::createConsole()
     {
-        auto *consoleDockWidget = new Widgets::ConsoleDockWidget(this);
+        auto *consoleDockWidget = new Widgets::DockWidgets::ConsoleDockWidget(this);
 
         addDockWidget(Qt::BottomDockWidgetArea, consoleDockWidget);
     }
@@ -1335,7 +1335,7 @@ namespace ServerControlPanel
 
             // Port
             if (server->name == "PHP") {
-                auto *labelPort = new Tooltips::LabelWithHoverTooltip();
+                auto *labelPort = new Widgets::Tooltips::LabelWithHoverTooltip();
                 labelPort->setObjectName(QString("label_PHP_Port"));
                 // labelPort->setTooltipText(getPort(server->lowercaseName));
                 labelPort->setFont(fontNotBold);
@@ -1561,7 +1561,7 @@ namespace ServerControlPanel
                     label->setText("Pool*");
                 }
                 // enable hover tooltip + show PHP ports and childs text
-                auto *tip = ui->centralWidget->findChild<Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<Widgets::Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(true);
                     tip->setTooltipText(getPHPPort());
@@ -1573,7 +1573,7 @@ namespace ServerControlPanel
                     label->setText("");
                 }
                 // deactivate hover tooltip
-                auto *tip = ui->centralWidget->findChild<Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
+                auto *tip = ui->centralWidget->findChild<Widgets::Tooltips::LabelWithHoverTooltip *>("label_PHP_Port");
                 if (tip != nullptr) {
                     tip->enableToolTip(false);
                     tip->setTooltipText("");

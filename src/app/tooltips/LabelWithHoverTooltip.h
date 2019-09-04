@@ -5,7 +5,7 @@
 
 #include "BalloonTip.h"
 
-namespace Tooltips
+namespace Widgets::Tooltips
 {
 
     class LabelWithHoverTooltip : public QLabel

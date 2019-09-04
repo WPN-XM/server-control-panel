@@ -1,6 +1,6 @@
 #include "consoledockwidget.h"
 
-namespace Widgets
+namespace Widgets::DockWidgets
 {
 
     ConsoleDockWidget::ConsoleDockWidget(QMainWindow *parent)
@@ -17,7 +17,8 @@ namespace Widgets
         // resize mainwindow, when the dockwidget goes into floating mode
         connect(this, &QDockWidget::topLevelChanged, this, &ConsoleDockWidget::dockWidgetTopLevelChanged);
 
-        connect(this, &Widgets::QCloseDockWidget::closed, this, &ConsoleDockWidget::dockWidgetCloseClicked);
+        connect(this, &Widgets::DockWidgets::QCloseDockWidget::closed, this,
+                &ConsoleDockWidget::dockWidgetCloseClicked);
     }
 
     void ConsoleDockWidget::createDockWidget()
@@ -138,4 +139,4 @@ namespace Widgets
             toolButton->setToolTip("Open Debug Console");
         }
     }
-} // namespace Widgets
+} // namespace Widgets::DockWidgets

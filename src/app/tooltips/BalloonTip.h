@@ -8,7 +8,7 @@
 
 #include <QStyle>
 
-namespace Tooltips
+namespace Widgets::Tooltips
 {
 
     /*

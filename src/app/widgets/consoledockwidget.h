@@ -10,7 +10,7 @@
 #include <QLabel>
 #include <QTimer>
 
-namespace Widgets
+namespace Widgets::DockWidgets
 {
 
     class ConsoleDockWidget : public QCloseDockWidget
@@ -42,6 +42,6 @@ namespace Widgets
         void restoreDock();
     };
 
-} // namespace Widgets
+} // namespace Widgets::DockWidgets
 
 #endif // CONSOLEDOCKWIDGET_H

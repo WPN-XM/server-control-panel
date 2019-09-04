@@ -1,6 +1,6 @@
 #include "qclosedockwidget.h"
 
-namespace Widgets
+namespace Widgets::DockWidgets
 {
     QCloseDockWidget::QCloseDockWidget(const QString &title, QWidget *parent) : QDockWidget(title, parent)
     {
@@ -13,4 +13,4 @@ namespace Widgets
 
         QDockWidget::closeEvent(event);
     }
-} // namespace Widgets
+} // namespace Widgets::DockWidgets
