@@ -24,9 +24,9 @@ include(../../version.pri)
 
 CONFIG += qt console c++17
 
-# use a precompiled header file for faster compilation
-PRECOMPILED_HEADER = ../../build/pch/precompiled_header.h
-CONFIG += precompile_header
+# use a precompiled header (PCH) file for faster compilation
+#CONFIG += precompile_header
+#PRECOMPILED_HEADER = ../pch/precompiled_header.h
 
 QT += core network widgets
 
