@@ -29,7 +29,7 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
 
     // iterate over proccesFoundList and draw a "process shutdown" checkbox for
     // each one
-    foreach (Processes::ProcessUtil::Process p, runningProcessesList) {
+    for (const Processes::ProcessUtil::Process &p : runningProcessesList) {
         // create checkbox
         auto *checkbox = new QCheckBox(p.name);
         checkbox->setChecked(true);

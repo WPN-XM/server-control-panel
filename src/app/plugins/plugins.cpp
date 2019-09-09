@@ -22,7 +22,7 @@ namespace PluginsNS
     }
     void Plugins::loadPlugins()
     {
-        foreach (const QString &pluginName, enabledPlugins) {
+        for (const QString &pluginName : enabledPlugins) {
             Plugin plugin = loadPlugin(pluginName);
             if (!initPlugin(PluginInterface::StartupInitState, &plugin)) {
                 qWarning() << "Failed to init" << pluginName << "plugin";
@@ -191,7 +191,7 @@ namespace PluginsNS
     {
         loadedPlugins.clear();
 
-        foreach (const Plugin &plugin, availablePlugins) {
+        for (const Plugin &plugin : availablePlugins) {
             if (plugin.isLoaded()) {
                 loadedPlugins.append(plugin.instance);
             }
@@ -216,7 +216,7 @@ namespace PluginsNS
 
         QJsonArray authorsJsonArray = metaDataObject.value("authors").toArray();
 
-        foreach (const QJsonValue &value, authorsJsonArray) {
+        for (const QJsonValue &value : authorsJsonArray) {
             QJsonObject obj = value.toObject();
             pluginMetaData.authors.insert(obj["name"].toString(), obj["email"].toString());
         }
@@ -261,7 +261,7 @@ namespace PluginsNS
 
     void Plugins::shutdown()
     {
-        foreach (PluginInterface *iPlugin, loadedPlugins) {
+        for (PluginInterface *iPlugin : loadedPlugins) {
             iPlugin->unload();
         }
     }

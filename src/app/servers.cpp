@@ -8,10 +8,10 @@ namespace Servers
     {
         QStringList installedServers = getInstalledServerNames();
 
-        qDebug() << "[Servers] Create Server objects and tray submenus for installed servers.";
+        qDebug() << "[Servers] Create Server objects and tray submenus for installed servers:";
 
         // build server objects
-        foreach (QString serverName, installedServers) {
+        for (QString &serverName : installedServers) {
             auto *server = new Server();
 
             server->lowercaseName    = serverName;
@@ -203,7 +203,8 @@ namespace Servers
         qDebug() << "[Servers] Check, which servers are installed:";
 
         QStringList list;
-        foreach (const QString &serverName, getListOfServerNames()) {
+
+        for (QString &serverName : getListOfServerNames()) {
             // these three servers are the base package.
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are not.
@@ -238,7 +239,7 @@ namespace Servers
 
     Server *Servers::getServer(const QString &serverName) const
     {
-        foreach (Server *server, serverList) {
+        for (Server *server : serverList) {
             if (server->name == serverName)
                 return server;
         }
@@ -254,7 +255,7 @@ namespace Servers
         if (settings->getBool("global/clearlogsonstart")) {
             QStringList logfiles = getLogFiles(serverName);
 
-            foreach (QString logfile, logfiles) {
+            for (const QString &logfile : logfiles) {
                 File::truncate(logfile);
                 // qDebug() << ("[ %s ][ %s ] Log was cleared.\n", serverName, logfile);
             }

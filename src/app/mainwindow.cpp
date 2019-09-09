@@ -96,7 +96,7 @@ namespace ServerControlPanel
     {
         // stop all servers, when quitting the tray application
         if (settings->getBool("global/stopserversonquit")) {
-            qDebug() << "[Servers] Stopping All Servers on Quit...";
+            qDebug() << "[Servers] [QUIT] Stopping All Servers on Quit:";
             stopAllServers();
         }
 
@@ -132,7 +132,7 @@ namespace ServerControlPanel
 
         QStringList alreadyUpdated;
 
-        foreach (const Processes::ProcessUtil::Process &process, processes->monitoredProcessesList) {
+        for (const Processes::ProcessUtil::Process &process : processes->monitoredProcessesList) {
             QString processName = process.name.section(".", 0, 0);
             // qDebug() << Q_FUNC_INFO << processName;
 
@@ -1317,7 +1317,7 @@ namespace ServerControlPanel
 
         int rowCounter = 2;
 
-        foreach (Servers::Server *server, servers->servers()) {
+        for (Servers::Server *server : servers->servers()) {
 
             /**
              * Columns:
@@ -1392,7 +1392,7 @@ namespace ServerControlPanel
             }
 
             // Logs
-            foreach (QString logfile, server->logFiles) {
+            for (const QString &logfile : server->logFiles) {
                 if (!logfile.isEmpty()) {
                     // normal log
                     if (!logfile.contains("error")) {

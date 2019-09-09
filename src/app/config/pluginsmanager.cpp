@@ -80,7 +80,7 @@ namespace Configuration
 
         const QList<PluginsNS::Plugins::Plugin> &allPlugins = plugins->getAvailablePlugins();
 
-        foreach (const PluginsNS::Plugins::Plugin &plugin, allPlugins) {
+        for (const PluginsNS::Plugins::Plugin &plugin : allPlugins) {
 
             auto *item = new QListWidgetItem(ui->list);
 

@@ -423,7 +423,7 @@ namespace Configuration
 
     bool ConfigurationDialog::isServerInstalled(const QString &serverName) const
     {
-        foreach (QString server, installedServersList) {
+        for (const QString &server : installedServersList) {
             if (server == serverName) {
                 return true;
             }
@@ -515,7 +515,7 @@ namespace Configuration
         /**
          * @TODO Iterate over all enabled plugins and save their settings.
          */
-        /*foreach (const Plugins::Plugin &plugin, allPlugins) {
+        /*for (const Plugins::Plugin &plugin :  allPlugins) {
             if (plugin->hasSettings) {
                 plugin->saveSettings();
             }
@@ -809,7 +809,7 @@ namespace Configuration
         // delete old upstream configs
         dir.setNameFilters(QStringList() << "*.conf");
         dir.setFilter(QDir::Files);
-        foreach (QString dirFile, dir.entryList()) {
+        for (const QString &dirFile : dir.entryList()) {
             dir.remove(dirFile);
         }
     }
@@ -946,9 +946,12 @@ namespace Configuration
         }
     }
 
-    // @TODO move to core/plugins/general_settings?
+    // @TODO a) move to core/plugins/general_settings?
+    // @TODO b) remove completely, installed server plugin should add the autostart checkbox (render if installed)
     void ConfigurationDialog::hideAutostartCheckboxesOfNotInstalledServers()
     {
+        qDebug() << "[Config] Hiding Autostart Checkboxes Of Not Installed Servers:";
+
         QStringList installed = this->servers->getInstalledServerNames();
 
         const auto regexp = QRegularExpression("checkbox_autostart_\\w");

@@ -43,7 +43,7 @@ namespace ServerControlPanel
         trayMenu->addSeparator();
 
         // add local IPs to the tray menu
-        foreach (const QHostAddress &address, NetworkUtils::getLocalHostIPs()) {
+        for (const QHostAddress &address : NetworkUtils::getLocalHostIPs()) {
             trayMenu->addAction("Local IP: " + address.toString())->setFont(QFont("Arial", 9, QFont::Bold));
         }
         trayMenu->addSeparator();
@@ -55,7 +55,7 @@ namespace ServerControlPanel
         trayMenu->addSeparator();
 
         // add all server submenus to the tray menu
-        foreach (Servers::Server *server, servers->servers()) {
+        for (Servers::Server *server : servers->servers()) {
             trayMenu->addMenu(server->trayMenu);
             qDebug() << "[Tray] Added Menu:\t" << server->name;
         }

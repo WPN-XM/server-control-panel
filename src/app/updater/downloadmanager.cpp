@@ -72,7 +72,7 @@ namespace Downloader
             return;
         }
 
-        foreach (TransferItem *item, transfers) {
+        for (TransferItem *item : transfers) {
             if (!item->reply) {
                 item->startGetRequest();
                 // by default multiple downloads are processed in parallel.
@@ -88,7 +88,7 @@ namespace Downloader
     void DownloadManager::sslErrors(QNetworkReply *, const QList<QSslError> &errors)
     {
         qDebug() << "sslErrors";
-        foreach (const QSslError &error, errors) {
+        for (const QSslError &error : errors) {
             qDebug() << error.errorString();
             qDebug() << error.certificate().toPem();
         }
@@ -97,7 +97,7 @@ namespace Downloader
 
     TransferItem *DownloadManager::findTransfer(const QUrl &url)
     {
-        foreach (TransferItem *item, transfers) {
+        for (TransferItem *item : transfers) {
             if (item->request.url() == url) {
                 return item;
             }
@@ -107,7 +107,7 @@ namespace Downloader
 
     TransferItem *DownloadManager::findTransfer(QNetworkReply *reply)
     {
-        foreach (TransferItem *item, transfers) {
+        for (TransferItem *item : transfers) {
             if (item->reply == reply) {
                 return item;
             }

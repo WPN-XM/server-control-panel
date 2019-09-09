@@ -89,13 +89,15 @@ namespace HostsFileManager
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
-        QModelIndex index;
-        int row = -1;
+        // QModelIndex index;
         QString name;
         QString address;
 
         if (!indexes.empty()) {
-            foreach (index, indexes) {
+
+            int row = -1;
+
+            for (const QModelIndex &index : indexes) {
                 row = index.row();
 
                 QModelIndex indexName = model->index(row, HostsTableModel::COLUMN_NAME, QModelIndex());
@@ -122,13 +124,13 @@ namespace HostsFileManager
 
     void HostsManagerDialog::removeEntry()
     {
-        auto *model                         = dynamic_cast<HostsTableModel *>(tableView->model());
+        auto *model = dynamic_cast<HostsTableModel *>(tableView->model());
+
         QItemSelectionModel *selectionModel = tableView->selectionModel();
 
         QModelIndexList indexes = selectionModel->selectedRows();
-        QModelIndex index;
 
-        foreach (index, indexes) {
+        for (const QModelIndex &index : indexes) {
             model->removeRows(index.row(), 1, QModelIndex());
         }
     }

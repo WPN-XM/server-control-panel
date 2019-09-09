@@ -110,9 +110,9 @@ namespace File
             out.setCodec(codec.toLatin1());
         }
 
-        foreach (const QStringList &line, data) {
+        for (const QStringList &line : data) {
             QStringList output;
-            foreach (QString value, line) {
+            for (QString value : line) {
                 if (value.contains(QRegExp(",|\r\n"))) {
                     output << ("\"" + value + "\"");
                 } else if (value.contains("\"")) {

@@ -33,15 +33,15 @@ namespace Processes
     ProcessUtil::Process ProcessUtil::findByName(const QString &name)
     {
         QList<Process> processes = getRunningProcesses();
-        Process p;
-        foreach (p, processes) {
+        for (const Process &p : processes) {
             if (p.pid < nullptr) {
                 continue; // if negative pid
-            }
-            if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
+            } else if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
                 return p; // if executable name matches
             }
         }
+
+        Process p;
         p.name = "process not found";
         return p;
     }
@@ -49,12 +49,16 @@ namespace Processes
     ProcessUtil::Process ProcessUtil::findByPid(const QString &pid)
     {
         QList<Process> processes = getRunningProcesses();
-        Process p;
-        foreach (p, processes) {
-            if (p.pid == pid) {
+
+        for (const Process &p : processes) {
+            if (p.pid < nullptr) {
+                continue; // if negative pid
+            } else if (p.pid == pid) {
                 return p;
             }
         }
+
+        Process p;
         p.name = "process not found";
         return p;
     }
@@ -83,10 +87,10 @@ namespace Processes
 
         QStringList processesToSearch = getProcessNamesToSearchFor();
 
-        // foreach processesToSearch take a look in the runningProcessesList
+        // for each processesToSearch take a look in the runningProcessesList
         for (int i = 0; i < processesToSearch.size(); ++i) {
             qDebug() << "[Processes] Searching for process:" << processesToSearch.at(i).toLocal8Bit().constData();
-            foreach (ProcessUtil::Process process, getRunningProcesses()) {
+            for (const auto &process : getRunningProcesses()) {
                 if (isSystemProcess(process.name)) {
                     continue;
                 }
