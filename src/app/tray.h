@@ -20,7 +20,7 @@
 #include "networkutils.h"
 #include "servers.h"
 #include "settings.h"
-#include "tooltips/TrayToolTip.h"
+#include "widgets/tooltips/TrayToolTip.h"
 #include "version.h"
 
 namespace ServerControlPanel

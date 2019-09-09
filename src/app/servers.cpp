@@ -200,33 +200,33 @@ namespace Servers
 
     QStringList Servers::getInstalledServerNames()
     {
-        qDebug() << "[Servers] Check, which servers are installed.";
+        qDebug() << "[Servers] Check, which servers are installed:";
 
         QStringList list;
-        foreach (QString serverName, getListOfServerNames()) {
+        foreach (const QString &serverName, getListOfServerNames()) {
             // these three servers are the base package.
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are not.
             if (serverName == "nginx" || serverName == "php" || serverName == "mariadb" ||
                 QFile::exists(getExecutablePath(serverName))) {
-                qDebug() << "Installed:\t" << serverName;
+                qDebug() << "[Servers] Installed:       " << serverName;
                 list << serverName;
             } else {
-                qDebug() << "Not Installed:\t" << serverName;
+                qDebug() << "[Servers] Not Installed:   " << serverName;
             }
         }
         return list;
     }
 
-    bool Servers::isInstalled(const QString &searchServerName)
+    bool Servers::isInstalled(const QString &serverName)
     {
-        qDebug() << "[Servers] isInstalled?" << searchServerName;
+        qDebug() << "[Servers] isInstalled?" << serverName;
 
         QStringList installedServers = getInstalledServerNames();
 
-        foreach (QString serverName, installedServers) {
-            if (searchServerName == serverName) {
-                qDebug() << "Installed:\t" << serverName;
+        for (const auto &installedServerName : installedServers) {
+            if (serverName == installedServerName) {
+                qDebug() << "Installed:\t" << installedServerName;
                 return true;
             }
         }

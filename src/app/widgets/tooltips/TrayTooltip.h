@@ -22,8 +22,8 @@ signals:
 public slots:
 
 private:
-    QLabel *labelGroupBoxTitle;
     QFrame *hLine{};
+    QLabel *labelGroupBoxTitle;
     QLabel *labelIcon;
     QLabel *labelTitle;
     QLabel *labelMessage;

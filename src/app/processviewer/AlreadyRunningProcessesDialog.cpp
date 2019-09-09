@@ -12,7 +12,7 @@ AlreadyRunningProcessesDialog::AlreadyRunningProcessesDialog(QWidget *parent) : 
  */
 void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
 {
-    qDebug() << "[Processes Running] Check for already running processes.";
+    qDebug() << "[Processes Running] Check for already running processes:";
 
     // qDebug() << "Already running Processes found : " <<
     // Processes::getInstance()->getMonitoredProcessesList();

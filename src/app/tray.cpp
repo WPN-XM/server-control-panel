@@ -1,5 +1,4 @@
 #include "tray.h"
-#include "tooltips/TrayToolTip.h"
 
 namespace ServerControlPanel
 {
@@ -28,7 +27,7 @@ namespace ServerControlPanel
 
     void Tray::createTrayMenu()
     {
-        qDebug() << "[Tray] Create Tray and add Server menus.\t";
+        qDebug() << "[Tray] Create Tray and add Server menus:";
 
         QMenu *trayMenu = contextMenu();
 

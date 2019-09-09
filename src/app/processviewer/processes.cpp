@@ -79,20 +79,20 @@ namespace Processes
 
     bool ProcessUtil::getAlreadyRunningProcesses()
     {
-        qDebug() << "[Processes] Check for already running processes.";
+        qDebug() << "[Processes] Check for already running processes:";
 
         QStringList processesToSearch = getProcessNamesToSearchFor();
 
         // foreach processesToSearch take a look in the runningProcessesList
         for (int i = 0; i < processesToSearch.size(); ++i) {
-            qDebug() << "Searching for process:" << processesToSearch.at(i).toLocal8Bit().constData();
+            qDebug() << "[Processes] Searching for process:" << processesToSearch.at(i).toLocal8Bit().constData();
             foreach (ProcessUtil::Process process, getRunningProcesses()) {
                 if (isSystemProcess(process.name)) {
                     continue;
                 }
 
                 if (process.name.contains(processesToSearch.at(i).toLatin1().constData())) {
-                    qDebug() << "Found:" << process.name;
+                    qDebug() << "[Processes] Found:" << process.name;
                     monitoredProcessesList.append(process);
                 }
             }

@@ -1,7 +1,7 @@
 #ifndef CONSOLEDOCKWIDGET_H
 #define CONSOLEDOCKWIDGET_H
 
-#include "widgets/qclosedockwidget.h"
+#include "qclosedockwidget.h"
 #include "mainwindow.h"
 
 #include <QPlainTextEdit>

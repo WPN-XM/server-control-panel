@@ -1,4 +1,4 @@
-#include "tooltips/TrayToolTip.h"
+#include "widgets/tooltips/TrayToolTip.h"
 #include "version.h"
 
 TrayToolTip::TrayToolTip(QWidget *parent) : QWidget(parent)

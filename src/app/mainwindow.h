@@ -16,11 +16,11 @@
 #include "config/configurationdialog.h"
 #include "processviewer/processes.h"
 #include "processviewer/processviewerdialog.h"
-#include "tooltips/BalloonTip.h"
-#include "tooltips/LabelWithHoverTooltip.h"
 #include "updater/updaterdialog.h"
 #include "plugins/plugins.h"
-#include "widgets/consoledockwidget.h"
+#include "widgets/dockwidgets/consoledockwidget.h"
+#include "widgets/tooltips/BalloonTip.h"
+#include "widgets/tooltips/LabelWithHoverTooltip.h"
 
 namespace ServerControlPanel
 {
