@@ -3,7 +3,11 @@
 echo.
 echo Building dependencies using MSVC
 echo. 
-echo Using CMake Generator: Visual Studio 14 2015 Win64 = (x86_amd64)
+
+echo -- Set Generator
+echo. 
+SET "GENERATOR=Visual Studio 14 2015 Win64"
+echo    Using CMake Generator: %GENERATOR%
 echo.
 
 echo -- Set Qt folder
@@ -11,14 +15,18 @@ echo.
 SET "QTVERSION=Qt5.10.1\5.10.1\msvc2017_64"
 SET QTDIR=D:\Qt\%QTVERSION%
 SET PATH=%QTDIR%\bin;%QTDIR%;%PATH%
-echo %QTDIR%\bin
+echo    Using Qt: %QTDIR%\bin
+echo.
+
+echo -- Setup Qt environment
 call %QTDIR%\bin\qtenv2.bat
 qmake -v
 echo.
 
-SET "platform=amd64"
+echo -- Setup MSVC environment
+SET "PLATFORM=amd64"
 SET "MSBUILD_FLAGS=/verbosity:minimal /maxcpucount /nologo"
-call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %PLATFORM%
 echo Done.
 echo.
 
@@ -29,10 +37,10 @@ cd third-party\zlib
 :: 0) cleanup
 rm -rf build
 :: 1) configure
-cmake -G "Visual Studio 14 2015 Win64" CMakeLists.txt -B./build -DCMAKE_INSTALL_PREFIX=../../libs
+cmake -G %GENERATOR% CMakeLists.txt -B./build -DCMAKE_INSTALL_PREFIX=../../libs
 :: 2) make
 msbuild .\build\zlib.vcxproj /p:Configuration=Release %MSBUILD_FLAGS%
-msbuild .\build\zlibstatic.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
+msbuild .\build\zlibstatic.vcxproj /p:Configuration=Release /p:Platform=%PLATFORM% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
 :: 3) install 
 msbuild .\build\INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
@@ -48,9 +56,9 @@ rm -rf build
 :: 1) configure
 mkdir build 
 cd build
-cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DLIB_DESTINATION=../../../libs/quazip/bin -DZLIB_INCLUDE_DIRS=../../../libs/zlib/include -DZLIB_LIBRARIES=../../../libs/zdll.lib
+cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX=../../../libs -DLIB_DESTINATION=../../../libs/quazip/bin -DZLIB_INCLUDE_DIRS=../../../libs/zlib/include -DZLIB_LIBRARIES=../../../libs/zdll.lib
 :: 2) make
-msbuild ..\quazip.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
+msbuild ..\quazip.vcxproj /p:Configuration=Release /p:Platform=%PLATFORM% /p:OutDir=..\..\..\libs\ %MSBUILD_FLAGS%
 :: 3) install 
 msbuild ..\INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
@@ -66,9 +74,9 @@ rm -rf build
 :: 1) configure
 mkdir build 
 cd build
-cmake .. -G "Visual Studio 14 2015 Win64" -DCMAKE_INSTALL_PREFIX=../../../libs -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
+cmake .. -G %GENERATOR% -DCMAKE_INSTALL_PREFIX=../../../libs -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
 :: 2) make
-msbuild yaml-cpp.vcxproj /p:Configuration=Release /p:Platform=%platform% /p:OutDir=..\..\..\libs %MSBUILD_FLAGS%
+msbuild yaml-cpp.vcxproj /p:Configuration=Release /p:Platform=%PLATFORM% /p:OutDir=..\..\..\libs %MSBUILD_FLAGS%
 :: 3) install 
 msbuild INSTALL.vcxproj %MSBUILD_FLAGS% 
 popd
