@@ -20,14 +20,14 @@ void Package::upgradeAll() {}
 /**
  * Upgrade one package
  */
-void Package::upgrade(QString packageName) { Q_UNUSED(packageName); }
+void Package::upgrade(const QString &packageName) { Q_UNUSED(packageName); }
 
 /**
  * Get current version of a package
  */
-void Package::version(QString packageName) { Q_UNUSED(packageName); }
+void Package::version(const QString &packageName) { Q_UNUSED(packageName); }
 
 /**
  * Install or upgrade package
  */
-void Package::install(QString packageName) { Q_UNUSED(packageName); }
+void Package::install(const QString &packageName) { Q_UNUSED(packageName); }

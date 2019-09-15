@@ -3,7 +3,7 @@
 
 // Application version.
 // Its a token, replaced during the build process.
-#define VERSION = @APPVERSION@ // 1.2.3+githash
+#define VERSION = @APPVERSION @ // 1.2.3+githash
 #define APP_VERSION "@APPVERSION@" // "1.2.3+githash"
 #define APP_VERSION_SHORT "@APPVERSIONSHORT@" // 1.2.3
 
@@ -14,7 +14,7 @@
 // Settings for application_win.rc
 // These values are the attributes of the executable, shown when right-clicking
 // on it.
-#define VER_FILEVERSION @APPVERSIONRC@
+#define VER_FILEVERSION @APPVERSIONRC @
 #define VER_FILEVERSION_STR "@APPVERSION@\0"
 
 #define VER_PRODUCTVERSION VER_FILEVERSION

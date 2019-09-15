@@ -14,8 +14,8 @@ public:
     static QList<QHostAddress> getLocalHostIPs();
 
     QString getIpAddress();
-    void ping(QString hostname);
-    void traceroute(QString hostname);
+    void ping(const QString &hostname);
+    void traceroute(const QString &hostname);
 };
 
 #endif // NETWORKUTILS_H

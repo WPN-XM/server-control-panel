@@ -36,7 +36,9 @@ namespace Processes
         for (const Process &p : processes) {
             if (p.pid < nullptr) {
                 continue; // if negative pid
-            } else if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
+            }
+
+            if ((p.name).contains(name)) { // || name == p.name || name + ".exe" == p.name
                 return p; // if executable name matches
             }
         }
@@ -53,7 +55,9 @@ namespace Processes
         for (const Process &p : processes) {
             if (p.pid < nullptr) {
                 continue; // if negative pid
-            } else if (p.pid == pid) {
+            }
+
+            if (p.pid == pid) {
                 return p;
             }
         }

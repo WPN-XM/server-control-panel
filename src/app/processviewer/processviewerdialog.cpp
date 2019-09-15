@@ -147,7 +147,7 @@ void ProcessViewerDialog::filter(const QString &filterByItem, const QString &que
 
 ProcessViewerDialog::~ProcessViewerDialog() { delete ui; }
 
-QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::ProcessUtil::Process process)
+QTreeWidgetItem *ProcessViewerDialog::addRoot(const Processes::ProcessUtil::Process &process)
 {
     auto *item = new QTreeWidgetItem(ui->treeWidget);
     item->setText(0, process.name);
@@ -160,7 +160,7 @@ QTreeWidgetItem *ProcessViewerDialog::addRoot(Processes::ProcessUtil::Process pr
     return item;
 }
 
-void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, Processes::ProcessUtil::Process process)
+void ProcessViewerDialog::addChild(QTreeWidgetItem *parent, const Processes::ProcessUtil::Process &process)
 {
     auto *item = new QTreeWidgetItem();
     item->setText(0, process.name);

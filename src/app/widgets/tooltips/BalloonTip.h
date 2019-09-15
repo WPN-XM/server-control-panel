@@ -28,7 +28,7 @@ namespace Widgets::Tooltips
         Q_DECLARE_FLAGS(TipButtonRole, TipButtonRoles)
         Q_ENUM(TipButtonRoles)
 
-    protected:
+    private:
         TipButtonRole my_role;
 
     public:
@@ -102,6 +102,7 @@ namespace Widgets::Tooltips
         QRect my_popupRect;
         QRect my_textRect;
         int my_duration;
+        static const int defaultDuration = 2000;
 
         TipButton *my_closeButton;
         // TODO add a configure button to the balloon tooltip
@@ -120,11 +121,17 @@ namespace Widgets::Tooltips
         bool eventFilter(QObject *, QEvent *) override;
 
     public:
-        explicit BalloonTip(
-            const QPixmap &icon, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
-        explicit BalloonTip(
-            QStyle::StandardPixmap icon, QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
-        explicit BalloonTip(QString title, QString text, int duration = 2000, QWidget *parent = nullptr);
+        explicit BalloonTip(const QPixmap &icon,
+                            QString title,
+                            QString text,
+                            int duration    = defaultDuration,
+                            QWidget *parent = nullptr);
+        explicit BalloonTip(QStyle::StandardPixmap icon,
+                            QString title,
+                            QString text,
+                            int duration    = defaultDuration,
+                            QWidget *parent = nullptr);
+        explicit BalloonTip(QString title, QString text, int duration = defaultDuration, QWidget *parent = nullptr);
 
         ~BalloonTip() override;
         ArrowPosition arrowPosition();
@@ -139,5 +146,5 @@ namespace Widgets::Tooltips
         bool close();
     };
 
-} // namespace Tooltips
+} // namespace Widgets::Tooltips
 #endif // BALLONTIP_H

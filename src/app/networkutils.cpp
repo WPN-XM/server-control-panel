@@ -44,9 +44,9 @@ QString NetworkUtils::getIpAddress() { return QString(); }
 /**
  * Ping a host
  */
-void NetworkUtils::ping(QString hostname) { Q_UNUSED(hostname); }
+void NetworkUtils::ping(const QString &hostname) { Q_UNUSED(hostname); }
 
 /**
  * TraceRoute a host
  */
-void NetworkUtils::traceroute(QString hostname) { Q_UNUSED(hostname); }
+void NetworkUtils::traceroute(const QString &hostname) { Q_UNUSED(hostname); }

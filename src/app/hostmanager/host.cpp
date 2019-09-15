@@ -107,27 +107,21 @@ namespace HostsFileManager
     }
 
     //--------------------------------
-    Host::Host()
-    {
-        // m_bIsEnable = true;
-    }
+    Host::Host() { enabled = true; }
 
     Host::Host(const QString &name, const QString &address)
+        : hostname(name.trimmed()), ipaddress(address.trimmed()), enabled(true)
     {
-        hostname  = name.trimmed();
-        ipaddress = address.trimmed();
-        // m_bIsEnable = true;
     }
 
-    // void Host::setEnable(bool bEnable)
-    //{
-    //    m_bIsEnable = bEnable;
-    //}
+    void Host::setEnabled(bool enable) { enabled = enable; }
+    bool Host::isEnabled() { return enabled; }
 
-    // bool Host::isEnable()
-    //{
-    //    return m_bIsEnable;
-    //}
+    void Host::setHostname(const QString &host) { hostname = host; }
+    QString Host::getHostname() { return hostname; }
+
+    void Host::setIp(const QString &ip) { ipaddress = ip; }
+    QString Host::getIp() { return ipaddress; }
 
     bool Host::operator==(const Host &host) const { return hostname == host.hostname && ipaddress == host.ipaddress; }
 } // namespace HostsFileManager

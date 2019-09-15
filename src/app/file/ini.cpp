@@ -255,9 +255,8 @@ namespace File
         const char *str = getStringValue(index, name);
         if (!str) {
             return -1;
-        } else {
-            return atoi(str);
         }
+        return atoi(str);
     }
 
     float INI::getFloatValue(const char *index, const char *name)

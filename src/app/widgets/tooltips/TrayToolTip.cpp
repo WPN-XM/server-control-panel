@@ -52,9 +52,8 @@ void TrayToolTip::showMessage(const QPixmap &pixmap, const QString &title, const
     labelMessage->setText(msg);
 
     // TrayToolTip
-    int rectX, rectY;
-    rectX = point.rx() - (tipSizeX / 3);
-    rectY = point.ry() - (tipSizeY + 10);
+    int rectX = point.rx() - (tipSizeX / 3);
+    int rectY = point.ry() - (tipSizeY + 10);
     move(QPoint(rectX, rectY));
     QWidget::show();
 }
@@ -64,9 +63,8 @@ void TrayToolTip::showMessage(const QString &msg, QPoint point)
     labelMessage->setText(msg);
 
     // TrayToolTip
-    int rectX, rectY;
-    rectX = point.rx() - (tipSizeX / 3);
-    rectY = point.ry() - (tipSizeY + 10);
+    int rectX = point.rx() - (tipSizeX / 3);
+    int rectY = point.ry() - (tipSizeY + 10);
     move(QPoint(rectX, rectY));
     QWidget::show();
 }

@@ -24,8 +24,8 @@ public:
     explicit ProcessViewerDialog(QWidget &parent) = delete;
     ~ProcessViewerDialog() override;
 
-    QTreeWidgetItem *addRoot(Processes::ProcessUtil::Process process);
-    void addChild(QTreeWidgetItem *parent, Processes::ProcessUtil::Process process);
+    QTreeWidgetItem *addRoot(const Processes::ProcessUtil::Process &process);
+    void addChild(QTreeWidgetItem *parent, const Processes::ProcessUtil::Process &process);
 
     void setChecked_ShowOnlyWpnxmProcesses();
     void setProcessesInstance(Processes::ProcessUtil *p);

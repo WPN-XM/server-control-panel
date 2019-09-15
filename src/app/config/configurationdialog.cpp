@@ -1133,7 +1133,8 @@ namespace Configuration
         }
 
         // sort the php version list
-        int i, j;
+        int i;
+        int j;
         for (i = 0; i < list.count(); ++i) {
             for (j = i + 1; j < list.count(); ++j) {
                 QVersionNumber version1 = QVersionNumber::fromString(list[i].version);

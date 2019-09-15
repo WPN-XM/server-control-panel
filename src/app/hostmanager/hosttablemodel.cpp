@@ -36,9 +36,9 @@ namespace HostsFileManager
         if (role == Qt::DisplayRole) {
             switch (index.column()) {
             case COLUMN_ADDRESS:
-                return host->ipaddress;
+                return host->getIp();
             case COLUMN_NAME:
-                return host->hostname;
+                return host->getHostname();
             }
         }
         return QVariant();
@@ -80,10 +80,10 @@ namespace HostsFileManager
 
             switch (index.column()) {
             case COLUMN_ADDRESS:
-                host->ipaddress = value.toString();
+                host->setIp(value.toString());
                 break;
             case COLUMN_NAME:
-                host->hostname = value.toString();
+                host->setHostname(value.toString());
                 break;
             default:
                 return false;

@@ -34,6 +34,8 @@ namespace Settings
         QString getString(const QString &key, const QString &defaultValue) const;
 
         QPointer<QSettings> getQSettings();
+
+    private:
         QSettings *settings;
     };
 } // namespace Settings

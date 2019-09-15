@@ -12,9 +12,9 @@ public:
     QList<QString> listUpgrades();
 
     void upgradeAll();
-    void upgrade(QString packageName);
-    void install(QString packageName);
-    void version(QString packageName);
+    void upgrade(const QString &packageName);
+    void install(const QString &packageName);
+    void version(const QString &packageName);
 
 signals:
 

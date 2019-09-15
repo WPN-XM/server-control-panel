@@ -49,8 +49,7 @@ namespace Configuration
             QListWidgetItem *item = ui->list->item(i);
 
             if (item->checkState() == Qt::Checked) {
-                const PluginsNS::Plugins::Plugin plugin =
-                    item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
+                const auto plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
                 enabledPlugins.append(plugin.pluginId);
             }
         }

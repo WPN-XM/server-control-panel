@@ -67,14 +67,13 @@ namespace File
         // debug
         void debug();
 
-        // get all Entry
-        std::vector<INIEntry> datas;
-
     private:
         void setStringValueWithIndex(const char *index, const char *name, const char *value);
         void loadConfigFile();
 
         std::string trim(std::string &str);
+
+        std::vector<INIEntry> datas;
 
         bool autoSave;
         char iniFileName[4096]{};

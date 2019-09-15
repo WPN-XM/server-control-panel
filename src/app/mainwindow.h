@@ -114,7 +114,7 @@ namespace ServerControlPanel
 
         void runSelfUpdate();
 
-        MainWindow *getMainWindow();
+        ServerControlPanel::MainWindow *getMainWindow();
         void setup();
 
         void setProcessUtil(Processes::ProcessUtil *oProcessesUtil);

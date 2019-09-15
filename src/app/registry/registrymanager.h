@@ -32,7 +32,6 @@ namespace SoftwareRegistry
         void downloadRegistry(const QUrl &url, const QString &file);
         bool fileNotExistingOrOutdated(const QString &fileName);
 
-    protected:
         QJsonDocument stackSoftwareRegistry;
         // QJsonDocument phpSoftwareRegistry;
     };
