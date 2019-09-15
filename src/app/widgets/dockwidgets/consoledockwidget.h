@@ -40,6 +40,9 @@ namespace Widgets::DockWidgets
         void dockWidgetTopLevelChanged(bool);
         void dockWidgetVisibilityChanged(bool);
         void restoreDock();
+
+    protected:
+        int getBottomWidgetEndHeight();
     };
 
 } // namespace Widgets::DockWidgets

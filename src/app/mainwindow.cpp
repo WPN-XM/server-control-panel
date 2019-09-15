@@ -32,9 +32,6 @@ namespace ServerControlPanel
         // disable Maximize button functionality
         setWindowFlags((windowFlags() | Qt::CustomizeWindowHint) & ~Qt::WindowMaximizeButtonHint);
 
-        // set window size fixed
-        // setFixedSize(width(), height() - ui->statusBar->heigth());
-
         // TODO unhide scheduler - feature not ready yet. hide button for now
         ui->pushButton_Scheduler->hide();
 
@@ -42,13 +39,6 @@ namespace ServerControlPanel
         ui->pushButton_Updater->hide();
 
         connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
-    }
-
-    void MainWindow::createConsole()
-    {
-        auto *consoleDockWidget = new Widgets::DockWidgets::ConsoleDockWidget(this);
-
-        addDockWidget(Qt::BottomDockWidgetArea, consoleDockWidget);
     }
 
     void MainWindow::setup()
@@ -90,6 +80,13 @@ namespace ServerControlPanel
 #endif
 
         createConsole();
+    }
+
+    void MainWindow::createConsole()
+    {
+        auto *consoleDockWidget = new Widgets::DockWidgets::ConsoleDockWidget(this);
+
+        addDockWidget(Qt::BottomDockWidgetArea, consoleDockWidget);
     }
 
     MainWindow::~MainWindow()
@@ -542,16 +539,12 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusOnTray(const QString &serverName, bool enabled)
     {
-        QIcon icon;
-        if (enabled) {
-            icon = QIcon(":/status_run");
-        } else {
-            icon = QIcon(":/status_stop");
-        }
+        QIcon icon = (enabled) ? QIcon(":/status_run") : QIcon(":/status_stop");
 
         QList<QAction *> actions = tray->contextMenu()->actions();
 
         const int listSize = actions.size();
+
         for (int i = 0; i < listSize; ++i) {
             QAction *action = actions.at(i);
             if (action->iconText().toLower() == serverName) {
@@ -598,8 +591,10 @@ namespace ServerControlPanel
     {
         QWidget *widget = ui->centralWidget;
 
-        if (widget->findChild<QLabel *>("label_Nginx_Status")->isEnabled() &&
-            widget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
+        auto nginx = widget->findChild<QLabel *>("label_Nginx_Status");
+        auto php   = widget->findChild<QLabel *>("label_PHP_Status");
+
+        if (nginx->isEnabled() && php->isEnabled()) {
             enableToolsPushButtons(true);
         } else {
             enableToolsPushButtons(false);
@@ -612,6 +607,7 @@ namespace ServerControlPanel
             qDebug() << "[Servers] Stopping on Quit...\n";
             stopAllServers();
         }
+
         QApplication::quit();
     }
 
@@ -894,7 +890,8 @@ namespace ServerControlPanel
 
     void MainWindow::openConsole()
     {
-        QString cmd, conemu;
+        QString cmd;
+        QString conemu;
 
         if (qgetenv("PROCESSOR_ARCHITECTURE") == "x86") {
             conemu = "./bin/conemu/conemu.exe";
@@ -1142,8 +1139,8 @@ namespace ServerControlPanel
 
     void MainWindow::setDefaultSettings()
     {
-        // if the INI is not existing yet, set defaults, they will be written to file
-        // if the INI exists, do not set the defaults but read them from file
+        // if the INI is not existing yet, set default values. they will be written to file.
+        // if the INI exists, settings are read from file.
         if (!QFile(settings->file()).exists()) {
 
             settings->set("global/runonstartup", 0);

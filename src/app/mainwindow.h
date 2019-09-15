@@ -162,8 +162,8 @@ namespace ServerControlPanel
         QString getServerNameFromPushButton(QPushButton *button);
 
         // MainWindow Default Size
-        int defaultWidth  = 621;
-        int defaultHeight = 424;
+        // int defaultWidth  = 621;
+        // int defaultHeight = 424;
 
     signals:
         void mainwindow_show();

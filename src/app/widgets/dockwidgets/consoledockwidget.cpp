@@ -70,21 +70,36 @@ namespace Widgets::DockWidgets
 
     void ConsoleDockWidget::dockWidgetCloseClicked()
     {
-        // TODO resizing causes a short flickering.... WTF
-        setMainWindowDefaultSize();
-
         // disallow dockwidget window to be resized
         plainTextEdit->setMaximumHeight(100);
 
         // after clicking close on the dockwidget, switch to "open" on the toggle button
         toolButton->setArrowType(Qt::DownArrow);
         toolButton->setToolTip("Open Debug Console");
+
+        // TODO resizing causes a short flickering.... WTF
+        // figure out, if using QWidget::resizeEvent() works better
+        setMainWindowDefaultSize();
     }
 
     void ConsoleDockWidget::setMainWindowDefaultSize()
     {
-        // make the mainwindow smaller again, after dock was closed
-        mainWindow->setFixedSize(defaultWidth, defaultHeight);
+        // make the mainwindow smaller again, after the dock was closed
+        mainWindow->setFixedSize(defaultWidth, getBottomWidgetEndHeight());
+    }
+
+    int ConsoleDockWidget::getBottomWidgetEndHeight()
+    {
+        // the consoledock should be 40 pixel below the bottomWidget.
+
+        const int spacing = 40;
+
+        // we need to get the lower left point (top() + height()) of the bottom widget
+
+        auto *bottomWidget        = mainWindow->findChild<QWidget *>("BottomWidget");
+        int bottomWidgetEndHeight = bottomWidget->y() + bottomWidget->height();
+
+        return bottomWidgetEndHeight + spacing;
     }
 
     void ConsoleDockWidget::dockWidgetTopLevelChanged(bool topLevelChanged)
@@ -125,7 +140,8 @@ namespace Widgets::DockWidgets
         if (toolButton->arrowType() == Qt::DownArrow) {
             // when open console was clicked, do this:
             dockWidget->show();
-            mainWindow->setFixedSize(defaultWidth, defaultHeight + dockWidget->height() - 5);
+            mainWindow->setFixedSize(defaultWidth, getBottomWidgetEndHeight() + dockWidget->height() - 5);
+            // mainWindow->setFixedSize(defaultWidth, defaultHeight + dockWidget->height() - 5);
             toolButton->setArrowType(Qt::UpArrow);
             toolButton->setToolTip("Close Debug Console");
         } else {
