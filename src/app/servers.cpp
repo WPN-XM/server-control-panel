@@ -300,6 +300,12 @@ namespace Servers
 
     void Servers::stopNginx()
     {
+        // if not installed, skip
+        if (!QFile::exists(getServer("Nginx")->exe)) {
+            qDebug() << "[Nginx] Is not installed. Skipping stop command.";
+            return;
+        }
+
         // if not running, skip
         if (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::NotRunning) {
             qDebug() << "[Nginx] Not running... Skipping stop command.";
