@@ -74,15 +74,14 @@ namespace HostsFileManager
         QString strTempFile = QDir::toNativeSeparators(tempFile.fileName());
 
         QString strArguments = "/c copy /y \"" + strTempFile + "\" \"" + strHostFile + "\"";
-        std::wstring tmp     = strArguments.toStdWString();
-        LPCTSTR wcArguments  = tmp.c_str();
+        LPCTSTR wcArguments  = strArguments.toStdString().c_str();
 
         SHELLEXECUTEINFO shExecInfo;
         shExecInfo.cbSize       = sizeof(SHELLEXECUTEINFO);
         shExecInfo.fMask        = 0;
         shExecInfo.hwnd         = nullptr;
-        shExecInfo.lpVerb       = L"runas";
-        shExecInfo.lpFile       = L"cmd.exe";
+        shExecInfo.lpVerb       = "runas";
+        shExecInfo.lpFile       = "cmd.exe";
         shExecInfo.lpParameters = wcArguments;
         shExecInfo.lpDirectory  = nullptr;
         shExecInfo.nShow        = SW_MAXIMIZE;
