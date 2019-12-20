@@ -44,6 +44,8 @@ namespace ServerControlPanel
         bool isTooltipVisible();
         void hideTooltip();
 
+        void createTrayMenu();
+
     public slots:
         void startAllServers();
         void stopAllServers();
@@ -53,7 +55,7 @@ namespace ServerControlPanel
         void openHostManagerDialog();
 
     private:
-        void createTrayMenu();
+
 
         Settings::SettingsManager *settings{};
         Servers::Servers *servers;

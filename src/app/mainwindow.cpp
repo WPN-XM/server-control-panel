@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+//#include "selfupdater.h"
+//#include "settings.h"
+
 namespace ServerControlPanel
 {
 
@@ -1350,9 +1353,9 @@ namespace ServerControlPanel
             labelServer->setObjectName(QString("label_" + server->name + "_Name"));
             labelServer->setAlignment(Qt::AlignCenter);
             labelServer->setText(QApplication::translate("MainWindow",
-                                                         "<span style=\" font-family:'MS Shell Dlg 2'; font-size: "
-                                                         "14px; font-weight: bold;\">" +
-                                                             server->name.toLocal8Bit() + "</span><"));
+                                        (QString("<span style=\" font-family:'MS Shell Dlg 2'; font-size: "
+                                                         "14px; font-weight: bold;\">" %
+                                                             server->name.toLocal8Bit() % "</span><")).toLocal8Bit().constData()));
             ServersGridLayout->addWidget(labelServer, rowCounter, 2);
 
             // Version
@@ -1371,7 +1374,8 @@ namespace ServerControlPanel
             pushButton_Configure->setIcon(iconConfig);
             pushButton_Configure->setFlat(true);
             pushButton_Configure->setToolTip(QApplication::translate(
-                "MainWindow", "Open Configuration Tab for " + server->name.toLocal8Bit() + " "));
+                "MainWindow",
+                (QString("Open Configuration Tab for " % server->name.toLocal8Bit() % " ")).toLocal8Bit().constData()));
             ServersGridLayout->addWidget(pushButton_Configure, rowCounter, 4);
 
             if (server->name != "Memcached") { // memcached doesn't have a config file
@@ -1381,8 +1385,9 @@ namespace ServerControlPanel
                 pushButton_ConfigureEdit->setObjectName(QString("pushButton_ConfigurationEditor_" + server->name + ""));
                 pushButton_ConfigureEdit->setIcon(iconConfigEdit);
                 pushButton_ConfigureEdit->setFlat(true);
-                pushButton_ConfigureEdit->setToolTip(
-                    QApplication::translate("MainWindow", "Edit " + server->name.toLocal8Bit() + " config file"));
+                pushButton_ConfigureEdit->setToolTip(QApplication::translate(
+                    "MainWindow",
+                    (QString("Edit " + server->name.toLocal8Bit() + " config file")).toLocal8Bit().constData()));
                 ServersGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
 
                 connect(pushButton_ConfigureEdit, SIGNAL(clicked()), this, SLOT(openConfigurationInEditor()));
@@ -1397,7 +1402,9 @@ namespace ServerControlPanel
                         pushButton_ShowLog->setObjectName(QString("pushButton_ShowLog_" + server->name + ""));
                         pushButton_ShowLog->setIcon(iconLog);
                         pushButton_ShowLog->setFlat(true);
-                        pushButton_ShowLog->setToolTip(tr("MainWindow", "Open " + server->name.toLocal8Bit() + " Log"));
+                        pushButton_ShowLog->setToolTip(
+                            tr("MainWindow",
+                               (QString("Open " + server->name.toLocal8Bit() + " Log")).toLocal8Bit().constData()));
                         ServersGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
 
                         connect(pushButton_ShowLog, SIGNAL(clicked()), this, SLOT(openLog()));
@@ -1410,7 +1417,8 @@ namespace ServerControlPanel
                         pushButton_ShowErrorLog->setIcon(iconErrorLog);
                         pushButton_ShowErrorLog->setFlat(true);
                         pushButton_ShowErrorLog->setToolTip(
-                            tr("MainWindow", "Open " + server->name.toLocal8Bit() + " Error Log"));
+                            tr("MainWindow",
+                               (QString("Open " + server->name.toLocal8Bit() + " Error Log")).toLocal8Bit().constData()));
                         ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
                         connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));
@@ -1424,14 +1432,16 @@ namespace ServerControlPanel
 
             pushButton_Stop->setIcon(iconStop);
             pushButton_Stop->setFlat(true);
-            pushButton_Stop->setToolTip(tr("MainWindow", "Stop " + server->name.toLocal8Bit() + ""));
+            pushButton_Stop->setToolTip(
+                tr("MainWindow", (QString("Stop " + server->name.toLocal8Bit() + "")).toLocal8Bit().constData()));
             ServersGridLayout->addWidget(pushButton_Stop, rowCounter, 8);
 
             auto *pushButton_Start = new QPushButton();
             pushButton_Start->setObjectName(QString("pushButton_Start_" + server->name + ""));
             pushButton_Start->setIcon(iconStart);
             pushButton_Start->setFlat(true);
-            pushButton_Start->setToolTip(tr("MainWindow", "Start " + server->name.toLocal8Bit() + ""));
+            pushButton_Start->setToolTip(
+                tr("MainWindow", (QString("Start " + server->name.toLocal8Bit() + "")).toLocal8Bit().constData()));
             ServersGridLayout->addWidget(pushButton_Start, rowCounter, 9);
 
             rowCounter++;

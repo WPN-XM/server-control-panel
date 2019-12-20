@@ -1,5 +1,8 @@
 #include "tray.h"
 
+#include <QHostAddress>
+#include "networkutils.h"
+
 namespace ServerControlPanel
 {
     Tray::Tray(QCoreApplication *parent, Servers::Servers *servers)

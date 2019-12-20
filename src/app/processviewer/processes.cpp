@@ -131,6 +131,7 @@ namespace Processes
         HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
         if (hSnapshot == INVALID_HANDLE_VALUE) {
+            // maybe throw std::exception("failed to create memory snapshot"); ?
             return processes;
         }
 
@@ -142,7 +143,7 @@ namespace Processes
             Process p;
             p.pid  = QString::number((int)pe.th32ProcessID);
             p.ppid = QString::number((int)pe.th32ParentProcessID);
-            p.name = QString::fromWCharArray(pe.szExeFile);
+            p.name = QString(pe.szExeFile);
 
             if (!details.empty()) {
                 p.path        = details.at(0);
@@ -364,7 +365,7 @@ namespace Processes
         return cmd;
     }
 
-    // can be removed, when we compile with Qt5.8 where startDetached() is fixed.
+    // TODO can be removed, when we compile with Qt5.8 where startDetached() is fixed.
     bool ProcessUtil::startDetached(const QString &program, const QStringList &arguments, const QString &workingDir)
     {
         bool success                              = false;
@@ -406,10 +407,10 @@ namespace Processes
 
         qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
-        success = CreateProcess(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
-                                workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
-
-        if (success) {
+        if (CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                           workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo))
+        {
+            WaitForSingleObject(pinfo.hProcess, INFINITE);
             CloseHandle(pinfo.hThread);
             CloseHandle(pinfo.hProcess);
 
@@ -463,10 +464,10 @@ namespace Processes
 
         qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
-        success = CreateProcess(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
-                                workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo);
-
-        if (success) {
+        if (CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                          workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo))
+        {
+            WaitForSingleObject(pinfo.hProcess, INFINITE);
             CloseHandle(pinfo.hThread);
             CloseHandle(pinfo.hProcess);
 

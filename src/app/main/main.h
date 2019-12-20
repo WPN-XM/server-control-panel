@@ -4,7 +4,7 @@
 #include "../cli.h"
 #include "../mainwindow.h"
 #include "../splashscreen.h"
-#include "../version.h"
+//#include "version.h"
 
 #include "../settings.h"
 #include "../processviewer/processes.h"
