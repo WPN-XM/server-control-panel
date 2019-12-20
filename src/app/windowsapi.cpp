@@ -28,11 +28,11 @@ namespace WindowsAPI
 
             IPersistFile *persistFile = nullptr;
 
-            shell_link->SetPath(target_app_path.toStdWString().c_str());
-            shell_link->SetArguments(app_args.toStdWString().c_str());
-            shell_link->SetIconLocation(icon_path.toStdWString().c_str(), icon_index);
-            shell_link->SetDescription(description.toStdWString().c_str());
-            shell_link->SetWorkingDirectory(working_dir.toStdWString().c_str());
+            shell_link->SetPath(target_app_path.toStdString().c_str());
+            shell_link->SetArguments(app_args.toStdString().c_str());
+            shell_link->SetIconLocation(icon_path.toStdString().c_str(), icon_index);
+            shell_link->SetDescription(description.toStdString().c_str());
+            shell_link->SetWorkingDirectory(working_dir.toStdString().c_str());
 
             // Query IShellLink for the IPersistFile interface,
             // used for saving the shortcut in persistent storage.
