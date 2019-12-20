@@ -23,9 +23,9 @@ environment:
     # MSVC x64
     - bitsize:    x64
       #qt:         latest\msvc2017_64
-      qt:         5.13.0\msvc2017_64  
+      qt:         5.13.2\msvc2017_64  
       suffix:     msvc2017
-      generator:  "Visual Studio 15 2017 Win64"
+      generator:  "Visual Studio 2019"
 
 matrix:
   fast_finish: true
@@ -64,7 +64,7 @@ before_build:
   - set QTDIR=C:\Qt\%qt%
   # set vars
   - call "C:\Qt\%qt%\bin\qtenv2.bat"
-  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
   - set CPU=AMD64
   - set SPEC="win32-msvc"
   # convert matrix var "qt" to folder name (replace dot, then replace slash)
@@ -142,8 +142,6 @@ before_build:
 
 build_script:
   - cd C:\projects\server-control-panel
-  # versionize 
-  - call bin\phing\phing.bat -f build.appveyor.xml
   # make shadow build folder
   - cd C:\projects
   - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%

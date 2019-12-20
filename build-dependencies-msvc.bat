@@ -44,7 +44,7 @@ rm -rf build
 mkdir build 
 cd build
 :: 1) configure
-cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DLIB_DESTINATION=../../../libs/quazip/bin -DZLIB_ROOT=../../../libs/zlib
+cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=../../../libs/quazip -DZLIB_ROOT=../../libs/zlib -DQUAZIP_BUILD=ON
 :: 2) make
 cmake --build . --target install --config Release
 popd
@@ -59,7 +59,7 @@ rm -rf build
 mkdir build 
 cd build
 :: 1) configure
-cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
+cmake .. -G "Visual Studio 16 2019" -A x64 -DCMAKE_INSTALL_PREFIX=../../../libs/yaml-cpp -DYAML_CPP_INSTALL=ON -DYAML_CPP_BUILD_TESTS=OFF -DYAML_CPP_BUILD_TOOLS=OFF
 :: 2) make
 cmake --build . --target install --config Release
 popd
