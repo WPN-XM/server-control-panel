@@ -6,6 +6,8 @@
 #include "version.h"
 #include "windowsapi.h"
 
+#include "quazip/quazip.h"
+#include "quazip/quazipfile.h"
 #include "quazip/JlCompress.h"
 
 #include <QApplication>

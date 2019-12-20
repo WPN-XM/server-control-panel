@@ -158,16 +158,17 @@ namespace Updater
 
         qDebug() << "[SelfUpdater] Extracting " << fileToExtract << "from" << zipArchiveFile << "to" << targetPath;
 
-        QuaZipFileInfo info;
+        QuaZipFileInfo64 info;
 
         QuaZip zipArchive(zipArchiveFile);
 
         if (!zipArchive.open(QuaZip::mdUnzip)) {
             qWarning("Cannot open zip archive, error: %d", zipArchive.getZipError());
-            // return false;
-        }
+            // return false;            
+        }        
 
-        qDebug() << "[SelfUpdater] Extracting files:" << zipArchive.getFileNameList();
+        QStringList files = zipArchive.getFileNameList();
+        qDebug() << "[SelfUpdater] Extracting files:" << files;
 
         QuaZipFile zippedFile(&zipArchive);
 
@@ -359,6 +360,10 @@ namespace Updater
 
         return jsonResponse.object();
     }
+
+    /*QJsonObject SelfUpdater::notifyRestartNeeded(QJsonObject versionInfo) { 
+        return versionInfo; 
+    }*/
 
     QString SelfUpdater::getUpdateCheckURL()
     {
