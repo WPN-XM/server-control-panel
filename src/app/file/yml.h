@@ -1,9 +1,6 @@
 #ifndef YML_H
 #define YML_H
 
-//#include <QFile>
-//#include <QTextStream>
-
 #include <QVariant>
 #include <QStringList>
 #include <QRegExp>
