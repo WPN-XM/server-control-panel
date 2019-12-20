@@ -192,14 +192,14 @@ namespace Configuration
             // special handling for zend_extension xdebug
             if (item->text() == "xdebug") {
                 item->setFlags(item->flags() & ~Qt::ItemIsSelectable & ~Qt::ItemIsUserCheckable);
-                item->setBackgroundColor(QColor("lightgray"));
+                item->setBackground(QColor("lightgray"));
             } else {
                 item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
             }
 
             if (enabledList.contains(item->text())) {
                 item->setCheckState(Qt::Checked);
-                item->setBackgroundColor(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
+                item->setBackground(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
             } else {
                 item->setCheckState(Qt::Unchecked);
             }
@@ -214,10 +214,10 @@ namespace Configuration
                             SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
 
         if (item->checkState() == Qt::Checked) {
-            item->setBackgroundColor(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
+            item->setBackground(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
             savePHPExtensionState(item->text(), true);
         } else {
-            item->setBackgroundColor(QColor(100, 100, 100));
+            item->setBackground(QColor(100, 100, 100));
             savePHPExtensionState(item->text(), false);
         }
 
@@ -1151,8 +1151,8 @@ namespace Configuration
 
         // populate php version dropdown
         ui->comboBox_PHPVersions->clear();
-        for (int i = 0; i < list.count(); ++i) {
-            ui->comboBox_PHPVersions->addItem(list[i].version);
+        for (int z = 0; z < list.count(); ++z) {
+            ui->comboBox_PHPVersions->addItem(list[z].version);
         }
         ui->comboBox_PHPVersions->setEnabled(true);
     }
