@@ -25,7 +25,7 @@ environment:
       #qt:         latest\msvc2017_64
       qt:         5.13.2\msvc2017_64  
       suffix:     msvc2017
-      generator:  "Visual Studio 2019"
+      generator:  "Visual Studio 16 2019"
 
 matrix:
   fast_finish: true
