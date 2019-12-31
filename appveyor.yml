@@ -2,7 +2,7 @@
 
 version: '{build}'
 
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 # Branches to build
 branches:
