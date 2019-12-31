@@ -239,20 +239,21 @@ namespace Configuration
             content = in.readAll();
         }
 
-        QString extName = QString("extension=").append(ext);
+        QString extension = "extension=" % ext;
+        QString extensionOff = ";" % extension;
 
-        if (content.contains(extName)) {
+        if (content.contains(extension)) {
             if (enable) {
-                content.replace(QString(";extension=").append(ext), extName);
+                content.replace(extensionOff, extension);
             } else {
-                content.replace(extName, QString(";extension=").append(ext));
+                content.replace(extension, extensionOff);
             }
         } else {
             // no entry in ini, yet. add to ini
             if (enable) {
-                content.append(extName);
+                content.append(extension);
             } else {
-                content.append(QString(";extension=").append(ext));
+                content.append(extensionOff);
             }
         }
 
@@ -1104,7 +1105,7 @@ namespace Configuration
             qDebug() << v.php_dir << v.version;
 
             // rename folders = versionize PHP folders ("php-version")
-            QString expectedPhpDirName = QString("php-").append(v.version);
+            QString expectedPhpDirName = "php-" % v.version;
 
             if (phpDirName == "php") {
                 qDebug() << "Skipping bin/php folder.";
@@ -1118,8 +1119,7 @@ namespace Configuration
             if (phpDirName == expectedPhpDirName) {
                 qDebug() << "PHP Folder already correctly versionized.";
             } else {
-                QString dest(binFolder);
-                dest.append(expectedPhpDirName);
+                QString dest = binFolder % expectedPhpDirName;
                 qDebug() << "dest: " << dest;
                 QDir dir;
                 if (!dir.rename(originalDir, dest)) {
@@ -1167,13 +1167,12 @@ namespace Configuration
         } else {
             QString binFolder          = QDir::currentPath() + "/bin/";
             QString binPHPFolder       = binFolder + "php";
-            QString selectedPhpDirName = QString("php-").append(selectedPHPVersion);
-            QString currentPhPDirName  = QString("php-").append(currentPHPVersion);
+            QString selectedPhpDirName = "php-" % selectedPHPVersion;
+            QString currentPhPDirName  = "php-" % currentPHPVersion;
 
             // rename (current) "bin/php" to "bin/php-version"
 
-            QString current(binFolder);
-            current.append(currentPhPDirName);
+            QString current = binFolder % currentPhPDirName;
 
             // first, we need to remove the "bin/php-version" folder, if it exists
             if (QDir(current).exists()) {
@@ -1190,8 +1189,7 @@ namespace Configuration
 
             // rename (selected) "bin/php-version" to "bin/php"
 
-            QString src(binFolder);
-            src.append(selectedPhpDirName);
+            QString src = binFolder % selectedPhpDirName;
             QDir dir2;
             if (!dir2.rename(src, binPHPFolder)) {
                 qDebug() << "Error renaming folder.";
@@ -1212,7 +1210,7 @@ namespace Configuration
 
         QProcess process;
         process.setProcessChannelMode(QProcess::MergedChannels);
-        process.start(pathToPHPExecutable.append(" -n -v"));
+        process.start(pathToPHPExecutable % " -n -v");
 
         if (!process.waitForFinished()) {
             qDebug() << "[PHP] Version failed:" << process.errorString();

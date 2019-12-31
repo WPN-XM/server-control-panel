@@ -1,6 +1,12 @@
 
-#include <QDebug>
+// plugin includes
 #include "HelloWorldPlugin.h"
+
+// main app includes
+#include "config/configurationdialog.h"
+
+// Qt includes
+#include <QDebug>
 
 namespace Plugin_HelloWorld_NS
 {
@@ -12,6 +18,12 @@ namespace Plugin_HelloWorld_NS
     {
         if (state == InitState::StartupInitState) {
             qDebug() << "[Plugin: HelloWorld] StartupInitState";
+
+            // register plugin functionalities at application
+
+            // TODO register config page at application OR fetch config page during plugin loading
+            // auto *c = new Configuration::ConfigurationDialog();
+            // c->addPage(getConfigDialog());
         }
         if (state == InitState::LateInitState) {
             qDebug() << "[Plugin: HelloWorld] LateInitState";
@@ -22,6 +34,10 @@ namespace Plugin_HelloWorld_NS
     {
         // unload
         qDebug() << __FUNCTION__ << "called";
+
+        // remove config page from application
+
+        // remove settings dialog, if open
     }
 
     QString Plugin_HelloWorld::getName() const

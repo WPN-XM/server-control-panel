@@ -199,8 +199,7 @@ namespace ServerControlPanel
             QMessageBox msgBox;
             msgBox.setWindowTitle(APP_NAME);
             msgBox.setText("The WPN-XM executable must be placed in the root folder of the server stack.");
-            msgBox.setDetailedText(
-                QString("[Error] The directory that currently contains the executable is: \n").append(appDir));
+            msgBox.setDetailedText("[Error] The directory that currently contains the executable is: \n" % appDir);
             msgBox.setIcon(QMessageBox::Critical);
             msgBox.exec();
 

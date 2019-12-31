@@ -95,7 +95,7 @@ namespace Downloader
                 downloadFolder.append(QDir::separator());
             }
 
-            QString downloadFilePath = QDir::toNativeSeparators(downloadFolder.append(fileName));
+            QString downloadFilePath = QDir::toNativeSeparators(downloadFolder % fileName);
 
             outputFile->setFileName(downloadFilePath);
 
@@ -123,7 +123,7 @@ namespace Downloader
                         break;
                     }
                     QString enumedFileName   = QString(QLatin1String("%1.%2")).arg(fileName).arg(i);
-                    QString downloadFilePath = QDir::toNativeSeparators(downloadFolder.append(enumedFileName));
+                    QString downloadFilePath = QDir::toNativeSeparators(downloadFolder % enumedFileName);
                     outputFile->setFileName(downloadFilePath);
                 }
             }

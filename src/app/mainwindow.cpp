@@ -562,29 +562,29 @@ namespace ServerControlPanel
         QWidget *widget = ui->centralWidget;
 
         if (widget->findChild<QLabel *>("label_Nginx_Status")->isEnabled()) {
-            tip.append("Nginx: running\n");
+            tip % "Nginx: running\n";
         }
         if (widget->findChild<QLabel *>("label_PHP_Status")->isEnabled()) {
-            tip.append("PHP: running\n");
+            tip % "PHP: running\n";
         }
         if (widget->findChild<QLabel *>("label_MariaDb_Status")->isEnabled()) {
-            tip.append("MariaDb: running\n");
+            tip % "MariaDb: running\n";
         }
         if (widget->findChild<QLabel *>("label_MongoDb_Status") &&
             widget->findChild<QLabel *>("label_MongoDb_Status")->isEnabled()) {
-            tip.append("MongoDb: running\n");
+            tip % "MongoDb: running\n";
         }
         if (widget->findChild<QLabel *>("label_Memcached_Status") &&
             widget->findChild<QLabel *>("label_Memcached_Status")->isEnabled()) {
-            tip.append("Memcached: running\n");
+            tip % "Memcached: running\n";
         }
         if (widget->findChild<QLabel *>("label_PostgreSQL_Status") &&
             widget->findChild<QLabel *>("label_PostgreSQL_Status")->isEnabled()) {
-            tip.append("PostgreSQL: running\n");
+            tip % "PostgreSQL: running\n";
         }
         if (widget->findChild<QLabel *>("label_Redis_Status") &&
             widget->findChild<QLabel *>("label_Redis_Status")->isEnabled()) {
-            tip.append("Redis: running\n");
+            tip % "Redis: running\n";
         }
 
         tray->setMessage(tip);
@@ -875,7 +875,7 @@ namespace ServerControlPanel
         QString url = "http://localhost";
 
         if (nginxPort != "80") {
-            url.append(":" + nginxPort + "/");
+            url % ":" % nginxPort % "/";
         }
 
         QDesktopServices::openUrl(QUrl(url));
@@ -885,7 +885,7 @@ namespace ServerControlPanel
     {
         if (QDir(getProjectFolder()).exists()) {
             // exec explorer with path to projects
-            QDesktopServices::openUrl(QUrl("file:///" + getProjectFolder(), QUrl::TolerantMode));
+            QDesktopServices::openUrl(QUrl("file:///" % getProjectFolder(), QUrl::TolerantMode));
         } else {
             QMessageBox::warning(this, tr("Warning"), tr("The projects folder was not found."));
         }
@@ -904,7 +904,7 @@ namespace ServerControlPanel
 
         // prefer "ConEmu", else fallback to "Windows Console"
         if (QFile::exists(conemu)) {
-            cmd = conemu + " /LoadCfgFile ./bin/conemu/ConEmu.xml";
+            cmd = conemu % " /LoadCfgFile ./bin/conemu/ConEmu.xml";
         } else {
             cmd = "cmd.exe";
         }
@@ -1009,25 +1009,25 @@ namespace ServerControlPanel
         QString logFile = "";
 
         if (objectName == "pushButton_ShowLog_Nginx") {
-            logFile = logsDir + "/access.log";
+            logFile = logsDir % "/access.log";
         }
         if (objectName == "pushButton_ShowErrorLog_Nginx") {
-            logFile = logsDir + "/error.log";
+            logFile = logsDir % "/error.log";
         }
         if (objectName == "pushButton_ShowErrorLog_PHP") {
-            logFile = logsDir + "/php_error.log";
+            logFile = logsDir % "/php_error.log";
         }
         if (objectName == "pushButton_ShowErrorLog_MariaDb") {
-            logFile = logsDir + "/mariadb_error.log";
+            logFile = logsDir % "/mariadb_error.log";
         }
         if (objectName == "pushButton_ShowLog_MongoDb") {
-            logFile = logsDir + "/mongodb.log";
+            logFile = logsDir % "/mongodb.log";
         }
         if (objectName == "pushButton_ShowLog_PostgreSQL") {
-            logFile = logsDir + "/postgresql.log";
+            logFile = logsDir % "/postgresql.log";
         }
         if (objectName == "pushButton_ShowLog_Redis") {
-            logFile = logsDir + "/redis.log";
+            logFile = logsDir % "/redis.log";
         }
 
         return logFile;
