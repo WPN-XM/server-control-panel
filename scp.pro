@@ -12,5 +12,3 @@ helloworldplugin.subdir = src/plugins/HelloWorldPlugin
 # what subproject depends on others
 app.depends = helloworldplugin
 
-# build the project sequentially as listed in SUBDIRS
-#CONFIG += ordered
