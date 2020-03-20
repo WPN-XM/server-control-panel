@@ -1,17 +1,16 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include "../cli.h"
-#include "../mainwindow.h"
-#include "../splashscreen.h"
-//#include "version.h"
+#include "../core/cli.h"
+#include "../core/mainwindow.h"
+#include "../core/splashscreen.h"
 
-#include "../settings.h"
-#include "../processviewer/processes.h"
-#include "../plugins/plugins.h"
+#include "../core/settings.h"
+#include "../core/processviewer/processes.h"
+#include "../core/plugins/plugins.h"
 
-//#include "../processviewer/processviewerdialog.h"
-//#include "../processviewer/AlreadyRunningProcessesDialog.h"
+//#include "../core/processviewer/processviewerdialog.h"
+//#include "../core/processviewer/AlreadyRunningProcessesDialog.h"
 
 #include <QSharedMemory>
 #include <QtCore>
