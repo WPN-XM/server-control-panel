@@ -204,7 +204,9 @@ namespace Servers
 
         QStringList list;
 
-        for (QString &serverName : getListOfServerNames()) {
+        auto listOfServerNames = getListOfServerNames();
+
+        for (QString &serverName : listOfServerNames) {
             // these three servers are the base package.
             // we assume that they are always installed.
             // this is also for testing, because they appear installed, even if they are not.
@@ -225,17 +227,15 @@ namespace Servers
 
         QStringList installedServers = getInstalledServerNames();
 
-        for (const auto &installedServerName : installedServers) {
-            if (serverName == installedServerName) {
-                qDebug() << "Installed:\t" << installedServerName;
-                return true;
-            }
+        if (installedServers.contains(serverName)) {
+            qDebug() << "Installed:\t" << serverName;
+            return true;
         }
 
         return false;
     }
 
-    QList<Server *> Servers::servers() const { return serverList; }
+    QList<Server *> Servers::getServers() const { return serverList; }
 
     Server *Servers::getServer(const QString &serverName) const
     {
@@ -344,7 +344,7 @@ namespace Servers
         QByteArray p_stdout = process.readLine();
         qDebug() << p_stdout;
         if(p_stdout.contains("nginx: [error] CreateFile()") == true) {
-*/
+    */
 
         // you know what: process multi kill. fuck off.
         while (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::Running) {

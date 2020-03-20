@@ -170,7 +170,9 @@ namespace ServerControlPanel
 
         auto *servers = new Servers::Servers();
 
-        for (int i = 0; i < serversList.size(); ++i) {
+        const int serverListSize = serversList.size();
+
+        for (int i = 0; i < serverListSize; ++i) {
             QString server = serversList.at(i);
 
             // check if whitelisted

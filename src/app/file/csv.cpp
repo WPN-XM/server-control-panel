@@ -18,7 +18,9 @@ namespace File
         QStringList line;
         QString value;
 
-        for (int i = 0; i < string.size(); i++) {
+        const int stringSize = string.size();
+
+        for (int i = 0; i < stringSize; i++) {
             QChar current = string.at(i);
 
             // Normal

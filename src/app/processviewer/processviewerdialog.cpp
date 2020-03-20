@@ -55,13 +55,16 @@ void ProcessViewerDialog::refreshProcesses()
 
 void ProcessViewerDialog::renderProcesses()
 {
-    for (Processes::ProcessUtil::Process process : processes->getRunningProcesses()) {
+    const auto runningProcesses = processes->getRunningProcesses();
+    const auto ports = processes->getPorts();
+
+    for (Processes::ProcessUtil::Process process : runningProcesses) {
         // find parentItem in the tree by looking for parentId recursivley
         QList<QTreeWidgetItem *> parentItem =
             ui->treeWidget->findItems(process.ppid, Qt::MatchContains | Qt::MatchRecursive, 1);
 
         // lookup port for this pid and add it to the process struct
-        for (const Processes::ProcessUtil::PidAndPort &p : processes->getPorts()) {
+        for (const Processes::ProcessUtil::PidAndPort &p : ports) {
             if (p.pid == process.pid) {
                 process.port = p.port;
                 break;

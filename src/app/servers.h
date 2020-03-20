@@ -47,7 +47,7 @@ namespace Servers
         Processes::ProcessUtil *processes{};
         Settings::SettingsManager *settings;
 
-        QList<Server *> servers() const;
+        QList<Server *> getServers() const;
         QStringList getListOfServerNames() const;
         QStringList getInstalledServerNames();
         bool isInstalled(const QString &serverName);

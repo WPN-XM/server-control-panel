@@ -45,7 +45,9 @@ namespace Configuration
 
         QStringList enabledPlugins;
 
-        for (int i = 0; i < ui->list->count(); i++) {
+        const int listItems = ui->list->count();
+
+        for (int i = 0; i < listItems; i++) {
             QListWidgetItem *item = ui->list->item(i);
 
             if (item->checkState() == Qt::Checked) {

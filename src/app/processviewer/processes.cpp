@@ -458,7 +458,9 @@ namespace Processes
 
         QString cmd = program + QLatin1Char(' ');
 
-        for (int i = 0; i < arguments.size(); ++i) {
+        const int number_of_arguments = arguments.size();
+
+        for (int i = 0; i < number_of_arguments; ++i) {
             cmd += QLatin1Char(' ') + arguments.at(i);
         }
 

@@ -1317,7 +1317,9 @@ namespace ServerControlPanel
 
         int rowCounter = 2;
 
-        for (Servers::Server *server : servers->servers()) {
+        auto s = servers->getServers();
+
+        for (Servers::Server *server : s) {
 
             /**
              * Columns:
@@ -1352,10 +1354,13 @@ namespace ServerControlPanel
             auto *labelServer = new QLabel();
             labelServer->setObjectName(QString("label_" + server->name + "_Name"));
             labelServer->setAlignment(Qt::AlignCenter);
-            labelServer->setText(QApplication::translate("MainWindow",
+            labelServer->setText(
+                QApplication::translate("MainWindow",
                                         (QString("<span style=\" font-family:'MS Shell Dlg 2'; font-size: "
-                                                         "14px; font-weight: bold;\">" %
-                                                             server->name.toLocal8Bit() % "</span><")).toLocal8Bit().constData()));
+                                                 "14px; font-weight: bold;\">" %
+                                                 server->name.toLocal8Bit() % "</span><"))
+                                            .toLocal8Bit()
+                                            .constData()));
             ServersGridLayout->addWidget(labelServer, rowCounter, 2);
 
             // Version
@@ -1416,9 +1421,9 @@ namespace ServerControlPanel
                         pushButton_ShowErrorLog->setObjectName(QString("pushButton_ShowErrorLog_" + server->name + ""));
                         pushButton_ShowErrorLog->setIcon(iconErrorLog);
                         pushButton_ShowErrorLog->setFlat(true);
-                        pushButton_ShowErrorLog->setToolTip(
-                            tr("MainWindow",
-                               (QString("Open " + server->name.toLocal8Bit() + " Error Log")).toLocal8Bit().constData()));
+                        pushButton_ShowErrorLog->setToolTip(tr(
+                            "MainWindow",
+                            (QString("Open " + server->name.toLocal8Bit() + " Error Log")).toLocal8Bit().constData()));
                         ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
                         connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));

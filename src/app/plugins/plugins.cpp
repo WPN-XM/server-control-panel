@@ -83,13 +83,13 @@ namespace PluginsNS
         QString file = fileName;
 
 #ifdef QT_DEBUG
-        if (!file.contains("d.dll")) {
+        if (!file.endsWith("d.dll")) {
             file.append("d.dll"); // "ADebugPlugind.dll"
         }
 #endif
 
 #ifdef QT_NO_DEBUG
-        if (!fileName.contains(".dll")) {
+        if (!file.endsWith(".dll")) {
             file.append(".dll"); // "AReleasePlugin.dll"
         }
 #endif
@@ -98,13 +98,11 @@ namespace PluginsNS
 
         const QString fullPath = QDir(pluginsDir).absoluteFilePath(file);
 
-        if (QFileInfo::exists(fullPath)) {
-            QString file = fullPath;
-        } else {
+        if (!QFileInfo::exists(fullPath)) {
             qDebug() << "[Plugins] Plugin file not found:" << file;
         }
 
-        auto *pluginLoader = new QPluginLoader(file);
+        auto *pluginLoader = new QPluginLoader(fullPath);
 
         /*if (pluginLoader->metaData().value("MetaData").type() != QJsonValue::Object) {
             qDebug() << "Invalid plugin (metadata json missing):" << fileName << pluginLoader->errorString();
@@ -115,8 +113,8 @@ namespace PluginsNS
 
         Plugin plugin;
         plugin.pluginId   = pluginMetaData.value("MetaData").toObject().value("name").toString();
-        plugin.pluginPath = file;
-        plugin.loader     = new QPluginLoader(file);
+        plugin.pluginPath = fullPath;
+        plugin.loader     = pluginLoader;
         plugin.metaData   = Plugins::getMetaData(pluginMetaData);
 
         return plugin;

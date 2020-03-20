@@ -58,7 +58,7 @@ namespace ServerControlPanel
         trayMenu->addSeparator();
 
         // add all server submenus to the tray menu
-        for (Servers::Server *server : servers->servers()) {
+        for (Servers::Server *server : servers->getServers()) {
             trayMenu->addMenu(server->trayMenu);
             qDebug() << "[Tray] Added Menu:\t" << server->name;
         }

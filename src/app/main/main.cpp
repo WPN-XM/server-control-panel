@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
         return QCoreApplication::exec();
     }
 
+    // HighDpi support
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     // Initialize Qt application
     QApplication app(argc, argv);
 
@@ -68,10 +72,6 @@ int main(int argc, char *argv[])
 
     // do not leave application, until Quit is clicked in the tray menu
     QApplication::setQuitOnLastWindowClosed(false);
-
-    // HighDpi support
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     /**
      * TODO application style / dark style

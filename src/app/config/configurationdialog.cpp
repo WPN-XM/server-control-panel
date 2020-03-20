@@ -147,7 +147,9 @@ namespace Configuration
         ext.setNameFilters(QStringList() << "*.dll");
         QStringList fileList = ext.entryList();
 
-        for (int i = 0; i < fileList.size(); ++i) {
+        const int fileListSize = fileList.size();
+
+        for (int i = 0; i < fileListSize; ++i) {
             availableExtensions << fileList.at(i).chopped(4).mid(4);
         }
 
@@ -187,7 +189,10 @@ namespace Configuration
         ui->php_extensions_listWidget->addItems(availableList);
 
         QListWidgetItem *item = nullptr;
-        for (int i = 0; i < ui->php_extensions_listWidget->count(); ++i) {
+
+        const int phpExtensionListWidgetItems = ui->php_extensions_listWidget->count();
+
+        for (int i = 0; i < phpExtensionListWidgetItems; ++i) {
             item = ui->php_extensions_listWidget->item(i);
             // special handling for zend_extension xdebug
             if (item->text() == "xdebug") {
@@ -239,7 +244,7 @@ namespace Configuration
             content = in.readAll();
         }
 
-        QString extension = "extension=" % ext;
+        QString extension    = "extension=" % ext;
         QString extensionOff = ";" % extension;
 
         if (content.contains(extension)) {
@@ -516,7 +521,7 @@ namespace Configuration
         /**
          * @TODO Iterate over all enabled plugins and save their settings.
          */
-        /*for (const Plugins::Plugin &plugin :  allPlugins) {
+        /*for (const Plugins::Plugin &plugin : allPlugins) {
             if (plugin->hasSettings) {
                 plugin->saveSettings();
             }
@@ -627,7 +632,10 @@ namespace Configuration
 
         // iterate over all lines and replace or re-add lines
         QString line;
-        for (int i = 0; i < configLines.size(); i++) {
+
+        const int configLineSize = configLines.size();
+
+        for (int i = 0; i < configLineSize; i++) {
             line = configLines.at(i);
 
             // replace line: port
@@ -810,7 +818,10 @@ namespace Configuration
         // delete old upstream configs
         dir.setNameFilters(QStringList() << "*.conf");
         dir.setFilter(QDir::Files);
-        for (const QString &dirFile : dir.entryList()) {
+
+        const auto dirEntryList = dir.entryList();
+
+        for (const QString &dirFile : dirEntryList) {
             dir.remove(dirFile);
         }
     }
@@ -903,7 +914,9 @@ namespace Configuration
 
     void ConfigurationDialog::toggleAutostartServerCheckboxes(bool run)
     {
-        for (int i = 0; i < ui->autostartServersFormLayout->count(); ++i) {
+        const int number_of_checkboxes = ui->autostartServersFormLayout->count();
+
+        for (int i = 0; i < number_of_checkboxes; ++i) {
             QWidget *w = ui->autostartServersFormLayout->itemAt(i)->widget();
             if (w != nullptr) {
                 w->setEnabled(run);
@@ -924,7 +937,9 @@ namespace Configuration
         QTreeWidgetItem *components       = itemList[0];
 
         // iterate over childs
-        for (int i = 0; i < components->childCount(); i++) {
+        const int number_of_components = components->childCount();
+
+        for (int i = 0; i < number_of_components; i++) {
             // get child and hide it
             QTreeWidgetItem *childItem = components->child(i);
             childItem->setHidden(true);
@@ -1375,7 +1390,9 @@ namespace Configuration
         // key "servers"
         QJsonObject jsonServers = jsonPool["servers"].toObject();
 
-        for (int i = 0; i < jsonServers.count(); ++i) {
+        const int jsonServersCount = jsonServers.count();
+
+        for (int i = 0; i < jsonServersCount; ++i) {
             // values for a "server"
             QJsonObject values = jsonServers.value(QString::number(i)).toObject();
 
