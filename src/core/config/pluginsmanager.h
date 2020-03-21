@@ -1,6 +1,8 @@
 #ifndef PLUGINSMANAGER_H
 #define PLUGINSMANAGER_H
 
+#include "common.h"
+
 #include <QWidget>
 #include <QMessageBox>
 
@@ -13,7 +15,7 @@ namespace Configuration
         class PluginsManager;
     }
 
-    class PluginsManager : public QWidget
+    class APP_CORE_EXPORT PluginsManager : public QWidget
     {
         Q_OBJECT
 

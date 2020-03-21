@@ -1,6 +1,7 @@
 #ifndef ALREADYRUNNINGPROCESSESDIALOG_H
 #define ALREADYRUNNINGPROCESSESDIALOG_H
 
+#include "common.h"
 #include "../processviewer/processes.h"
 #include "../servers.h"
 
@@ -16,7 +17,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-class AlreadyRunningProcessesDialog : public QDialog
+class APP_CORE_EXPORT AlreadyRunningProcessesDialog : public QDialog
 {
     Q_OBJECT
 

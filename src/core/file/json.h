@@ -1,19 +1,21 @@
 #ifndef JSON_H
 #define JSON_H
 
+#include "common.h"
+
 #include <QFile>
 #include <QJsonDocument>
 
 namespace File
 {
-    class JSON
+    class APP_CORE_EXPORT JSON
     {
     public:
         static void save(const QJsonDocument &document, const QString &fileName);
         static QJsonDocument load(const QString &fileName);
     };
 
-    class Text
+    class APP_CORE_EXPORT Text
     {
     public:
         static void save(const QString &text, const QString &fileName);

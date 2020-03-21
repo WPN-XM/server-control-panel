@@ -1,7 +1,7 @@
 #ifndef HELLOWORLDPLUGIN_H
 #define HELLOWORLDPLUGIN_H
 
-#include "../../app/plugins/plugininterface.h"
+#include "../../core/plugins/plugininterface.h"
 
 #include "ConfigDialog.h"
 

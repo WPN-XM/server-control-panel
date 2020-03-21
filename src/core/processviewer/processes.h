@@ -1,6 +1,8 @@
 #ifndef PROCESSES_H
 #define PROCESSES_H
 
+#include "common.h"
+
 #include <QFileIconProvider>
 #include <QFileInfo>
 #include <QIcon>
@@ -18,7 +20,7 @@
 namespace Processes
 {
 
-    class ProcessUtil : public QObject
+    class APP_CORE_EXPORT ProcessUtil : public QObject
     {
         Q_OBJECT
 

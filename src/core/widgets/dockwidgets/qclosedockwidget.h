@@ -1,12 +1,14 @@
 #ifndef QCLOSEDOCKWIDGET_H
 #define QCLOSEDOCKWIDGET_H
 
+#include "common.h"
+
 #include <QDockWidget>
 
 namespace Widgets::DockWidgets
 {
 
-    class QCloseDockWidget : public QDockWidget
+    class APP_CORE_EXPORT QCloseDockWidget : public QDockWidget
     {
         Q_OBJECT
 

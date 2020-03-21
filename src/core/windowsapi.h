@@ -1,6 +1,9 @@
 #ifndef WINDOWSAPI_H
 #define WINDOWSAPI_H
 
+#include "common.h"
+#include "version.h"
+
 // this is needed for "createShellLink"
 #include <objbase.h>
 #include <ShlObj.h> // type definition for IShellLink
@@ -10,7 +13,7 @@
 
 namespace WindowsAPI
 {
-    class Console
+    class APP_CORE_EXPORT Console
     {
         static HANDLE hConsole;
         static WORD oldConsoleAttributes;
@@ -20,7 +23,7 @@ namespace WindowsAPI
         static const char *printColoredMsg(int prefix, int color, const char *msg);
     };
 
-    class QtWin : public QObject
+    class APP_CORE_EXPORT QtWin : public QObject
     {
         Q_OBJECT
 

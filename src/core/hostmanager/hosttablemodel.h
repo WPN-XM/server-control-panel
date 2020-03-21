@@ -1,6 +1,8 @@
 #ifndef HOSTTABLEMODEL_H
 #define HOSTTABLEMODEL_H
 
+#include "common.h"
+
 #include <utility>
 
 #include <QAbstractTableModel>
@@ -10,7 +12,7 @@
 
 namespace HostsFileManager
 {
-    class HostsTableModel : public QAbstractTableModel
+    class APP_CORE_EXPORT HostsTableModel : public QAbstractTableModel
     {
         Q_OBJECT
 

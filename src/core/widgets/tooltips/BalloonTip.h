@@ -1,6 +1,8 @@
 #ifndef BALLONTIP_H
 #define BALLONTIP_H
 
+#include "common.h"
+
 #include <QFrame>
 #include <QPainter>
 #include <QPropertyAnimation>
@@ -14,7 +16,7 @@ namespace Widgets::Tooltips
     /*
       Class TipButton : button used in the BalloonTip class
     */
-    class TipButton : public QPushButton
+    class APP_CORE_EXPORT TipButton : public QPushButton
     {
         Q_OBJECT
     public:

@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-    Q_INIT_RESOURCE(resources);
+    // Q_INIT_RESOURCE(resources);
 
     /*
      * On Windows an application is either a GUI application or Console application.

@@ -1,6 +1,8 @@
 #ifndef PLUGINS_H
 #define PLUGINS_H
 
+#include "common.h"
+
 #include <QObject>
 #include <QPluginLoader>
 //#include <QPixmap>
@@ -18,7 +20,7 @@
 namespace PluginsNS
 {
 
-    class PluginMetaData
+    class APP_CORE_EXPORT PluginMetaData
     {
     public:
         QString iid;
@@ -34,7 +36,7 @@ namespace PluginsNS
         // @TODO plugin dependencies?
     };
 
-    class Plugins : public QObject
+    class APP_CORE_EXPORT Plugins : public QObject
     {
         Q_OBJECT
     public:

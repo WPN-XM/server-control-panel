@@ -7,6 +7,7 @@
 #include <QSystemTrayIcon>
 #include <QRegularExpression>
 
+#include "common.h"
 #include "tray.h"
 #include "servers.h"
 #include "settings.h"
@@ -29,7 +30,7 @@ namespace ServerControlPanel
         class MainWindow;
     }
 
-    class MainWindow : public QMainWindow
+    class APP_CORE_EXPORT MainWindow : public QMainWindow
     {
         Q_OBJECT
 

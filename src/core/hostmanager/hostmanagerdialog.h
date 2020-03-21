@@ -1,6 +1,8 @@
 #ifndef HOSTMANAGERDIALOG_H
 #define HOSTMANAGERDIALOG_H
 
+#include "common.h"
+
 #include "adddialog.h"
 #include "host.h"
 #include "hosttablemodel.h"
@@ -19,7 +21,7 @@
 
 namespace HostsFileManager
 {
-    class HostsManagerDialog : public QDialog
+    class APP_CORE_EXPORT HostsManagerDialog : public QDialog
     {
         Q_OBJECT
 

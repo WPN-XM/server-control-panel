@@ -2,6 +2,7 @@
 #define FILEHANDLING_H
 
 //#include <utime.h>
+#include "common.h"
 
 #include <QByteArray>
 #include <QDataStream>
@@ -14,10 +15,10 @@
 
 namespace File
 {
-    bool truncate(const QString &file);
-    bool move(const QString &source, const QString &target);
-    bool copyFile(const QString &source, const QString &target);
-    bool copyData(const QString &source, QDataStream &target);
-}
+    bool APP_CORE_EXPORT truncate(const QString &file);
+    bool APP_CORE_EXPORT move(const QString &source, const QString &target);
+    bool APP_CORE_EXPORT copyFile(const QString &source, const QString &target);
+    bool APP_CORE_EXPORT copyData(const QString &source, QDataStream &target);
+} // namespace File
 
 #endif // FILEHANDLING_H

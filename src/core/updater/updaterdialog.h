@@ -1,6 +1,8 @@
 #ifndef UPDATERDIALOG_H
 #define UPDATERDIALOG_H
 
+#include "common.h"
+
 #include <QDialog>
 #include <QDir>
 #include <QJsonArray>
@@ -29,7 +31,7 @@ namespace Updater
         class UpdaterDialog;
     }
 
-    class UpdaterDialog : public QDialog
+    class APP_CORE_EXPORT UpdaterDialog : public QDialog
     {
         Q_OBJECT
 
@@ -71,7 +73,7 @@ namespace Updater
         void on_searchLineEdit_textChanged(const QString &arg1);
     };
 
-    class ProgressBarUpdater : public QObject
+    class APP_CORE_EXPORT ProgressBarUpdater : public QObject
     {
         Q_OBJECT
     public:

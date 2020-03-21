@@ -1,6 +1,8 @@
 #ifndef CONFIGURATIONDIALOG_H
 #define CONFIGURATIONDIALOG_H
 
+#include "common.h"
+
 #include <QDialog>
 #include <QFile>
 #include <QFileDialog>
@@ -33,7 +35,7 @@ namespace Configuration
         class ConfigurationDialog;
     }
 
-    class ConfigurationDialog : public QDialog
+    class APP_CORE_EXPORT ConfigurationDialog : public QDialog
     {
         Q_OBJECT
 

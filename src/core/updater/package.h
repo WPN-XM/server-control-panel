@@ -1,9 +1,11 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
+#include "common.h"
+
 #include <QObject>
 
-class Package : public QObject
+class APP_CORE_EXPORT Package : public QObject
 {
     Q_OBJECT
 public:

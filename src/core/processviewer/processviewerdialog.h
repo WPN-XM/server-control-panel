@@ -1,6 +1,7 @@
 #ifndef PROCESSVIEWERDIALOG_H
 #define PROCESSVIEWERDIALOG_H
 
+#include "common.h"
 #include "file/csv.h"
 #include "processviewer/processes.h"
 
@@ -15,7 +16,7 @@ namespace Ui
     class ProcessViewerDialog;
 }
 
-class ProcessViewerDialog : public QDialog
+class APP_CORE_EXPORT ProcessViewerDialog : public QDialog
 {
     Q_OBJECT
 

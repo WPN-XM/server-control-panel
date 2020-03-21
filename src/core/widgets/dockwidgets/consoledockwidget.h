@@ -13,7 +13,7 @@
 namespace Widgets::DockWidgets
 {
 
-    class ConsoleDockWidget : public QCloseDockWidget
+    class APP_CORE_EXPORT ConsoleDockWidget : public QCloseDockWidget
     {
         Q_OBJECT
 

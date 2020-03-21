@@ -1,11 +1,13 @@
 #ifndef CSV_H
 #define CSV_H
 
+#include "common.h"
+
 #include <QStringList>
 
 namespace File
 {
-    class CSV
+    class APP_CORE_EXPORT CSV
     {
     public:
         static QList<QStringList> parseFromString(const QString &string);
@@ -16,6 +18,6 @@ namespace File
         static QList<QStringList> parse(const QString &string);
         static QString initString(const QString &string);
     };
-}
+} // namespace File
 
 #endif // CSV_H

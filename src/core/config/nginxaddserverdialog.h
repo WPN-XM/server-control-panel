@@ -1,6 +1,8 @@
 #ifndef NGINXADDSERVERDIALOG_H
 #define NGINXADDSERVERDIALOG_H
 
+#include "common.h"
+
 #include <QDialog>
 
 namespace Configuration
@@ -10,7 +12,7 @@ namespace Configuration
         class NginxAddServerDialog;
     }
 
-    class NginxAddServerDialog : public QDialog
+    class APP_CORE_EXPORT NginxAddServerDialog : public QDialog
     {
         Q_OBJECT
 

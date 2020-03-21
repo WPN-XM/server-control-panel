@@ -1,6 +1,8 @@
 #ifndef INI_H
 #define INI_H
 
+#include "common.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <fstream>

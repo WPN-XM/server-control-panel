@@ -1,0 +1,10 @@
+#ifndef COMMON_H
+#define COMMON_H
+
+#ifdef APP_CORE_SHAREDLIBRARY
+#define APP_CORE_EXPORT Q_DECL_EXPORT
+#else
+#define APP_CORE_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // COMMON_H

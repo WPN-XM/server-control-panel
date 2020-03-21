@@ -1,4 +1,4 @@
-IDI_ICON1               ICON    DISCARDABLE     "wpnxm.ico"
+IDI_ICON1               ICON    DISCARDABLE     "../core/data/icons/wpnxm.ico"
 
 #include <Windows.h>
 #include "version.h"

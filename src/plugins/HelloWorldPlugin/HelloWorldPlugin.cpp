@@ -3,7 +3,7 @@
 #include "HelloWorldPlugin.h"
 
 // main app includes
-#include "config/configurationdialog.h"
+//#include "config/configurationdialog.h"
 
 // Qt includes
 #include <QDebug>

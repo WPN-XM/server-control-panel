@@ -1,6 +1,8 @@
 #ifndef SERVERS_H
 #define SERVERS_H
 
+#include "common.h"
+
 #include <QApplication>
 #include <QDir>
 #include <QMenu>
@@ -21,7 +23,7 @@
 
 namespace Servers
 {
-    class Server : public QObject
+    class APP_CORE_EXPORT Server : public QObject
     {
         Q_OBJECT
 
@@ -36,7 +38,7 @@ namespace Servers
         QMenu *trayMenu{};
     };
 
-    class Servers : public QObject
+    class APP_CORE_EXPORT Servers : public QObject
     {
         Q_OBJECT
 

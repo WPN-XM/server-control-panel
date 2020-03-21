@@ -1,6 +1,8 @@
 #ifndef ADDDIALOG_H
 #define ADDDIALOG_H
 
+#include "common.h"
+
 #include <QDialog>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -13,7 +15,7 @@
 
 namespace HostsFileManager
 {
-    class HostsAddDialog : public QDialog
+    class APP_CORE_EXPORT HostsAddDialog : public QDialog
     {
         Q_OBJECT
 

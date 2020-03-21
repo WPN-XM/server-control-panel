@@ -1,6 +1,8 @@
 #ifndef TrayToolTip_H
 #define TrayToolTip_H
 
+#include "common.h"
+
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -8,7 +10,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-class TrayToolTip : public QWidget
+class APP_CORE_EXPORT TrayToolTip : public QWidget
 {
     Q_OBJECT
 

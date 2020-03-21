@@ -1,6 +1,8 @@
 #ifndef HOST_H
 #define HOST_H
 
+#include "common.h"
+
 // Windows / C++
 #include <Windows.h>
 #include <shellapi.h>
@@ -18,7 +20,7 @@
 
 namespace HostsFileManager
 {
-    class Host
+    class APP_CORE_EXPORT Host
     {
     public:
         explicit Host();

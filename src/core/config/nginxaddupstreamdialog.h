@@ -1,6 +1,8 @@
 #ifndef NGINXADDUPSTREAMDIALOG_H
 #define NGINXADDUPSTREAMDIALOG_H
 
+#include "common.h"
+
 #include <QDialog>
 
 namespace Configuration
@@ -10,7 +12,7 @@ namespace Configuration
         class NginxAddPoolDialog;
     }
 
-    class NginxAddUpstreamDialog : public QDialog
+    class APP_CORE_EXPORT NginxAddUpstreamDialog : public QDialog
     {
         Q_OBJECT
 

@@ -1,6 +1,8 @@
 #ifndef LABELWITHHOVERTOOLTIP_H
 #define LABELWITHHOVERTOOLTIP_H
 
+#include "common.h"
+
 #include <QLabel>
 
 #include "BalloonTip.h"
@@ -8,7 +10,7 @@
 namespace Widgets::Tooltips
 {
 
-    class LabelWithHoverTooltip : public QLabel
+    class APP_CORE_EXPORT LabelWithHoverTooltip : public QLabel
     {
         Q_OBJECT
 
@@ -28,6 +30,6 @@ namespace Widgets::Tooltips
         void leaveEvent(QEvent *event) override;
     };
 
-} // namespace Tooltips
+} // namespace Widgets::Tooltips
 
 #endif // LABELWITHHOVERTOOLTIP_H

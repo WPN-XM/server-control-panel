@@ -1,12 +1,14 @@
 #ifndef NETWORKUTILS_H
 #define NETWORKUTILS_H
 
+#include "common.h"
+
 #include <QObject>
 
 #include <QNetworkAddressEntry>
 #include <QNetworkInterface>
 
-class NetworkUtils
+class APP_CORE_EXPORT NetworkUtils
 {
 public:
     NetworkUtils();

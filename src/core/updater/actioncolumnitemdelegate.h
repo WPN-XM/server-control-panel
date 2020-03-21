@@ -1,6 +1,8 @@
 #ifndef ACTIONCOLUMNITEMDELEGATE_H
 #define ACTIONCOLUMNITEMDELEGATE_H
 
+#include "common.h"
+
 #include <QProgressBar>
 #include <QPushButton>
 #include <QStyledItemDelegate>
@@ -14,7 +16,7 @@
 
 namespace Updater
 {
-    class ActionColumnItemDelegate : public QStyledItemDelegate
+    class APP_CORE_EXPORT ActionColumnItemDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
 

@@ -1,6 +1,8 @@
 #ifndef SOFTWARECOLUMNITEMDELEGATE_H
 #define SOFTWARECOLUMNITEMDELEGATE_H
 
+#include "common.h"
+
 #include <QDesktopServices>
 #include <QLabel>
 #include <QMouseEvent>
@@ -11,7 +13,7 @@
 namespace Updater
 {
 
-    class SoftwareColumnItemDelegate : public QStyledItemDelegate
+    class APP_CORE_EXPORT SoftwareColumnItemDelegate : public QStyledItemDelegate
     {
         Q_OBJECT
     public:

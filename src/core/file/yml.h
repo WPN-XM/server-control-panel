@@ -1,6 +1,8 @@
 #ifndef YML_H
 #define YML_H
 
+#include "common.h"
+
 #include <QVariant>
 #include <QStringList>
 #include <QRegExp>
@@ -40,7 +42,7 @@ namespace YAML
 
 namespace File
 {
-    class Yml
+    class APP_CORE_EXPORT Yml
     {
     public:
         YAML::Node load(const QString &fileName);

@@ -1,6 +1,8 @@
 #ifndef Tray_H
 #define Tray_H
 
+#include "version.h"
+
 #include <QAction>
 #include <QApplication>
 #include <QDesktopServices>
@@ -32,7 +34,7 @@ namespace ServerControlPanel
     Servers processes are monitored and their process state is displayed in the
    server status panel.
 */
-    class Tray : public QSystemTrayIcon
+    class APP_CORE_EXPORT Tray : public QSystemTrayIcon
     {
         Q_OBJECT
 
@@ -55,8 +57,6 @@ namespace ServerControlPanel
         void openHostManagerDialog();
 
     private:
-
-
         Settings::SettingsManager *settings{};
         Servers::Servers *servers;
         TrayToolTip *tooltip = nullptr;

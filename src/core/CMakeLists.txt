@@ -1,4 +1,4 @@
-
+add_definitions(-DAPP_CORE_SHAREDLIBRARY)
 
 #if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 #    set(SOURCES ${SOURCES} ${CMAKE_SOURCE_DIR}/tests/test.cpp)
@@ -21,6 +21,7 @@ set(SOURCES ${SOURCES}
     # application core library files
     mainwindow.cpp
     mainwindow.h
+    common.h
     cli.cpp
     cli.h
     servers.cpp
@@ -109,7 +110,7 @@ set(SOURCES ${SOURCES}
     widgets/tooltips/TrayToolTip.h
 )
 
-set(USERINTERFACES
+set(USERINTERFACES_SRCS
     mainwindow.ui
     config/configurationdialog.ui
     config/nginxaddserverdialog.ui
@@ -118,12 +119,12 @@ set(USERINTERFACES
     processviewer/processviewerdialog.ui 
     updater/updaterdialog.ui
 )
-qt5_wrap_ui(USERINTERFACES)
+qt5_wrap_ui(USERINTERFACES ${USERINTERFACES_SRCS})
 
-set(RESOURCES
-    resources/resources.qrc
+set(RESOURCES_SRCS
+    data/resources.qrc
 )
-qt5_add_resources(RESOURCES) 
+qt5_add_resources(RESOURCES ${RESOURCES_SRCS})
 
 #------------------------------------------------------------------------------
 # Build Application Core Library

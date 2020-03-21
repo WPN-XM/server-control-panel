@@ -1,6 +1,7 @@
 #ifndef SPLASHSCREEN_H
 #define SPLASHSCREEN_H
 
+#include "common.h"
 #include "version.h"
 
 #include <utility>
@@ -16,7 +17,7 @@
 
 namespace ServerControlPanel
 {
-    class SplashScreen : public QSplashScreen
+    class APP_CORE_EXPORT SplashScreen : public QSplashScreen
     {
         Q_OBJECT
 

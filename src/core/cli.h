@@ -1,6 +1,7 @@
 #ifndef CLI_H
 #define CLI_H
 
+#include "common.h"
 #include "servers.h"
 #include "version.h"
 #include "Windows.h"
@@ -11,7 +12,7 @@
 
 namespace ServerControlPanel
 {
-    class CLI
+    class APP_CORE_EXPORT CLI
     {
     public:
         void handleCommandLineArguments();

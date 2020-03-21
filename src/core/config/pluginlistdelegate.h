@@ -1,6 +1,8 @@
 #ifndef PLUGINLISTDELEGATE_H
 #define PLUGINLISTDELEGATE_H
 
+#include "common.h"
+
 #include <QApplication>
 #include <QListWidget>
 #include <QPainter>
@@ -9,7 +11,7 @@
 namespace PluginsNS
 {
 
-    class PluginListDelegate : public QStyledItemDelegate
+    class APP_CORE_EXPORT PluginListDelegate : public QStyledItemDelegate
     {
     public:
         explicit PluginListDelegate(QListWidget *parent);

@@ -1,6 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "common.h"
+
 #include <QCoreApplication>
 #include <QDir>
 #include <QSettings>
@@ -12,7 +14,7 @@ namespace Settings
     /*!
     This class stores the application settings.
 */
-    class SettingsManager : public QObject
+    class APP_CORE_EXPORT SettingsManager : public QObject
     {
         Q_OBJECT
 

@@ -1,5 +1,7 @@
 include_directories(
   ../core
+  ../core/plugins
+  ../core/processviewer
 )
 
 set(SOURCES 
@@ -8,9 +10,8 @@ set(SOURCES
 )
 
 if (WIN32)
-    set(SOURCES ${SOURCES} application.rc)
     configure_file(version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/version.h)
-    set(SOURCES ${SOURCES} version.h)
+    set(SOURCES ${SOURCES} version.h application.rc) 
 endif()
 
 add_executable(wpn-xm ${SOURCES})

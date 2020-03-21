@@ -1,6 +1,7 @@
 #ifndef SELFUPDATER_H
 #define SELFUPDATER_H
 
+#include "common.h"
 #include "settings.h"
 #include "updater/downloadmanager.h"
 #include "version.h"
@@ -25,7 +26,7 @@
 
 namespace Updater
 {
-    class SelfUpdater : public QObject
+    class APP_CORE_EXPORT SelfUpdater : public QObject
     {
         Q_OBJECT
 

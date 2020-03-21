@@ -1,6 +1,7 @@
 #ifndef REGISTRIESDOWNLOADER_H
 #define REGISTRIESDOWNLOADER_H
 
+#include "common.h"
 #include "file/json.h"
 
 #include <QEventLoop>
@@ -21,7 +22,7 @@
 
 namespace SoftwareRegistry
 {
-    class Manager
+    class APP_CORE_EXPORT Manager
     {
     public:
         Manager();
