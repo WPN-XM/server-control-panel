@@ -1,41 +1,41 @@
 <RCC>
     <qresource prefix="/">
-        <file alias="action_reload">action_reload.png</file>
-        <file alias="action_run">action_run.png</file>
-        <file alias="action_stop">action_stop.png</file>
-        <file alias="action_restart">action_restart.png</file>
-        <file alias="status_run">status_run.png</file>
-        <file alias="status_runstop">status_runstop.png</file>
-        <file alias="status_stop">status_stop.png</file>
-        <file alias="status_reload">status_reload.png</file>
-        <file alias="report_bug">bug.png</file>
-        <file>quit.png</file>
-        <file>gear.png</file>
-        <file>report.png</file>
-        <file>report--exclamation.png</file>
-        <file>cup.png</file>
-        <file>home.png</file>
-        <file>mail.png</file>
-        <file>wpnxm-logo-dark-transparent.png</file>
-        <file alias="cappuccino64">cappuccino-64px.png</file>
-        <file alias="money">money-coin.png</file>
-        <file alias="question">question.png</file>
-        <file>wpnxm.ico</file>
-        <file alias="splash">splash.png</file>
-        <file alias="key">key-solid.png</file>
-        <file alias="tick">tick.png</file>
-        <file alias="cross">cross.png</file>
-        <file alias="wpnxm">wpnxm.png</file>
-        <file alias="status_run_big">bullet_ball_green.png</file>
-        <file alias="status_stop_big">bullet_ball_grey.png</file>
-        <file>gear--pencil.png</file>
-        <file>pencil.png</file>
-        <file alias="console">terminal.png</file>
-        <file alias="explorer">folder-smiley.png</file>
-        <file>comment.png</file>
-        <file alias="update">update.png</file>
-        <file>update-circle.png</file>
-        <file>system-monitor.png</file>
-        <file>clock-history.png</file>
+        <file alias="action_reload">icons/action_reload.png</file>
+        <file alias="action_run">icons/action_run.png</file>
+        <file alias="action_stop">icons/action_stop.png</file>
+        <file alias="action_restart">icons/action_restart.png</file>
+        <file alias="status_run">icons/status_run.png</file>
+        <file alias="status_runstop">icons/status_runstop.png</file>
+        <file alias="status_stop">icons/status_stop.png</file>
+        <file alias="status_reload">icons/status_reload.png</file>
+        <file alias="report_bug">icons/bug.png</file>
+        <file>icons/quit.png</file>
+        <file>icons/gear.png</file>
+        <file>icons/report.png</file>
+        <file>icons/report--exclamation.png</file>
+        <file>icons/cup.png</file>
+        <file>icons/home.png</file>
+        <file>icons/mail.png</file>
+        <file>icons/wpnxm-logo-dark-transparent.png</file>
+        <file alias="cappuccino64">icons/cappuccino-64px.png</file>
+        <file alias="money">icons/money-coin.png</file>
+        <file alias="question">icons/question.png</file>
+        <file>icons/wpnxm.ico</file>
+        <file alias="splash">images/splashscreen.png</file>
+        <file alias="key">icons/key-solid.png</file>
+        <file alias="tick">icons/tick.png</file>
+        <file alias="cross">icons/cross.png</file>
+        <file alias="wpnxm">icons/wpnxm.png</file>
+        <file alias="status_run_big">icons/bullet_ball_green.png</file>
+        <file alias="status_stop_big">icons/bullet_ball_grey.png</file>
+        <file>icons/gear--pencil.png</file>
+        <file>icons/pencil.png</file>
+        <file alias="console">icons/terminal.png</file>
+        <file alias="explorer">icons/folder-smiley.png</file>
+        <file>icons/comment.png</file>
+        <file alias="update">icons/update.png</file>
+        <file>icons/update-circle.png</file>
+        <file>icons/system-monitor.png</file>
+        <file>icons/clock-history.png</file>
     </qresource>
 </RCC>
