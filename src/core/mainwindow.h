@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMainWindow>
 #include <QCheckBox>
 #include <QDialogButtonBox>
-#include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QRegularExpression>
 

@@ -81,7 +81,7 @@
      <string notr="true"/>
     </property>
     <property name="pixmap">
-     <pixmap resource="resources/resources.qrc">:/wpnxm-logo-dark-transparent.png</pixmap>
+     <pixmap resource="data/resources.qrc">:/images/images/wpnxm-logo-dark-transparent.png</pixmap>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -136,8 +136,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/home.png</normaloff>:/home.png</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/home.png</normaloff>:/icons/icons/home.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -177,8 +177,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/comment.png</normaloff>:/comment.png</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/comment.png</normaloff>:/icons/icons/comment.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -221,8 +221,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/report_bug</normaloff>:/report_bug</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/bug.png</normaloff>:/icons/icons/bug.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -262,8 +262,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/question</normaloff>:/question</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/question.png</normaloff>:/icons/icons/question.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -303,8 +303,8 @@
         <string notr="true"/>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/cup.png</normaloff>:/cup.png</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/cup.png</normaloff>:/icons/icons/cup.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -387,8 +387,8 @@
         <string>Donate</string>
        </property>
        <property name="icon">
-        <iconset resource="resources/resources.qrc">
-         <normaloff>:/money</normaloff>:/money</iconset>
+        <iconset resource="data/resources.qrc">
+         <normaloff>:/icons/icons/money-coin.png</normaloff>:/icons/icons/money-coin.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -471,8 +471,8 @@
          <string>Console</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/console</normaloff>:/console</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/terminal.png</normaloff>:/icons/icons/terminal.png</iconset>
         </property>
         <property name="autoDefault">
          <bool>false</bool>
@@ -500,8 +500,8 @@
          <string>Configuration</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/gear.png</normaloff>:/gear.png</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/gear.png</normaloff>:/icons/icons/gear.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -529,8 +529,8 @@
          <string>Updater</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/update-circle.png</normaloff>:/update-circle.png</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/update-circle.png</normaloff>:/icons/icons/update-circle.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -561,8 +561,8 @@
          <string>Processes</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/system-monitor.png</normaloff>:/system-monitor.png</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/system-monitor.png</normaloff>:/icons/icons/system-monitor.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -599,8 +599,8 @@
          <string>Scheduler</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/clock-history.png</normaloff>:/clock-history.png</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/clock-history.png</normaloff>:/icons/icons/clock-history.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -628,8 +628,8 @@
          <string>Close</string>
         </property>
         <property name="icon">
-         <iconset resource="resources/resources.qrc">
-          <normaloff>:/quit.png</normaloff>:/quit.png</iconset>
+         <iconset resource="data/resources.qrc">
+          <normaloff>:/icons/icons/quit.png</normaloff>:/icons/icons/quit.png</iconset>
         </property>
        </widget>
       </item>
@@ -769,8 +769,8 @@
        <string>Webinterface</string>
       </property>
       <property name="icon">
-       <iconset resource="resources/resources.qrc">
-        <normaloff>:/wpnxm</normaloff>:/wpnxm</iconset>
+       <iconset resource="data/resources.qrc">
+        <normaloff>:/icons/icons/wpnxm.png</normaloff>:/icons/icons/wpnxm.png</iconset>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -801,8 +801,8 @@
        <string notr="true">Explorer</string>
       </property>
       <property name="icon">
-       <iconset resource="resources/resources.qrc">
-        <normaloff>:/explorer</normaloff>:/explorer</iconset>
+       <iconset resource="data/resources.qrc">
+        <normaloff>:/icons/icons/folder-smiley.png</normaloff>:/icons/icons/folder-smiley.png</iconset>
       </property>
      </widget>
     </widget>
@@ -1004,6 +1004,15 @@
            </color>
           </brush>
          </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
         </active>
         <inactive>
          <colorrole role="WindowText">
@@ -1174,6 +1183,15 @@
            </color>
           </brush>
          </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
         </inactive>
         <disabled>
          <colorrole role="WindowText">
@@ -1341,6 +1359,15 @@
             <red>0</red>
             <green>0</green>
             <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
            </color>
           </brush>
          </colorrole>
@@ -1571,6 +1598,15 @@ QPushButton:pressed
            </color>
           </brush>
          </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
         </active>
         <inactive>
          <colorrole role="WindowText">
@@ -1738,6 +1774,15 @@ QPushButton:pressed
             <red>0</red>
             <green>0</green>
             <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
            </color>
           </brush>
          </colorrole>
@@ -1911,6 +1956,15 @@ QPushButton:pressed
            </color>
           </brush>
          </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="NoBrush">
+           <color alpha="128">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
         </disabled>
        </palette>
       </property>
@@ -1974,7 +2028,7 @@ QPushButton:pressed
   <tabstop>pushButton_OpenProjects_Explorer</tabstop>
  </tabstops>
  <resources>
-  <include location="resources/resources.qrc"/>
+  <include location="data/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

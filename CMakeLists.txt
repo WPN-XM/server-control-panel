@@ -99,8 +99,10 @@ set(PLUGIN_PATH "${CMAKE_INSTALL_PREFIX}/${APP_INSTALL_PLUGINDIR}")
 
 # Qt Code-Generators
 set(CMAKE_AUTOMOC ON) # compile metaobject files
-#set(CMAKE_AUTORCC ON) # compile qrc resource files
+set(CMAKE_AUTORCC ON) # compile qrc resource files
 set(CMAKE_AUTOUIC ON) # compile ui files
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #------------------------------------------------------------------------------
 #                                 Defines                                        

@@ -111,13 +111,13 @@ set(SOURCES ${SOURCES}
 )
 
 set(USERINTERFACES_SRCS
-    mainwindow.ui
     config/configurationdialog.ui
     config/nginxaddserverdialog.ui
     config/nginxaddupstreamdialog.ui
     config/pluginsmanager.ui
     processviewer/processviewerdialog.ui 
     updater/updaterdialog.ui
+    mainwindow.ui
 )
 qt5_wrap_ui(USERINTERFACES ${USERINTERFACES_SRCS})
 
