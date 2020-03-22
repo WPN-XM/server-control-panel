@@ -318,26 +318,26 @@ foreach(FILE ${ALL_SOURCES})
     # Group into "Source Files", "Header Files", "UI", "Resources"
     if ("${FILE}" MATCHES ".*\\.cpp")
        source_group(
-           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/app"
-           PREFIX "Source Files - app"
+           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
+           PREFIX "Source Files"
            FILES "${FILE}"
        )
     elseif("${FILE}" MATCHES ".*\\.h")
        source_group(
-           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/app"
-           PREFIX "Header Files - app"
+           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
+           PREFIX "Header Files"
            FILES "${FILE}"
        )
     elseif("${FILE}" MATCHES ".*\\.ui")
        source_group(
-           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/app"
-           PREFIX "UI - app"
+           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
+           PREFIX "UI"
            FILES "${FILE}"
        )
     elseif("${FILE}" MATCHES ".*\\.rc|.*\\.qrc")
        source_group(
-           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/app"
-           PREFIX "Resources - app"
+           TREE "${CMAKE_CURRENT_SOURCE_DIR}/src/core"
+           PREFIX "Resources"
            FILES "${FILE}"
        )
     endif()       
