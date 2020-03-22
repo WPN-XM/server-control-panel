@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     mainWindow.setPlugins(plugins);
 
     splash.setMessage("Initial scan of installed applications ..", 15);
-    QThread::msleep(500);
+    QThread::msleep(300);
 
     splash.setMessage("Getting System Processes ..", 30);
     Processes::ProcessUtil *processes = Processes::ProcessUtil::getInstance();
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     }
 
     splash.setProgress(50);
-    QThread::msleep(500);
+    QThread::msleep(300);
 
     // Setup the environment: trayicon, actions, servers, process monitoring
     mainWindow.setup();
