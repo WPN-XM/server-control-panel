@@ -30,6 +30,8 @@ set(SOURCES ${SOURCES}
     settings.h
     splashscreen.cpp
     splashscreen.h
+    processes.cpp
+    processes.h
     networkutils.cpp
     networkutils.h
     tray.cpp
@@ -77,8 +79,6 @@ set(SOURCES ${SOURCES}
 
     processviewer/AlreadyRunningProcessesDialog.cpp
     processviewer/AlreadyRunningProcessesDialog.h
-    processviewer/processes.cpp
-    processviewer/processes.h
     processviewer/processviewerdialog.cpp
     processviewer/processviewerdialog.h
 
@@ -110,7 +110,7 @@ set(SOURCES ${SOURCES}
     widgets/tooltips/TrayToolTip.h
 )
 
-set(USERINTERFACES_SRCS
+set(USERINTERFACE_FILES
     config/configurationdialog.ui
     config/nginxaddserverdialog.ui
     config/nginxaddupstreamdialog.ui
@@ -119,12 +119,12 @@ set(USERINTERFACES_SRCS
     updater/updaterdialog.ui
     mainwindow.ui
 )
-qt5_wrap_ui(USERINTERFACES ${USERINTERFACES_SRCS})
+qt5_wrap_ui(USERINTERFACES ${USERINTERFACE_FILES})
 
-set(RESOURCES_SRCS
+set(RESOURCE_FILES
     data/resources.qrc
 )
-qt5_add_resources(RESOURCES ${RESOURCES_SRCS})
+qt5_add_resources(RESOURCES ${RESOURCE_FILES})
 
 #------------------------------------------------------------------------------
 # Build Application Core Library
@@ -154,3 +154,10 @@ target_include_directories(AppCoreLib
         # which is generated from "src/main/version.h.cmake"
         ${PROJECT_BINARY_DIR}/src/main 
 )
+
+#------------------------------------------------------------------------------
+# Source Groups
+#------------------------------------------------------------------------------
+
+source_group("UI" FILES ${USERINTERFACE_FILES})
+source_group("Resources" FILES ${RESOURCE_FILES})
