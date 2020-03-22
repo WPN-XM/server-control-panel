@@ -18,12 +18,12 @@ environment:
   MSBUILD_FLAGS: /verbosity:minimal /maxcpucount /nologo /ds
   APPVEYOR_SAVE_CACHE_ON_ERROR: true
   matrix: 
-    # https://www.appveyor.com/docs/build-environment/#qt
+    # https://www.appveyor.com/docs/windows-images-software/#qt
 
     # MSVC x64
     - bitsize:    x64
       #qt:         latest\msvc2017_64
-      qt:         5.13.2\msvc2017_64  
+      qt:         5.14.1\msvc2017_64  
       suffix:     msvc2017
       generator:  "Visual Studio 16 2019"
 
@@ -146,15 +146,21 @@ build_script:
   - cd C:\projects
   - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - cd build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
-  # run qmake to create a makefile
+  # configure
   - if "%CONFIGURATION%"=="Release" (
-      qmake -r -spec %SPEC% "CONFIG+=release" ..\server-control-panel\scp.pro      
+      cmake -H../server-control-panel -DCMAKE_BUILD_TYPE=Release     
     )
   - if "%CONFIGURATION%"=="Debug" (
-      qmake -r -spec %SPEC% "CONFIG+=debug" ..\server-control-panel\scp.pro
+      cmake -H../server-control-panel -DCMAKE_BUILD_TYPE=Debug
     )
-  # run nmake for all Makefile.Release | Makefile.Debug
-  - dir /s /b Makefile.%CONFIGURATION% | nmake
+  # build 
+  - if "%CONFIGURATION%"=="Release" (
+      cmake --build . --target all --config Release     
+    )
+  - if "%CONFIGURATION%"=="Debug" (
+      cmake --build . --target all --config Debug
+    )
+
 
 after_build:
   - echo %cd%
