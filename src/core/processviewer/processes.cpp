@@ -372,12 +372,13 @@ namespace Processes
         static const DWORD errorElevationRequired = 740;
         PROCESS_INFORMATION pinfo;
 
-        // the goal is to create a new process, which is able to survive, if the
-        // parent (wpn-xm.exe) is killed
+        // the goal is to create a new process, which is able to survive,
+        // if the parent (wpn-xm.exe) is killed.
         // we need DETACHED_PROCESS or CREATE_NEW_PROCESS_GROUP for this.
 
-        // changed to parent-> runs cmd.exe with no window -> runs child -> parent
-        // kills cmd.exe (child gets parentless)
+        // 1. wpn-xm.exe as parent -> runs cmd.exe with no window
+        // 2. cmd.exe -> runs child
+        // 3. parent cmd.exe gets killed -> and finally the child gets parentless
 
         DWORD dwCreationFlags    = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
         STARTUPINFOW startupInfo = {sizeof(STARTUPINFO),
@@ -399,7 +400,7 @@ namespace Processes
                                     nullptr,
                                     nullptr};
 
-        QString cmd = R"(C:\windows\system32\cmd.exe /c )" + program + QLatin1Char(' ');
+        QString cmd = R"(C:\windows\system32\cmd.exe /c )" + program;
 
         for (int i = 0; i < arguments.size(); ++i) {
             cmd += QLatin1Char(' ') + arguments.at(i);
@@ -407,10 +408,21 @@ namespace Processes
 
         qDebug("[Process::startDetached] \"%s\"", cmd.toLatin1().constData());
 
-        if (CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
-                           workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo))
-        {
-            WaitForSingleObject(pinfo.hProcess, INFINITE);
+        if (!CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                            workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo)) {
+
+            auto error = GetLastError();
+            if (error == errorElevationRequired) {
+                qDebug() << "[Process::start] errorElevationRequired";
+                success = false;
+            } else {
+                qDebug() << "[Process::start] CreateProcessW failed with error: " << error;
+                success = false;
+            }
+        } else {
+            // wait up to 3 seconds for new program to start
+            WaitForSingleObject(pinfo.hProcess, 3 * 1000);
+
             CloseHandle(pinfo.hThread);
             CloseHandle(pinfo.hProcess);
 
@@ -421,10 +433,7 @@ namespace Processes
                 killProcess(pinfo.dwProcessId);
             }
 
-        } else if (GetLastError() == errorElevationRequired) {
-            // startDetachedUacPrompt
-            qDebug() << "[Process::startDetached] errorElevationRequired";
-            success = false;
+            success = true;
         }
 
         return success;
@@ -466,16 +475,24 @@ namespace Processes
 
         qDebug("[Process::start] \"%s\"", cmd.toLatin1().constData());
 
-        if (CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
-                          workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo))
-        {
-            WaitForSingleObject(pinfo.hProcess, INFINITE);
+        if (!CreateProcessW(nullptr, (wchar_t *)cmd.utf16(), nullptr, nullptr, FALSE, dwCreationFlags, nullptr,
+                            workingDir.isEmpty() ? nullptr : (wchar_t *)workingDir.utf16(), &startupInfo, &pinfo)) {
+
+            auto error = GetLastError();
+            if (error == errorElevationRequired) {
+                qDebug() << "[Process::start] errorElevationRequired";
+                success = false;
+            } else {
+                qDebug() << "[Process::start] CreateProcessW failed with error: " << error;
+                success = false;
+            }
+        } else {
+            // wait up to 3 seconds for new program to start
+            WaitForSingleObject(pinfo.hProcess, 3 * 1000);
+
             CloseHandle(pinfo.hThread);
             CloseHandle(pinfo.hProcess);
-
-        } else if (GetLastError() == errorElevationRequired) {
-            qDebug() << "[Process::start] errorElevationRequired";
-            success = false;
+            success = true;
         }
 
         return success;
