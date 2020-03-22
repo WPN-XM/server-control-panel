@@ -81,7 +81,7 @@
      <string notr="true"/>
     </property>
     <property name="pixmap">
-     <pixmap resource="data/resources.qrc">:/images/images/wpnxm-logo-dark-transparent.png</pixmap>
+     <pixmap resource="data/resources.qrc">:/images/wpnxm-logo-dark-transparent.png</pixmap>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -137,7 +137,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/home.png</normaloff>:/icons/icons/home.png</iconset>
+         <normaloff>:/icons/home.png</normaloff>:/icons/home.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -178,7 +178,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/comment.png</normaloff>:/icons/icons/comment.png</iconset>
+         <normaloff>:/icons/comment.png</normaloff>:/icons/comment.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -222,7 +222,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/bug.png</normaloff>:/icons/icons/bug.png</iconset>
+         <normaloff>:/icons/bug.png</normaloff>:/icons/bug.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -263,7 +263,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/question.png</normaloff>:/icons/icons/question.png</iconset>
+         <normaloff>:/icons/question.png</normaloff>:/icons/question.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -304,7 +304,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/cup.png</normaloff>:/icons/icons/cup.png</iconset>
+         <normaloff>:/icons/cup.png</normaloff>:/icons/cup.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -388,7 +388,7 @@
        </property>
        <property name="icon">
         <iconset resource="data/resources.qrc">
-         <normaloff>:/icons/icons/money-coin.png</normaloff>:/icons/icons/money-coin.png</iconset>
+         <normaloff>:/icons/money-coin.png</normaloff>:/icons/money-coin.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -472,7 +472,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/terminal.png</normaloff>:/icons/icons/terminal.png</iconset>
+          <normaloff>:/icons/terminal.png</normaloff>:/icons/terminal.png</iconset>
         </property>
         <property name="autoDefault">
          <bool>false</bool>
@@ -501,7 +501,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/gear.png</normaloff>:/icons/icons/gear.png</iconset>
+          <normaloff>:/icons/gear.png</normaloff>:/icons/gear.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -530,7 +530,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/update-circle.png</normaloff>:/icons/icons/update-circle.png</iconset>
+          <normaloff>:/icons/update-circle.png</normaloff>:/icons/update-circle.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -562,7 +562,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/system-monitor.png</normaloff>:/icons/icons/system-monitor.png</iconset>
+          <normaloff>:/icons/system-monitor.png</normaloff>:/icons/system-monitor.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -600,7 +600,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/clock-history.png</normaloff>:/icons/icons/clock-history.png</iconset>
+          <normaloff>:/icons/clock-history.png</normaloff>:/icons/clock-history.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -629,7 +629,7 @@
         </property>
         <property name="icon">
          <iconset resource="data/resources.qrc">
-          <normaloff>:/icons/icons/quit.png</normaloff>:/icons/icons/quit.png</iconset>
+          <normaloff>:/icons/quit.png</normaloff>:/icons/quit.png</iconset>
         </property>
        </widget>
       </item>
@@ -770,7 +770,7 @@
       </property>
       <property name="icon">
        <iconset resource="data/resources.qrc">
-        <normaloff>:/icons/icons/wpnxm.png</normaloff>:/icons/icons/wpnxm.png</iconset>
+        <normaloff>:/icons/wpnxm.png</normaloff>:/icons/wpnxm.png</iconset>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -802,7 +802,7 @@
       </property>
       <property name="icon">
        <iconset resource="data/resources.qrc">
-        <normaloff>:/icons/icons/folder-smiley.png</normaloff>:/icons/icons/folder-smiley.png</iconset>
+        <normaloff>:/icons/folder-smiley.png</normaloff>:/icons/folder-smiley.png</iconset>
       </property>
      </widget>
     </widget>

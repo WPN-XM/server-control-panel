@@ -539,7 +539,7 @@ namespace ServerControlPanel
 
     void MainWindow::updateServerStatusOnTray(const QString &serverName, bool enabled)
     {
-        QIcon icon = (enabled) ? QIcon(":/status_run") : QIcon(":/status_stop");
+        QIcon icon = (enabled) ? QIcon(":/icons/status_run.png") : QIcon(":/icons/status_stop.png");
 
         QList<QAction *> actions = tray->contextMenu()->actions();
 
@@ -1294,23 +1294,12 @@ namespace ServerControlPanel
          * Define Icons
          */
 
-        QIcon iconConfig;
-        iconConfig.addFile(QStringLiteral(":/gear.png"), QSize(), QIcon::Normal, QIcon::Off);
-
-        QIcon iconConfigEdit;
-        iconConfigEdit.addFile(QStringLiteral(":/gear--pencil.png"), QSize(), QIcon::Normal, QIcon::Off);
-
-        QIcon iconLog;
-        iconLog.addFile(QStringLiteral(":/report.png"), QSize(), QIcon::Normal, QIcon::Off);
-
-        QIcon iconErrorLog;
-        iconErrorLog.addFile(QStringLiteral(":/report--exclamation.png"), QSize(), QIcon::Normal, QIcon::Off);
-
-        QIcon iconStop;
-        iconStop.addFile(QStringLiteral(":/action_stop"), QSize(), QIcon::Normal, QIcon::Off);
-
-        QIcon iconStart;
-        iconStart.addFile(QStringLiteral(":/action_run"), QSize(), QIcon::Normal, QIcon::Off);
+        QIcon iconConfig     = QIcon(":/icons/gear.png");
+        QIcon iconConfigEdit = QIcon(":/icons/gear--pencil.png");
+        QIcon iconLog        = QIcon(":/icons/report.png");
+        QIcon iconErrorLog   = QIcon(":/icons/report--exclamation.png");
+        QIcon iconStop       = QIcon(":/icons/action_stop.png");
+        QIcon iconStart      = QIcon(":/icons/action_run.png");
 
         int rowCounter = 2;
 
@@ -1327,7 +1316,7 @@ namespace ServerControlPanel
             // Status
             auto *labelStatus = new QLabel();
             labelStatus->setObjectName(QString("label_" + server->name + "_Status"));
-            labelStatus->setPixmap(QPixmap(QString::fromUtf8(":/status_run_big")));
+            labelStatus->setPixmap(QPixmap(":/icons/bullet_ball_green.png"));
             labelStatus->setAlignment(Qt::AlignCenter);
             labelStatus->setEnabled(false); // inital state of status leds is disabled
             ServersGridLayout->addWidget(labelStatus, rowCounter, 0);

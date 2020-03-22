@@ -6,7 +6,7 @@
 namespace ServerControlPanel
 {
     Tray::Tray(QCoreApplication *parent, Servers::Servers *servers)
-        : QSystemTrayIcon(QIcon(":/wpnxm"), parent), servers(servers)
+        : QSystemTrayIcon(QIcon(":/icons/wpnxm.png"), parent), servers(servers)
     {
         createTrayMenu();
 
@@ -53,8 +53,10 @@ namespace ServerControlPanel
 
         // start and stop all servers; the connection to these actions is made from
         // mainwindow
-        trayMenu->addAction(QIcon(":/action_run"), tr("Start All"), this, SLOT(startAllServers()), QKeySequence());
-        trayMenu->addAction(QIcon(":/action_stop"), tr("Stop All"), this, SLOT(stopAllServers()), QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/action_run.png"), tr("Start All"), this, SLOT(startAllServers()),
+                            QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/action_stop.png"), tr("Stop All"), this, SLOT(stopAllServers()),
+                            QKeySequence());
         trayMenu->addSeparator();
 
         // add all server submenus to the tray menu
@@ -64,12 +66,16 @@ namespace ServerControlPanel
         }
 
         trayMenu->addSeparator();
-        trayMenu->addAction(QIcon(":/gear"), tr("Manage Hosts"), this, SLOT(openHostManagerDialog()), QKeySequence());
-        trayMenu->addAction(QIcon(":/gear"), tr("Webinterface"), this, SLOT(goToWebinterface()), QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Manage Hosts"), this, SLOT(openHostManagerDialog()),
+                            QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Webinterface"), this, SLOT(goToWebinterface()),
+                            QKeySequence());
         trayMenu->addSeparator();
-        trayMenu->addAction(QIcon(":/report_bug"), tr("&Report Bug"), this, SLOT(goToReportIssue()), QKeySequence());
-        trayMenu->addAction(QIcon(":/question"), tr("&Help"), this, SLOT(goToWebsiteHelp()), QKeySequence());
-        trayMenu->addAction(QIcon(":/quit"), tr("&Quit"), QCoreApplication::instance(), SLOT(quit()), QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/bug.png"), tr("&Report Bug"), this, SLOT(goToReportIssue()), QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/question.png"), tr("&Help"), this, SLOT(goToWebsiteHelp()), QKeySequence());
+        // TODO themes? QIcon::fromTheme("application-exit")
+        trayMenu->addAction(QIcon(":/icons/quit.png"), tr("&Quit"), QCoreApplication::instance(), SLOT(quit()),
+                            QKeySequence());
 
         setContextMenu(trayMenu);
     }

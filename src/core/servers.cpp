@@ -288,8 +288,6 @@ namespace Servers
 
         Processes::ProcessUtil::startDetached(program, arguments, getServer("Nginx")->workingDirectory);
 
-        Processes::ProcessUtil::delay(250);
-
         // catch startup failures
         if (processes->getProcessState("nginx.exe") == Processes::ProcessUtil::ProcessState::Running) {
             emit signalMainWindow_ServerStatusChange("Nginx", true);
@@ -667,9 +665,6 @@ namespace Servers
         qDebug() << "[MariaDB] Starting...\n";
 
         Processes::ProcessUtil::startDetached(startMariaDb, args, getServer("MariaDb")->workingDirectory);
-
-        // wait for process started
-        Processes::ProcessUtil::delay(500);
 
         // check for startup failure (immediate shutdown)
         if (processes->getProcessState("mysqld.exe") == Processes::ProcessUtil::ProcessState::Running) {

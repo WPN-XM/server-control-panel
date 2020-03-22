@@ -29,7 +29,7 @@ namespace ServerControlPanel
 
         // load bitmap for writing text over it
         QPixmap newPixmap;
-        newPixmap = QPixmap(":/splash");
+        newPixmap = QPixmap(":/images/splashscreen.png");
 
         QPainter pixPaint(&newPixmap);
         pixPaint.setPen(QColor(100, 100, 100));
