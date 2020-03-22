@@ -147,20 +147,11 @@ build_script:
   - mkdir build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   - cd build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%
   # configure
-  - if "%CONFIGURATION%"=="Release" (
-      cmake -H../server-control-panel -DCMAKE_BUILD_TYPE=Release     
-    )
-  - if "%CONFIGURATION%"=="Debug" (
-      cmake -H../server-control-panel -DCMAKE_BUILD_TYPE=Debug
-    )
-  # build 
-  - if "%CONFIGURATION%"=="Release" (
-      cmake --build . --target all --config Release     
-    )
-  - if "%CONFIGURATION%"=="Debug" (
-      cmake --build . --target all --config Debug
-    )
-
+  - cmake -H../server-control-panel -DCMAKE_BUILD_TYPE=%CONFIGURATION%  
+  # build
+  - cmake --build . --config %CONFIGURATION%
+  # install
+  - cmake --build . --config %CONFIGURATION% --target install
 
 after_build:
   - echo %cd%
