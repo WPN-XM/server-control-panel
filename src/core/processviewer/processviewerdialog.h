@@ -2,8 +2,8 @@
 #define PROCESSVIEWERDIALOG_H
 
 #include "common.h"
+#include "processes.h"
 #include "file/csv.h"
-#include "processviewer/processes.h"
 
 #include <QDesktopWidget>
 #include <QDialog>

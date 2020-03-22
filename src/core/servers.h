@@ -19,7 +19,7 @@
 #include "file/ini.h"
 #include "file/yml.h"
 #include "settings.h"
-#include "processviewer/processes.h"
+#include "processes.h"
 
 namespace Servers
 {

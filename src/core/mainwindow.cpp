@@ -1068,7 +1068,7 @@ namespace ServerControlPanel
         about.setWindowTitle(tr("About"));
         about.setText(tr("<table border=0>"
                          "<tr><td colspan=2><img "
-                         "src=\":/wpnxm-logo-dark-transparent\"></img>&nbsp;"
+                         "src=\":/images/wpnxm-logo-dark-transparent.png\"></img>&nbsp;"
                          "<span style=\"display: inline-block; vertical-align: super; top: "
                          "-20px; font-weight: bold; font-size: 16px;\">v" APP_VERSION "</span>"
                          "</td></tr>"

@@ -6,7 +6,7 @@
 #include "../core/splashscreen.h"
 
 #include "../core/settings.h"
-#include "../core/processviewer/processes.h"
+#include "../core/processes.h"
 #include "../core/plugins/plugins.h"
 
 //#include "../core/processviewer/processviewerdialog.h"

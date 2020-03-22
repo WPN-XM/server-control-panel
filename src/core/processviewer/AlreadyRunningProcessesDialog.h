@@ -2,7 +2,7 @@
 #define ALREADYRUNNINGPROCESSESDIALOG_H
 
 #include "common.h"
-#include "../processviewer/processes.h"
+#include "../processes.h"
 #include "../servers.h"
 
 #include <QApplication>

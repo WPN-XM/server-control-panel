@@ -14,8 +14,8 @@
 #include "selfupdater.h"
 
 #include "file/yml.h"
+#include "processes.h"
 #include "config/configurationdialog.h"
-#include "processviewer/processes.h"
 #include "processviewer/processviewerdialog.h"
 #include "updater/updaterdialog.h"
 #include "plugins/plugins.h"
@@ -116,6 +116,7 @@ namespace ServerControlPanel
         void runSelfUpdate();
 
         ServerControlPanel::MainWindow *getMainWindow();
+
         void setup();
 
         void setProcessUtil(Processes::ProcessUtil *oProcessesUtil);
