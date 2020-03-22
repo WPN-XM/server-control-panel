@@ -10,7 +10,7 @@ namespace PluginsNS
 
     Plugins::Plugins(QObject *parent) : QObject(parent)
     {
-        // load Settings
+        // --
         loadSettings();
     }
 

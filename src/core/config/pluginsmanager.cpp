@@ -16,11 +16,15 @@ namespace Configuration
     {
         ui->setupUi(this);
         ui->list->setLayoutDirection(Qt::LeftToRight);
+
         // ui->butSettings->setIcon(IconProvider::settingsIcon());
+        // ui->butRemove->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
 
         connect(ui->butSettings, &QAbstractButton::clicked, this, &PluginsManager::settingsClicked);
+        connect(ui->butRemove, &QAbstractButton::clicked, this, &PluginsManager::removeClicked);
         connect(ui->list, &QListWidget::currentItemChanged, this, &PluginsManager::currentChanged);
         connect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
+        // connect(mApp->plugins(), &Plugins::availablePluginsChanged, this, &PluginsManager::refresh);
 
         ui->list->setItemDelegate(new PluginsNS::PluginListDelegate(ui->list));
 
@@ -69,6 +73,12 @@ namespace Configuration
 
     void PluginsManager::refresh()
     {
+        if (blockRefreshPlugins) {
+            return;
+        }
+
+        const int oldCurrentRow = ui->list->currentRow();
+
         // stop list handling
         // clear list, deactivate settings button, disconnect item change handling
         ui->list->clear();
@@ -115,6 +125,11 @@ namespace Configuration
 
         sortItems();
 
+        if (oldCurrentRow >= 0) {
+            ui->list->setCurrentRow(qMax(0, oldCurrentRow - 1));
+            ui->list->setFocus();
+        }
+
         connect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
     }
 
@@ -149,13 +164,8 @@ namespace Configuration
 
         const PluginsNS::Plugins::Plugin plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
-        bool showSettings = plugin.metaData.hasSettings;
-
-        if (!plugin.isLoaded()) {
-            showSettings = false;
-        }
-
-        ui->butSettings->setEnabled(showSettings);
+        ui->butSettings->setEnabled(plugin.isLoaded() && plugin.metaData.hasSettings);
+        ui->butRemove->setEnabled(plugin.isRemovable());
     }
 
     void PluginsManager::itemChanged(QListWidgetItem *item)
@@ -168,11 +178,15 @@ namespace Configuration
 
         auto plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
 
+        blockRefreshPlugins = true;
+
         if (item->checkState() == Qt::Checked) {
             plugins->loadPlugin(&plugin);
         } else {
             plugins->unloadPlugin(&plugin);
         }
+
+        blockRefreshPlugins = false;
 
         disconnect(ui->list, &QListWidget::itemChanged, this, &PluginsManager::itemChanged);
 
@@ -209,6 +223,20 @@ namespace Configuration
 
         if (plugin.isLoaded() && plugin.metaData.hasSettings) {
             plugin.instance->showSettings(this);
+        }
+    }
+
+    void PluginsManager::removeClicked()
+    {
+        QListWidgetItem *item = ui->list->currentItem();
+        if (!item) {
+            return;
+        }
+
+        auto plugin = item->data(Qt::UserRole + 10).value<PluginsNS::Plugins::Plugin>();
+
+        if (plugin.isRemovable()) {
+            // mApp->plugins()->removePlugin(&plugin);
         }
     }
 

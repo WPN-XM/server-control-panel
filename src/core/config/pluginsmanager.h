@@ -29,6 +29,7 @@ namespace Configuration
 
     private slots:
         void settingsClicked();
+        void removeClicked();
         void currentChanged(QListWidgetItem *item);
         void itemChanged(QListWidgetItem *item);
 
@@ -38,7 +39,8 @@ namespace Configuration
         void sortItems();
 
         Ui::PluginsManager *ui;
-        bool loaded = false;
+        bool loaded              = false;
+        bool blockRefreshPlugins = false;
     };
 } // namespace Configuration
 
