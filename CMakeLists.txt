@@ -259,46 +259,6 @@ message(STATUS "    CXX Compiler Flags: '${CMAKE_CXX_FLAGS}'.")
 message("")
 
 #------------------------------------------------------------------------------
-# Build Executable
-#------------------------------------------------------------------------------
-
-#add_library(AppCore SHARED 
-#    # generated from src/app/version.h.cmake
-#    ${PROJECT_BINARY_DIR}/src/main/version.h
-#    ${SOURCES} 
-#    ${USERINTERFACES}      
-#    ${RESOURCES}
-#    ${QRC} 
-#)
-
-#target_include_directories(AppCore  
-#  PRIVATE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-#          $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-#          ${Qt5_INCLUDE_DIRS}
-#          ${Qt5Core_INCLUDE_DIRS}
-#          ${YAMLCPP_INCLUDE_DIR}
-#          ${ZLIB_INCLUDE_DIR}  
-#          ${QUAZIP_INCLUDE_DIR}
-#  PUBLIC ${CMAKE_SOURCE_DIR}/src/app
-#         # we need to add the build target folder to include /src/app/version.h
-#         # it's generated from src/app/version.h.cmake
-#         ${PROJECT_BINARY_DIR}/src/app 
-#)
-#
-
-#------------------------------------------------------------------------------
-# Build executable with main entry point and link AppCore
-#------------------------------------------------------------------------------
-
-#add_executable(wpn-xm  
-#    #WIN32 # entrypoint for qtwinmain  
-#    #Qt5::WinMain   
-#    #AppCore 
-#)
-
-#target_link_libraries(wpn-xm AppCore)  
-
-#------------------------------------------------------------------------------
 # Finally, scan subdirectories for CMakeLists
 #------------------------------------------------------------------------------
 
