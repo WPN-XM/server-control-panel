@@ -158,15 +158,13 @@ after_build:
   - set RELEASE_FOLDER=C:\projects\build-scp-Desktop_Qt_%QT_BUILD_FOLDER%_%CONFIGURATION%      
   - cd %RELEASE_FOLDER%
   - dir
+  - dir %RELEASE_FOLDER%\bin
   # cleanups
-  - del vc_redist*.exe 
-  - del Qt5SVG.dll
   - del imageformats\qwebp.dll
   - del imageformats\qtiff.dll
   - del imageformats\qtga.dll
   - del imageformats\qgif.dll
   - del imageformats\qicns.dll
-  - del imageformats\qsvg.dll  
   # cleanup plugins
   - if "%CONFIGURATION%"=="Release" (
      del plugins\*.exp
