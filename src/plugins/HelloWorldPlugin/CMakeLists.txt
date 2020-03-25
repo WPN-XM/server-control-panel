@@ -18,20 +18,25 @@ qt5_wrap_ui(UI ${UI_FILES})
 #qt5_add_resources(RES ${RES_FILES})
 
 #------------------------------------------------------------------------------
-# Create Library: build, link, install
+# Create Library: build, link
 #------------------------------------------------------------------------------
 
 add_library(HelloWorldPlugin MODULE ${SOURCES} ${UI}) #${RES}
 
-target_link_libraries(HelloWorldPlugin AppCoreLib)
-
-install(TARGETS HelloWorldPlugin DESTINATION ${APP_INSTALL_PLUGINDIR})
+target_link_libraries(HelloWorldPlugin AppCore)
 
 #------------------------------------------------------------------------------
-# Install additional files
+# Install
 #------------------------------------------------------------------------------
 
-# TODO deploy/copy plugin description json
+# install library itself
+install(TARGETS HelloWorldPlugin DESTINATION ${APP_INSTALL_PLUGIN_DIRECTORY})
+
+# install plugin description json
+install(FILES HelloWorldPlugin.json DESTINATION ${APP_INSTALL_PLUGIN_DIRECTORY})
+
+# install additional Qt libraries
+windeployqt(HelloWorldPlugin)
 
 #------------------------------------------------------------------------------
 # Source Groups

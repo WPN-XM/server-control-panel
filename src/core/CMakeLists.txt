@@ -127,12 +127,12 @@ set(RESOURCE_FILES
 qt5_add_resources(RESOURCES ${RESOURCE_FILES})
 
 #------------------------------------------------------------------------------
-# Build Application Core Library
+# Build + Link
 #------------------------------------------------------------------------------
 
-add_library(AppCoreLib SHARED ${SOURCES} ${USERINTERFACES} ${RESOURCES})
+add_library(AppCore SHARED ${SOURCES} ${USERINTERFACES} ${RESOURCES})
 
-target_link_libraries(AppCoreLib    
+target_link_libraries(AppCore
     Qt5::Core 
     Qt5::Gui 
     Qt5::Network 
@@ -142,7 +142,7 @@ target_link_libraries(AppCoreLib
     ${QUAZIP_LIBRARY} # NOT LIBRARIES...
 )
 
-target_include_directories(AppCoreLib
+target_include_directories(AppCore
    PUBLIC
         ${Qt5_INCLUDE_DIRS}
         ${Qt5Core_INCLUDE_DIRS}
@@ -156,8 +156,20 @@ target_include_directories(AppCoreLib
 )
 
 #------------------------------------------------------------------------------
+# Install
+#------------------------------------------------------------------------------
+
+install(TARGETS AppCore RUNTIME DESTINATION "${APP_INSTALL_DIRECTORY}")
+
+#------------------------------------------------------------------------------
 # Source Groups
 #------------------------------------------------------------------------------
 
 source_group("UI" FILES ${USERINTERFACE_FILES})
 source_group("Resources" FILES ${RESOURCE_FILES})
+
+#------------------------------------------------------------------------------
+# Additional Files to Deploy
+#------------------------------------------------------------------------------
+
+windeployqt(AppCore)

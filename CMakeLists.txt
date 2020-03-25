@@ -6,12 +6,6 @@ cmake_minimum_required(VERSION 3.8)
 project(wpn-xm VERSION 0.8.6)
 
 #------------------------------------------------------------------------------
-# CMake Includes
-#------------------------------------------------------------------------------
-
-include(FeatureSummary)
-
-#------------------------------------------------------------------------------
 # Version
 #------------------------------------------------------------------------------
 
@@ -88,19 +82,22 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 include(FindPackageHandleStandardArgs)
 
+# CMake Includes
+include(FeatureSummary)
+
 # Output dirs
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
-# Set Plugin Dir (used by CMakeLists.txt of plugins)
-set(APP_INSTALL_PLUGINDIR "${CMAKE_INSTALL_PREFIX}/bin/plugins")
+# Setup install dirs for App and Plugins (used by CMakeLists.txt of plugins)
+set(APP_INSTALL_DIRECTORY        "${CMAKE_INSTALL_PREFIX}")
+set(APP_INSTALL_PLUGIN_DIRECTORY "${APP_INSTALL_DIRECTORY}/plugins")
 
 # Qt Code-Generators
 set(CMAKE_AUTOMOC ON) # compile metaobject files
 set(CMAKE_AUTORCC ON) # compile qrc resource files
 set(CMAKE_AUTOUIC ON) # compile ui files
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #------------------------------------------------------------------------------
@@ -256,6 +253,13 @@ message(STATUS "    CMake version is '${CMAKE_VERSION}'.")
 message(STATUS "    CXX Compiler ID: '${CMAKE_CXX_COMPILER_ID}'.")
 message(STATUS "    CXX Compiler Flags: '${CMAKE_CXX_FLAGS}'.")
 message("")
+
+#------------------------------------------------------------------------------
+# Installation Helpers for libraries (need to be defined before subdirs)
+#------------------------------------------------------------------------------
+
+include(windeployqt)
+include(install_system_runtimes)
 
 #------------------------------------------------------------------------------
 # Finally, scan subdirectories for CMakeLists

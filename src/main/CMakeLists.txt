@@ -16,56 +16,26 @@ if (WIN32)
 endif()
 
 #------------------------------------------------------------------------------
-# Build and Link Executable
+# Build + Link
 #------------------------------------------------------------------------------
 
 add_executable(wpn-xm ${SOURCES})
 
-target_link_libraries(wpn-xm AppCoreLib)
+target_link_libraries(wpn-xm AppCore)
 
 #------------------------------------------------------------------------------
-# Source Groups
+# Install
 #------------------------------------------------------------------------------
 
-source_group("Resources" FILES ${RES_FILES})
+install(TARGETS wpn-xm RUNTIME DESTINATION "${APP_INSTALL_DIRECTORY}")
 
 #------------------------------------------------------------------------------
-# Additional Files to Deploy
+# Install Additional Files
 #------------------------------------------------------------------------------
 
-# 1. Automatically determine and copy Qt dependencies to build folder using windeployqt
+windeployqt(wpn-xm)
 
-find_program(WINDEPLOYQT_EXECUTABLE NAMES windeployqt HINTS ${QTDIR} ENV QTDIR PATH_SUFFIXES bin)
-
-add_custom_command(TARGET wpn-xm POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E
-        env PATH="${CMAKE_PREFIX_PATH}/bin" "${WINDEPLOYQT_EXECUTABLE}"
-            #--verbose 0
-            --no-svg
-            --no-system-d3d-compiler
-            --no-opengl
-            --no-compiler-runtime
-            --no-angle
-            --no-opengl-sw
-            \"$<TARGET_FILE:wpn-xm>\"
-    COMMENT "Running windeployqt..."
-)
-
-# 2. Copy system runtime libraries
-
-set(CMAKE_INSTALL_UCRT_LIBRARIES FALSE)
-
-include(InstallRequiredSystemLibraries)
-foreach(lib ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS})
-get_filename_component(filename "${lib}" NAME)
-add_custom_command(TARGET wpn-xm POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E
-        copy_if_different "${lib}" \"$<TARGET_FILE_DIR:wpn-xm>\"
-    COMMAND ${CMAKE_COMMAND} -E echo "Copying system-lib: ${filename}..."
-)
-endforeach()
-
-# 3. Copy third-party dependencies into build dir
+# Copy third-party dependencies into build dir
 
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
 
@@ -91,9 +61,16 @@ endif()
 
 foreach(file ${FILES_TO_DEPLOY_DEBUG} ${FILES_TO_DEPLOY_RELEASE})
     get_filename_component(filename "${file}" NAME)
-    add_custom_command(TARGET wpn-xm POST_BUILD
+    add_custom_command(TARGET wpn-xm
         COMMAND "${CMAKE_COMMAND}" -E
             copy_if_different "${file}" \"$<TARGET_FILE_DIR:wpn-xm>\"
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying: ${filename}..."
+        COMMAND ${CMAKE_COMMAND} -E echo "Copying library: ${filename}"
     )
 endforeach()
+
+#------------------------------------------------------------------------------
+# Source Groups
+#------------------------------------------------------------------------------
+
+source_group("Resources" FILES ${RES_FILES})
+
