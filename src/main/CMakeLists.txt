@@ -35,7 +35,6 @@ install(TARGETS wpn-xm RUNTIME DESTINATION "${APP_INSTALL_DIRECTORY}")
 
 windeployqt(wpn-xm)
 
-# Copy third-party dependencies into build dir
 
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
 
@@ -59,14 +58,7 @@ else("Release")
     )
 endif()
 
-foreach(file ${FILES_TO_DEPLOY_DEBUG} ${FILES_TO_DEPLOY_RELEASE})
-    get_filename_component(filename "${file}" NAME)
-    add_custom_command(TARGET wpn-xm
-        COMMAND "${CMAKE_COMMAND}" -E
-            copy_if_different "${file}" \"$<TARGET_FILE_DIR:wpn-xm>\"
-        COMMAND ${CMAKE_COMMAND} -E echo "Copying library: ${filename}"
-    )
-endforeach()
+install_thirdparty_libs(wpn-xm FILES_TO_DEPLOY_RELEASE FILES_TO_DEPLOY_DEBUG)
 
 #------------------------------------------------------------------------------
 # Source Groups

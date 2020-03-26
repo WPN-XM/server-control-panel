@@ -260,6 +260,7 @@ message("")
 
 include(windeployqt)
 include(install_system_runtimes)
+include(install_thirdparty_libs)
 
 #------------------------------------------------------------------------------
 # Finally, scan subdirectories for CMakeLists
