@@ -16,29 +16,20 @@ namespace ServerControlPanel
          */
 
         // -h, --help, -?
-        QCommandLineOption helpOption(QStringList() << "h"
-                                                    << "help"
-                                                    << "?",
-                                      "Prints this help message.");
+        QCommandLineOption helpOption("h", "help", "?", "Prints this help message.");
         parser.addOption(helpOption);
 
         // -v, --version
-        QCommandLineOption versionOption(QStringList() << "v"
-                                                       << "version",
-                                         "Display the version.");
+        QCommandLineOption versionOption("v", "version", "Display the version.");
         parser.addOption(versionOption);
 
         // -s, --service
         // TODO: install / uninstall server as service from CLI (part1)
-        // QCommandLineOption serviceOption(QStringList() << "s" << "service",
-        // "Install/Uninstall server as service.", "[server] [command]");
-        // parser.addOption(serviceOption);
+        // QCommandLineOption serviceOption("s", "service", "Install/Uninstall server as service.",
+        // "[server][command]"); parser.addOption(serviceOption);
 
         // -srv, --server
-        QCommandLineOption serverOption(QStringList() << "srv"
-                                                      << "server",
-                                        "Execute a command on server.",
-                                        "[server] [command]");
+        QCommandLineOption serverOption("srv", "server", "Execute a command on server.", "[server] [command]");
         parser.addOption(serverOption);
 
         // --start
@@ -81,7 +72,6 @@ namespace ServerControlPanel
 
         // -d, --server <server> <command>, where <command> is start|stop|restart
         if (parser.isSet(serverOption)) {
-
             // at this point we already have "--server <server>", but not <command>//
 
             // server is the value
@@ -102,9 +92,8 @@ namespace ServerControlPanel
                 printHelpText(QString("Error: no <command> specified."));
             }
 
-            QStringList availableCommands = QStringList() << "start"
-                                                          << "stop"
-                                                          << "restart";
+            QStringList availableCommands = {"start", "stop", "restart"};
+
             if (!availableCommands.contains(command)) {
                 printHelpText(
                     QString("Error: \"%1\" is not a valid <command>.").arg(command.toLocal8Bit().constData()));
@@ -173,14 +162,15 @@ namespace ServerControlPanel
         const int serverListSize = serversList.size();
 
         for (int i = 0; i < serverListSize; ++i) {
-            QString server = serversList.at(i);
+            QString serverName = serversList.at(i);
 
             // check if whitelisted
-            if (!servers->getListOfServerNames().contains(server)) {
-                printHelpText(QString("Error: \"%1\" is not a valid <server>.").arg(server.toLocal8Bit().constData()));
+            if (!servers->getListOfServerNames().contains(serverName)) {
+                printHelpText(
+                    QString("Error: \"%1\" is not a valid <server>.").arg(serverName.toLocal8Bit().constData()));
             }
 
-            QString methodName = command + servers->getCamelCasedServerName(server);
+            QString methodName = command + servers->getCamelCasedServerName(serverName);
 
             QMetaObject::invokeMethod(servers, methodName.toLocal8Bit().constData());
         }
@@ -190,9 +180,11 @@ namespace ServerControlPanel
 
     /*[[noreturn]]*/ void CLI::printHelpText(QString errorMessage)
     {
+        const QString binary = QCoreApplication::arguments().at(0);
+
         colorPrint("WPN-XM Server Stack - Server Control Panel " APP_VERSION "\n", "brightwhite");
 
-        QString year = QDate::currentDate().toString("yyyy");
+        const QString year = QDate::currentDate().toString("yyyy");
         colorPrint("Copyright (c) " + year + " Jens A. Koch. All rights reserved.\n\n");
 
         if (!errorMessage.isEmpty()) {
@@ -200,11 +192,10 @@ namespace ServerControlPanel
         }
 
         colorPrint("Usage: ", "green");
-        QString usage = QCoreApplication::arguments().at(0) + " [option] [args] \n\n";
-        colorPrint(usage);
+        colorPrint(binary + " [option] [args] \n\n");
 
         colorPrint("Options: \n", "green");
-        QString options =
+        const QString options =
             "  -v, --version                        Prints the version. \n"
             "  -h, --help                           Prints this help message. \n"
             "  -d, --server <server> <command>      Executes <command> on <server>. "
@@ -216,22 +207,15 @@ namespace ServerControlPanel
         colorPrint(options);
 
         colorPrint("Arguments: \n", "green");
-        QString arguments =
-            "  <server>:  The name of a server, e.g. nginx, mariadb, memcached, "
-            "mongodb. \n"
-            "  <command>: The command to execute, e.g. start, stop, restart. \n\n";
-        colorPrint(arguments);
+        colorPrint("  <server>:  The name of a server, e.g. nginx, mariadb, memcached, mongodb. \n");
+        colorPrint("  <command>: The command to execute, e.g. start, stop, restart. \n\n");
 
         colorPrint("Examples: \n", "green");
-        QString example = "  " + QCoreApplication::arguments().at(0) +
-                          " --server nginx start \n"
-                          "  " +
-                          QCoreApplication::arguments().at(0) + " --start nginx php mariadb \n\n";
-        colorPrint(example);
+        colorPrint("  " + binary + " --server nginx start \n");
+        colorPrint("  " + binary + " --start nginx php mariadb \n\n");
 
         colorPrint("Info: \n", "green");
-        QString info = "  Ports specified in \"wpn-xm.ini\" will be used. \n";
-        colorPrint(info);
+        colorPrint("  Ports specified in \"wpn-xm.ini\" will be used. \n");
 
         exit(0);
     }

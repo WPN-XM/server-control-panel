@@ -36,7 +36,6 @@ function(windeployqt target)
         DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
 
-
 endfunction()
 
 mark_as_advanced(WINDEPLOYQT_EXECUTABLE)
