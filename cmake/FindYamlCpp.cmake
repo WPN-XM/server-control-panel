@@ -37,14 +37,17 @@ find_path(YAMLCPP_INCLUDE_DIR yaml-cpp/yaml.h
 
 # find the yaml-cpp library
 find_library(YAMLCPP_LIBRARY
-             NAMES ${YAMLCPP_STATIC} yaml-cpp
-             PATHS ~/Library/Frameworks
-                    /Library/Frameworks
-                    /usr/local
-                    /usr
-                    /opt
-                    ${YAMLCPP_DIR}/lib
-                    ${YAMLCPP_DIR}/build)
+             NAMES ${YAMLCPP_STATIC}
+             yaml-cpp
+             yaml-cppd
+             PATHS
+             ~/Library/Frameworks
+             /Library/Frameworks
+             /usr/local
+             /usr
+             /opt
+             ${YAMLCPP_DIR}/lib
+             ${YAMLCPP_DIR}/build)
 
 # handle the QUIETLY and REQUIRED arguments and set YAMLCPP_FOUND to TRUE if all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
