@@ -164,14 +164,14 @@ after_build:
       del imageformats\qtga.dll
       del imageformats\qgif.dll
       del imageformats\qicns.dll
-  )
+    )
   - if "%CONFIGURATION%"=="Debug" (
       del imageformats\qwebpd.dll
       del imageformats\qtiffd.dll
       del imageformats\qtgad.dll
       del imageformats\qgifd.dll
       del imageformats\qicnsd.dll
-  )
+    )
   # package server control panel
   - 7z a -tzip wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip . -mx9 -mmt
   - appveyor PushArtifact wpnxm-scp-%APPVEYOR_BUILD_VERSION%-%bitsize%-%suffix%.zip
