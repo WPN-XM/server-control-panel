@@ -158,20 +158,19 @@ add_definitions(-D_WIN32_WINNT=${winnt_version})
 
 # Force C++ standard, do not fall back, do not use (gcc-specific) compiler extensions
 set(CMAKE_CXX_STANDARD 20)
-set(CXX_STANDARD_REQUIRED ON)  
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Define C++ Standard to use, be quiet
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest /MP /nologo")
+set(CMAKE_CXX_FLAGS                "/std:c++latest /MP /GL /EHsc /W3 /nologo ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG          "/Od /Zi ${CMAKE_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_RELEASE        "/O2 /Oi /Oy /Zc:inline ${CMAKE_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/O2 /Oi /Zi ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
 
 #------------------------------------------------------------------------------
 # Linker flags
 #------------------------------------------------------------------------------
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:5000000 /machine:x64")
-#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:console")
-
-add_link_options("/nologo")
+set(CMAKE_EXE_LINKER_FLAGS "/LTCG:INCREMENTAL /STACK:5000000 /machine:x64 /nologo ${CMAKE_EXE_LINKER_FLAGS}")
 
 #------------------------------------------------------------------------------
 # Link time optimizations (LTO)
