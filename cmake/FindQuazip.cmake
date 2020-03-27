@@ -39,7 +39,7 @@ if(WIN32)
   # find the quazip library   
   find_library( 
     QUAZIP_LIBRARY 
-    NAMES ${QUAZIP_STATIC} quazip    
+    NAMES ${QUAZIP_STATIC} quazip quazipd  
     PATHS ${QUAZIP_DIR} ${QUAZIP_DIR}/.. 
     PATH_SUFFIXES lib64 lib)    
 endif() 
