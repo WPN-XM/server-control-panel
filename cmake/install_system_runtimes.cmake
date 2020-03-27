@@ -3,11 +3,15 @@
 macro(install_system_runtimes target)
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_INSTALL_DEBUG_LIBRARIES true)
+        # we need ucrtbased.dll :)
+        # which lives here "c:/Program Files (x86)/Windows Kits/10/bin/$env:arch/ucrt/ucrtbased.dll"
+        set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
         set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
     endif()
 
-    set(CMAKE_INSTALL_UCRT_LIBRARIES FALSE)
+    if(CMAKE_BUILD_TYPE STREQUAL "Release")
+        set(CMAKE_INSTALL_UCRT_LIBRARIES FALSE)
+    endif()
 
     include(InstallRequiredSystemLibraries)
 

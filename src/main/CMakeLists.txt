@@ -35,6 +35,7 @@ install(TARGETS wpn-xm RUNTIME DESTINATION "${APP_INSTALL_DIRECTORY}")
 
 windeployqt(wpn-xm)
 
+install_system_runtimes(wpn-xm)
 
 set(LIBS_DIR "${CMAKE_SOURCE_DIR}/libs")
 
