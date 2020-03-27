@@ -53,9 +53,9 @@ namespace ServerControlPanel
 
         // start and stop all servers; the connection to these actions is made from
         // mainwindow
-        trayMenu->addAction(QIcon(":/icons/action_run.png"), tr("Start All"), this, SLOT(startAllServers()),
+        trayMenu->addAction(QIcon(":/icons/action_run.png"), tr("Start All"), this, &Tray::startAllServers,
                             QKeySequence());
-        trayMenu->addAction(QIcon(":/icons/action_stop.png"), tr("Stop All"), this, SLOT(stopAllServers()),
+        trayMenu->addAction(QIcon(":/icons/action_stop.png"), tr("Stop All"), this, &Tray::stopAllServers,
                             QKeySequence());
         trayMenu->addSeparator();
 
@@ -66,21 +66,21 @@ namespace ServerControlPanel
         }
 
         trayMenu->addSeparator();
-        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Manage Hosts"), this, SLOT(openHostManagerDialog()),
+        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Manage Hosts"), this, &Tray::openHostManagerDialog,
                             QKeySequence());
-        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Webinterface"), this, SLOT(goToWebinterface()),
+        trayMenu->addAction(QIcon(":/icons/gear.png"), tr("Webinterface"), this, &Tray::goToWebinterface,
                             QKeySequence());
         trayMenu->addSeparator();
-        trayMenu->addAction(QIcon(":/icons/bug.png"), tr("&Report Bug"), this, SLOT(goToReportIssue()), QKeySequence());
-        trayMenu->addAction(QIcon(":/icons/question.png"), tr("&Help"), this, SLOT(goToWebsiteHelp()), QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/bug.png"), tr("&Report Bug"), this, &Tray::goToReportIssue, QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/question.png"), tr("&Help"), this, &Tray::goToWebsiteHelp, QKeySequence());
         // TODO themes? QIcon::fromTheme("application-exit")
-        trayMenu->addAction(QIcon(":/icons/quit.png"), tr("&Quit"), QCoreApplication::instance(), SLOT(quit()),
-                            QKeySequence());
+        trayMenu->addAction(QIcon(":/icons/quit.png"), tr("&Quit"), QCoreApplication::instance(),
+                            &QCoreApplication::quit, QKeySequence());
 
         setContextMenu(trayMenu);
     }
 
-    void Tray::goToWebinterface() { QDesktopServices::openUrl(QUrl("http://wpn.xm/")); }
+    void Tray::goToWebinterface() { QDesktopServices::openUrl(QUrl("https://wpn.xm/")); }
 
     void Tray::goToReportIssue() { QDesktopServices::openUrl(QUrl("https://github.com/WPN-XM/WPN-XM/issues/")); }
 

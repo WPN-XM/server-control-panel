@@ -27,4 +27,13 @@
 #define QL1C(x) QLatin1Char(x)
 #endif
 
+namespace Common
+{
+    enum ObjectName
+    {
+        ON_Configuration_TreeWidget,
+        ON_Mainwindow
+    };
+}
+
 #endif // COMMON_H

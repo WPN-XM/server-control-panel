@@ -55,7 +55,7 @@ namespace SoftwareRegistry
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop, SLOT(quit()));
+        QObject::connect(&network, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit);
 
         // the HTTP request
         QNetworkRequest req(url);

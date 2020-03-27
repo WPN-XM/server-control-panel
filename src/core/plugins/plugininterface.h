@@ -3,7 +3,12 @@
 
 #include <QtPlugin>
 
-//#include "../settings.h"
+#include "../common.h"
+
+class QMenu;
+class QMouseEvent;
+class QKeyEvent;
+class QWheelEvent;
 
 namespace PluginsNS
 {
@@ -35,10 +40,42 @@ namespace PluginsNS
         // virtual QString getEmail() const;
 
         // settings related
-        virtual void showSettings(QWidget *parent = nullptr) = 0;
+        virtual void showSettings(QWidget *parent = 0) { Q_UNUSED(parent) }
         // virtual bool loadSettings(Settings::SettingsManager *settings) = 0;
         // virtual bool saveSettings(Settings::SettingsManager *settings) = 0;
         // virtual void onSettingChanged(const QString &setting);
+
+        virtual void populateExtensionsMenu(QMenu *menu) { Q_UNUSED(menu) }
+
+        virtual bool mouseDoubleClick(Common::ObjectName type, QObject *obj, QMouseEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+        virtual bool mousePress(Common::ObjectName type, QObject *obj, QMouseEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+        virtual bool mouseRelease(Common::ObjectName type, QObject *obj, QMouseEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+        virtual bool mouseMove(Common::ObjectName type, QObject *obj, QMouseEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+        virtual bool wheelEvent(Common::ObjectName type, QObject *obj, QWheelEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+
+        virtual bool keyPress(Common::ObjectName type, QObject *obj, QKeyEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
+        virtual bool keyRelease(Common::ObjectName type, QObject *obj, QKeyEvent *event)
+        {
+            Q_UNUSED(type) Q_UNUSED(obj) Q_UNUSED(event) return false;
+        }
     };
 
 } // namespace PluginsNS

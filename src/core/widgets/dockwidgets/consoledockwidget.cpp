@@ -65,7 +65,7 @@ namespace Widgets::DockWidgets
         mainWindow->setStatusBar(statusBar);
 
         // Toggle Console with ToolButton in the StatusBar
-        connect(toolButton, SIGNAL(clicked()), this, SLOT(toolButton_Console_clicked()));
+        connect(toolButton, &QToolButton::clicked, this, &ConsoleDockWidget::toolButton_Console_clicked);
     }
 
     void ConsoleDockWidget::dockWidgetCloseClicked()

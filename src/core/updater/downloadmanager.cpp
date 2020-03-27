@@ -8,11 +8,10 @@ namespace Downloader
 {
     DownloadManager::DownloadManager()
     {
-        connect(&nam, SIGNAL(finished(QNetworkReply *)), this, SLOT(finished(QNetworkReply *)));
+        connect(&nam, &QNetworkAccessManager::finished, this, &DownloadManager::finished);
 
 #ifndef QT_NO_SSL
-        connect(&nam, SIGNAL(sslErrors(QNetworkReply *, QList<QSslError>)), this,
-                SLOT(sslErrors(QNetworkReply *, QList<QSslError>)));
+        connect(&nam, &QNetworkAccessManager::sslErrors, this, &DownloadManager::sslErrors);
 #endif
     }
 
@@ -45,7 +44,7 @@ namespace Downloader
         transfers.append(dl);
         FilesToDownloadCounter = transfers.count();
 
-        connect(dl, SIGNAL(transferFinished(TransferItem *)), SLOT(downloadFinished(TransferItem *)));
+        connect(dl, &Downloader::DownloadItem::transferFinished, this, &Downloader::DownloadManager::downloadFinished);
     }
 
     void DownloadManager::finished(QNetworkReply *) { qDebug() << "DownloadManager::finished()"; }

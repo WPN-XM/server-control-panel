@@ -43,6 +43,8 @@ namespace WindowsAPI
                 // Save the link by calling IPersistFile::Save.
                 hres = persistFile->Save((LPCOLESTR)linkShortcut.toStdWString().c_str(), STGM_WRITE);
 
+                Q_UNUSED(hres)
+
                 // Release the pointer to the IPersistFile interface.
                 persistFile->Release();
             }

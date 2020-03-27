@@ -8,9 +8,9 @@ namespace HostsFileManager
         setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
         auto *toolbar = new QToolBar(this);
-        toolbar->addAction("Add", this, SLOT(addEntry()));
-        toolbar->addAction("Edit", this, SLOT(editEntry()));
-        toolbar->addAction("Delete", this, SLOT(removeEntry()));
+        toolbar->addAction("Add", this, &HostsManagerDialog::addEntry);
+        toolbar->addAction("Edit", this, &HostsManagerDialog::editEntry);
+        toolbar->addAction("Delete", this, &HostsManagerDialog::removeEntry);
 
         QPushButton *btnOk = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_VistaShield), "OK", this);
         QPushButton *btnCancel = new QPushButton("Cancel", this);
@@ -41,8 +41,8 @@ namespace HostsFileManager
         mainLayout->addLayout(gLayout);
         setLayout(mainLayout);
 
-        connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
-        connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+        connect(btnOk, &QPushButton::clicked, this, &HostsManagerDialog::accept);
+        connect(btnCancel, &QPushButton::clicked, this, &HostsManagerDialog::reject);
         // connect(tableView->selectionModel(),
         // SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this,
         // SIGNAL(selectionChanged(QItemSelection)));

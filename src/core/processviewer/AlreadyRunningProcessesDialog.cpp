@@ -68,9 +68,8 @@ void AlreadyRunningProcessesDialog::checkAlreadyRunningServers()
     dlg->setWindowTitle(QCoreApplication::applicationName());
     dlg->setWindowFlags(dlg->windowFlags() | Qt::WindowStaysOnTopHint);
 
-    // Set signal and slot for "Buttons"
-    connect(ShutdownButton, SIGNAL(clicked()), dlg, SLOT(accept()));
-    connect(ContinueButton, SIGNAL(clicked()), dlg, SLOT(reject()));
+    connect(ShutdownButton, &QPushButton::clicked, dlg, &AlreadyRunningProcessesDialog::accept);
+    connect(ContinueButton, &QPushButton::clicked, dlg, &AlreadyRunningProcessesDialog::reject);
 
     // show modal window
     int dialogCode = dlg->exec();

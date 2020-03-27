@@ -39,7 +39,7 @@ namespace Servers
             menu->addAction(stopAction);
 
             // connect ONLY ONCE
-            connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(mapAction(QAction *)), Qt::UniqueConnection);
+            connect(menu, &QMenu::triggered, this, &Servers::mapAction, Qt::UniqueConnection);
 
             server->trayMenu = menu;
 
@@ -534,10 +534,10 @@ namespace Servers
                 qDebug() << "        Pool:" << poolName;
                 qDebug() << "        php-cgi:" << startPHPCGI;
 
-                auto *process = new QProcess;
-                process->setEnvironment(env.toStringList());
-                process->startDetached(startPHPCGI);
-                qDebug() << "        Process PID:" << process->pid() << "\n";
+                auto *p = new QProcess;
+                p->setEnvironment(env.toStringList());
+                p->startDetached(startPHPCGI);
+                qDebug() << "        Process PID:" << p->pid() << "\n";
             }
         }
 

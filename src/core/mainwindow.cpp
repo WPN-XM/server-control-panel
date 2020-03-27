@@ -38,7 +38,8 @@ namespace ServerControlPanel
         // TODO unhide updater - feature not ready yet. hide button for now
         ui->pushButton_Updater->hide();
 
-        connect(this, SIGNAL(mainwindow_show()), this, SLOT(MainWindow_ShowEvent()));
+        connect(this, &ServerControlPanel::MainWindow::mainwindow_show, this,
+                &ServerControlPanel::MainWindow::MainWindow_ShowEvent);
     }
 
     void MainWindow::setup()
@@ -58,8 +59,8 @@ namespace ServerControlPanel
         // Status Table - Column Status
         // if process state of a server changes, then change the label status in
         // UI::MainWindow too
-        connect(servers, SIGNAL(signalMainWindow_ServerStatusChange(QString, bool)), this,
-                SLOT(updateServerStatusIndicators(QString, bool)));
+        connect(servers, &Servers::Servers::signalMainWindow_ServerStatusChange, this,
+                &ServerControlPanel::MainWindow::updateServerStatusIndicators);
 
         // server autostart
         if (settings->getBool("global/autostartservers")) {
@@ -147,10 +148,10 @@ namespace ServerControlPanel
     void MainWindow::runSelfUpdate()
     {
         selfUpdater = new Updater::SelfUpdater(settings);
-        connect(selfUpdater, SIGNAL(notifyUpdateAvailable(QJsonObject)), this,
-                SLOT(show_SelfUpdater_UpdateNotification(QJsonObject)));
-        connect(selfUpdater, SIGNAL(notifyRestartNeeded(QJsonObject)), this,
-                SLOT(show_SelfUpdater_RestartNeededNotification(QJsonObject)));
+        connect(selfUpdater, &Updater::SelfUpdater::notifyUpdateAvailable, this,
+                &ServerControlPanel::MainWindow::show_SelfUpdater_UpdateNotification);
+        connect(selfUpdater, &Updater::SelfUpdater::notifyRestartNeeded, this,
+                &ServerControlPanel::MainWindow::show_SelfUpdater_RestartNeededNotification);
         selfUpdater->run();
     }
 
@@ -163,7 +164,7 @@ namespace ServerControlPanel
 
         if (!settings->getBool("selfupdater/autoupdate")) {
             // the timer is used to wait, until the SplashScreen is gone
-            QTimer::singleShot(2000, selfUpdater, SLOT(askForUpdate()));
+            QTimer::singleShot(2000, selfUpdater, &Updater::SelfUpdater::askForUpdate);
             return;
         }
 
@@ -197,128 +198,145 @@ namespace ServerControlPanel
     {
         // title bar - minimize
         minimizeAction = new QAction(tr("Mi&nimize"), this);
-        connect(minimizeAction, SIGNAL(triggered()), this, SLOT(hide()));
+        connect(minimizeAction, &QAction::triggered, this, &ServerControlPanel::MainWindow::hide);
 
         // title bar - restore
         restoreAction = new QAction(tr("&Restore"), this);
-        connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
+        connect(restoreAction, &QAction::triggered, this, &ServerControlPanel::MainWindow::showNormal);
 
         // title bar - close
         // Note that this action is intercepted by MainWindow::closeEvent()
         // Its modified from "quit" to "close to tray" with a msgbox
         quitAction = new QAction(tr("&Quit"), this);
-        connect(quitAction, SIGNAL(triggered()), this, SLOT(quitApplication()));
+        connect(quitAction, &QAction::triggered, this, &ServerControlPanel::MainWindow::quitApplication);
 
         QWidget *cWidget = ui->centralWidget;
 
         // Connect Actions for Status Table - Column Action (Start)
-        connect(cWidget->findChild<QPushButton *>("pushButton_Start_Nginx"), SIGNAL(clicked()), servers,
-                SLOT(startNginx()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Start_PHP"), SIGNAL(clicked()), servers,
-                SLOT(startPHP()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), SIGNAL(clicked()), servers,
-                SLOT(startMariaDb()));
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_Nginx"), &QPushButton::clicked, servers,
+                &Servers::Servers::startNginx);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_PHP"), &QPushButton::clicked, servers,
+                &Servers::Servers::startPHP);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Start_MariaDb"), &QPushButton::clicked, servers,
+                &Servers::Servers::startMariaDb);
         auto *buttonStartMongoDb = cWidget->findChild<QPushButton *>("pushButton_Start_MongoDb");
         if (buttonStartMongoDb != nullptr) {
-            connect(buttonStartMongoDb, SIGNAL(clicked()), servers, SLOT(startMongoDb()));
+            connect(buttonStartMongoDb, &QPushButton::clicked, servers, &Servers::Servers::startMongoDb);
         }
         auto *buttonStartMemcached = cWidget->findChild<QPushButton *>("pushButton_Start_Memcached");
         if (buttonStartMemcached != nullptr) {
-            connect(buttonStartMemcached, SIGNAL(clicked()), servers, SLOT(startMemcached()));
+            connect(buttonStartMemcached, &QPushButton::clicked, servers, &Servers::Servers::startMemcached);
         }
         auto *buttonStartPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Start_PostgreSQL");
         if (buttonStartPostgreSQL != nullptr) {
-            connect(buttonStartPostgreSQL, SIGNAL(clicked()), servers, SLOT(startPostgreSQL()));
+            connect(buttonStartPostgreSQL, &QPushButton::clicked, servers, &Servers::Servers::startPostgreSQL);
         }
         auto *buttonStartRedis = cWidget->findChild<QPushButton *>("pushButton_Start_Redis");
         if (buttonStartRedis != nullptr) {
-            connect(buttonStartRedis, SIGNAL(clicked()), servers, SLOT(startRedis()));
+            connect(buttonStartRedis, &QPushButton::clicked, servers, &Servers::Servers::startRedis);
         }
 
         // Connect Actions for Status Table - Column Action (Stop)
-        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), SIGNAL(clicked()), servers,
-                SLOT(stopNginx()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), SIGNAL(clicked()), servers, SLOT(stopPHP()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), SIGNAL(clicked()), servers,
-                SLOT(stopMariaDb()));
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_Nginx"), &QPushButton::clicked, servers,
+                &Servers::Servers::stopNginx);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_PHP"), &QPushButton::clicked, servers,
+                &Servers::Servers::stopPHP);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Stop_MariaDb"), &QPushButton::clicked, servers,
+                &Servers::Servers::stopMariaDb);
 
         auto *buttonStopMongoDb = cWidget->findChild<QPushButton *>("pushButton_Stop_MongoDb");
         if (buttonStopMongoDb != nullptr) {
-            connect(buttonStopMongoDb, SIGNAL(clicked()), servers, SLOT(stopMongoDb()));
+            connect(buttonStopMongoDb, &QPushButton::clicked, servers, &Servers::Servers::stopMongoDb);
         }
         auto *buttonStopMemcached = cWidget->findChild<QPushButton *>("pushButton_Stop_Memcached");
         if (buttonStopMemcached != nullptr) {
-            connect(buttonStopMemcached, SIGNAL(clicked()), servers, SLOT(stopMemcached()));
+            connect(buttonStopMemcached, &QPushButton::clicked, servers, &Servers::Servers::stopMemcached);
         }
         auto *buttonStopPostgreSQL = cWidget->findChild<QPushButton *>("pushButton_Stop_PostgreSQL");
         if (buttonStopPostgreSQL != nullptr) {
-            connect(buttonStopPostgreSQL, SIGNAL(clicked()), servers, SLOT(stopPostgreSQL()));
+            connect(buttonStopPostgreSQL, &QPushButton::clicked, servers, &Servers::Servers::stopPostgreSQL);
         }
         auto *buttonStopRedis = cWidget->findChild<QPushButton *>("pushButton_Stop_Redis");
         if (buttonStopRedis != nullptr) {
-            connect(buttonStopRedis, SIGNAL(clicked()), servers, SLOT(stopRedis()));
+            connect(buttonStopRedis, &QPushButton::clicked, servers, &Servers::Servers::stopRedis);
         }
 
         // Connect Actions for Status Table - AllServers Start, Stop
-        connect(ui->pushButton_AllServers_Start, SIGNAL(clicked()), this, SLOT(startAllServers()));
-        connect(ui->pushButton_AllServers_Stop, SIGNAL(clicked()), this, SLOT(stopAllServers()));
+        connect(ui->pushButton_AllServers_Start, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::startAllServers);
+        connect(ui->pushButton_AllServers_Stop, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::stopAllServers);
 
         // PushButtons: Website, Forum, Help, About, ReportBug, Donate
-        connect(ui->pushButton_Website, SIGNAL(clicked()), this, SLOT(goToWebsite()));
-        connect(ui->pushButton_Forum, SIGNAL(clicked()), this, SLOT(goToForum()));
-        connect(ui->pushButton_Help, SIGNAL(clicked()), this, SLOT(openHelpDialog()));
-        connect(ui->pushButton_About, SIGNAL(clicked()), this, SLOT(openAboutDialog()));
-        connect(ui->pushButton_ReportBug, SIGNAL(clicked()), this, SLOT(goToReportIssue()));
-        connect(ui->pushButton_Donate, SIGNAL(clicked()), this, SLOT(goToDonate()));
+        connect(ui->pushButton_Website, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::goToWebsite);
+        connect(ui->pushButton_Forum, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::goToForum);
+        connect(ui->pushButton_Help, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::openHelpDialog);
+        connect(ui->pushButton_About, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::openAboutDialog);
+        connect(ui->pushButton_ReportBug, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::goToReportIssue);
+        connect(ui->pushButton_Donate, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::goToDonate);
 
         // PushButtons: Configuration, Help, About, Close
-        connect(ui->pushButton_Console, SIGNAL(clicked()), this, SLOT(openConsole()));
-        connect(ui->pushButton_Configuration, SIGNAL(clicked()), this, SLOT(openConfigurationDialog()));
-        connect(ui->pushButton_Processes, SIGNAL(clicked()), this, SLOT(openProcessViewerDialog()));
+        connect(ui->pushButton_Console, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::openConsole);
+        connect(ui->pushButton_Configuration, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openConfigurationDialog);
+        connect(ui->pushButton_Processes, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openProcessViewerDialog);
 
         // clicking Close, does not quit, but closes the window to tray
-        connect(ui->pushButton_Close, SIGNAL(clicked()), this, SLOT(hide()));
+        connect(ui->pushButton_Close, &QPushButton::clicked, this, &ServerControlPanel::MainWindow::hide);
 
         // Actions - Tools
-        connect(ui->pushButton_tools_phpinfo, SIGNAL(clicked()), this, SLOT(openToolPHPInfo()));
-        connect(ui->pushButton_tools_phpmyadmin, SIGNAL(clicked()), this, SLOT(openToolPHPMyAdmin()));
-        connect(ui->pushButton_tools_webgrind, SIGNAL(clicked()), this, SLOT(openToolWebgrind()));
-        connect(ui->pushButton_tools_adminer, SIGNAL(clicked()), this, SLOT(openToolAdminer()));
-        connect(ui->pushButton_tools_robomongo, SIGNAL(clicked()), this, SLOT(openToolRobomongo()));
+        connect(ui->pushButton_tools_phpinfo, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openToolPHPInfo);
+        connect(ui->pushButton_tools_phpmyadmin, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openToolPHPMyAdmin);
+        connect(ui->pushButton_tools_webgrind, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openToolWebgrind);
+        connect(ui->pushButton_tools_adminer, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openToolAdminer);
+        connect(ui->pushButton_tools_robomongo, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openToolRobomongo);
 
         // Actions - Open Projects Folder
-        connect(ui->pushButton_OpenProjects_Browser, SIGNAL(clicked()), this, SLOT(openProjectFolderInBrowser()));
-        connect(ui->pushButton_OpenProjects_Explorer, SIGNAL(clicked()), this, SLOT(openProjectFolderInExplorer()));
+        connect(ui->pushButton_OpenProjects_Browser, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openProjectFolderInBrowser);
+        connect(ui->pushButton_OpenProjects_Explorer, &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openProjectFolderInExplorer);
 
         // Actions - Status Table
 
         // Connect Configure Buttons
         // clicking the configure icon opens the config tab of this server
-        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"), SIGNAL(clicked()), this,
-                SLOT(openConfigurationDialogNginx()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_PHP"), SIGNAL(clicked()), this,
-                SLOT(openConfigurationDialogPHP()));
-        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), SIGNAL(clicked()), this,
-                SLOT(openConfigurationDialogMariaDb()));
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_Nginx"), &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openConfigurationDialogNginx);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_PHP"), &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openConfigurationDialogPHP);
+        connect(cWidget->findChild<QPushButton *>("pushButton_Configure_MariaDb"), &QPushButton::clicked, this,
+                &ServerControlPanel::MainWindow::openConfigurationDialogMariaDb);
 
         auto *btnConfigureMongoDb = cWidget->findChild<QPushButton *>("pushButton_Configure_MongoDb");
         if (btnConfigureMongoDb != nullptr) {
-            connect(btnConfigureMongoDb, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMongoDb()));
+            connect(btnConfigureMongoDb, &QPushButton::clicked, this,
+                    &ServerControlPanel::MainWindow::openConfigurationDialogMongoDb);
         }
 
         auto *btnConfigureMemcached = cWidget->findChild<QPushButton *>("pushButton_Configure_Memcached");
         if (btnConfigureMemcached != nullptr) {
-            connect(btnConfigureMemcached, SIGNAL(clicked()), this, SLOT(openConfigurationDialogMemcached()));
+            connect(btnConfigureMemcached, &QPushButton::clicked, this,
+                    &ServerControlPanel::MainWindow::openConfigurationDialogMemcached);
         }
 
         auto *btnConfigurePostgresql = cWidget->findChild<QPushButton *>("pushButton_Configure_PostgreSQL");
         if (btnConfigurePostgresql != nullptr) {
-            connect(btnConfigurePostgresql, SIGNAL(clicked()), this, SLOT(openConfigurationDialogPostgresql()));
+            connect(btnConfigurePostgresql, &QPushButton::clicked, this,
+                    &ServerControlPanel::MainWindow::openConfigurationDialogPostgresql);
         }
 
         auto *btnConfigureRedis = cWidget->findChild<QPushButton *>("pushButton_Configure_Redis");
         if (btnConfigureRedis != nullptr) {
-            connect(btnConfigureRedis, SIGNAL(clicked()), this, SLOT(openConfigurationDialogRedis()));
+            connect(btnConfigureRedis, &QPushButton::clicked, this,
+                    &ServerControlPanel::MainWindow::openConfigurationDialogRedis);
         }
     }
 
@@ -1381,7 +1399,8 @@ namespace ServerControlPanel
                     (QString("Edit " + server->name.toLocal8Bit() + " config file")).toLocal8Bit().constData()));
                 ServersGridLayout->addWidget(pushButton_ConfigureEdit, rowCounter, 5);
 
-                connect(pushButton_ConfigureEdit, SIGNAL(clicked()), this, SLOT(openConfigurationInEditor()));
+                connect(pushButton_ConfigureEdit, &QPushButton::clicked, this,
+                        &ServerControlPanel::MainWindow::openConfigurationInEditor);
             }
 
             // Logs
@@ -1398,7 +1417,8 @@ namespace ServerControlPanel
                                (QString("Open " + server->name.toLocal8Bit() + " Log")).toLocal8Bit().constData()));
                         ServersGridLayout->addWidget(pushButton_ShowLog, rowCounter, 6);
 
-                        connect(pushButton_ShowLog, SIGNAL(clicked()), this, SLOT(openLog()));
+                        connect(pushButton_ShowLog, &QPushButton::clicked, this,
+                                &ServerControlPanel::MainWindow::openLog);
                     }
 
                     // error log
@@ -1412,7 +1432,8 @@ namespace ServerControlPanel
                             (QString("Open " + server->name.toLocal8Bit() + " Error Log")).toLocal8Bit().constData()));
                         ServersGridLayout->addWidget(pushButton_ShowErrorLog, rowCounter, 7);
 
-                        connect(pushButton_ShowErrorLog, SIGNAL(clicked()), this, SLOT(openLog()));
+                        connect(pushButton_ShowErrorLog, &QPushButton::clicked, this,
+                                &ServerControlPanel::MainWindow::openLog);
                     }
                 }
             }

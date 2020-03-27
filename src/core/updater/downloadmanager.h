@@ -60,8 +60,9 @@ namespace Downloader
     signals:
         void transferFinished(Downloader::TransferItem *self);
     private slots:
-        void readyRead();
         void finished();
+    public slots:
+        void readyRead();
     };
 
     class APP_CORE_EXPORT DownloadManager : public QObject

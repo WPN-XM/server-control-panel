@@ -166,8 +166,10 @@ namespace Updater
         actionDelegate = new Updater::ActionColumnItemDelegate;
         ui->tableView_1->setItemDelegateForColumn(Columns::Action, actionDelegate);
 
-        connect(actionDelegate, SIGNAL(downloadButtonClicked(QModelIndex)), this, SLOT(doDownload(QModelIndex)));
-        connect(actionDelegate, SIGNAL(installButtonClicked(QModelIndex)), this, SLOT(doInstall(QModelIndex)));
+        connect(actionDelegate, &Updater::ActionColumnItemDelegate::downloadButtonClicked, this,
+                &UpdaterDialog::doDownload);
+        connect(actionDelegate, &Updater::ActionColumnItemDelegate::installButtonClicked, this,
+                &UpdaterDialog::doInstall);
 
         /**
          * Configure view
@@ -235,10 +237,10 @@ namespace Updater
         // setup progressbar
         Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
         auto *progressBar                  = new ProgressBarUpdater(this, index.row());
-        connect(transfer, SIGNAL(downloadProgress(QMap<QString, QVariant>)), progressBar,
-                SLOT(updateProgress(QMap<QString, QVariant>)));
-        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem * t)), progressBar,
-                SLOT(downloadFinished(Downloader::TransferItem * t)));
+        connect(transfer, &Downloader::TransferItem::downloadProgress, progressBar,
+                &ProgressBarUpdater::updateProgress);
+        connect(transfer, &Downloader::TransferItem::transferFinished, progressBar,
+                &ProgressBarUpdater::downloadFinished);
 
         // finally: invoke downloading
         QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);

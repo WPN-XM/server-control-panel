@@ -32,8 +32,8 @@ namespace HostsFileManager
         mainLayout->addLayout(gLayout);
         setLayout(mainLayout);
 
-        connect(btnOk, SIGNAL(clicked()), this, SLOT(accept()));
-        connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+        connect(btnOk, &QPushButton::clicked, this, &HostsAddDialog::accept);
+        connect(btnCancel, &QPushButton::clicked, this, &HostsAddDialog::reject);
 
         setWindowTitle(tr("Add Host"));
     }

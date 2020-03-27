@@ -84,8 +84,8 @@ namespace Plugin_HelloWorld_NS
             settings.data()->setMinimumSize(200, 200);
             settings.data()->setAttribute(Qt::WA_DeleteOnClose);
             settings.data()->setWindowTitle(tr("Hello World Plugin Settings"));
-            // settings.data()->setWindowIcon(QIcon(":icons/falkon.svg"));
-            connect(closeButton, SIGNAL(clicked()), settings.data(), SLOT(close()));
+            // settings.data()->setWindowIcon(QIcon(":icons/app.svg"));
+            connect(closeButton, &QPushButton::clicked, settings.data(), &QDialog::close);
         }
 
         settings.data()->show();

@@ -16,9 +16,10 @@ namespace Downloader
 
         reply = nam.get(request);
 
+        // TODO SLOT is not existint or DownloadItem and private
         connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
-        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(updateDownloadProgress(qint64, qint64)));
-        connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+        connect(reply, &QNetworkReply::downloadProgress, this, &Downloader::TransferItem::updateDownloadProgress);
+        connect(reply, &QNetworkReply::finished, this, &Downloader::TransferItem::finished);
 
         timer.start();
     }
@@ -172,12 +173,13 @@ namespace Downloader
                     }
                 }
                 reply->deleteLater();
+
                 reply = nam.get(QNetworkRequest(url));
                 reply->setParent(this);
-                connect(reply, SIGNAL(readyRead()), this, SLOT(readyRead()));
-                connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this,
-                        SLOT(updateDownloadProgress(qint64, qint64)));
-                connect(reply, SIGNAL(finished()), this, SLOT(finished()));
+                connect(reply, &QNetworkReply::readyRead, this, &Downloader::DownloadItem::readyRead);
+                connect(reply, &QNetworkReply::downloadProgress, this,
+                        &Downloader::DownloadItem::updateDownloadProgress);
+                connect(reply, &QNetworkReply::finished, this, &Downloader::DownloadItem::finished);
                 timer.restart();
                 redirects.append(url);
                 return;

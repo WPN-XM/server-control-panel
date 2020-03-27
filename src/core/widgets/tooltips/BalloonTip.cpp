@@ -55,7 +55,7 @@ namespace Widgets::Tooltips
         // defineArrowPosition();
         setArrowPosition(my_arrowPos);
 
-        connect(my_closeButton, SIGNAL(clicked()), this, SLOT(close()));
+        connect(my_closeButton, &QPushButton::clicked, this, &BalloonTip::close);
 
         // install event filter
         if (parentWidget() != nullptr) {

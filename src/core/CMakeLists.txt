@@ -75,7 +75,9 @@ set(SOURCES ${SOURCES}
     plugins/global_plugin_interface.h
     plugins/plugininterface.h
     plugins/plugins.cpp
-    plugins/plugins.h
+    plugins/plugins.h    
+    plugins/pluginproxy.cpp
+    plugins/pluginproxy.h
 
     processviewer/AlreadyRunningProcessesDialog.cpp
     processviewer/AlreadyRunningProcessesDialog.h

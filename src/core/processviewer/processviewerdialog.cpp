@@ -32,8 +32,8 @@ ProcessViewerDialog::ProcessViewerDialog(QWidget *parent) : QDialog(parent), ui(
     ui->treeWidget->expandAll();
 
     // connect buttons
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(close()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(close()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ProcessViewerDialog::close);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ProcessViewerDialog::close);
 
     setFocus();
 }
@@ -56,7 +56,7 @@ void ProcessViewerDialog::refreshProcesses()
 void ProcessViewerDialog::renderProcesses()
 {
     const auto runningProcesses = processes->getRunningProcesses();
-    const auto ports = processes->getPorts();
+    const auto ports            = processes->getPorts();
 
     for (Processes::ProcessUtil::Process process : runningProcesses) {
         // find parentItem in the tree by looking for parentId recursivley

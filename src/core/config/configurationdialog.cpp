@@ -23,15 +23,15 @@ namespace Configuration
 
         // "start these servers, when starting wpn-xm" checkbox
         toggleAutostartServerCheckboxes(ui->checkbox_autostartServers->isChecked());
-        connect(ui->checkbox_autostartServers, SIGNAL(clicked(bool)), this,
-                SLOT(toggleAutostartServerCheckboxes(bool)));
+        connect(ui->checkbox_autostartServers, &QAbstractButton::clicked, this,
+                &ConfigurationDialog::toggleAutostartServerCheckboxes);
 
         // load initial data for pages
         loadNginxUpstreams();
 
         createPHPExtensionListWidget();
-        connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
-                SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+        connect(ui->php_extensions_listWidget, &QListWidget::itemChanged, this,
+                &ConfigurationDialog::PHPExtensionListWidgetHighlightChecked);
 
         // @TODO plugin loading
         pluginsManager = new PluginsManager(this);
@@ -39,8 +39,7 @@ namespace Configuration
 
         connect(ui->buttonBox, &QDialogButtonBox::clicked, this, &ConfigurationDialog::on_pushButton_ButtonBox_Clicked);
 
-        /*connect(m_list, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this,
-                SLOT(showStackedPage(QListWidgetItem *)));*/
+        /*connect(m_list, &QListWidget::currentItemChanged, this, &ConfigurationDialog::showStackedPage);*/
 
         ui->configMenuTreeWidget->expandAll();
     }
@@ -215,8 +214,8 @@ namespace Configuration
     {
         // disconnect is needed, because setBackgroundColor triggers itemChanged
         // we need to avoid getting two signals, because we want to save the state only once
-        QObject::disconnect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
-                            SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+        QObject::disconnect(ui->php_extensions_listWidget, &QListWidget::itemChanged, this,
+                            &ConfigurationDialog::PHPExtensionListWidgetHighlightChecked);
 
         if (item->checkState() == Qt::Checked) {
             item->setBackground(QColor(56, 93, 56)); // https://www.colorhexa.com/90ee90
@@ -226,8 +225,8 @@ namespace Configuration
             savePHPExtensionState(item->text(), false);
         }
 
-        QObject::connect(ui->php_extensions_listWidget, SIGNAL(itemChanged(QListWidgetItem *)), this,
-                         SLOT(PHPExtensionListWidgetHighlightChecked(QListWidgetItem *)));
+        QObject::connect(ui->php_extensions_listWidget, &QListWidget::itemChanged, this,
+                         &ConfigurationDialog::PHPExtensionListWidgetHighlightChecked);
     }
 
     void ConfigurationDialog::savePHPExtensionState(const QString &ext, bool enable)

@@ -117,7 +117,7 @@ namespace Updater
         downloadManager.get(request);
 
         Downloader::TransferItem *transfer = downloadManager.findTransfer(downloadURL);
-        connect(transfer, SIGNAL(transferFinished(Downloader::TransferItem *)), this, SLOT(extract()));
+        connect(transfer, &Downloader::TransferItem::transferFinished, this, &SelfUpdater::extract);
 
         // finally: invoke downloading
         QMetaObject::invokeMethod(&downloadManager, "checkForAllDone", Qt::QueuedConnection);
@@ -164,8 +164,8 @@ namespace Updater
 
         if (!zipArchive.open(QuaZip::mdUnzip)) {
             qWarning("Cannot open zip archive, error: %d", zipArchive.getZipError());
-            // return false;            
-        }        
+            // return false;
+        }
 
         QStringList files = zipArchive.getFileNameList();
         qDebug() << "[SelfUpdater] Extracting files:" << files;
@@ -326,7 +326,7 @@ namespace Updater
         QEventLoop eventLoop;
 
         // "quit()" the event-loop, when the network request "finished()"
-        QObject::connect(&network, SIGNAL(finished(QNetworkReply *)), &eventLoop, SLOT(quit()));
+        QObject::connect(&network, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit);
 
         // the HTTP request
         QNetworkRequest req(url);
@@ -361,8 +361,8 @@ namespace Updater
         return jsonResponse.object();
     }
 
-    /*QJsonObject SelfUpdater::notifyRestartNeeded(QJsonObject versionInfo) { 
-        return versionInfo; 
+    /*QJsonObject SelfUpdater::notifyRestartNeeded(QJsonObject versionInfo) {
+        return versionInfo;
     }*/
 
     QString SelfUpdater::getUpdateCheckURL()
