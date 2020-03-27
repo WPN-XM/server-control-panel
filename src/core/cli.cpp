@@ -41,7 +41,7 @@ namespace ServerControlPanel
         parser.addOption(stopOption);
 
         // --restart
-        QCommandLineOption restartOption("stop", "Restarts a server.", "[server/s]");
+        QCommandLineOption restartOption("restart", "Restarts a server.", "[server/s]");
         parser.addOption(restartOption);
 
         /**
