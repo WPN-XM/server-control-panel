@@ -2,6 +2,11 @@
 
 macro(install_system_runtimes target)
 
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_INSTALL_DEBUG_LIBRARIES true)
+        set(CMAKE_INSTALL_UCRT_LIBRARIES TRUE)
+    endif()
+
     set(CMAKE_INSTALL_UCRT_LIBRARIES FALSE)
 
     include(InstallRequiredSystemLibraries)
