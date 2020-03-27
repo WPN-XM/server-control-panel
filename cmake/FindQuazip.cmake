@@ -24,7 +24,7 @@ if(UNIX)
   # find the quazip library   
   find_library( 
     QUAZIP_LIBRARY 
-    NAMES ${QUAZIP_STATIC} quazip    
+    NAMES ${QUAZIP_STATIC} quazip quazipd 
     PATHS ${QUAZIP_DIR} /usr /usr/local /opt /opt/local    
     PATH_SUFFIXES lib64 lib) 
 endif()   
@@ -33,14 +33,14 @@ if(WIN32)
   # find the quazip include directory 
   find_path(    
     QUAZIP_INCLUDE_DIR quazip/quazip.h 
-    PATHS ${QUAZIP_DIR} C:/    
+    PATHS ${QUAZIP_DIR}
     PATH_SUFFIXES include)  
 
   # find the quazip library   
   find_library( 
     QUAZIP_LIBRARY 
     NAMES ${QUAZIP_STATIC} quazip    
-    PATHS ${QUAZIP_DIR} ${QUAZIP_DIR}/.. C:/    
+    PATHS ${QUAZIP_DIR} ${QUAZIP_DIR}/.. 
     PATH_SUFFIXES lib64 lib)    
 endif() 
 
